@@ -1,19 +1,71 @@
-﻿<div class="row">
+﻿@model DotaDb.ViewModels.HeroViewModel
+
+<div class="row">
     <div class="col-lg-3">
-        <div style="margin-bottom: 10px">
-            <h2 style="margin-top: 0; margin-bottom: 0">
-                <strong>Abaddon</strong>
-            </h2>
-            <small class="text-uppercase">
-                <span class="label label-primary">Melee</span>
-                <span class="label label-warning">Carry</span>
-                <span class="label label-success">Durable</span>
-                <span class="label label-success">Support</span>
-            </small>
+        <h2 style="margin-top: 0;">
+            @Model.Name
+        </h2>
+        <div class="text-center">
+            <img src="@Model.AvatarImagePath" />
         </div>
-        <div style="margin-bottom: 10px">
-            <img src="http://cdn.dota2.com/apps/dota2/images/heroes/abaddon_full.png?v=3129863?v=3129863" width="175" />
+        <hr />
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="~/Content/icon_str.png" width="40" height="40" />
+                <strong>@Model.BaseStrength</strong> <small class="text-muted">(+@Model.StrengthGain.ToString("F"))</small>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/Content/icon_atk.png" height="40" />
+                <strong>@Model.BaseDamageMin - @Model.BaseDamageMax</strong>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/Content/icon_agi.png" width="40" height="40" />
+                <strong>@Model.BaseAgility</strong> <small class="text-muted">(+@Model.AgilityGain.ToString("F"))</small>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/Content/icon_speed.png" height="40" />
+                <strong>@Model.BaseMoveSpeed</strong>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/Content/icon_int.png" width="40" height="40" />
+                <strong>@Model.BaseIntelligence</strong> <small class="text-muted">(+@Model.IntelligenceGain.ToString("F"))</small>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/Content/icon_def.png" height="40" />
+                <strong>@Model.BaseArmor</strong>
+            </div>
         </div>
+        <hr />
+        <div class="row">
+            <div class="col-lg-6">
+                <div style="line-height: 5px;">
+                    <p class="text-uppercase">
+                        <span class="label label-primary">@Model.AttackType</span>
+                    </p>
+                    @foreach (var role in Model.Roles)
+                    {
+                        var color = String.Empty;
+                        if (role.Level == "1") { color = "label-danger"; }
+                        else if (role.Level == "2") { color = "label-warning"; }
+                        else if (role.Level == "3") { color = "label-success"; }
+                        <p class="text-uppercase">
+                            <span class="label @color">@role.Name (@role.Level)</span>
+                        </p>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 text-uppercase">
+                <small class="text-muted">Team:</small>
+                <small>@Model.Team</small>
+                <br />
+                <small class="text-muted">Atk Rate:</small>
+                <small>@Model.AttackRate.ToString("F")</small>
+                <br />
+                <small class="text-muted">Turn Rate:</small>
+                <small>@Model.TurnRate.ToString("F")</small>
+            </div>
+        </div>
+        <hr />
         <div class="panel panel-default">
             <div class="list-group">
                 <a class="list-group-item" href="#">
@@ -37,345 +89,299 @@
     </div>
     <div class="col-lg-9">
         <div class="row">
-            <div class="col-lg-1 text-center">
-                @*<span class="fa-stack fa-lg text-danger" style="margin-bottom: 5px">
-                        <i class="fa fa-circle fa-stack-2x"></i>
-                    </span>*@
-                <img src="~/Content/strength-40x40.png" style="margin-bottom: 5px" />
-                <div style="line-height: 2px">
-                    <p><strong><small>23</small></strong></p>
-                    <p><strong><small>+2.70</small></strong></p>
-                </div>
-            </div>
-            <div class="col-lg-1 text-center">
-                @*<span class="fa-stack fa-lg text-success" style="margin-bottom: 5px">
-                        <i class="fa fa-circle fa-stack-2x"></i>
-                        <i class="fa fa-male fa-stack-1x fa-inverse"></i>
-                    </span>*@
-                <img src="~/Content/agility-40x40.png" style="margin-bottom: 5px" />
-                <div style="line-height: 2px" class="text-muted">
-                    <p><small>17</small></p>
-                    <p><small>+1.50</small></p>
-                </div>
-            </div>
-            <div class="col-lg-1 text-center">
-                @*<span class="fa-stack fa-lg text-primary" style="margin-bottom: 5px">
-                        <i class="fa fa-circle fa-stack-2x"></i>
-                        <i class="fa fa-flask fa-stack-1x fa-inverse"></i>
-                    </span>*@
-                <img src="~/Content/intelligence-40x40.png" style="margin-bottom: 5px" />
-                <div style="line-height: 2px" class="text-muted">
-                    <p><small>21</small></p>
-                    <p><small>+2.00</small></p>
-                </div>
-            </div>
-            <div class="col-lg-1 text-center">
-                <img src="~/Content/attack-40x40.png" style="margin-bottom: 5px" />
-                <div style="line-height: 2px" class="text-muted">
-                    <p><small>32 - 42</small></p>
-                </div>
-            </div>
-            <div class="col-lg-1 text-center">
-                <img src="~/Content/move-40x40.png" style="margin-bottom: 5px" />
-                <div style="line-height: 2px" class="text-muted">
-                    <p><small>310</small></p>
-                </div>
-            </div>
-            <div class="col-lg-1 text-center">
-                <img src="~/Content/defense-40x40.png" style="margin-bottom: 5px" />
-                <div style="line-height: 2px" class="text-muted">
-                    <p><small>1.38</small></p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <hr />
-            <h3>Abilities</h3>
-            <div class="media">
-                <div class="media-left">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_death_coil_lg.png" width="80" height="80" />
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">Mist Coil</h4>
-                    <p><small class="text-muted">Abaddon releases a coil of deathly mist that can damage an enemy unit or heal a friendly unit at the cost of some of Abaddon's health.</small></p>
-                    <div class="row">
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Behavior:</small>
-                                <small>Target</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Team Target:</small>
-                                <small>Both</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Valid Target:</small>
-                                <small>Hero, Creep</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Pierces Spell Immunity:</small>
-                                <small class="text-success">On Allies</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Damage Type:</small>
-                                <small class="text-primary">Magical</small>
-                            </p>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 style="margin-top: 0;">Abilities</h3>
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_death_coil_lg.png" width="80" height="80" />
                         </div>
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Cast Range:</small>
-                                <small>800</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Cooldown:</small>
-                                <small>4.5 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Mana Cost:</small>
-                                <small>50 / 60 / 70 / 80</small>
-                            </p>
-                        </div>
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Self Damage:</small>
-                                <small>75 / 100 / 125 / 150</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Target Damage:</small>
-                                <small>100 / 150 / 200 / 250</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Heal Amount:</small>
-                                <small>100 / 150 / 200 / 250</small>
-                            </p>
+                        <div class="media-body">
+                            <h4 class="media-heading">Mist Coil</h4>
+                            <p><small class="text-muted">Abaddon releases a coil of deathly mist that can damage an enemy unit or heal a friendly unit at the cost of some of Abaddon's health.</small></p>
+                            <div class="row">
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Behavior:</small>
+                                        <small>Target</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Team Target:</small>
+                                        <small>Both</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Valid Target:</small>
+                                        <small>Hero, Creep</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Pierces Spell Immunity:</small>
+                                        <small class="text-success">On Allies</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Damage Type:</small>
+                                        <small class="text-primary">Magical</small>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Cast Range:</small>
+                                        <small>800</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Cooldown:</small>
+                                        <small>4.5 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Mana Cost:</small>
+                                        <small>50 / 60 / 70 / 80</small>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Self Damage:</small>
+                                        <small>75 / 100 / 125 / 150</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Target Damage:</small>
+                                        <small>100 / 150 / 200 / 250</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Heal Amount:</small>
+                                        <small>100 / 150 / 200 / 250</small>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="media">
-                <div class="media-left">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_aphotic_shield_lg.png" width="80" height="80" />
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">Aphotic Shield</h4>
-                    <p><small class="text-muted">Summons dark energies around an ally unit, creating a shield that absorbs a set amount of damage before expiring. When the shield is destroyed it will burst and deal damage equal to the amount it could absorb to an area around it. Removes certain types of negative buffs and stuns on cast.</small></p>
-                    <div class="row">
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Behavior:</small>
-                                <small>Target</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Team Target:</small>
-                                <small>Friendly</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Valid Target:</small>
-                                <small>Hero</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Pierces Spell Immunity:</small>
-                                <small class="text-danger">No</small>
-                            </p>
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_aphotic_shield_lg.png" width="80" height="80" />
                         </div>
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Cast Range:</small>
-                                <small>500</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Cooldown:</small>
-                                <small>12 / 10 / 8 / 6 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Mana Cost:</small>
-                                <small>100 / 105 / 110 / 115</small>
-                            </p>
-                        </div>
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Duration:</small>
-                                <small>15 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Damage Absorb:</small>
-                                <small>110 / 140 / 170 / 200</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Damage Radius:</small>
-                                <small>675</small>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="media">
-                <div class="media-left">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_frostmourne_lg.png" width="80" height="80" />
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">Curse of Avernus</h4>
-                    <p><small class="text-muted">Abaddon strikes an enemy with chilling curse on each attack, causing all units who attack the slowed enemy to gain increased movement speed, along with faster attack speed, for a limited time.</small></p>
-                    <div class="row">
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Behavior:</small>
-                                <small>Passive</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Pierces Spell Immunity:</small>
-                                <small class="text-success">Yes</small>
-                            </p>
-                        </div>
-                        <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                            <p>
-                                <small class="text-muted">Debuff Duration:</small>
-                                <small>2.5 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Buff Duration:</small>
-                                <small>4.5 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Move Slow %</small>
-                                <small>5 / 10 / 15 / 20</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Attack Slow:</small>
-                                <small>5 / 10 / 15 / 20</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Move Buff %:</small>
-                                <small>15</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Attack Speed:</small>
-                                <small>10 / 20 / 30 / 40</small>
-                            </p>
+                        <div class="media-body">
+                            <h4 class="media-heading">Aphotic Shield</h4>
+                            <p><small class="text-muted">Summons dark energies around an ally unit, creating a shield that absorbs a set amount of damage before expiring. When the shield is destroyed it will burst and deal damage equal to the amount it could absorb to an area around it. Removes certain types of negative buffs and stuns on cast.</small></p>
+                            <div class="row">
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Behavior:</small>
+                                        <small>Target</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Team Target:</small>
+                                        <small>Friendly</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Valid Target:</small>
+                                        <small>Hero</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Pierces Spell Immunity:</small>
+                                        <small class="text-danger">No</small>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Cast Range:</small>
+                                        <small>500</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Cooldown:</small>
+                                        <small>12 / 10 / 8 / 6 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Mana Cost:</small>
+                                        <small>100 / 105 / 110 / 115</small>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Duration:</small>
+                                        <small>15 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Damage Absorb:</small>
+                                        <small>110 / 140 / 170 / 200</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Damage Radius:</small>
+                                        <small>675</small>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="media">
-                <div class="media-left">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_borrowed_time_lg.png" width="80" height="80" />
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading text-primary">Borrowed Time (Ultimate)</h4>
-                    <p><small class="text-muted">When activated, all damage dealt to you will heal instead of harm. Most negative buffs will also be removed. If the ability is not on cooldown, it will automatically activate if your health falls below 400. Upgradable by Aghanim's Scepter.</small></p>
-                    <div class="row">
-                        <div class="col-lg-4 text-uppercase" style="line-height: 13px">
-                            <p>
-                                <small class="text-muted">Behavior:</small>
-                                <small>No Target, Instant, Ignore Queue</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Cooldown:</small>
-                                <small>60 / 50 / 40 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Mana Cost:</small>
-                                <small>0</small>
-                            </p>
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_frostmourne_lg.png" width="80" height="80" />
                         </div>
-                        <div class="col-lg-4 text-uppercase" style="line-height: 15px">
-                            <p>
-                                <small class="text-muted">HP Threshold:</small>
-                                <small>400</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Duration:</small>
-                                <small>4 / 5 / 6 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Duration (scepter):</small>
-                                <small>5 / 6 / 7 sec</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Redirect % (scepter):</small>
-                                <small>900</small>
-                            </p>
-                            <p>
-                                <small class="text-muted">Redirect Range (scepter):</small>
-                                <small>5 / 10 / 15 / 20</small>
-                            </p>
+                        <div class="media-body">
+                            <h4 class="media-heading">Curse of Avernus</h4>
+                            <p><small class="text-muted">Abaddon strikes an enemy with chilling curse on each attack, causing all units who attack the slowed enemy to gain increased movement speed, along with faster attack speed, for a limited time.</small></p>
+                            <div class="row">
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Behavior:</small>
+                                        <small>Passive</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Pierces Spell Immunity:</small>
+                                        <small class="text-success">Yes</small>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <p>
+                                        <small class="text-muted">Debuff Duration:</small>
+                                        <small>2.5 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Buff Duration:</small>
+                                        <small>4.5 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Move Slow %</small>
+                                        <small>5 / 10 / 15 / 20</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Attack Slow:</small>
+                                        <small>5 / 10 / 15 / 20</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Move Buff %:</small>
+                                        <small>15</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Attack Speed:</small>
+                                        <small>10 / 20 / 30 / 40</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_borrowed_time_lg.png" width="80" height="80" />
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading text-primary">Borrowed Time (Ultimate)</h4>
+                            <p><small class="text-muted">When activated, all damage dealt to you will heal instead of harm. Most negative buffs will also be removed. If the ability is not on cooldown, it will automatically activate if your health falls below 400. Upgradable by Aghanim's Scepter.</small></p>
+                            <div class="row">
+                                <div class="col-lg-4 text-uppercase" style="line-height: 13px">
+                                    <p>
+                                        <small class="text-muted">Behavior:</small>
+                                        <small>No Target, Instant, Ignore Queue</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Cooldown:</small>
+                                        <small>60 / 50 / 40 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Mana Cost:</small>
+                                        <small>0</small>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-uppercase" style="line-height: 15px">
+                                    <p>
+                                        <small class="text-muted">HP Threshold:</small>
+                                        <small>400</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Duration:</small>
+                                        <small>4 / 5 / 6 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Duration (scepter):</small>
+                                        <small>5 / 6 / 7 sec</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Redirect % (scepter):</small>
+                                        <small>900</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Redirect Range (scepter):</small>
+                                        <small>5 / 10 / 15 / 20</small>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <hr />
-            <h3>Level Progression</h3>
-            <table class="table table-condensed text-uppercase text-muted" style="font-size: 11px; margin-bottom: 0">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        @for (int i = 1; i <= 25; i++)
-                        {
-                            <th>@i</th>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>HP</td>
-                        @for (int i = 0; i < 25; i++)
-                        {
-                            <td>@Math.Round(150 + (19 * (23 + (i * 2.7))))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>MP</td>
-                        @for (int i = 0; i < 25; i++)
-                        {
-                            <td>@Math.Round(13 * (21 + (i * 2.0)))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>DMG (min)</td>
-                        @for (int i = 0; i < 25; i++)
-                        {
-                            <td>@Math.Round(32 + (23 + (i * 2.7)))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>DMG (max)</td>
-                        @for (int i = 0; i < 25; i++)
-                        {
-                            <td>@Math.Round(42 + (23 + (i * 2.7)))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>Armor</td>
-                        @for (int i = 0; i < 25; i++)
-                        {
-                            <td>@Math.Round(1.38 + (.14 * (17 + (i * 1.5))))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>STR</td>
-                        @for (int i = 1; i <= 25; i++)
-                        {
-                            <td>@(Math.Round(23 + (i * 2.7)))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>AGI</td>
-                        @for (int i = 1; i <= 25; i++)
-                        {
-                            <td>@(Math.Round(17 + (i * 1.5)))</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>INT</td>
-                        @for (int i = 1; i <= 25; i++)
-                        {
-                            <td>@(Math.Round(20 + (i * 2.0)))</td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 style="margin-top: 0">Level Progression <small class="text-uppercase">(without stats)</small></h3>
+                    <table class="table table-condensed text-uppercase text-muted" style="font-size: 11px; margin-bottom: 0">
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                @for (int i = 1; i <= 25; i++)
+                                {
+                                    <th>@i</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>HP</td>
+                                @for (int i = 0; i < 25; i++)
+                                {
+                                    <td>@Math.Round(150 + (19 * (23 + (i * 2.7))))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>MP</td>
+                                @for (int i = 0; i < 25; i++)
+                                {
+                                    <td>@Math.Round(13 * (21 + (i * 2.0)))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>DMG (min)</td>
+                                @for (int i = 0; i < 25; i++)
+                                {
+                                    <td>@Math.Round(32 + (23 + (i * 2.7)))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>DMG (max)</td>
+                                @for (int i = 0; i < 25; i++)
+                                {
+                                    <td>@Math.Round(42 + (23 + (i * 2.7)))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Armor</td>
+                                @for (int i = 0; i < 25; i++)
+                                {
+                                    <td>@Math.Round(1.38 + (.14 * (17 + (i * 1.5))))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>STR</td>
+                                @for (int i = 1; i <= 25; i++)
+                                {
+                                    <td>@(Math.Round(23 + (i * 2.7)))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>AGI</td>
+                                @for (int i = 1; i <= 25; i++)
+                                {
+                                    <td>@(Math.Round(17 + (i * 1.5)))</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>INT</td>
+                                @for (int i = 1; i <= 25; i++)
+                                {
+                                    <td>@(Math.Round(20 + (i * 2.0)))</td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

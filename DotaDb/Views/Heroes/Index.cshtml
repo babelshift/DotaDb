@@ -1,18 +1,20 @@
-﻿<div class="panel panel-danger">
+﻿@model DotaDb.ViewModels.HeroSelectViewModel
+
+<div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <i class="fa fa-shield"></i>
+            <img src="~/Content/icon_str.png" width="24" height="24" />
             Strength
         </h4>
     </div>
-    <div class="panel-body" style="padding: 0">
+    <div class="panel-body hero-select-list" style="padding: 0">
         <div class="row" style="margin: 0">
-            @for (int i = 0; i < 20; i++)
+            @foreach (var hero in Model.StrengthHeroes)
             {
-                <div class="col-lg-2" style="padding: 1px">
+                <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
                     <div class="thumbnail" style="margin-bottom: 0; padding: 0; border: 0;">
-                        <a href="#">
-                            <img src="http://placehold.it/190x100" />
+                        <a href="@Url.Action("hero", "heroes", new { id = hero.Id })">
+                            <img src="@hero.AvatarImagePath" />
                         </a>
                     </div>
                 </div>
@@ -20,25 +22,47 @@
         </div>
     </div>
 </div>
-<div class="panel panel-success">
+<div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <i class="fa fa-male"></i>
+            <img src="~/Content/icon_agi.png" width="24" height="24" />
             Agility
         </h4>
     </div>
-    <div class="panel-body">
-        Heroes
+    <div class="panel-body hero-select-list" style="padding: 0">
+        <div class="row" style="margin: 0">
+            @foreach (var hero in Model.AgilityHeroes)
+            {
+                <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
+                    <div class="thumbnail" style="margin-bottom: 0; padding: 0; border: 0;">
+                        <a href="@Url.Action("hero", "heroes", new { id = hero.Id })">
+                            <img src="@hero.AvatarImagePath" />
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
-<div class="panel panel-primary">
+<div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <i class="fa fa-flask"></i>
+            <img src="~/Content/icon_int.png" width="24" height="24" />
             Intelligence
         </h4>
     </div>
-    <div class="panel-body">
-        Heroes
+    <div class="panel-body hero-select-list" style="padding: 0">
+        <div class="row" style="margin: 0">
+            @foreach (var hero in Model.IntelligenceHeroes)
+            {
+                <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
+                    <div class="thumbnail" style="margin-bottom: 0; padding: 0; border: 0;">
+                        <a href="@Url.Action("hero", "heroes", new { id = hero.Id })">
+                            <img src="@hero.AvatarImagePath" />
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>

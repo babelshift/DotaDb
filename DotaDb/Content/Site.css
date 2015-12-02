@@ -1,5 +1,11 @@
-﻿body {
-    padding-bottom: 20px;
+﻿html {
+    -ms-overflow-style: scrollbar;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-bottom: 200px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -20,4 +26,52 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+    .footer p,
+    .footer h4,
+    .footer h5,
+    .footer-splash p,
+    .footer-splash h4,
+    .footer-splash h5 {
+        color: #fff;
+    }
+
+.footer-bottom small {
+    color: #999;
+}
+
+.footer hr,
+.footer-splash hr {
+    border-top: 1px dotted #292929;
+    color: #fff;
+    background-color: #fff;
+}
+
+.footer-bottom {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #222;
+}
+
+.footer-bottom .link-white {
+    color: #fff;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.text-twitter {
+    color: #55acee;
+}
+
+.hero-select-list > .row > .col-md-1:nth-child(12n+1) {
+    clear: both;
 }

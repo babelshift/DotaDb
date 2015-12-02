@@ -89,6 +89,10 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SourceSchemaParser, Version=1.0.0.18, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SourceSchemaParser.1.0.0.18\lib\net46\SourceSchemaParser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SteamWebAPI2, Version=1.1.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SteamWebAPI2.1.1.0.5\lib\net46\SteamWebAPI2.dll</HintPath>
       <Private>True</Private>
@@ -163,6 +167,11 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\HtmlHelperExtensions.cs" />
+    <Compile Include="ViewModels\HeroRoleViewModel.cs" />
+    <Compile Include="ViewModels\HeroSelectItemViewModel.cs" />
+    <Compile Include="ViewModels\HeroSelectViewModel.cs" />
+    <Compile Include="ViewModels\HeroViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\agility-40x40.png" />
@@ -173,6 +182,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\defense-40x40.png" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\icon_agi.png" />
+    <Content Include="Content\icon_atk.png" />
+    <Content Include="Content\icon_def.png" />
+    <Content Include="Content\icon_int.png" />
+    <Content Include="Content\icon_speed.png" />
+    <Content Include="Content\icon_str.png" />
     <Content Include="Content\intelligence-40x40.png" />
     <Content Include="Content\move-40x40.png" />
     <Content Include="Content\strength-40x40.png" />
@@ -194,6 +209,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="App_Data\npc_heroes.vdf" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -224,9 +240,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Heroes\Index.cshtml" />
     <Content Include="Views\Heroes\Hero.cshtml" />
+    <Content Include="Views\Shared\_FooterPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

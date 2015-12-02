@@ -1,0 +1,40 @@
+﻿@using DotaDb.Utilities
+
+<footer>
+    <div class="footer-bottom text-center-xs">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div itemscope itemtype="http://schema.org/Organization">
+                        <h4 style="margin: 0">
+                            <a href="@Url.Action("index", "home")" class="link-white">
+                                <i class="fa fa-database fa-lg"></i>
+                            </a>
+                            <span itemprop="name" class="hidden-xs">DotaDb</span>
+                            <small>@DateTime.Now.Year,</small>
+                            <small>@Html.CurrentVersion()</small>
+                        </h4>
+                        <small>
+                            This site is not affiliated with Valve, Steam, or any of their partners. All copyrights reserved to their respective owners.
+                            All images, content, and files related to Dota 2 are owned by Valve.
+                        </small>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-right text-center-xs">
+                        <p><small>Created by <a href="https://github.com/babelshift" class="link-white">babelshift</a></small></p>
+                        <a href="mailto:hello@dotadb.com" class="btn btn-default btn-sm" title="Email Us">
+                            <i class="fa fa-envelope fa-lg"></i>
+                        </a>
+                        <a href="http://twitter.com/dotadb" class="btn btn-default btn-sm" title="Follow us on Twitter">
+                            <i class="fa fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="http://github.com/dotadb" class="btn btn-default btn-sm" title="Report a Problem on GitHub">
+                            <i class="fa fa-github fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
