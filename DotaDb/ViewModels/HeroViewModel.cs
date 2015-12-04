@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SourceSchemaParser.Dota2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,5 +28,6 @@ namespace DotaDb.ViewModels
         public double IntelligenceGain { get; set; }
         public IReadOnlyCollection<HeroRoleViewModel> Roles { get; set; }
         public IReadOnlyCollection<HeroAbilityViewModel> Abilities { get; set; }
+        public DotaHeroPrimaryAttributeType PrimaryAttribute { get; set; }
     }
 }

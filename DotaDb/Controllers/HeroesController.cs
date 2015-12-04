@@ -21,6 +21,7 @@ namespace DotaDb.Controllers
         private IReadOnlyDictionary<string, DotaUnitTargetFlag> unitTargetFlags;
         private IReadOnlyDictionary<string, DotaUnitTargetTeamType> unitTargetTeamTypes;
         private IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
+        private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> attributeTypes;
 
         private string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
@@ -162,6 +163,17 @@ namespace DotaDb.Controllers
             return new ReadOnlyDictionary<string, DotaUnitTargetType>(temp);
         }
 
+        private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> GetAttributeTypes()
+        {
+            Dictionary<string, DotaHeroPrimaryAttributeType> temp = new Dictionary<string, DotaHeroPrimaryAttributeType>();
+
+            temp.Add(DotaHeroPrimaryAttributeType.AGILITY.Key, DotaHeroPrimaryAttributeType.AGILITY);
+            temp.Add(DotaHeroPrimaryAttributeType.INTELLECT.Key, DotaHeroPrimaryAttributeType.INTELLECT);
+            temp.Add(DotaHeroPrimaryAttributeType.STRENGTH.Key, DotaHeroPrimaryAttributeType.STRENGTH);
+
+            return new ReadOnlyDictionary<string, DotaHeroPrimaryAttributeType>(temp);
+        }
+
         #endregion In Memory "Database"
 
         #region Hero Index
@@ -250,6 +262,7 @@ namespace DotaDb.Controllers
             unitTargetFlags = GetUnitTargetFlags();
             unitTargetTeamTypes = GetUnitTargetTeamTypes();
             unitTargetTypes = GetUnitTargetTypes();
+            attributeTypes = GetAttributeTypes();
 
             IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
 
@@ -275,7 +288,8 @@ namespace DotaDb.Controllers
                 Roles = GetRoles(hero.Role, hero.RoleLevels).AsReadOnly(),
                 AgilityGain = hero.AttributeAgilityGain,
                 IntelligenceGain = hero.AttributeIntelligenceGain,
-                StrengthGain = hero.AttributeStrengthGain
+                StrengthGain = hero.AttributeStrengthGain,
+                PrimaryAttribute = GetKeyValue(hero.AttributePrimary, attributeTypes)
             };
 
             SetupAbilities(hero, viewModel);

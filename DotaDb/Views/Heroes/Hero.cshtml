@@ -1,6 +1,9 @@
 ﻿@model DotaDb.ViewModels.HeroViewModel
 @using SourceSchemaParser.Dota2;
 
+<div class="alert alert-info">
+    <i class="fa fa-info-circle"></i> The information on this page is built dynamically from Dota 2 files and tooltips.
+</div>
 <div class="row">
     <div class="col-lg-3">
         <h2 style="margin-top: 0;">
@@ -56,6 +59,12 @@
                 </div>
             </div>
             <div class="col-lg-6 text-uppercase">
+                @if (Model.PrimaryAttribute != null)
+                {
+                    <small class="text-muted">Attr:</small>
+                    <small><strong>@Model.PrimaryAttribute</strong></small>
+                    <br />
+                }
                 <small class="text-muted">Team:</small>
                 <small>@Model.Team</small>
                 <br />
@@ -94,15 +103,14 @@
     <div class="col-lg-9">
         <div class="row">
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <h3 style="margin-top: 0;">Abilities</h3>
+                <div class="panel-body abilities">
                     @foreach (var ability in Model.Abilities)
                     {
-                        <div class="media">
+                        <div class="media" style="margin-bottom: 10px">
                             <div class="media-left">
                                 <img src="@ability.AvatarImagePath" width="80" height="80" class="shadow" />
                             </div>
-                            <div class="media-body abilities">
+                            <div class="media-body">
                                 <h4 class="media-heading">
                                     @ability.Name
                                     @if (ability.AbilityType != null)
@@ -111,158 +119,180 @@
                                     }
                                 </h4>
                                 <p class="text-muted">@ability.Description</p>
-                                <div class="row">
-                                    <div class="col-lg-4 text-uppercase">
-                                        @if (!String.IsNullOrEmpty(ability.Behaviors))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Behaviors:</small>
-                                                <small>@ability.Behaviors</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.TargetTypes))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Targets:</small>
-                                                <small>@ability.TargetTypes</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.TeamTargets))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Team Targets:</small>
-                                                <small>@ability.TeamTargets</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.TargetFlags))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Target Flags:</small>
-                                                <small>@ability.TargetFlags</small>
-                                            </p>
-                                        }
-                                    </div>
-                                    <div class="col-lg-4 text-uppercase">
-                                        @if (!String.IsNullOrEmpty(ability.CastPoint))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Cast Point:</small>
-                                                <small>@ability.CastPoint</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.CastRange))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Cast Range:</small>
-                                                <small>@ability.CastRange</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.Cooldown))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Cooldown:</small>
-                                                <small>@ability.Cooldown</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.Damage))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Damage:</small>
-                                                <small>@ability.Damage</small>
-                                            </p>
-                                        }
-                                        @if (ability.DamageType != null)
-                                        {
-                                            <p>
-                                                <small class="text-muted">Damage Type:</small>
-                                                @if (ability.DamageType.Key == DotaDamageType.PHYSICAL.Key)
-                                                {
-                                                    <small class="text-danger">@ability.DamageType</small>
-                                                }
-                                                else if (ability.DamageType.Key == DotaDamageType.MAGICAL.Key)
-                                                {
-                                                    <small class="text-primary">@ability.DamageType</small>
-                                                }
-                                                else if (ability.DamageType.Key == DotaDamageType.PURE.Key)
-                                                {
-                                                    <small class="text-success">@ability.DamageType</small>
-                                                }
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.Duration))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Duration:</small>
-                                                <small>@ability.Duration</small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(ability.ManaCost))
-                                        {
-                                            <p>
-                                                <small class="text-muted">Mana Cost:</small>
-                                                <small>@ability.ManaCost</small>
-                                            </p>
-                                        }
-                                        @if (ability.SpellImmunityType != null)
-                                        {
-                                            <p>
-                                                <small class="text-muted">Pierces Spell Immunity:</small>
-                                                @if (ability.SpellImmunityType.Key == DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == DotaSpellImmunityType.ENEMIES_YES.Key)
-                                                {
-                                                    <small class="text-success">@ability.SpellImmunityType</small>
-                                                }
-                                                else
-                                                {
-                                                    <small class="text-danger">@ability.SpellImmunityType</small>
-                                                }
-                                            </p>
-                                        }
-                                    </div>
-                                    <div class="col-lg-4 text-uppercase">
-                                        @foreach (var abilitySpecial in ability.Attributes)
-                                        {
-                                            <p>
-                                                <small class="text-muted">
-                                                    @if (!String.IsNullOrEmpty(abilitySpecial.Name))
-                                                    {
-                                                        @abilitySpecial.Name
-                                                    }
-                                                    else
-                                                    {
-                                                        @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
-                                                    }
-                                                </small>
-                                                <small>@abilitySpecial.Value</small>
-                                            </p>
-                                        }
-                                    </div>
-                                </div>
-                                @if (!String.IsNullOrEmpty(ability.Note0))
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-bottom: 10px">
+                            <div class="col-lg-4 text-uppercase">
+                                @if (!String.IsNullOrEmpty(ability.Behaviors))
                                 {
-                                    <div class="alert alert-info"><small>@ability.Note0</small></div>
+                                    <p>
+                                        <small class="text-muted">Behaviors:</small>
+                                        <small>@ability.Behaviors</small>
+                                    </p>
                                 }
-                                @if (!String.IsNullOrEmpty(ability.Note1))
+                                @if (!String.IsNullOrEmpty(ability.TargetTypes))
                                 {
-                                    <div class="alert alert-info"><small>@ability.Note1</small></div>
+                                    <p>
+                                        <small class="text-muted">Targets:</small>
+                                        <small>@ability.TargetTypes</small>
+                                    </p>
                                 }
-                                @if (!String.IsNullOrEmpty(ability.Note2))
+                                @if (!String.IsNullOrEmpty(ability.TeamTargets))
                                 {
-                                    <div class="alert alert-info"><small>@ability.Note2</small></div>
+                                    <p>
+                                        <small class="text-muted">Team Targets:</small>
+                                        <small>@ability.TeamTargets</small>
+                                    </p>
                                 }
-                                @if (!String.IsNullOrEmpty(ability.Note3))
+                                @if (!String.IsNullOrEmpty(ability.TargetFlags))
                                 {
-                                    <div class="alert alert-info"><small>@ability.Note3</small></div>
+                                    <p>
+                                        <small class="text-muted">Target Flags:</small>
+                                        <small>@ability.TargetFlags</small>
+                                    </p>
                                 }
-                                @if (!String.IsNullOrEmpty(ability.Note4))
+                            </div>
+                            <div class="col-lg-4 text-uppercase">
+                                @if (!String.IsNullOrEmpty(ability.CastPoint))
                                 {
-                                    <div class="alert alert-info"><small>@ability.Note4</small></div>
+                                    <p>
+                                        <small class="text-muted">Cast Point:</small>
+                                        <small>@ability.CastPoint</small>
+                                    </p>
                                 }
-                                @if (!String.IsNullOrEmpty(ability.Note5))
+                                @if (!String.IsNullOrEmpty(ability.CastRange))
                                 {
-                                    <div class="alert alert-info"><small>@ability.Note5</small></div>
+                                    <p>
+                                        <small class="text-muted">Cast Range:</small>
+                                        <small>@ability.CastRange</small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Cooldown))
+                                {
+                                    <p>
+                                        <small class="text-muted">Cooldown:</small>
+                                        <small>@ability.Cooldown</small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Damage))
+                                {
+                                    <p>
+                                        <small class="text-muted">Damage:</small>
+                                        <small>@ability.Damage</small>
+                                    </p>
+                                }
+                                @if (ability.DamageType != null)
+                                {
+                                    <p>
+                                        <small class="text-muted">Damage Type:</small>
+                                        @if (ability.DamageType.Key == DotaDamageType.PHYSICAL.Key)
+                                        {
+                                            <small class="text-danger">@ability.DamageType</small>
+                                        }
+                                        else if (ability.DamageType.Key == DotaDamageType.MAGICAL.Key)
+                                        {
+                                            <small class="text-primary">@ability.DamageType</small>
+                                        }
+                                        else if (ability.DamageType.Key == DotaDamageType.PURE.Key)
+                                        {
+                                            <small class="text-success">@ability.DamageType</small>
+                                        }
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Duration))
+                                {
+                                    <p>
+                                        <small class="text-muted">Duration:</small>
+                                        <small>@ability.Duration</small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.ManaCost))
+                                {
+                                    <p>
+                                        <small class="text-muted">Mana Cost:</small>
+                                        <small>@ability.ManaCost</small>
+                                    </p>
+                                }
+                                @if (ability.SpellImmunityType != null)
+                                {
+                                    <p>
+                                        <small class="text-muted">Pierces Spell Immunity:</small>
+                                        @if (ability.SpellImmunityType.Key == DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == DotaSpellImmunityType.ENEMIES_YES.Key)
+                                        {
+                                            <small class="text-success">@ability.SpellImmunityType</small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-danger">@ability.SpellImmunityType</small>
+                                        }
+                                    </p>
+                                }
+                            </div>
+                            <div class="col-lg-4 text-uppercase">
+                                @foreach (var abilitySpecial in ability.Attributes)
+                                {
+                                    <p>
+                                        <small class="text-muted">
+                                            @if (!String.IsNullOrEmpty(abilitySpecial.Name))
+                                            {
+                                                @abilitySpecial.Name
+                                            }
+                                            else
+                                            {
+                                                @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
+                                            }
+                                        </small>
+                                        <small>@abilitySpecial.Value</small>
+                                    </p>
                                 }
                             </div>
                         </div>
+
+                        <ul class="list-unstyled" style="margin-bottom: 0">
+                            @if (!String.IsNullOrEmpty(ability.Note0))
+                            {
+                                <li>
+                                    <small class="text-muted text-uppercase">Note:</small>
+                                    <small>@ability.Note0</small>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(ability.Note1))
+                            {
+                                <li>
+                                    <small class="text-muted text-uppercase">Note:</small>
+                                    <small>@ability.Note1</small>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(ability.Note2))
+                            {
+                                <li>
+                                    <small class="text-muted text-uppercase">Note:</small>
+                                    <small>@ability.Note2</small>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(ability.Note3))
+                            {
+                                <li>
+                                    <small class="text-muted text-uppercase">Note:</small>
+                                    <small>@ability.Note3</small>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(ability.Note4))
+                            {
+                                <li>
+                                    <small class="text-muted text-uppercase">Note:</small>
+                                    <small>@ability.Note4</small>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(ability.Note5))
+                            {
+                                <li>
+                                    <small class="text-muted text-uppercase">Note:</small>
+                                    <small>@ability.Note5</small>
+                                </li>
+                            }
+                        </ul>
                         <hr />
                     }
                 </div>
