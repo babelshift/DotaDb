@@ -108,7 +108,7 @@
                                     }
                                 </h4>
                                 <p><small class="text-muted">@ability.Description</small></p>
-                                <div class="row">
+                                <div class="row abilities">
                                     <div class="col-lg-4 text-uppercase">
                                         @if (!String.IsNullOrEmpty(ability.Behaviors))
                                         {
@@ -203,7 +203,7 @@
                                         @if (ability.SpellImmunityType != null)
                                         {
                                             <p>
-                                                <small class="text-muted">Spell Immunity:</small>
+                                                <small class="text-muted">Pierces Spell Immunity:</small>
                                                 @if (ability.SpellImmunityType.Key == DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == DotaSpellImmunityType.ENEMIES_YES.Key)
                                                 {
                                                     <small class="text-success">@ability.SpellImmunityType</small>
@@ -226,7 +226,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @String.Format("{0}:", abilitySpecial.RawName)
+                                                        @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
                                                     }
                                                 </small>
                                                 <small>@abilitySpecial.Value</small>

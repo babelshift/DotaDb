@@ -1,12 +1,10 @@
 ﻿using DotaDb.ViewModels;
-using SourceSchemaParser;
 using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DotaDb.Controllers
@@ -26,115 +24,7 @@ namespace DotaDb.Controllers
 
         private string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
-        public ActionResult Index()
-        {
-            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
-
-            var str = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttributeType.STRENGTH.Key
-                && x.Name != "npc_dota_hero_base"
-                && x.Enabled);
-
-            var agi = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttributeType.AGILITY.Key
-                && x.Name != "npc_dota_hero_base"
-                && x.Enabled);
-
-            var intel = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttributeType.INTELLECT.Key
-                && x.Name != "npc_dota_hero_base"
-                && x.Enabled);
-
-            List<HeroSelectItemViewModel> strHeroes = new List<HeroSelectItemViewModel>();
-            foreach (var strHero in str)
-            {
-                strHeroes.Add(new HeroSelectItemViewModel()
-                {
-                    Id = strHero.HeroId,
-                    Name = strHero.Url,
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", strHero.Name.Replace("npc_dota_hero_", ""))
-                });
-            }
-
-            List<HeroSelectItemViewModel> agiHeroes = new List<HeroSelectItemViewModel>();
-            foreach (var agiHero in agi)
-            {
-                agiHeroes.Add(new HeroSelectItemViewModel()
-                {
-                    Id = agiHero.HeroId,
-                    Name = agiHero.Url,
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", agiHero.Name.Replace("npc_dota_hero_", ""))
-                });
-            }
-
-            List<HeroSelectItemViewModel> intHeroes = new List<HeroSelectItemViewModel>();
-            foreach (var intHero in intel)
-            {
-                intHeroes.Add(new HeroSelectItemViewModel()
-                {
-                    Id = intHero.HeroId,
-                    Name = intHero.Url,
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", intHero.Name.Replace("npc_dota_hero_", ""))
-                });
-            }
-
-            HeroSelectViewModel viewModel = new HeroSelectViewModel();
-            viewModel.StrengthHeroes = strHeroes.AsReadOnly();
-            viewModel.AgilityHeroes = agiHeroes.AsReadOnly();
-            viewModel.IntelligenceHeroes = intHeroes.AsReadOnly();
-
-            return View(viewModel);
-        }
-
-        private IReadOnlyCollection<DotaHeroSchemaItem> GetHeroes()
-        {
-            string heroesVdfPath = Path.Combine(AppDataPath, "npc_heroes.vdf");
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
-            var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
-            return heroes;
-        }
-
-        private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
-        {
-            string heroesVdfPath = Path.Combine(AppDataPath, "npc_abilities.vdf");
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
-            var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
-            return abilities;
-        }
-
-        private IReadOnlyDictionary<string, string> GetPublicLocalization()
-        {
-            string vdfPath = Path.Combine(AppDataPath, "public_dota_english.vdf");
-            string vdf = System.IO.File.ReadAllText(vdfPath);
-            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
-            return result;
-        }
-
-        private DotaHeroAbilityBehaviorType GetAbilityBehaviorType(string key)
-        {
-            DotaHeroAbilityBehaviorType value = null;
-            if (abilityBehaviorTypes != null && abilityBehaviorTypes.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return DotaHeroAbilityBehaviorType.UNKNOWN;
-            }
-        }
-
-        private string GetLocalizationText(string key)
-        {
-            string value = String.Empty;
-            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
+        #region In Memory "Database"
 
         private IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> GetAbilityBehaviorTypes()
         {
@@ -160,6 +50,11 @@ namespace DotaDb.Controllers
             temp.Add(DotaHeroAbilityBehaviorType.IGNORE_CHANNEL.Key, DotaHeroAbilityBehaviorType.IGNORE_CHANNEL);
             temp.Add(DotaHeroAbilityBehaviorType.DIRECTIONAL.Key, DotaHeroAbilityBehaviorType.DIRECTIONAL);
             temp.Add(DotaHeroAbilityBehaviorType.AURA.Key, DotaHeroAbilityBehaviorType.AURA);
+            temp.Add(DotaHeroAbilityBehaviorType.DONT_ALERT_TARGET.Key, DotaHeroAbilityBehaviorType.DONT_ALERT_TARGET);
+            temp.Add(DotaHeroAbilityBehaviorType.DONT_CANCEL_MOVEMENT.Key, DotaHeroAbilityBehaviorType.DONT_CANCEL_MOVEMENT);
+            temp.Add(DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN.Key, DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN);
+            temp.Add(DotaHeroAbilityBehaviorType.RUNE_TARGET.Key, DotaHeroAbilityBehaviorType.RUNE_TARGET);
+            temp.Add(DotaHeroAbilityBehaviorType.UNRESTRICTED.Key, DotaHeroAbilityBehaviorType.UNRESTRICTED);
 
             return new ReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>(temp);
         }
@@ -267,6 +162,82 @@ namespace DotaDb.Controllers
             return new ReadOnlyDictionary<string, DotaUnitTargetType>(temp);
         }
 
+        #endregion In Memory "Database"
+
+        #region Hero Index
+
+        public ActionResult Index()
+        {
+            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
+
+            var str = heroes.Where(x =>
+                x.AttributePrimary == DotaHeroPrimaryAttributeType.STRENGTH.Key
+                && x.Name != "npc_dota_hero_base"
+                && x.Enabled);
+
+            var agi = heroes.Where(x =>
+                x.AttributePrimary == DotaHeroPrimaryAttributeType.AGILITY.Key
+                && x.Name != "npc_dota_hero_base"
+                && x.Enabled);
+
+            var intel = heroes.Where(x =>
+                x.AttributePrimary == DotaHeroPrimaryAttributeType.INTELLECT.Key
+                && x.Name != "npc_dota_hero_base"
+                && x.Enabled);
+
+            List<HeroSelectItemViewModel> strHeroes = new List<HeroSelectItemViewModel>();
+            foreach (var strHero in str)
+            {
+                strHeroes.Add(new HeroSelectItemViewModel()
+                {
+                    Id = strHero.HeroId,
+                    Name = strHero.Url,
+                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", strHero.Name.Replace("npc_dota_hero_", ""))
+                });
+            }
+
+            List<HeroSelectItemViewModel> agiHeroes = new List<HeroSelectItemViewModel>();
+            foreach (var agiHero in agi)
+            {
+                agiHeroes.Add(new HeroSelectItemViewModel()
+                {
+                    Id = agiHero.HeroId,
+                    Name = agiHero.Url,
+                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", agiHero.Name.Replace("npc_dota_hero_", ""))
+                });
+            }
+
+            List<HeroSelectItemViewModel> intHeroes = new List<HeroSelectItemViewModel>();
+            foreach (var intHero in intel)
+            {
+                intHeroes.Add(new HeroSelectItemViewModel()
+                {
+                    Id = intHero.HeroId,
+                    Name = intHero.Url,
+                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", intHero.Name.Replace("npc_dota_hero_", ""))
+                });
+            }
+
+            HeroSelectViewModel viewModel = new HeroSelectViewModel();
+            viewModel.StrengthHeroes = strHeroes.AsReadOnly();
+            viewModel.AgilityHeroes = agiHeroes.AsReadOnly();
+            viewModel.IntelligenceHeroes = intHeroes.AsReadOnly();
+
+            return View(viewModel);
+        }
+
+        private IReadOnlyCollection<DotaHeroSchemaItem> GetHeroes()
+        {
+            string heroesVdfPath = Path.Combine(AppDataPath, "npc_heroes.vdf");
+            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
+            return heroes;
+        }
+
+        #endregion
+
+        #region Hero Specifics
+
         public ActionResult Hero(int id)
         {
             localizationKeys = GetPublicLocalization();
@@ -297,9 +268,9 @@ namespace DotaDb.Controllers
                 BaseStrength = hero.AttributeBaseStrength,
                 BaseIntelligence = hero.AttributeBaseIntelligence,
                 AttackRate = hero.AttackRate,
-                Team = GetType(hero.Team, teamTypes).ToString(),
+                Team = GetKeyValue(hero.Team, teamTypes).ToString(),
                 TurnRate = hero.MovementTurnRate,
-                AttackType = GetType(hero.AttackCapabilities, attackTypes).ToString(),
+                AttackType = GetKeyValue(hero.AttackCapabilities, attackTypes).ToString(),
                 Roles = GetRoles(hero.Role, hero.RoleLevels).AsReadOnly(),
                 AgilityGain = hero.AttributeAgilityGain,
                 IntelligenceGain = hero.AttributeIntelligenceGain,
@@ -309,6 +280,35 @@ namespace DotaDb.Controllers
             SetupAbilities(hero, viewModel);
 
             return View(viewModel);
+        }
+        
+        private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
+        {
+            string heroesVdfPath = Path.Combine(AppDataPath, "npc_abilities.vdf");
+            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
+            return abilities;
+        }
+
+        private IReadOnlyDictionary<string, string> GetPublicLocalization()
+        {
+            string vdfPath = Path.Combine(AppDataPath, "public_dota_english.vdf");
+            string vdf = System.IO.File.ReadAllText(vdfPath);
+            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
+            return result;
+        }
+
+        private string GetLocalizationText(string key)
+        {
+            string value = String.Empty;
+            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return String.Empty;
+            }
         }
 
         private void SetupAbilities(DotaHeroSchemaItem hero, HeroViewModel viewModel)
@@ -363,13 +363,13 @@ namespace DotaDb.Controllers
                 CastRange = ability.AbilityCastRange.ToSlashSeparatedString(),
                 Cooldown = ability.AbilityCooldown.ToSlashSeparatedString(),
                 Damage = ability.AbilityDamage.ToSlashSeparatedString(),
-                DamageType = GetType(ability.AbilityUnitDamageType, damageTypes),
+                DamageType = GetKeyValue(ability.AbilityUnitDamageType, damageTypes),
                 Duration = ability.AbilityDuration.ToSlashSeparatedString(),
                 ManaCost = ability.AbilityManaCost.ToSlashSeparatedString(),
-                SpellImmunityType = GetType(ability.SpellImmunityType, spellImmunityTypes),
+                SpellImmunityType = GetKeyValue(ability.SpellImmunityType, spellImmunityTypes),
                 Attributes = abilitySpecialViewModels,
                 Behaviors = joinedBehaviors,
-                AbilityType = GetType(ability.AbilityType, abilityTypes),
+                AbilityType = GetKeyValue(ability.AbilityType, abilityTypes),
                 TargetFlags = joinedUnitTargetFlags,
                 TargetTypes = joinedUnitTargetTypes,
                 TeamTargets = joinedUnitTargetTeamTypes
@@ -380,17 +380,17 @@ namespace DotaDb.Controllers
 
         private string GetJoinedValues<T>(string startingValue, IReadOnlyDictionary<string, T> lookup)
         {
-            if(String.IsNullOrEmpty(startingValue))
+            if (String.IsNullOrEmpty(startingValue))
             {
                 return String.Empty;
             }
 
             string[] raw = startingValue.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
-            List<T> individual = raw.Select(x => lookup[x]).ToList();
+            List<T> individual = raw.Select(x => GetKeyValue(x, lookup)).ToList();
             return String.Join(", ", individual);
         }
 
-        private T GetType<T>(string key, IReadOnlyDictionary<string, T> dict)
+        private T GetKeyValue<T>(string key, IReadOnlyDictionary<string, T> dict)
         {
             if (String.IsNullOrEmpty(key))
             {
@@ -425,5 +425,7 @@ namespace DotaDb.Controllers
 
             return roleViewModels;
         }
+
+        #endregion
     }
 }
