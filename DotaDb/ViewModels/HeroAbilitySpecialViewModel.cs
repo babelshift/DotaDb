@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DotaDb.ViewModels
 {
-    public class HeroAbilityAttribute
+    public class HeroAbilitySpecialViewModel
     {
         public string Name { get; set; }
         public string Value { get; set; }

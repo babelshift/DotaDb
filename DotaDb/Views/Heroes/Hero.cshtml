@@ -92,6 +92,105 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h3 style="margin-top: 0;">Abilities</h3>
+                    @foreach (var ability in Model.Abilities)
+                    {
+                        <div class="media">
+                            <div class="media-left">
+                                <img src="@ability.AvatarImagePath" width="80" height="80" />
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">@ability.Name</h4>
+                                <p><small class="text-muted">@ability.Description</small></p>
+                                <div class="row">
+                                    <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                        @if (!String.IsNullOrEmpty(ability.Behaviors))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Behaviors:</small>
+                                                <small>@ability.Behaviors</small>
+                                            </p>
+                                        }
+                                    </div>
+                                    <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                        @if (!String.IsNullOrEmpty(ability.CastPoint))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Cast Point:</small>
+                                                <small>@ability.CastPoint</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.CastRange))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Cast Range:</small>
+                                                <small>@ability.CastRange</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.Cooldown))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Cooldown:</small>
+                                                <small>@ability.Cooldown</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.Damage))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Damage:</small>
+                                                <small>@ability.Damage</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.DamageType))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Damage Type:</small>
+                                                <small>@ability.DamageType</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.Duration))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Duration:</small>
+                                                <small>@ability.Duration</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.ManaCost))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Mana Cost:</small>
+                                                <small>@ability.ManaCost</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.SpellImmunityType))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Spell Immunity:</small>
+                                                <small>@ability.SpellImmunityType</small>
+                                            </p>
+                                        }
+                                    </div>
+                                    <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                        @foreach (var abilitySpecial in ability.Attributes)
+                                        {
+                                            <p>
+                                                <small class="text-muted">
+                                                    @if (!String.IsNullOrEmpty(abilitySpecial.Name))
+                                                    {
+                                                        @abilitySpecial.Name
+                                                    }
+                                                    else
+                                                    {
+                                                        @String.Format("{0}:", abilitySpecial.RawName)
+                                                    }
+                                                </small>
+                                                <small>@abilitySpecial.Value</small>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <div class="media">
                         <div class="media-left">
                             <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_death_coil_lg.png" width="80" height="80" />

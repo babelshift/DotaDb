@@ -8,6 +8,7 @@ namespace DotaDb.ViewModels
     public class HeroViewModel
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public string AvatarImagePath { get; set; }
         public int BaseStrength { get; set; }
         public int BaseAgility { get; set; }
@@ -24,5 +25,6 @@ namespace DotaDb.ViewModels
         public double AgilityGain { get; set; }
         public double IntelligenceGain { get; set; }
         public IReadOnlyCollection<HeroRoleViewModel> Roles { get; set; }
+        public IReadOnlyCollection<HeroAbilityViewModel> Abilities { get; set; }
     }
 }
