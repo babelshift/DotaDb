@@ -11,55 +11,37 @@ using System.Web.Mvc;
 
 namespace DotaDb.Controllers
 {
-    public enum DotaHeroAbilityType
-    {
-        DOTA_ABILITY_TYPE_BASIC,
-        DOTA_ABILITY_TYPE_ULTIMATE,
-        DOTA_ABILITY_TYPE_ATTRIBUTES
-    }
-
-    public enum DotaHeroPrimaryAttribute
-    {
-        DOTA_ATTRIBUTE_STRENGTH,
-        DOTA_ATTRIBUTE_AGILITY,
-        DOTA_ATTRIBUTE_INTELLECT
-    }
-
-    public enum DotaAttackType
-    {
-        DOTA_UNIT_CAP_RANGED_ATTACK,
-        DOTA_UNIT_CAP_MELEE_ATTACK
-    }
-
-    public enum DotaTeam
-    {
-        DOTA_TEAM_GOODGUYS,
-        DOTA_TEAM_BADGUYS
-    }
-
     public class HeroesController : Controller
     {
-        private string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
-
         private IReadOnlyDictionary<string, string> localizationKeys;
         private IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
+        private IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
+        private IReadOnlyDictionary<string, DotaAttackType> attackTypes;
+        private IReadOnlyDictionary<string, DotaTeamType> teamTypes;
+        private IReadOnlyDictionary<string, DotaDamageType> damageTypes;
+        private IReadOnlyDictionary<string, DotaSpellImmunityType> spellImmunityTypes;
+        private IReadOnlyDictionary<string, DotaUnitTargetFlag> unitTargetFlags;
+        private IReadOnlyDictionary<string, DotaUnitTargetTeamType> unitTargetTeamTypes;
+        private IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
+
+        private string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
         public ActionResult Index()
         {
             IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
 
             var str = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttribute.DOTA_ATTRIBUTE_STRENGTH.ToString()
+                x.AttributePrimary == DotaHeroPrimaryAttributeType.STRENGTH.Key
                 && x.Name != "npc_dota_hero_base"
                 && x.Enabled);
 
             var agi = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttribute.DOTA_ATTRIBUTE_AGILITY.ToString()
+                x.AttributePrimary == DotaHeroPrimaryAttributeType.AGILITY.Key
                 && x.Name != "npc_dota_hero_base"
                 && x.Enabled);
 
             var intel = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttribute.DOTA_ATTRIBUTE_INTELLECT.ToString()
+                x.AttributePrimary == DotaHeroPrimaryAttributeType.INTELLECT.Key
                 && x.Name != "npc_dota_hero_base"
                 && x.Enabled);
 
@@ -128,6 +110,19 @@ namespace DotaDb.Controllers
             return result;
         }
 
+        private DotaHeroAbilityBehaviorType GetAbilityBehaviorType(string key)
+        {
+            DotaHeroAbilityBehaviorType value = null;
+            if (abilityBehaviorTypes != null && abilityBehaviorTypes.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return DotaHeroAbilityBehaviorType.UNKNOWN;
+            }
+        }
+
         private string GetLocalizationText(string key)
         {
             string value = String.Empty;
@@ -169,10 +164,121 @@ namespace DotaDb.Controllers
             return new ReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>(temp);
         }
 
+        private IReadOnlyDictionary<string, DotaHeroAbilityType> GetHeroAbilityTypes()
+        {
+            Dictionary<string, DotaHeroAbilityType> temp = new Dictionary<string, DotaHeroAbilityType>();
+
+            temp.Add(DotaHeroAbilityType.BASIC.Key, DotaHeroAbilityType.BASIC);
+            temp.Add(DotaHeroAbilityType.ULTIMATE.Key, DotaHeroAbilityType.ULTIMATE);
+            temp.Add(DotaHeroAbilityType.ATTRIBUTES.Key, DotaHeroAbilityType.ATTRIBUTES);
+
+            return new ReadOnlyDictionary<string, DotaHeroAbilityType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaAttackType> GetAttackTypes()
+        {
+            Dictionary<string, DotaAttackType> temp = new Dictionary<string, DotaAttackType>();
+
+            temp.Add(DotaAttackType.MELEE.Key, DotaAttackType.MELEE);
+            temp.Add(DotaAttackType.RANGED.Key, DotaAttackType.RANGED);
+
+            return new ReadOnlyDictionary<string, DotaAttackType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> GetPrimaryAttributeTypes()
+        {
+            Dictionary<string, DotaHeroPrimaryAttributeType> temp = new Dictionary<string, DotaHeroPrimaryAttributeType>();
+
+            temp.Add(DotaHeroPrimaryAttributeType.AGILITY.Key, DotaHeroPrimaryAttributeType.AGILITY);
+            temp.Add(DotaHeroPrimaryAttributeType.INTELLECT.Key, DotaHeroPrimaryAttributeType.INTELLECT);
+            temp.Add(DotaHeroPrimaryAttributeType.STRENGTH.Key, DotaHeroPrimaryAttributeType.STRENGTH);
+
+            return new ReadOnlyDictionary<string, DotaHeroPrimaryAttributeType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaTeamType> GetTeamTypes()
+        {
+            Dictionary<string, DotaTeamType> temp = new Dictionary<string, DotaTeamType>();
+
+            temp.Add(DotaTeamType.BAD.Key, DotaTeamType.BAD);
+            temp.Add(DotaTeamType.GOOD.Key, DotaTeamType.GOOD);
+
+            return new ReadOnlyDictionary<string, DotaTeamType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaDamageType> GetDamageTypes()
+        {
+            Dictionary<string, DotaDamageType> temp = new Dictionary<string, DotaDamageType>();
+
+            temp.Add(DotaDamageType.MAGICAL.Key, DotaDamageType.MAGICAL);
+            temp.Add(DotaDamageType.PHYSICAL.Key, DotaDamageType.PHYSICAL);
+            temp.Add(DotaDamageType.PURE.Key, DotaDamageType.PURE);
+
+            return new ReadOnlyDictionary<string, DotaDamageType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaSpellImmunityType> GetSpellImmunityTypes()
+        {
+            Dictionary<string, DotaSpellImmunityType> temp = new Dictionary<string, DotaSpellImmunityType>();
+
+            temp.Add(DotaSpellImmunityType.ALLIES_NO.Key, DotaSpellImmunityType.ALLIES_NO);
+            temp.Add(DotaSpellImmunityType.ALLIES_YES.Key, DotaSpellImmunityType.ALLIES_YES);
+            temp.Add(DotaSpellImmunityType.ENEMIES_NO.Key, DotaSpellImmunityType.ENEMIES_NO);
+            temp.Add(DotaSpellImmunityType.ENEMIES_YES.Key, DotaSpellImmunityType.ENEMIES_YES);
+
+            return new ReadOnlyDictionary<string, DotaSpellImmunityType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaUnitTargetFlag> GetUnitTargetFlags()
+        {
+            Dictionary<string, DotaUnitTargetFlag> temp = new Dictionary<string, DotaUnitTargetFlag>();
+
+            temp.Add(DotaUnitTargetFlag.INVULNERABLE.Key, DotaUnitTargetFlag.INVULNERABLE);
+            temp.Add(DotaUnitTargetFlag.MAGIC_IMMUNE_ENEMIES.Key, DotaUnitTargetFlag.MAGIC_IMMUNE_ENEMIES);
+            temp.Add(DotaUnitTargetFlag.NOT_ANCIENTS.Key, DotaUnitTargetFlag.NOT_ANCIENTS);
+            temp.Add(DotaUnitTargetFlag.NOT_CREEP_HERO.Key, DotaUnitTargetFlag.NOT_CREEP_HERO);
+            temp.Add(DotaUnitTargetFlag.NOT_MAGIC_IMMUNE_ALLIES.Key, DotaUnitTargetFlag.NOT_MAGIC_IMMUNE_ALLIES);
+            temp.Add(DotaUnitTargetFlag.NOT_SUMMONED.Key, DotaUnitTargetFlag.NOT_SUMMONED);
+
+            return new ReadOnlyDictionary<string, DotaUnitTargetFlag>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaUnitTargetTeamType> GetUnitTargetTeamTypes()
+        {
+            Dictionary<string, DotaUnitTargetTeamType> temp = new Dictionary<string, DotaUnitTargetTeamType>();
+
+            temp.Add(DotaUnitTargetTeamType.BOTH.Key, DotaUnitTargetTeamType.BOTH);
+            temp.Add(DotaUnitTargetTeamType.CUSTOM.Key, DotaUnitTargetTeamType.CUSTOM);
+            temp.Add(DotaUnitTargetTeamType.ENEMY.Key, DotaUnitTargetTeamType.ENEMY);
+            temp.Add(DotaUnitTargetTeamType.FRIENDLY.Key, DotaUnitTargetTeamType.FRIENDLY);
+
+            return new ReadOnlyDictionary<string, DotaUnitTargetTeamType>(temp);
+        }
+
+        private IReadOnlyDictionary<string, DotaUnitTargetType> GetUnitTargetTypes()
+        {
+            Dictionary<string, DotaUnitTargetType> temp = new Dictionary<string, DotaUnitTargetType>();
+
+            temp.Add(DotaUnitTargetType.BASIC.Key, DotaUnitTargetType.BASIC);
+            temp.Add(DotaUnitTargetType.BUILDING.Key, DotaUnitTargetType.BUILDING);
+            temp.Add(DotaUnitTargetType.CUSTOM.Key, DotaUnitTargetType.CUSTOM);
+            temp.Add(DotaUnitTargetType.HERO.Key, DotaUnitTargetType.HERO);
+
+            return new ReadOnlyDictionary<string, DotaUnitTargetType>(temp);
+        }
+
         public ActionResult Hero(int id)
         {
             localizationKeys = GetPublicLocalization();
             abilityBehaviorTypes = GetAbilityBehaviorTypes();
+            attackTypes = GetAttackTypes();
+            teamTypes = GetTeamTypes();
+            abilityTypes = GetHeroAbilityTypes();
+            spellImmunityTypes = GetSpellImmunityTypes();
+            damageTypes = GetDamageTypes();
+            unitTargetFlags = GetUnitTargetFlags();
+            unitTargetTeamTypes = GetUnitTargetTeamTypes();
+            unitTargetTypes = GetUnitTargetTypes();
 
             IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
 
@@ -191,9 +297,9 @@ namespace DotaDb.Controllers
                 BaseStrength = hero.AttributeBaseStrength,
                 BaseIntelligence = hero.AttributeBaseIntelligence,
                 AttackRate = hero.AttackRate,
-                Team = GetTeam(hero.TeamName),
+                Team = GetType(hero.Team, teamTypes).ToString(),
                 TurnRate = hero.MovementTurnRate,
-                AttackType = GetAttackType(hero.AttackCapabilities),
+                AttackType = GetType(hero.AttackCapabilities, attackTypes).ToString(),
                 Roles = GetRoles(hero.Role, hero.RoleLevels).AsReadOnly(),
                 AgilityGain = hero.AttributeAgilityGain,
                 IntelligenceGain = hero.AttributeIntelligenceGain,
@@ -232,9 +338,10 @@ namespace DotaDb.Controllers
 
             var ability = abilities.FirstOrDefault(x => x.Name == abilityName);
 
-            string[] rawBehaviors = ability.AbilityBehavior.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
-            List<DotaHeroAbilityBehaviorType> behaviors = rawBehaviors.Select(x => abilityBehaviorTypes[x]).ToList();
-            string joinedBehaviors = String.Join(", ", behaviors);
+            string joinedBehaviors = GetJoinedValues(ability.AbilityBehavior, abilityBehaviorTypes);
+            string joinedUnitTargetTeamTypes = GetJoinedValues(ability.AbilityUnitTargetTeam, unitTargetTeamTypes);
+            string joinedUnitTargetTypes = GetJoinedValues(ability.AbilityUnitTargetType, unitTargetTypes);
+            string joinedUnitTargetFlags = GetJoinedValues(ability.AbilityUnitTargetFlags, unitTargetFlags);
 
             List<HeroAbilitySpecialViewModel> abilitySpecialViewModels = new List<HeroAbilitySpecialViewModel>();
             foreach (var abilitySpecial in ability.AbilitySpecials)
@@ -243,41 +350,61 @@ namespace DotaDb.Controllers
                 {
                     Name = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, abilitySpecial.Name)),
                     RawName = abilitySpecial.Name,
-                    Value = abilitySpecial.Value
+                    Value = abilitySpecial.Value.ToSlashSeparatedString()
                 });
             }
 
-            abilityViewModels.Add(new HeroAbilityViewModel()
+            var abilityViewModel = new HeroAbilityViewModel()
             {
-                Name = GetLocalizationText(String.Format("{0}{1}", "DOTA_Tooltip_ability_", abilityName)),
+                Name = GetLocalizationText(String.Format("{0}_{1}", "DOTA_Tooltip_ability", abilityName)),
                 AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/abilities/{0}_lg.png", ability.Name),
                 Description = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Description")),
-                CastPoint = ability.AbilityCastPoint,
-                CastRange = ability.AbilityCastRange.Replace(" ", " / "),
-                Cooldown = ability.AbilityCooldown.Replace(" ", " / "),
-                Damage = ability.AbilityDamage.Replace(" ", " / "),
-                DamageType = ability.AbilityUnitDamageType,
-                Duration = ability.AbilityDuration.Replace(" ", " / "),
-                ManaCost = ability.AbilityManaCost.Replace(" ", " / "),
-                SpellImmunityType = ability.SpellImmunityType,
+                CastPoint = ability.AbilityCastPoint.ToSlashSeparatedString(),
+                CastRange = ability.AbilityCastRange.ToSlashSeparatedString(),
+                Cooldown = ability.AbilityCooldown.ToSlashSeparatedString(),
+                Damage = ability.AbilityDamage.ToSlashSeparatedString(),
+                DamageType = GetType(ability.AbilityUnitDamageType, damageTypes),
+                Duration = ability.AbilityDuration.ToSlashSeparatedString(),
+                ManaCost = ability.AbilityManaCost.ToSlashSeparatedString(),
+                SpellImmunityType = GetType(ability.SpellImmunityType, spellImmunityTypes),
                 Attributes = abilitySpecialViewModels,
-                Behaviors = joinedBehaviors
-            });
+                Behaviors = joinedBehaviors,
+                AbilityType = GetType(ability.AbilityType, abilityTypes),
+                TargetFlags = joinedUnitTargetFlags,
+                TargetTypes = joinedUnitTargetTypes,
+                TeamTargets = joinedUnitTargetTeamTypes
+            };
+
+            abilityViewModels.Add(abilityViewModel);
         }
 
-        private static string GetAttackType(string attackType)
+        private string GetJoinedValues<T>(string startingValue, IReadOnlyDictionary<string, T> lookup)
         {
-            if (attackType == DotaAttackType.DOTA_UNIT_CAP_MELEE_ATTACK.ToString())
+            if(String.IsNullOrEmpty(startingValue))
             {
-                return "Melee";
+                return String.Empty;
             }
-            else if (attackType == DotaAttackType.DOTA_UNIT_CAP_RANGED_ATTACK.ToString())
+
+            string[] raw = startingValue.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
+            List<T> individual = raw.Select(x => lookup[x]).ToList();
+            return String.Join(", ", individual);
+        }
+
+        private T GetType<T>(string key, IReadOnlyDictionary<string, T> dict)
+        {
+            if (String.IsNullOrEmpty(key))
             {
-                return "Ranged";
+                return default(T);
+            }
+
+            T value;
+            if (dict != null && dict.TryGetValue(key, out value))
+            {
+                return value;
             }
             else
             {
-                return "Undefined";
+                return default(T);
             }
         }
 
@@ -297,22 +424,6 @@ namespace DotaDb.Controllers
             }
 
             return roleViewModels;
-        }
-
-        private static string GetTeam(string team)
-        {
-            if (team == DotaTeam.DOTA_TEAM_GOODGUYS.ToString())
-            {
-                return "Radiant";
-            }
-            else if (team == DotaTeam.DOTA_TEAM_BADGUYS.ToString())
-            {
-                return "Dire";
-            }
-            else
-            {
-                return "Unknown";
-            }
         }
     }
 }

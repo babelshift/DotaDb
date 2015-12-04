@@ -1,4 +1,5 @@
 ﻿@model DotaDb.ViewModels.HeroViewModel
+@using SourceSchemaParser.Dota2;
 
 <div class="row">
     <div class="col-lg-3">
@@ -99,10 +100,16 @@
                                 <img src="@ability.AvatarImagePath" width="80" height="80" />
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading">@ability.Name</h4>
+                                <h4 class="media-heading">
+                                    @ability.Name
+                                    @if (ability.AbilityType != null)
+                                    {
+                                        <span class="badge">@ability.AbilityType</span>
+                                    }
+                                </h4>
                                 <p><small class="text-muted">@ability.Description</small></p>
                                 <div class="row">
-                                    <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <div class="col-lg-4 text-uppercase">
                                         @if (!String.IsNullOrEmpty(ability.Behaviors))
                                         {
                                             <p>
@@ -110,8 +117,29 @@
                                                 <small>@ability.Behaviors</small>
                                             </p>
                                         }
+                                        @if (!String.IsNullOrEmpty(ability.TargetTypes))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Targets:</small>
+                                                <small>@ability.TargetTypes</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.TeamTargets))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Team Targets:</small>
+                                                <small>@ability.TeamTargets</small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(ability.TargetFlags))
+                                        {
+                                            <p>
+                                                <small class="text-muted">Target Flags:</small>
+                                                <small>@ability.TargetFlags</small>
+                                            </p>
+                                        }
                                     </div>
-                                    <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <div class="col-lg-4 text-uppercase">
                                         @if (!String.IsNullOrEmpty(ability.CastPoint))
                                         {
                                             <p>
@@ -140,11 +168,22 @@
                                                 <small>@ability.Damage</small>
                                             </p>
                                         }
-                                        @if (!String.IsNullOrEmpty(ability.DamageType))
+                                        @if (ability.DamageType != null)
                                         {
                                             <p>
                                                 <small class="text-muted">Damage Type:</small>
-                                                <small>@ability.DamageType</small>
+                                                @if (ability.DamageType.Key == DotaDamageType.PHYSICAL.Key)
+                                                {
+                                                    <small class="text-danger">@ability.DamageType</small>
+                                                }
+                                                else if (ability.DamageType.Key == DotaDamageType.MAGICAL.Key)
+                                                {
+                                                    <small class="text-primary">@ability.DamageType</small>
+                                                }
+                                                else if (ability.DamageType.Key == DotaDamageType.PURE.Key)
+                                                {
+                                                    <small class="text-success">@ability.DamageType</small>
+                                                }
                                             </p>
                                         }
                                         @if (!String.IsNullOrEmpty(ability.Duration))
@@ -161,15 +200,22 @@
                                                 <small>@ability.ManaCost</small>
                                             </p>
                                         }
-                                        @if (!String.IsNullOrEmpty(ability.SpellImmunityType))
+                                        @if (ability.SpellImmunityType != null)
                                         {
                                             <p>
                                                 <small class="text-muted">Spell Immunity:</small>
-                                                <small>@ability.SpellImmunityType</small>
+                                                @if (ability.SpellImmunityType.Key == DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == DotaSpellImmunityType.ENEMIES_YES.Key)
+                                                {
+                                                    <small class="text-success">@ability.SpellImmunityType</small>
+                                                }
+                                                else
+                                                {
+                                                    <small class="text-danger">@ability.SpellImmunityType</small>
+                                                }
                                             </p>
                                         }
                                     </div>
-                                    <div class="col-lg-4 text-uppercase" style="line-height: 7px">
+                                    <div class="col-lg-4 text-uppercase">
                                         @foreach (var abilitySpecial in ability.Attributes)
                                         {
                                             <p>
@@ -191,218 +237,6 @@
                             </div>
                         </div>
                     }
-                    <div class="media">
-                        <div class="media-left">
-                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_death_coil_lg.png" width="80" height="80" />
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">Mist Coil</h4>
-                            <p><small class="text-muted">Abaddon releases a coil of deathly mist that can damage an enemy unit or heal a friendly unit at the cost of some of Abaddon's health.</small></p>
-                            <div class="row">
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Behavior:</small>
-                                        <small>Target</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Team Target:</small>
-                                        <small>Both</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Valid Target:</small>
-                                        <small>Hero, Creep</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Pierces Spell Immunity:</small>
-                                        <small class="text-success">On Allies</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Damage Type:</small>
-                                        <small class="text-primary">Magical</small>
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Cast Range:</small>
-                                        <small>800</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Cooldown:</small>
-                                        <small>4.5 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Mana Cost:</small>
-                                        <small>50 / 60 / 70 / 80</small>
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Self Damage:</small>
-                                        <small>75 / 100 / 125 / 150</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Target Damage:</small>
-                                        <small>100 / 150 / 200 / 250</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Heal Amount:</small>
-                                        <small>100 / 150 / 200 / 250</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="media-left">
-                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_aphotic_shield_lg.png" width="80" height="80" />
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">Aphotic Shield</h4>
-                            <p><small class="text-muted">Summons dark energies around an ally unit, creating a shield that absorbs a set amount of damage before expiring. When the shield is destroyed it will burst and deal damage equal to the amount it could absorb to an area around it. Removes certain types of negative buffs and stuns on cast.</small></p>
-                            <div class="row">
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Behavior:</small>
-                                        <small>Target</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Team Target:</small>
-                                        <small>Friendly</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Valid Target:</small>
-                                        <small>Hero</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Pierces Spell Immunity:</small>
-                                        <small class="text-danger">No</small>
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Cast Range:</small>
-                                        <small>500</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Cooldown:</small>
-                                        <small>12 / 10 / 8 / 6 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Mana Cost:</small>
-                                        <small>100 / 105 / 110 / 115</small>
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Duration:</small>
-                                        <small>15 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Damage Absorb:</small>
-                                        <small>110 / 140 / 170 / 200</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Damage Radius:</small>
-                                        <small>675</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="media-left">
-                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_frostmourne_lg.png" width="80" height="80" />
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">Curse of Avernus</h4>
-                            <p><small class="text-muted">Abaddon strikes an enemy with chilling curse on each attack, causing all units who attack the slowed enemy to gain increased movement speed, along with faster attack speed, for a limited time.</small></p>
-                            <div class="row">
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Behavior:</small>
-                                        <small>Passive</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Pierces Spell Immunity:</small>
-                                        <small class="text-success">Yes</small>
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 text-uppercase" style="line-height: 7px">
-                                    <p>
-                                        <small class="text-muted">Debuff Duration:</small>
-                                        <small>2.5 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Buff Duration:</small>
-                                        <small>4.5 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Move Slow %</small>
-                                        <small>5 / 10 / 15 / 20</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Attack Slow:</small>
-                                        <small>5 / 10 / 15 / 20</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Move Buff %:</small>
-                                        <small>15</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Attack Speed:</small>
-                                        <small>10 / 20 / 30 / 40</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="media-left">
-                            <img src="http://cdn.dota2.com/apps/dota2/images/abilities/abaddon_borrowed_time_lg.png" width="80" height="80" />
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading text-primary">Borrowed Time (Ultimate)</h4>
-                            <p><small class="text-muted">When activated, all damage dealt to you will heal instead of harm. Most negative buffs will also be removed. If the ability is not on cooldown, it will automatically activate if your health falls below 400. Upgradable by Aghanim's Scepter.</small></p>
-                            <div class="row">
-                                <div class="col-lg-4 text-uppercase" style="line-height: 13px">
-                                    <p>
-                                        <small class="text-muted">Behavior:</small>
-                                        <small>No Target, Instant, Ignore Queue</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Cooldown:</small>
-                                        <small>60 / 50 / 40 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Mana Cost:</small>
-                                        <small>0</small>
-                                    </p>
-                                </div>
-                                <div class="col-lg-4 text-uppercase" style="line-height: 15px">
-                                    <p>
-                                        <small class="text-muted">HP Threshold:</small>
-                                        <small>400</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Duration:</small>
-                                        <small>4 / 5 / 6 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Duration (scepter):</small>
-                                        <small>5 / 6 / 7 sec</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Redirect % (scepter):</small>
-                                        <small>900</small>
-                                    </p>
-                                    <p>
-                                        <small class="text-muted">Redirect Range (scepter):</small>
-                                        <small>5 / 10 / 15 / 20</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
