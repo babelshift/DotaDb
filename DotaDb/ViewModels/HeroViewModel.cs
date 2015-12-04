@@ -18,6 +18,7 @@ namespace DotaDb.ViewModels
         public int BaseMoveSpeed { get; set; }
         public double BaseArmor { get; set; }
         public string Team { get; set; }
+        public double AttackRange { get; set; }
         public double AttackRate { get; set; }
         public double TurnRate { get; set; }
         public string AttackType { get; set; }

@@ -7,7 +7,7 @@
             @Model.Name
         </h2>
         <div class="text-center">
-            <img src="@Model.AvatarImagePath" />
+            <img src="@Model.AvatarImagePath" class="shadow" />
         </div>
         <hr />
         <div class="row">
@@ -62,6 +62,9 @@
                 <small class="text-muted">Atk Rate:</small>
                 <small>@Model.AttackRate.ToString("F")</small>
                 <br />
+                <small class="text-muted">Atk Range:</small>
+                <small>@Model.AttackRange.ToString("F")</small>
+                <br />
                 <small class="text-muted">Turn Rate:</small>
                 <small>@Model.TurnRate.ToString("F")</small>
             </div>
@@ -97,9 +100,9 @@
                     {
                         <div class="media">
                             <div class="media-left">
-                                <img src="@ability.AvatarImagePath" width="80" height="80" />
+                                <img src="@ability.AvatarImagePath" width="80" height="80" class="shadow" />
                             </div>
-                            <div class="media-body">
+                            <div class="media-body abilities">
                                 <h4 class="media-heading">
                                     @ability.Name
                                     @if (ability.AbilityType != null)
@@ -107,8 +110,8 @@
                                         <span class="badge">@ability.AbilityType</span>
                                     }
                                 </h4>
-                                <p><small class="text-muted">@ability.Description</small></p>
-                                <div class="row abilities">
+                                <p class="text-muted">@ability.Description</p>
+                                <div class="row">
                                     <div class="col-lg-4 text-uppercase">
                                         @if (!String.IsNullOrEmpty(ability.Behaviors))
                                         {
@@ -234,8 +237,33 @@
                                         }
                                     </div>
                                 </div>
+                                @if (!String.IsNullOrEmpty(ability.Note0))
+                                {
+                                    <div class="alert alert-info"><small>@ability.Note0</small></div>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Note1))
+                                {
+                                    <div class="alert alert-info"><small>@ability.Note1</small></div>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Note2))
+                                {
+                                    <div class="alert alert-info"><small>@ability.Note2</small></div>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Note3))
+                                {
+                                    <div class="alert alert-info"><small>@ability.Note3</small></div>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Note4))
+                                {
+                                    <div class="alert alert-info"><small>@ability.Note4</small></div>
+                                }
+                                @if (!String.IsNullOrEmpty(ability.Note5))
+                                {
+                                    <div class="alert alert-info"><small>@ability.Note5</small></div>
+                                }
                             </div>
                         </div>
+                        <hr />
                     }
                 </div>
             </div>

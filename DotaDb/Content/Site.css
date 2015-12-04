@@ -60,9 +60,9 @@ textarea {
     background-color: #222;
 }
 
-.footer-bottom .link-white {
-    color: #fff;
-}
+    .footer-bottom .link-white {
+        color: #fff;
+    }
 
 .footer a:hover {
     text-decoration: underline;
@@ -80,4 +80,17 @@ textarea {
     margin-top: 3px;
     line-height: 15px;
     margin-bottom: 3px;
+}
+
+.shadow {
+    -webkit-box-shadow: 2px 2px 2px 0 rgba(170,170,170,1);
+    -moz-box-shadow: 2px 2px 2px 0 rgba(170,170,170,1);
+    box-shadow: 2px 2px 2px 0 rgba(170,170,170,1);
+}
+
+.abilities .alert {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    margin-bottom: 5px;
 }

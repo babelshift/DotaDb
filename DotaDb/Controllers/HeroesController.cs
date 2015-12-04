@@ -268,6 +268,7 @@ namespace DotaDb.Controllers
                 BaseStrength = hero.AttributeBaseStrength,
                 BaseIntelligence = hero.AttributeBaseIntelligence,
                 AttackRate = hero.AttackRate,
+                AttackRange = hero.AttackRange,
                 Team = GetKeyValue(hero.Team, teamTypes).ToString(),
                 TurnRate = hero.MovementTurnRate,
                 AttackType = GetKeyValue(hero.AttackCapabilities, attackTypes).ToString(),
@@ -372,7 +373,13 @@ namespace DotaDb.Controllers
                 AbilityType = GetKeyValue(ability.AbilityType, abilityTypes),
                 TargetFlags = joinedUnitTargetFlags,
                 TargetTypes = joinedUnitTargetTypes,
-                TeamTargets = joinedUnitTargetTeamTypes
+                TeamTargets = joinedUnitTargetTeamTypes,
+                Note0 = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note0")),
+                Note1 = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note1")),
+                Note2 = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note2")),
+                Note3 = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note3")),
+                Note4 = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note4")),
+                Note5 = GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note5")),
             };
 
             abilityViewModels.Add(abilityViewModel);
