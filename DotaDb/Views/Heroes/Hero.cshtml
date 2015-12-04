@@ -302,76 +302,98 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h3 style="margin-top: 0">Level Progression <small class="text-uppercase">(without stats)</small></h3>
-                    <table class="table table-condensed text-uppercase text-muted" style="font-size: 11px; margin-bottom: 0">
-                        <thead>
-                            <tr>
-                                <th>Level</th>
-                                @for (int i = 1; i <= 25; i++)
-                                {
-                                    <th>@i</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>HP</td>
-                                @for (int i = 0; i < 25; i++)
-                                {
-                                    <td>@Math.Round(150 + (19 * (23 + (i * 2.7))))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>MP</td>
-                                @for (int i = 0; i < 25; i++)
-                                {
-                                    <td>@Math.Round(13 * (21 + (i * 2.0)))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>DMG (min)</td>
-                                @for (int i = 0; i < 25; i++)
-                                {
-                                    <td>@Math.Round(32 + (23 + (i * 2.7)))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>DMG (max)</td>
-                                @for (int i = 0; i < 25; i++)
-                                {
-                                    <td>@Math.Round(42 + (23 + (i * 2.7)))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>Armor</td>
-                                @for (int i = 0; i < 25; i++)
-                                {
-                                    <td>@Math.Round(1.38 + (.14 * (17 + (i * 1.5))))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>STR</td>
-                                @for (int i = 1; i <= 25; i++)
-                                {
-                                    <td>@(Math.Round(23 + (i * 2.7)))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>AGI</td>
-                                @for (int i = 1; i <= 25; i++)
-                                {
-                                    <td>@(Math.Round(17 + (i * 1.5)))</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td>INT</td>
-                                @for (int i = 1; i <= 25; i++)
-                                {
-                                    <td>@(Math.Round(20 + (i * 2.0)))</td>
-                                }
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
+                <table class="table table-condensed table-striped text-uppercase text-muted" style="font-size: 12px; margin-bottom: 0">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            @for (int i = 1; i <= 25; i++)
+                            {
+                                <th>@i</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HP</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                <td>@Math.Round(150 + (19 * (Model.BaseStrength + (i * Model.StrengthGain))))</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>MP</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                <td>@Math.Round(13 * (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>DMG (min)</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                                {
+                                    <td>@Math.Round(Model.BaseDamageMin + (Model.BaseStrength + (i * Model.StrengthGain)))</td>
+                                }
+                                else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                                {
+                                    <td>@Math.Round(Model.BaseDamageMin + (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                                }
+                                else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.AGILITY.Key)
+                                {
+                                    <td>@Math.Round(Model.BaseDamageMin + (Model.BaseAgility + (i * Model.AgilityGain)))</td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>DMG (max)</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                                {
+                                    <td>@Math.Round(Model.BaseDamageMax + (Model.BaseStrength + (i * Model.StrengthGain)))</td>
+                                }
+                                else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                                {
+                                    <td>@Math.Round(Model.BaseDamageMax + (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                                }
+                                else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.AGILITY.Key)
+                                {
+                                    <td>@Math.Round(Model.BaseDamageMax + (Model.BaseAgility + (i * Model.AgilityGain)))</td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>Armor</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                <td>@Math.Round(Model.BaseArmor + (.14 * (Model.BaseAgility + (i * Model.AgilityGain))))</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>STR</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                <td>@(Math.Round(Model.BaseStrength + (i * Model.StrengthGain)))</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>AGI</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                <td>@(Math.Round(Model.BaseAgility + (i * Model.AgilityGain)))</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            @for (int i = 0; i < 25; i++)
+                            {
+                                <td>@(Math.Round(Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
