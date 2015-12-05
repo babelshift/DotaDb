@@ -5,33 +5,37 @@
 }
 <div class="panel panel-default">
     <div class="panel-body">
-        <h3 style="margin-top: 0">Recommended items for Ancient Apparation</h3>
-        <p class="text-uppercase">
-            <span class="text-muted">Guide Author:</span>
-            Valve
-        </p>
-        <h4>Starting Items</h4>
-        <div class="row text-center">
-            <div class="col-lg-1">
-                <div class="thumbnail" style="margin: 0 0 5px 0; padding: 0; border: 0" title="Clarity Potion">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/items/clarity_lg.png" class="shadow" />
-                </div>
-                <span class="label label-default">x 2</span>
+        @if (ViewBag.ErrorMessage != null && !String.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
             </div>
-            <div class="col-lg-1">
-                <div class="thumbnail" style="margin: 0 0 5px 0; padding: 0; border: 0" title="Tango">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/items/tango_lg.png" class="shadow" />
+        }
+        @if (Model != null && Model.ItemGroups != null && Model.ItemGroups.Count > 0)
+        {
+            <h3 style="margin-top: 0">@Model.Title</h3>
+            <p class="text-uppercase">
+                <span class="text-muted">Guide Author:</span>
+                @Model.Author
+            </p>
+            foreach (var itemGroup in Model.ItemGroups)
+            {
+                <p class="text-uppercase" style="margin-bottom: 3px">@itemGroup.Title</p>
+                <div class="row text-center" style="margin-bottom: 10px">
+                    @foreach (var item in itemGroup.Items)
+                    {
+                        <div class="col-lg-1">
+                            <div class="thumbnail" style="margin: 0 0 5px 0; padding: 0; border: 0" title="@item.Name">
+                                <img src="@item.IconPath" class="shadow" />
+                            </div>
+                            @if (item.Quantity > 1)
+                            {
+                                <span class="label label-default">x @item.Quantity</span>
+                            }
+                        </div>
+                    }
                 </div>
-                <span class="label label-default">x 4</span>
-            </div>
-            <div class="col-lg-1">
-                <div class="thumbnail" style="margin: 0; padding: 0; border: 0" title="Bottle">
-                    <img src="http://cdn.dota2.com/apps/dota2/images/items/bottle_lg.png" class="shadow" />
-                </div>
-            </div>
-        </div>
-        <h4>Early Game</h4>
-        <h4>Core Items</h4>
-        <h4>Situational Items</h4>
+            }
+        }
     </div>
 </div>

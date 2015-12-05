@@ -22,6 +22,7 @@ namespace DotaDb.Controllers
         private IReadOnlyDictionary<string, DotaUnitTargetTeamType> unitTargetTeamTypes;
         private IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
         private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> attributeTypes;
+        private IReadOnlyDictionary<string, DotaHeroSchemaItem> heroes;
 
         private string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
@@ -249,18 +250,63 @@ namespace DotaDb.Controllers
         #endregion
 
         #region Hero Specifics
-        
+
         public ActionResult Build(string id)
         {
             SetupInMemoryDatabase();
 
-            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
-            DotaHeroSchemaItem hero = heroes.FirstOrDefault(x => !String.IsNullOrEmpty(x.Url) && x.Url.ToLower() == id);
+            var hero = GetKeyValue(id, heroes);
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
             SetupHero(hero, viewModel);
             viewModel.ActiveTab = "ItemBuilds";
 
+            try
+            {
+                string vdfPath = Path.Combine(AppDataPath, String.Format("default_{0}.txt", hero.Name.Replace("npc_dota_hero_", "")));
+                string vdf = System.IO.File.ReadAllText(vdfPath);
+                var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
+
+                viewModel.Title = itemBuild.Title;
+                viewModel.Author = itemBuild.Author;
+                viewModel.ItemGroups = GetItemGroups(itemBuild);
+            }
+            catch (FileNotFoundException ex)
+            {
+                ViewBag.ErrorMessage = "This hero doesn't have any item builds in the Dota 2 files yet.";
+            }
+
             return PartialView("_ItemBuildsPartial", viewModel);
+        }
+
+        private List<HeroItemBuildGroupViewModel> GetItemGroups(DotaItemBuildSchemaItem itemBuild)
+        {
+            List<HeroItemBuildGroupViewModel> itemGroupViewModels = new List<HeroItemBuildGroupViewModel>();
+            foreach (var itemGroup in itemBuild.Items)
+            {
+                HeroItemBuildGroupViewModel itemGroupViewModel = new HeroItemBuildGroupViewModel();
+                itemGroupViewModel.Title = GetLocalizationText(itemGroup.Name.Remove(0, 1));
+
+                List<HeroItemBuildItemViewModel> itemViewModels = new List<HeroItemBuildItemViewModel>();
+
+                itemGroupViewModel.Items = itemGroup.Items
+                    .Select(x => new HeroItemBuildItemViewModel()
+                    {
+                        IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", x.Replace("item_", "")),
+                        Name = x.Replace("item_", "")
+                    })
+                    .GroupBy(x => new { x.Name, x.IconPath })
+                    .Select(x => new HeroItemBuildItemViewModel()
+                    {
+                        IconPath = x.Key.IconPath,
+                        Name = x.Key.Name,
+                        Quantity = x.Count()
+                    })
+                    .ToList();
+
+                itemGroupViewModels.Add(itemGroupViewModel);
+            }
+
+            return itemGroupViewModels;
         }
 
         public ActionResult Hero(string id)
@@ -277,7 +323,7 @@ namespace DotaDb.Controllers
             return PartialView("_HeroOverviewPartial", viewModel);
         }
 
-        private BaseHeroViewModel SetupHero<T>(DotaHeroSchemaItem hero, T viewModel) 
+        private BaseHeroViewModel SetupHero<T>(DotaHeroSchemaItem hero, T viewModel)
             where T : BaseHeroViewModel
         {
             viewModel.Name = GetLocalizationText(hero.Name);
@@ -316,6 +362,9 @@ namespace DotaDb.Controllers
             unitTargetTeamTypes = GetUnitTargetTeamTypes();
             unitTargetTypes = GetUnitTargetTypes();
             attributeTypes = GetAttributeTypes();
+            heroes = GetHeroes()
+                .Where(x => !String.IsNullOrEmpty(x.Url))
+                .ToDictionary(x => x.Url.ToLower(), x => x);
         }
 
         private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
