@@ -11,6 +11,8 @@ namespace DotaDb.Controllers
 {
     public class HeroesController : Controller
     {
+        #region Members
+
         private IReadOnlyDictionary<string, string> localizationKeys;
         private IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
         private IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
@@ -25,6 +27,8 @@ namespace DotaDb.Controllers
         private IReadOnlyDictionary<string, DotaHeroSchemaItem> heroes;
 
         private string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
+
+        #endregion Members
 
         #region In Memory "Database"
 
@@ -175,6 +179,30 @@ namespace DotaDb.Controllers
             return new ReadOnlyDictionary<string, DotaHeroPrimaryAttributeType>(temp);
         }
 
+        private IReadOnlyCollection<DotaHeroSchemaItem> GetHeroes()
+        {
+            string heroesVdfPath = Path.Combine(AppDataPath, "npc_heroes.vdf");
+            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
+            return heroes;
+        }
+
+        private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
+        {
+            string heroesVdfPath = Path.Combine(AppDataPath, "npc_abilities.vdf");
+            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
+            return abilities;
+        }
+
+        private IReadOnlyDictionary<string, string> GetPublicLocalization()
+        {
+            string vdfPath = Path.Combine(AppDataPath, "public_dota_english.vdf");
+            string vdf = System.IO.File.ReadAllText(vdfPath);
+            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
+            return result;
+        }
+
         #endregion In Memory "Database"
 
         #region Hero Index
@@ -239,15 +267,7 @@ namespace DotaDb.Controllers
             return View(viewModel);
         }
 
-        private IReadOnlyCollection<DotaHeroSchemaItem> GetHeroes()
-        {
-            string heroesVdfPath = Path.Combine(AppDataPath, "npc_heroes.vdf");
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
-            var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
-            return heroes;
-        }
-
-        #endregion
+        #endregion Hero Index
 
         #region Hero Specifics
 
@@ -255,9 +275,8 @@ namespace DotaDb.Controllers
         {
             SetupInMemoryDatabase();
 
-            var hero = GetKeyValue(id, heroes);
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
-            SetupHero(hero, viewModel);
+
             viewModel.ActiveTab = "ItemBuilds";
 
             try
@@ -270,7 +289,7 @@ namespace DotaDb.Controllers
                 viewModel.Author = itemBuild.Author;
                 viewModel.ItemGroups = GetItemGroups(itemBuild);
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 ViewBag.ErrorMessage = "This hero doesn't have any item builds in the Dota 2 files yet.";
             }
@@ -313,17 +332,18 @@ namespace DotaDb.Controllers
         {
             SetupInMemoryDatabase();
 
-            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
-            DotaHeroSchemaItem hero = heroes.FirstOrDefault(x => !String.IsNullOrEmpty(x.Url) && x.Url.ToLower() == id);
             HeroViewModel viewModel = new HeroViewModel();
-            SetupHero(hero, viewModel);
+
+            var hero = GetKeyValue(id, heroes);
+            SetupHeroViewModel(hero, viewModel);
             SetupAbilities(hero, viewModel);
+
             viewModel.ActiveTab = "Overview";
 
             return PartialView("_HeroOverviewPartial", viewModel);
         }
 
-        private BaseHeroViewModel SetupHero<T>(DotaHeroSchemaItem hero, T viewModel)
+        private BaseHeroViewModel SetupHeroViewModel<T>(DotaHeroSchemaItem hero, T viewModel)
             where T : BaseHeroViewModel
         {
             viewModel.Name = GetLocalizationText(hero.Name);
@@ -365,22 +385,6 @@ namespace DotaDb.Controllers
             heroes = GetHeroes()
                 .Where(x => !String.IsNullOrEmpty(x.Url))
                 .ToDictionary(x => x.Url.ToLower(), x => x);
-        }
-
-        private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
-        {
-            string heroesVdfPath = Path.Combine(AppDataPath, "npc_abilities.vdf");
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
-            var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
-            return abilities;
-        }
-
-        private IReadOnlyDictionary<string, string> GetPublicLocalization()
-        {
-            string vdfPath = Path.Combine(AppDataPath, "public_dota_english.vdf");
-            string vdf = System.IO.File.ReadAllText(vdfPath);
-            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
-            return result;
         }
 
         private string GetLocalizationText(string key)
@@ -517,6 +521,6 @@ namespace DotaDb.Controllers
             return roleViewModels;
         }
 
-        #endregion
+        #endregion Hero Specifics
     }
 }
