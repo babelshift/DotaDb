@@ -1,0 +1,12 @@
+﻿@model List<DotaDb.ViewModels.GameItemViewModel>
+
+<div class="row item-list">
+    @foreach (var gameItem in Model)
+    {
+        <div class="col-md-1" style="padding: 4px">
+            <div class="thumbnail" style="margin: 0 0 5px 0; padding: 0; border: 0" title="@gameItem.Name">
+                <img src="@gameItem.IconPath" class="shadow" />
+            </div>
+        </div>
+    }
+</div>

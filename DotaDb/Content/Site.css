@@ -64,6 +64,11 @@ textarea {
         color: #fff;
     }
 
+    .footer-bottom p {
+        margin-bottom: 5px;
+        line-height: 15px;
+    }
+
 .footer a:hover {
     text-decoration: underline;
 }
@@ -73,6 +78,10 @@ textarea {
 }
 
 .hero-select-list > .row > .col-md-1:nth-child(12n+1) {
+    clear: both;
+}
+
+.item-list > .col-md-1:nth-child(12n+1) {
     clear: both;
 }
 

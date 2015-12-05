@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div itemscope itemtype="http://schema.org/Organization">
-                        <h4 style="margin: 0">
+                        <h4 style="margin: 0 0 5px 0">
                             <a href="@Url.Action("index", "home")" class="link-white">
                                 <i class="fa fa-database fa-lg"></i>
                             </a>
@@ -14,10 +14,12 @@
                             <small>@DateTime.Now.Year,</small>
                             <small>@Html.CurrentVersion()</small>
                         </h4>
-                        <small>
-                            This site is not affiliated with Valve, Steam, or any of their partners. All copyrights reserved to their respective owners.
-                            All images, content, and files related to Dota 2 are owned by Valve.
-                        </small>
+                        <p>
+                            <small>
+                                This site is not affiliated with Valve, Steam, or any of their partners. All copyrights reserved to their respective owners.
+                                All images, content, and files related to Dota 2 are owned by Valve.
+                            </small>
+                        </p>
                     </div>
                 </div>
                 <div class="col-sm-6">
