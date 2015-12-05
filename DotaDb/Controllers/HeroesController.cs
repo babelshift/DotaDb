@@ -277,6 +277,9 @@ namespace DotaDb.Controllers
 
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
 
+            var hero = GetKeyValue(id, heroes);
+            SetupHeroViewModel(hero, viewModel);
+
             viewModel.ActiveTab = "ItemBuilds";
 
             try
