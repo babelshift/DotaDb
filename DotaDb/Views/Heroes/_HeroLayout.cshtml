@@ -1,0 +1,144 @@
+﻿@model DotaDb.ViewModels.BaseHeroViewModel
+@using SourceSchemaParser.Dota2;
+@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="alert alert-info">
+    <i class="fa fa-info-circle"></i> The information on this page is built dynamically from Dota 2 files.
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <h2 style="margin-top: 0;">
+            @Model.Name
+        </h2>
+        <div class="text-center">
+            <img src="@Model.AvatarImagePath" class="shadow" />
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-6">
+                <img src="~/Content/icon_str.png" width="40" height="40" />
+                <strong>@Model.BaseStrength</strong> <small class="text-muted">(+@Model.StrengthGain.ToString("F"))</small>
+            </div>
+            <div class="col-xs-6">
+                <img src="~/Content/icon_atk.png" height="40" />
+                <strong>@Model.BaseDamageMin - @Model.BaseDamageMax</strong>
+            </div>
+            <div class="col-xs-6">
+                <img src="~/Content/icon_agi.png" width="40" height="40" />
+                <strong>@Model.BaseAgility</strong> <small class="text-muted">(+@Model.AgilityGain.ToString("F"))</small>
+            </div>
+            <div class="col-xs-6">
+                <img src="~/Content/icon_speed.png" height="40" />
+                <strong>@Model.BaseMoveSpeed</strong>
+            </div>
+            <div class="col-xs-6">
+                <img src="~/Content/icon_int.png" width="40" height="40" />
+                <strong>@Model.BaseIntelligence</strong> <small class="text-muted">(+@Model.IntelligenceGain.ToString("F"))</small>
+            </div>
+            <div class="col-xs-6">
+                <img src="~/Content/icon_def.png" height="40" />
+                <strong>@Model.BaseArmor</strong>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-6">
+                <div style="line-height: 5px;">
+                    <p class="text-uppercase">
+                        <span class="label label-primary">@Model.AttackType</span>
+                    </p>
+                    @foreach (var role in Model.Roles)
+                    {
+                        var color = String.Empty;
+                        if (role.Level == "1") { color = "label-danger"; }
+                        else if (role.Level == "2") { color = "label-warning"; }
+                        else if (role.Level == "3") { color = "label-success"; }
+                        <p class="text-uppercase">
+                            <span class="label @color">@role.Name (@role.Level)</span>
+                        </p>
+                    }
+                </div>
+            </div>
+            <div class="col-xs-6 text-uppercase">
+                @if (Model.PrimaryAttribute != null)
+                {
+                    <small class="text-muted">Attr:</small>
+                    <small><strong>@Model.PrimaryAttribute</strong></small>
+                    <br />
+                }
+                <small class="text-muted">Team:</small>
+                <small>@Model.Team</small>
+                <br />
+                <small class="text-muted">Atk Rate:</small>
+                <small>@Model.AttackRate.ToString("F")</small>
+                <br />
+                <small class="text-muted">Atk Range:</small>
+                <small>@Model.AttackRange.ToString("F")</small>
+                <br />
+                <small class="text-muted">Turn Rate:</small>
+                <small>@Model.TurnRate.ToString("F")</small>
+            </div>
+        </div>
+        <div class="hidden-sm hidden-md hidden-lg">
+            <hr />
+            <div class="panel panel-default">
+                <div class="list-group">
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-info fa-fw"></i>
+                        Overview
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-cogs fa-fw"></i>
+                        Item Builds
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-play-circle fa-fw"></i>
+                        Matches
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-list-alt fa-fw"></i>
+                        Raw Data
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="nav nav-tabs hidden-xs">
+                    <li role="presentation" class="@(Model.ActiveTab == "Overview" ? "active" : String.Empty)">
+                        <a href="@Url.Action("hero", "heroes")">
+                            <i class="fa fa-info"></i>
+                            Overview
+                        </a>
+                    </li>
+                    <li role="presentation" class="@(Model.ActiveTab == "ItemBuilds" ? "active" : String.Empty)">
+                        <a href="@Url.Action("build", "heroes")">
+                            <i class="fa fa-cogs"></i>
+                            Item Builds
+                        </a>
+                    </li>
+                    <li role="presentation" class="@(Model.ActiveTab == "Matches" ? "active" : String.Empty)">
+                        <a href="#">
+                            <i class="fa fa-play-circle"></i>
+                            Matches
+                        </a>
+                    </li>
+                    <li role="presentation" class="@(Model.ActiveTab == "RawData" ? "active" : String.Empty)">
+                        <a href="#">
+                            <i class="fa fa-list-alt"></i>
+                            Raw Data
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>

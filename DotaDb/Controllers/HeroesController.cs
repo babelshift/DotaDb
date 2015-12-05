@@ -202,8 +202,8 @@ namespace DotaDb.Controllers
             {
                 strHeroes.Add(new HeroSelectItemViewModel()
                 {
-                    Id = strHero.HeroId,
-                    Name = strHero.Url,
+                    Url = strHero.Url,
+                    Name = strHero.Name,
                     AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", strHero.Name.Replace("npc_dota_hero_", ""))
                 });
             }
@@ -213,8 +213,8 @@ namespace DotaDb.Controllers
             {
                 agiHeroes.Add(new HeroSelectItemViewModel()
                 {
-                    Id = agiHero.HeroId,
-                    Name = agiHero.Url,
+                    Url = agiHero.Url,
+                    Name = agiHero.Name,
                     AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", agiHero.Name.Replace("npc_dota_hero_", ""))
                 });
             }
@@ -224,8 +224,8 @@ namespace DotaDb.Controllers
             {
                 intHeroes.Add(new HeroSelectItemViewModel()
                 {
-                    Id = intHero.HeroId,
-                    Name = intHero.Url,
+                    Url = intHero.Url,
+                    Name = intHero.Name,
                     AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", intHero.Name.Replace("npc_dota_hero_", ""))
                 });
             }
@@ -249,8 +249,61 @@ namespace DotaDb.Controllers
         #endregion
 
         #region Hero Specifics
+        
+        public ActionResult Build(string id)
+        {
+            SetupInMemoryDatabase();
 
-        public ActionResult Hero(int id)
+            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
+            DotaHeroSchemaItem hero = heroes.FirstOrDefault(x => !String.IsNullOrEmpty(x.Url) && x.Url.ToLower() == id);
+            HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
+            SetupHero(hero, viewModel);
+            viewModel.ActiveTab = "ItemBuilds";
+
+            return PartialView("_ItemBuildsPartial", viewModel);
+        }
+
+        public ActionResult Hero(string id)
+        {
+            SetupInMemoryDatabase();
+
+            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
+            DotaHeroSchemaItem hero = heroes.FirstOrDefault(x => !String.IsNullOrEmpty(x.Url) && x.Url.ToLower() == id);
+            HeroViewModel viewModel = new HeroViewModel();
+            SetupHero(hero, viewModel);
+            SetupAbilities(hero, viewModel);
+            viewModel.ActiveTab = "Overview";
+
+            return PartialView("_HeroOverviewPartial", viewModel);
+        }
+
+        private BaseHeroViewModel SetupHero<T>(DotaHeroSchemaItem hero, T viewModel) 
+            where T : BaseHeroViewModel
+        {
+            viewModel.Name = GetLocalizationText(hero.Name);
+            viewModel.Description = "<from localization -> npc_dota_hero_<heroname>_hype>";
+            viewModel.AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_full.png", hero.Name.Replace("npc_dota_hero_", ""));
+            viewModel.BaseAgility = hero.AttributeBaseAgility;
+            viewModel.BaseArmor = hero.ArmorPhysical;
+            viewModel.BaseDamageMax = hero.AttackDamageMax;
+            viewModel.BaseDamageMin = hero.AttackDamageMin;
+            viewModel.BaseMoveSpeed = hero.MovementSpeed;
+            viewModel.BaseStrength = hero.AttributeBaseStrength;
+            viewModel.BaseIntelligence = hero.AttributeBaseIntelligence;
+            viewModel.AttackRate = hero.AttackRate;
+            viewModel.AttackRange = hero.AttackRange;
+            viewModel.Team = GetKeyValue(hero.Team, teamTypes).ToString();
+            viewModel.TurnRate = hero.MovementTurnRate;
+            viewModel.AttackType = GetKeyValue(hero.AttackCapabilities, attackTypes).ToString();
+            viewModel.Roles = GetRoles(hero.Role, hero.RoleLevels).AsReadOnly();
+            viewModel.AgilityGain = hero.AttributeAgilityGain;
+            viewModel.IntelligenceGain = hero.AttributeIntelligenceGain;
+            viewModel.StrengthGain = hero.AttributeStrengthGain;
+            viewModel.PrimaryAttribute = GetKeyValue(hero.AttributePrimary, attributeTypes);
+            return viewModel;
+        }
+
+        private void SetupInMemoryDatabase()
         {
             localizationKeys = GetPublicLocalization();
             abilityBehaviorTypes = GetAbilityBehaviorTypes();
@@ -263,40 +316,8 @@ namespace DotaDb.Controllers
             unitTargetTeamTypes = GetUnitTargetTeamTypes();
             unitTargetTypes = GetUnitTargetTypes();
             attributeTypes = GetAttributeTypes();
-
-            IReadOnlyCollection<DotaHeroSchemaItem> heroes = GetHeroes();
-
-            var hero = heroes.FirstOrDefault(x => x.HeroId == id);
-
-            HeroViewModel viewModel = new HeroViewModel()
-            {
-                Name = GetLocalizationText(hero.Name),
-                Description = "<from localization -> npc_dota_hero_<heroname>_hype>",
-                AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_full.png", hero.Name.Replace("npc_dota_hero_", "")),
-                BaseAgility = hero.AttributeBaseAgility,
-                BaseArmor = hero.ArmorPhysical,
-                BaseDamageMax = hero.AttackDamageMax,
-                BaseDamageMin = hero.AttackDamageMin,
-                BaseMoveSpeed = hero.MovementSpeed,
-                BaseStrength = hero.AttributeBaseStrength,
-                BaseIntelligence = hero.AttributeBaseIntelligence,
-                AttackRate = hero.AttackRate,
-                AttackRange = hero.AttackRange,
-                Team = GetKeyValue(hero.Team, teamTypes).ToString(),
-                TurnRate = hero.MovementTurnRate,
-                AttackType = GetKeyValue(hero.AttackCapabilities, attackTypes).ToString(),
-                Roles = GetRoles(hero.Role, hero.RoleLevels).AsReadOnly(),
-                AgilityGain = hero.AttributeAgilityGain,
-                IntelligenceGain = hero.AttributeIntelligenceGain,
-                StrengthGain = hero.AttributeStrengthGain,
-                PrimaryAttribute = GetKeyValue(hero.AttributePrimary, attributeTypes)
-            };
-
-            SetupAbilities(hero, viewModel);
-
-            return View(viewModel);
         }
-        
+
         private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
         {
             string heroesVdfPath = Path.Combine(AppDataPath, "npc_abilities.vdf");
