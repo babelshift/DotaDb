@@ -124,11 +124,17 @@
                                 <small class="text-muted">Pierces Spell Immunity:</small>
                                 @if (ability.SpellImmunityType.Key == DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == DotaSpellImmunityType.ENEMIES_YES.Key)
                                 {
-                                    <small class="text-success">@ability.SpellImmunityType</small>
+                                    <small class="text-success">
+                                        <i class="fa fa-check"></i>
+                                        @ability.SpellImmunityType
+                                    </small>
                                 }
                                 else
                                 {
-                                    <small class="text-danger">@ability.SpellImmunityType</small>
+                                    <small class="text-danger">
+                                        <i class="fa fa-remove"></i>
+                                        @ability.SpellImmunityType
+                                    </small>
                                 }
                             </p>
                         }

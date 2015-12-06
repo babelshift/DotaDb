@@ -191,6 +191,14 @@ namespace DotaDb.Controllers
             AddAbilityToViewModel(hero.Ability6, abilities, abilityViewModels);
             AddAbilityToViewModel(hero.Ability7, abilities, abilityViewModels);
             AddAbilityToViewModel(hero.Ability8, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability9, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability10, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability11, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability12, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability13, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability14, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability15, abilities, abilityViewModels);
+            AddAbilityToViewModel(hero.Ability16, abilities, abilityViewModels);
 
             viewModel.Abilities = abilityViewModels.AsReadOnly();
         }
@@ -249,7 +257,6 @@ namespace DotaDb.Controllers
 
             abilityViewModels.Add(abilityViewModel);
         }
-
 
         private static List<HeroRoleViewModel> GetRoles(string roles, string roleLevels)
         {
