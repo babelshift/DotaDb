@@ -22,6 +22,9 @@ namespace DotaDb.Models
         public IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
         public IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> attributeTypes;
         public IReadOnlyDictionary<string, DotaHeroSchemaItem> heroes;
+        public IReadOnlyDictionary<string, DotaItemDeclarationType> itemDeclarationTypes;
+        public IReadOnlyDictionary<string, DotaItemShareabilityType> itemShareabilityTypes;
+        public IReadOnlyDictionary<string, DotaItemDisassembleType> itemDisassembleTypes;
 
         public string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
@@ -41,6 +44,9 @@ namespace DotaDb.Models
             heroes = GetHeroes()
                 .Where(x => !String.IsNullOrEmpty(x.Url))
                 .ToDictionary(x => x.Url.ToLower(), x => x);
+            itemDeclarationTypes = GetItemDeclarationTypes();
+            itemShareabilityTypes = GetItemShareabilityTypes();
+            itemDisassembleTypes = GetItemDisassembleTypes();
         }
 
         public string GetLocalizationText(string key)
@@ -54,6 +60,38 @@ namespace DotaDb.Models
             {
                 return String.Empty;
             }
+        }
+
+        public IReadOnlyDictionary<string, DotaItemDisassembleType> GetItemDisassembleTypes()
+        {
+            Dictionary<string, DotaItemDisassembleType> temp = new Dictionary<string, DotaItemDisassembleType>();
+
+            temp.Add(DotaItemDisassembleType.ALWAYS.Key, DotaItemDisassembleType.ALWAYS);
+            temp.Add(DotaItemDisassembleType.NEVER.Key, DotaItemDisassembleType.NEVER);
+
+            return new ReadOnlyDictionary<string, DotaItemDisassembleType>(temp);
+        }
+
+        public IReadOnlyDictionary<string, DotaItemShareabilityType> GetItemShareabilityTypes()
+        {
+            Dictionary<string, DotaItemShareabilityType> temp = new Dictionary<string, DotaItemShareabilityType>();
+
+            temp.Add(DotaItemShareabilityType.FULLY_SHAREABLE.Key, DotaItemShareabilityType.FULLY_SHAREABLE);
+            temp.Add(DotaItemShareabilityType.FULLY_SHAREABLE_STACKING.Key, DotaItemShareabilityType.FULLY_SHAREABLE_STACKING);
+            temp.Add(DotaItemShareabilityType.PARTIALLY_SHAREABLE.Key, DotaItemShareabilityType.PARTIALLY_SHAREABLE);
+
+            return new ReadOnlyDictionary<string, DotaItemShareabilityType>(temp);
+        }
+
+        public IReadOnlyDictionary<string, DotaItemDeclarationType> GetItemDeclarationTypes()
+        {
+            Dictionary<string, DotaItemDeclarationType> temp = new Dictionary<string, DotaItemDeclarationType>();
+
+            temp.Add(DotaItemDeclarationType.PURCHASES_IN_SPEECH.Key, DotaItemDeclarationType.PURCHASES_IN_SPEECH);
+            temp.Add(DotaItemDeclarationType.PURCHASES_TO_SPECTATORS.Key, DotaItemDeclarationType.PURCHASES_TO_SPECTATORS);
+            temp.Add(DotaItemDeclarationType.PURCHASES_TO_TEAMMATES.Key, DotaItemDeclarationType.PURCHASES_TO_TEAMMATES);
+
+            return new ReadOnlyDictionary<string, DotaItemDeclarationType>(temp);
         }
 
         public IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> GetAbilityBehaviorTypes()
@@ -233,6 +271,21 @@ namespace DotaDb.Models
             string vdf = System.IO.File.ReadAllText(vdfPath);
             var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
             return result.ToDictionary(x => x.Id, x => x);
+        }
+
+        public string GetJoinedItemDisassembleTypes(string value)
+        {
+            return GetJoinedValues(value, itemDisassembleTypes);
+        }
+
+        public string GetJoinedItemShareabilityTypes(string value)
+        {
+            return GetJoinedValues(value, itemShareabilityTypes);
+        }
+
+        public string GetJoinedItemDeclarationTypes(string value)
+        {
+            return GetJoinedValues(value, itemDeclarationTypes);
         }
 
         public string GetJoinedUnitTargetFlags(string value)

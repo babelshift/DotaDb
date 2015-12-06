@@ -24,7 +24,7 @@ namespace DotaDb.ViewModels
         public string Note5 { get; set; }
         public string Note6 { get; set; }
 
-        public IReadOnlyCollection<GameItemAbilitySpecialViewModel> Attributes { get; set; }
+        public IReadOnlyCollection<HeroAbilitySpecialViewModel> Attributes { get; set; }
         public string Behaviors { get; set; }
         public string TeamTargets { get; set; }
         public string TargetTypes { get; set; }
@@ -35,5 +35,29 @@ namespace DotaDb.ViewModels
         public string Duration { get; set; }
         public string Damage { get; set; }
         public string ManaCost { get; set; }
+        public double? ChannelTime { get; set; }
+        public string SharedCooldown { get; set; }
+
+        public string ShopTags { get; set; }
+        public string Quality { get; set; }
+        public bool? IsStackable { get; set; }
+        public string Shareability { get; set; }
+        public int? InitialCharges { get; set; }
+        public int? DisplayCharges { get; set; }
+        public bool? IsPermanent { get; set; }
+        public int? StockMax { get; set; }
+        public int? StockInitial { get; set; }
+        public double? StockTime { get; set; }
+        public string Declarations { get; set; }
+        public bool? IsSupport { get; set; }
+        public bool? IsAlertable { get; set; }
+        public bool? ContributesToNetWorthWhenDropped { get; set; }
+        public bool? IsKillable { get; set; }
+        public bool? IsSellable { get; set; }
+        public bool? CastsOnPickup { get; set; }
+        public string DisassembleRule { get; set; }
+        public string RecipeResult { get; set; }
+        public bool? IsDroppable { get; set; }
+        public bool? IsPurchasable { get; set; }
     }
 }

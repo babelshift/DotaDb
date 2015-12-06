@@ -79,7 +79,7 @@ namespace DotaDb.Controllers
                 viewModel.Damage = ability.AbilityDamage.ToSlashSeparatedString();
                 viewModel.Duration = ability.AbilityDuration.ToSlashSeparatedString();
                 viewModel.ManaCost = ability.AbilityManaCost.ToSlashSeparatedString();
-                //viewModel.Attributes = abilitySpecialViewModels;
+                viewModel.Attributes = abilitySpecialViewModels;
                 viewModel.Behaviors = joinedBehaviors;
                 viewModel.TargetFlags = joinedUnitTargetFlags;
                 viewModel.TargetTypes = joinedUnitTargetTypes;
@@ -90,6 +90,38 @@ namespace DotaDb.Controllers
                 viewModel.Note3 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note3"));
                 viewModel.Note4 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note4"));
                 viewModel.Note5 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note5"));
+                viewModel.CastsOnPickup = ability.ItemCastOnPickup;
+                viewModel.ContributesToNetWorthWhenDropped = ability.ItemContributesToNetWorthWhenDropped;
+                viewModel.Declarations = db.GetJoinedItemDeclarationTypes(ability.ItemDeclarations);
+                viewModel.DisassembleRule = db.GetJoinedItemDisassembleTypes(ability.ItemDisassembleRule);
+                viewModel.DisplayCharges = ability.ItemDisplayCharges;
+                viewModel.InitialCharges = ability.ItemInitialCharges;
+                viewModel.IsAlertable = ability.ItemAlertable;
+                viewModel.IsDroppable = ability.ItemDroppable;
+                viewModel.IsKillable = ability.ItemKillable;
+                viewModel.IsPermanent = ability.ItemPermanent;
+                viewModel.IsPurchasable = ability.ItemPurchasable;
+                viewModel.IsSellable = ability.ItemSellable;
+                viewModel.IsStackable = ability.ItemStackable;
+                viewModel.IsSupport = ability.ItemSupport;
+                viewModel.Shareability = db.GetJoinedItemShareabilityTypes(ability.ItemShareability);
+                viewModel.ShopTags = GetSplitAndRejoinedShopTags(ability.ItemShopTags);
+                viewModel.StockInitial = ability.ItemStockInitial;
+                viewModel.StockMax = ability.ItemStockMax;
+                viewModel.StockTime = ability.ItemStockTime;
+            }
+        }
+
+        private string GetSplitAndRejoinedShopTags(string shopTags)
+        {
+            if (!String.IsNullOrEmpty(shopTags))
+            {
+                string[] split = shopTags.Split(';');
+                return String.Join(", ", split);
+            }
+            else
+            {
+                return String.Empty;
             }
         }
     }

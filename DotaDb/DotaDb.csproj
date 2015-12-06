@@ -169,7 +169,6 @@
     <Compile Include="Utilities\HtmlHelperExtensions.cs" />
     <Compile Include="ViewModels\BaseHeroViewModel.cs" />
     <Compile Include="ViewModels\GameItemViewModel.cs" />
-    <Compile Include="ViewModels\GameItemAbilitySpecialViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilitySpecialViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilityViewModel.cs" />
     <Compile Include="ViewModels\HeroItemBuildGroupViewModel.cs" />
