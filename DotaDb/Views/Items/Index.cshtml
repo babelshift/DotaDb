@@ -1,11 +1,157 @@
 ﻿@model List<DotaDb.ViewModels.GameItemViewModel>
 
+<div class="alert alert-info">
+    <i class="fa fa-info-circle"></i> The information on this page is generated dynamically from Dota 2 files.
+</div>
 <div class="row item-list">
     @foreach (var gameItem in Model)
     {
-        <div class="col-md-1" style="padding: 4px">
-            <div class="thumbnail" style="margin: 0 0 5px 0; padding: 0; border: 0" title="@gameItem.Name">
-                <img src="@gameItem.IconPath" class="shadow" />
+        <div class="col-md-3" style="padding: 4px">
+            <div class="media" style="margin-bottom: 10px">
+                <div class="media-left">
+                    <div class="thumbnail" style="margin: 0; border: 0" title="@gameItem.Name">
+                        <img src="@gameItem.IconPath" class="shadow" width="64" />
+                    </div>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        @gameItem.Name
+                    </h4>
+                    <p class="text-muted">@gameItem.Lore</p>
+                </div>
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-xs-12 text-uppercase">
+                        <p>
+                            <small class="text-muted">Cost:</small>
+                            <small class="text-warning">@gameItem.Cost</small>
+                        </p>
+                        @if (!String.IsNullOrEmpty(gameItem.ManaCost))
+                        {
+                            <p>
+                                <small class="text-muted">Mana Cost:</small>
+                                <small class="text-primary">@gameItem.ManaCost</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.Duration))
+                        {
+                            <p>
+                                <small class="text-muted">Duration:</small>
+                                <small class="text-warning">@gameItem.Duration</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.Damage))
+                        {
+                            <p>
+                                <small class="text-muted">Damage:</small>
+                                <small class="text-warning">@gameItem.Damage</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.CastPoint))
+                        {
+                            <p>
+                                <small class="text-muted">Cast Point:</small>
+                                <small>@gameItem.CastPoint</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.CastRange))
+                        {
+                            <p>
+                                <small class="text-muted">Cast Range:</small>
+                                <small>@gameItem.CastRange</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.Cooldown))
+                        {
+                            <p>
+                                <small class="text-muted">Cooldown:</small>
+                                <small>@gameItem.Cooldown</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.TargetFlags))
+                        {
+                            <p>
+                                <small class="text-muted">Target Flags:</small>
+                                <small>@gameItem.TargetFlags</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.TargetTypes))
+                        {
+                            <p>
+                                <small class="text-muted">Target Types:</small>
+                                <small>@gameItem.TargetTypes</small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(gameItem.TeamTargets))
+                        {
+                            <p>
+                                <small class="text-muted">Team Targets:</small>
+                                <small>@gameItem.TeamTargets</small>
+                            </p>
+                        }
+                        <p>
+                            <small class="text-muted">Secret Shop:</small>
+                            <small>
+                                @if (gameItem.SecretShop)
+                                {
+                                    <span class="text-success">
+                                        <i class="fa fa-check"></i>
+                                        Yes
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">
+                                        <i class="fa fa-remove"></i>
+                                        No
+                                    </span>
+                                }
+                            </small>
+                        </p>
+                        <p>
+                            <small class="text-muted">Side Shop:</small>
+                            <small>
+                                @if (gameItem.SideShop)
+                                {
+                                    <span class="text-success">
+                                        <i class="fa fa-check"></i>
+                                        Yes
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">
+                                        <i class="fa fa-remove"></i>
+                                        No
+                                    </span>
+                                }
+                            </small>
+                        </p>
+                        <p>
+                            <small class="text-muted">Is Recipe:</small>
+                            <small>
+                                @if (gameItem.IsRecipe)
+                                {
+                                    <span class="text-success">
+                                        <i class="fa fa-check"></i>
+                                        Yes
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">
+                                        <i class="fa fa-remove"></i>
+                                        No
+                                    </span>
+                                }
+                            </small>
+                        </p>
+                        <p>
+                            <small class="text-muted">
+                                @gameItem.Description
+                            </small>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     }

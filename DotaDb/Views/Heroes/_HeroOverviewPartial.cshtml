@@ -1,5 +1,6 @@
 ﻿@model DotaDb.ViewModels.HeroViewModel
 @using SourceSchemaParser.Dota2;
+
 @{
     Layout = "~/Views/Heroes/_HeroLayout.cshtml";
 }
@@ -212,7 +213,7 @@
                     <th>Level</th>
                     @for (int i = 1; i <= 25; i++)
                     {
-                        <th>@i</th>
+                    <th>@i</th>
                     }
                 </tr>
             </thead>
@@ -221,14 +222,14 @@
                     <td>HP</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Math.Round(150 + (19 * (Model.BaseStrength + (i * Model.StrengthGain))))</td>
+                    <td>@Math.Round(150 + (19 * (Model.BaseStrength + (i * Model.StrengthGain))))</td>
                     }
                 </tr>
                 <tr>
                     <td>MP</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Math.Round(13 * (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                    <td>@Math.Round(13 * (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
                     }
                 </tr>
                 <tr>
@@ -237,15 +238,15 @@
                     {
                         if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.STRENGTH.Key)
                         {
-                            <td>@Math.Round(Model.BaseDamageMin + (Model.BaseStrength + (i * Model.StrengthGain)))</td>
+                    <td>@Math.Round(Model.BaseDamageMin + (Model.BaseStrength + (i * Model.StrengthGain)))</td>
                         }
                         else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.INTELLECT.Key)
                         {
-                            <td>@Math.Round(Model.BaseDamageMin + (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                    <td>@Math.Round(Model.BaseDamageMin + (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
                         }
                         else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.AGILITY.Key)
                         {
-                            <td>@Math.Round(Model.BaseDamageMin + (Model.BaseAgility + (i * Model.AgilityGain)))</td>
+                    <td>@Math.Round(Model.BaseDamageMin + (Model.BaseAgility + (i * Model.AgilityGain)))</td>
                         }
                     }
                 </tr>
@@ -255,15 +256,15 @@
                     {
                         if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.STRENGTH.Key)
                         {
-                            <td>@Math.Round(Model.BaseDamageMax + (Model.BaseStrength + (i * Model.StrengthGain)))</td>
+                    <td>@Math.Round(Model.BaseDamageMax + (Model.BaseStrength + (i * Model.StrengthGain)))</td>
                         }
                         else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.INTELLECT.Key)
                         {
-                            <td>@Math.Round(Model.BaseDamageMax + (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                    <td>@Math.Round(Model.BaseDamageMax + (Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
                         }
                         else if (Model.PrimaryAttribute.Key == DotaHeroPrimaryAttributeType.AGILITY.Key)
                         {
-                            <td>@Math.Round(Model.BaseDamageMax + (Model.BaseAgility + (i * Model.AgilityGain)))</td>
+                    <td>@Math.Round(Model.BaseDamageMax + (Model.BaseAgility + (i * Model.AgilityGain)))</td>
                         }
                     }
                 </tr>
@@ -271,28 +272,28 @@
                     <td>Armor</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Math.Round(Model.BaseArmor + (.14 * (Model.BaseAgility + (i * Model.AgilityGain))))</td>
+                    <td>@Math.Round(Model.BaseArmor + (.14 * (Model.BaseAgility + (i * Model.AgilityGain))))</td>
                     }
                 </tr>
                 <tr>
                     <td>STR</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@(Math.Round(Model.BaseStrength + (i * Model.StrengthGain)))</td>
+                    <td>@(Math.Round(Model.BaseStrength + (i * Model.StrengthGain)))</td>
                     }
                 </tr>
                 <tr>
                     <td>AGI</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@(Math.Round(Model.BaseAgility + (i * Model.AgilityGain)))</td>
+                    <td>@(Math.Round(Model.BaseAgility + (i * Model.AgilityGain)))</td>
                     }
                 </tr>
                 <tr>
                     <td>INT</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@(Math.Round(Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
+                    <td>@(Math.Round(Model.BaseIntelligence + (i * Model.IntelligenceGain)))</td>
                     }
                 </tr>
             </tbody>

@@ -163,11 +163,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\GameItem.cs" />
+    <Compile Include="Models\InMemoryDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\HtmlHelperExtensions.cs" />
     <Compile Include="ViewModels\BaseHeroViewModel.cs" />
     <Compile Include="ViewModels\GameItemViewModel.cs" />
+    <Compile Include="ViewModels\GameItemAbilitySpecialViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilitySpecialViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilityViewModel.cs" />
     <Compile Include="ViewModels\HeroItemBuildGroupViewModel.cs" />
@@ -180,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\game_items.json" />
+    <Content Include="App_Data\item_abilities.vdf" />
     <None Include="App_Data\panorama_dota_english.vdf" />
     <None Include="App_Data\public_dota_english.vdf" />
     <Content Include="App_Data\default_abaddon.txt" />
