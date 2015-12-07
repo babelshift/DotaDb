@@ -10,6 +10,46 @@ namespace DotaDb.Models
 {
     public class InMemoryDb
     {
+        /// <summary>
+        /// Contains information about all hero abilities and descriptions
+        /// </summary>
+        private const string heroAbilitiesFileName = "hero_abilities.vdf";  // comes from npc_abilities.txt in dota 2 pak
+
+        /// <summary>
+        /// Contains information about all item abilities and descriptions 
+        /// </summary>
+        private const string itemAbilitiesFileName = "item_abilities.vdf";  // comes from items.txt in dota 2 pak
+
+        /// <summary>
+        /// Contains a list of all heroes (active and inactive) with some details about them
+        /// </summary>
+        private const string heroesFileName = "heroes.vdf";                 // comes from npc_heroes.txt in dota 2 pak
+
+        /// <summary>
+        /// Contains a list of all in game items that can be purchased by heroes in a regular game (blink dagger, boots of speed, etc)
+        /// </summary>
+        private const string itemsInGameFileName = "items_ingame.json";     // comes from web API GetGameItems
+
+        /// <summary>
+        /// Contains a list and details of all items that can be purchased from the game shop (wearables, cosmetics, announcers, etc)
+        /// </summary>
+        private const string itemsWearableSchemaFileName = "items_wearable_schema.vdf";     // comes from web API GetSchemaURL >> download from result URL
+
+        /// <summary>
+        /// Contains localization text for wearable items
+        /// </summary>
+        private const string itemsWearableEnglishFileName = "items_wearable_english.vdf";   // comes from public dota 2 resource folder
+        
+        /// <summary>
+        /// Contains localization text for in game tooltips
+        /// </summary>
+        private const string tooltipsEnglishFileName = "public_dota_english.vdf";            // comes from public dota 2 resource folder
+
+        /// <summary>
+        /// Contains localization text for in game UI
+        /// </summary>
+        private const string panoramaDotaEnglishFileName = "panorama_dota_english.vdf";     // comes from dota 2 pak
+
         public IReadOnlyDictionary<string, string> localizationKeys;
         public IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
         public IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
@@ -47,6 +87,14 @@ namespace DotaDb.Models
             itemDeclarationTypes = GetItemDeclarationTypes();
             itemShareabilityTypes = GetItemShareabilityTypes();
             itemDisassembleTypes = GetItemDisassembleTypes();
+        }
+
+        public IReadOnlyCollection<DotaLeague> GetLeagues()
+        {
+            string schemaVdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
+            string localizationVdfPath = Path.Combine(AppDataPath, itemsWearableEnglishFileName);
+            var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromFile(schemaVdfPath, localizationVdfPath);
+            return leagues;
         }
 
         public string GetLocalizationText(string key)
@@ -243,7 +291,7 @@ namespace DotaDb.Models
 
         public IReadOnlyCollection<DotaHeroSchemaItem> GetHeroes()
         {
-            string heroesVdfPath = Path.Combine(AppDataPath, "npc_heroes.vdf");
+            string heroesVdfPath = Path.Combine(AppDataPath, heroesFileName);
             string vdf = System.IO.File.ReadAllText(heroesVdfPath);
             var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
             return heroes;
@@ -251,7 +299,7 @@ namespace DotaDb.Models
 
         public IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
         {
-            string heroesVdfPath = Path.Combine(AppDataPath, "npc_abilities.vdf");
+            string heroesVdfPath = Path.Combine(AppDataPath, heroAbilitiesFileName);
             string vdf = System.IO.File.ReadAllText(heroesVdfPath);
             var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
             return abilities;
@@ -259,7 +307,7 @@ namespace DotaDb.Models
 
         public IReadOnlyDictionary<string, string> GetPublicLocalization()
         {
-            string vdfPath = Path.Combine(AppDataPath, "public_dota_english.vdf");
+            string vdfPath = Path.Combine(AppDataPath, tooltipsEnglishFileName);
             string vdf = System.IO.File.ReadAllText(vdfPath);
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
@@ -267,7 +315,7 @@ namespace DotaDb.Models
         
         public IDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilities()
         {
-            string vdfPath = Path.Combine(AppDataPath, "item_abilities.vdf");
+            string vdfPath = Path.Combine(AppDataPath, itemAbilitiesFileName);
             string vdf = System.IO.File.ReadAllText(vdfPath);
             var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
             return result.ToDictionary(x => x.Id, x => x);
