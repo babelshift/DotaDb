@@ -4,12 +4,35 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web;
 
 namespace DotaDb.Models
 {
-    public class InMemoryDb
+    public sealed class InMemoryDb
     {
+        private static volatile InMemoryDb instance;
+        private static object sync = new object();
+
+        public static InMemoryDb Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (sync)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new InMemoryDb();
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Contains information about all hero abilities and descriptions
         /// </summary>
@@ -39,7 +62,7 @@ namespace DotaDb.Models
         /// Contains localization text for wearable items
         /// </summary>
         private const string itemsWearableEnglishFileName = "items_wearable_english.vdf";   // comes from public dota 2 resource folder
-        
+
         /// <summary>
         /// Contains localization text for in game tooltips
         /// </summary>
@@ -50,7 +73,9 @@ namespace DotaDb.Models
         /// </summary>
         private const string panoramaDotaEnglishFileName = "panorama_dota_english.vdf";     // comes from dota 2 pak
 
-        public IReadOnlyDictionary<string, string> localizationKeys;
+        private MemoryCache cache = MemoryCache.Default;
+        private CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
+
         public IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
         public IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
         public IReadOnlyDictionary<string, DotaAttackType> attackTypes;
@@ -61,16 +86,20 @@ namespace DotaDb.Models
         public IReadOnlyDictionary<string, DotaUnitTargetTeamType> unitTargetTeamTypes;
         public IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
         public IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> attributeTypes;
-        public IReadOnlyDictionary<string, DotaHeroSchemaItem> heroes;
         public IReadOnlyDictionary<string, DotaItemDeclarationType> itemDeclarationTypes;
         public IReadOnlyDictionary<string, DotaItemShareabilityType> itemShareabilityTypes;
         public IReadOnlyDictionary<string, DotaItemDisassembleType> itemDisassembleTypes;
 
         public string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
-        public InMemoryDb()
+        private InMemoryDb()
         {
-            localizationKeys = GetPublicLocalization();
+            cache.Remove(MemoryCacheKey.LocalizationKeys.ToString());
+            cache.Remove(MemoryCacheKey.Heroes.ToString());
+            cache.Remove(MemoryCacheKey.HeroAbilities.ToString());
+            cache.Remove(MemoryCacheKey.Leagues.ToString());
+            cache.Remove(MemoryCacheKey.ItemAbilities.ToString());
+
             abilityBehaviorTypes = GetAbilityBehaviorTypes();
             attackTypes = GetAttackTypes();
             teamTypes = GetTeamTypes();
@@ -81,25 +110,23 @@ namespace DotaDb.Models
             unitTargetTeamTypes = GetUnitTargetTeamTypes();
             unitTargetTypes = GetUnitTargetTypes();
             attributeTypes = GetAttributeTypes();
-            heroes = GetHeroes()
-                .Where(x => !String.IsNullOrEmpty(x.Url))
-                .ToDictionary(x => x.Url.ToLower(), x => x);
             itemDeclarationTypes = GetItemDeclarationTypes();
             itemShareabilityTypes = GetItemShareabilityTypes();
             itemDisassembleTypes = GetItemDisassembleTypes();
-        }
 
-        public IReadOnlyCollection<DotaLeague> GetLeagues()
-        {
-            string schemaVdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
-            string localizationVdfPath = Path.Combine(AppDataPath, itemsWearableEnglishFileName);
-            var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromFile(schemaVdfPath, localizationVdfPath);
-            return leagues;
+            var localizationKeys = GetPublicLocalization();
+            var heroes = GetHeroes();
+
+            cacheItemPolicy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddDays(1);
+
+            cache.Add(MemoryCacheKey.LocalizationKeys.ToString(), localizationKeys, cacheItemPolicy);
+            cache.Add(MemoryCacheKey.Heroes.ToString(), heroes, cacheItemPolicy);
         }
 
         public string GetLocalizationText(string key)
         {
             string value = String.Empty;
+            var localizationKeys = GetPublicLocalization();
             if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
             {
                 return value;
@@ -289,38 +316,6 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaHeroPrimaryAttributeType>(temp);
         }
 
-        public IReadOnlyCollection<DotaHeroSchemaItem> GetHeroes()
-        {
-            string heroesVdfPath = Path.Combine(AppDataPath, heroesFileName);
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
-            var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
-            return heroes;
-        }
-
-        public IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
-        {
-            string heroesVdfPath = Path.Combine(AppDataPath, heroAbilitiesFileName);
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
-            var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
-            return abilities;
-        }
-
-        public IReadOnlyDictionary<string, string> GetPublicLocalization()
-        {
-            string vdfPath = Path.Combine(AppDataPath, tooltipsEnglishFileName);
-            string vdf = System.IO.File.ReadAllText(vdfPath);
-            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
-            return result;
-        }
-        
-        public IDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilities()
-        {
-            string vdfPath = Path.Combine(AppDataPath, itemAbilitiesFileName);
-            string vdf = System.IO.File.ReadAllText(vdfPath);
-            var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
-            return result.ToDictionary(x => x.Id, x => x);
-        }
-
         public string GetJoinedItemDisassembleTypes(string value)
         {
             return GetJoinedValues(value, itemDisassembleTypes);
@@ -400,6 +395,7 @@ namespace DotaDb.Models
 
         public DotaHeroSchemaItem GetHeroKeyValue(string key)
         {
+            var heroes = GetHeroes();
             return GetKeyValue(key, heroes);
         }
 
@@ -418,6 +414,92 @@ namespace DotaDb.Models
             else
             {
                 return default(T);
+            }
+        }
+
+        #region Cached Data
+        
+        public IReadOnlyDictionary<string, DotaHeroSchemaItem> GetHeroes()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.Heroes, GetHeroesFromSchema);
+        }
+
+        private IReadOnlyDictionary<string, DotaHeroSchemaItem> GetHeroesFromSchema()
+        {
+            string heroesVdfPath = Path.Combine(AppDataPath, heroesFileName);
+            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
+            return heroes
+                .Where(x => !String.IsNullOrEmpty(x.Url))
+                .ToDictionary(x => x.Url.ToLower(), x => x);
+        }
+
+        public IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.HeroAbilities, GetHeroAbilitiesFromSchema);
+        }
+
+        private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilitiesFromSchema()
+        {
+            string heroesVdfPath = Path.Combine(AppDataPath, heroAbilitiesFileName);
+            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
+            return abilities;
+        }
+
+        public IReadOnlyDictionary<string, string> GetPublicLocalization()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.LocalizationKeys, GetPublicLocalizationFromSchema);
+        }
+
+        private IReadOnlyDictionary<string, string> GetPublicLocalizationFromSchema()
+        {
+            string vdfPath = Path.Combine(AppDataPath, tooltipsEnglishFileName);
+            string vdf = System.IO.File.ReadAllText(vdfPath);
+            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
+            return result;
+        }
+
+        public IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilities()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.ItemAbilities, GetItemAbilitiesFromSchema);
+        }
+
+        private IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilitiesFromSchema()
+        {
+            string vdfPath = Path.Combine(AppDataPath, itemAbilitiesFileName);
+            string vdf = System.IO.File.ReadAllText(vdfPath);
+            var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
+            return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
+        }
+
+        public IReadOnlyCollection<DotaLeague> GetLeagues()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.Leagues, GetLeaguesFromSchema);
+        }
+
+        private IReadOnlyCollection<DotaLeague> GetLeaguesFromSchema()
+        {
+            string schemaVdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
+            string localizationVdfPath = Path.Combine(AppDataPath, itemsWearableEnglishFileName);
+            var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromFile(schemaVdfPath, localizationVdfPath);
+            return leagues;
+        }
+
+        #endregion
+
+        private T AddOrGetCachedValue<T>(MemoryCacheKey key, Func<T> func)
+        {
+            object value = cache.Get(key.ToString());
+            if(value != null)
+            {
+                return (T)value;
+            }
+            else
+            {
+                var newValue = func();
+                cache.Add(key.ToString(), newValue, cacheItemPolicy);
+                return newValue;
             }
         }
     }

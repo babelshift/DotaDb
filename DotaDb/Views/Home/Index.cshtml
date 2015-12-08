@@ -1,31 +1,80 @@
-﻿@{
+﻿@model DotaDb.ViewModels.HomeViewModel
+
+@{
     ViewBag.Title = "Home Page";
+    ViewBag.ShowTopAlertInfo = false;
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h2>Welcome to the Dota Database</h2>
+    <p class="lead">
+        I created this site to help visualize and understand various in game data for Dota 2. This tool will frequently update its data
+        directly from Dota 2 files and the Steam Web API to give you the most up to date information. Find my contact information
+        in the footer and let me know if you have any neat ideas to improve or enhance this site.
+    </p>
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    <div class="col-xs-12 text-center">
+        <h1 style="font-weight: 100">By the Numbers</h1>
+        <hr style="margin: 5px 0" />
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+</div>
+<div class="row text-center">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>@Model.InGamePlayerCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">In Game Players</p>
+            </div>
+            <div class="col-md-4">
+                <h2>@Model.DailyPeakPlayerCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">Peak Players Today</p>
+            </div>
+            <div class="col-md-4">
+                <h2>@Model.AllTimePeakPlayerCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">All-time Peak Players</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>@Model.HeroCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">Heroes</p>
+            </div>
+            <div class="col-md-4">
+                <h2>@Model.InGameItemCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">In Game Items</p>
+            </div>
+            <div class="col-md-4">
+                <h2>@Model.ShopItemCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">Cosmetic &amp; Shop Items</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>@Model.LeagueCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">Leagues</p>
+            </div>
+            <div class="col-md-4">
+                <h2>@Model.HeroAbilityCount.ToString("N0")</h2>
+                <p class="text-muted text-uppercase">Hero Abilities</p>
+            </div>
+            <div class="col-md-4">
+                <h2>@Model.LiveLeagueGameCount</h2>
+                <p class="text-muted text-uppercase">Live League Games</p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <h1 style="font-weight: 100">Recent Matches</h1>
+        <hr style="margin: 5px 0" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <h1 style="font-weight: 100">Live League Games</h1>
+        <hr style="margin: 5px 0" />
     </div>
 </div>

@@ -14,12 +14,12 @@ namespace DotaDb.Controllers
 {
     public class ItemsController : Controller
     {
-        private InMemoryDb db = new InMemoryDb();
+        private InMemoryDb db = InMemoryDb.Instance;
 
         public ActionResult Index()
         {
             // file would come from SteamWebAPI2 call
-            string itemsJsonPath = Path.Combine(db.AppDataPath, "game_items.json");
+            string itemsJsonPath = Path.Combine(db.AppDataPath, "items_ingame.json");
             string itemsJson = System.IO.File.ReadAllText(itemsJsonPath);
             JObject parsedItems = JObject.Parse(itemsJson);
             var itemsArray = parsedItems["result"]["items"];
@@ -50,7 +50,7 @@ namespace DotaDb.Controllers
             return View(itemsViewModel);
         }
 
-        private void AddAbilityToItemViewModel(GameItemViewModel viewModel, IDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private void AddAbilityToItemViewModel(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
         {
             DotaItemAbilitySchemaItem ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);

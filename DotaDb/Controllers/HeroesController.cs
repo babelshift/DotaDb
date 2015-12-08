@@ -12,37 +12,37 @@ namespace DotaDb.Controllers
 {
     public class HeroesController : Controller
     {
-        private InMemoryDb db = new InMemoryDb();
+        private InMemoryDb db = InMemoryDb.Instance;
 
         #region Hero Index
 
         public ActionResult Index()
         {
-            IReadOnlyCollection<DotaHeroSchemaItem> heroes = db.GetHeroes();
+            var heroes = db.GetHeroes();
 
             var str = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttributeType.STRENGTH.Key
-                && x.Name != "npc_dota_hero_base"
-                && x.Enabled);
+                x.Value.AttributePrimary == DotaHeroPrimaryAttributeType.STRENGTH.Key
+                && x.Value.Name != "npc_dota_hero_base"
+                && x.Value.Enabled);
 
             var agi = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttributeType.AGILITY.Key
-                && x.Name != "npc_dota_hero_base"
-                && x.Enabled);
+                x.Value.AttributePrimary == DotaHeroPrimaryAttributeType.AGILITY.Key
+                && x.Value.Name != "npc_dota_hero_base"
+                && x.Value.Enabled);
 
             var intel = heroes.Where(x =>
-                x.AttributePrimary == DotaHeroPrimaryAttributeType.INTELLECT.Key
-                && x.Name != "npc_dota_hero_base"
-                && x.Enabled);
+                x.Value.AttributePrimary == DotaHeroPrimaryAttributeType.INTELLECT.Key
+                && x.Value.Name != "npc_dota_hero_base"
+                && x.Value.Enabled);
 
             List<HeroSelectItemViewModel> strHeroes = new List<HeroSelectItemViewModel>();
             foreach (var strHero in str)
             {
                 strHeroes.Add(new HeroSelectItemViewModel()
                 {
-                    Url = strHero.Url,
-                    Name = strHero.Name,
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", strHero.Name.Replace("npc_dota_hero_", ""))
+                    Url = strHero.Value.Url,
+                    Name = strHero.Value.Name,
+                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", strHero.Value.Name.Replace("npc_dota_hero_", ""))
                 });
             }
 
@@ -51,9 +51,9 @@ namespace DotaDb.Controllers
             {
                 agiHeroes.Add(new HeroSelectItemViewModel()
                 {
-                    Url = agiHero.Url,
-                    Name = agiHero.Name,
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", agiHero.Name.Replace("npc_dota_hero_", ""))
+                    Url = agiHero.Value.Url,
+                    Name = agiHero.Value.Name,
+                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", agiHero.Value.Name.Replace("npc_dota_hero_", ""))
                 });
             }
 
@@ -62,9 +62,9 @@ namespace DotaDb.Controllers
             {
                 intHeroes.Add(new HeroSelectItemViewModel()
                 {
-                    Url = intHero.Url,
-                    Name = intHero.Name,
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", intHero.Name.Replace("npc_dota_hero_", ""))
+                    Url = intHero.Value.Url,
+                    Name = intHero.Value.Name,
+                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", intHero.Value.Name.Replace("npc_dota_hero_", ""))
                 });
             }
 

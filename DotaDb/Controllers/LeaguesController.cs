@@ -11,7 +11,7 @@ namespace DotaDb.Controllers
 {
     public class LeaguesController : Controller
     {
-        private InMemoryDb db = new InMemoryDb();
+        private InMemoryDb db = InMemoryDb.Instance;
 
         public ActionResult Index(int? page)
         {
