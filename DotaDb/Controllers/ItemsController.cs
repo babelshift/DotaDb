@@ -18,12 +18,7 @@ namespace DotaDb.Controllers
 
         public ActionResult Index()
         {
-            // file would come from SteamWebAPI2 call
-            string itemsJsonPath = Path.Combine(db.AppDataPath, "items_ingame.json");
-            string itemsJson = System.IO.File.ReadAllText(itemsJsonPath);
-            JObject parsedItems = JObject.Parse(itemsJson);
-            var itemsArray = parsedItems["result"]["items"];
-            var items = itemsArray.ToObject<List<GameItem>>();
+            var items = db.GetGameItems();
 
             var itemsViewModel = items
                 .Where(x => !x.IsRecipe)

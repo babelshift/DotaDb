@@ -1,11 +1,16 @@
-﻿using SourceSchemaParser.Dota2;
+﻿using Newtonsoft.Json.Linq;
+using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Web;
+using SteamWebAPI2;
+using SteamWebAPI2.Models.DOTA2;
+using SteamWebAPI2.Interfaces;
+using System.Configuration;
+using System.Threading.Tasks;
 
 namespace DotaDb.Models
 {
@@ -39,7 +44,7 @@ namespace DotaDb.Models
         private const string heroAbilitiesFileName = "hero_abilities.vdf";  // comes from npc_abilities.txt in dota 2 pak
 
         /// <summary>
-        /// Contains information about all item abilities and descriptions 
+        /// Contains information about all item abilities and descriptions
         /// </summary>
         private const string itemAbilitiesFileName = "item_abilities.vdf";  // comes from items.txt in dota 2 pak
 
@@ -419,6 +424,51 @@ namespace DotaDb.Models
 
         #region Cached Data
         
+        public DotaSchema GetSchema()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.Schema, GetSchemaFromFile);
+        }
+
+        private DotaSchema GetSchemaFromFile()
+        {
+            string vdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
+            string vdf = System.IO.File.ReadAllText(vdfPath);
+            var schema = SourceSchemaParser.SchemaFactory.GetDotaSchema(vdf);
+            return schema;
+        }
+
+        public async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesAsync()
+        {
+            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
+            {
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5)
+            };
+            return await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
+        }
+
+        public async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPI()
+        {
+            string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
+            var dota2Match = new DOTA2Match(steamWebApiKey);
+            var liveLeagueGames = await dota2Match.GetLiveLeagueGamesAsync();
+            return liveLeagueGames;
+        }
+
+        public IReadOnlyCollection<GameItem> GetGameItems()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.InGameItems, GetGameItemsFromSchema);
+        }
+
+        private IReadOnlyCollection<GameItem> GetGameItemsFromSchema()
+        {
+            string itemsJsonPath = Path.Combine(AppDataPath, itemsInGameFileName);
+            string itemsJson = System.IO.File.ReadAllText(itemsJsonPath);
+            JObject parsedItems = JObject.Parse(itemsJson);
+            var itemsArray = parsedItems["result"]["items"];
+            var items = itemsArray.ToObject<List<GameItem>>();
+            return items.AsReadOnly();
+        }
+
         public IReadOnlyDictionary<string, DotaHeroSchemaItem> GetHeroes()
         {
             return AddOrGetCachedValue(MemoryCacheKey.Heroes, GetHeroesFromSchema);
@@ -486,19 +536,28 @@ namespace DotaDb.Models
             return leagues;
         }
 
-        #endregion
+        #endregion Cached Data
 
-        private T AddOrGetCachedValue<T>(MemoryCacheKey key, Func<T> func)
+        private T AddOrGetCachedValue<T>(MemoryCacheKey key, Func<T> func, CacheItemPolicy overrideCacheItemPolicy = null)
         {
             object value = cache.Get(key.ToString());
-            if(value != null)
+            if (value != null)
             {
                 return (T)value;
             }
             else
             {
                 var newValue = func();
-                cache.Add(key.ToString(), newValue, cacheItemPolicy);
+
+                if(overrideCacheItemPolicy != null)
+                {
+                    cache.Add(key.ToString(), newValue, overrideCacheItemPolicy);
+                }
+                else
+                {
+                    cache.Add(key.ToString(), newValue, cacheItemPolicy);
+                }
+                
                 return newValue;
             }
         }

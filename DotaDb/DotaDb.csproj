@@ -101,10 +101,6 @@
       <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SteamWebAPI2, Version=1.1.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamWebAPI2.1.1.0.5\lib\net46\SteamWebAPI2.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -1633,6 +1629,10 @@
     <ProjectReference Include="..\..\..\..\GitHub\SourceSchemaParser\SourceSchemaParser\SourceSchemaParser.csproj">
       <Project>{f46f6eb7-2bf1-48fd-aeae-3145fa294a96}</Project>
       <Name>SourceSchemaParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\GitHub\SteamWebAPI2\SteamWebAPI2\SteamWebAPI2.csproj">
+      <Project>{f5be3b4f-5f56-45cb-9eeb-2bc017ac8eb5}</Project>
+      <Name>SteamWebAPI2</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

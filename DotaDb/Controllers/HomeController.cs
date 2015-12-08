@@ -23,10 +23,10 @@ namespace DotaDb.Controllers
 
             viewModel.HeroCount = db.GetHeroes().Count;
             viewModel.HeroAbilityCount = db.GetHeroAbilities().Count;
-            viewModel.ShopItemCount = 0;
+            viewModel.ShopItemCount = db.GetSchema().Items.Count;
             viewModel.LeagueCount = db.GetLeagues().Count;
-            viewModel.InGameItemCount = 0;
-            viewModel.LiveLeagueGameCount = 0;
+            viewModel.InGameItemCount = db.GetGameItems().Count;
+            viewModel.LiveLeagueGameCount = (await db.GetLiveLeagueGamesAsync()).Count;
 
             return View(viewModel);
         }

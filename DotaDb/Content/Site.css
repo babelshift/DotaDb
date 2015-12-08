@@ -119,3 +119,7 @@ textarea {
     line-height: 15px;
     margin-bottom: 3px;
 }
+
+.home-stats h2 {
+    margin-bottom: 0;
+}

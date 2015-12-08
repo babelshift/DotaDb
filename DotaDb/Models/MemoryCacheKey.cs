@@ -11,6 +11,9 @@ namespace DotaDb.Models
         Heroes,
         HeroAbilities,
         Leagues,
-        ItemAbilities
+        ItemAbilities,
+        InGameItems,
+        LiveLeagueGames,
+        Schema
     }
 }
