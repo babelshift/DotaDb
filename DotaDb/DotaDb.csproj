@@ -177,6 +177,7 @@
     <Compile Include="Models\LiveLeagueGamePlayerModel.cs" />
     <Compile Include="Models\LiveLeagueGameModel.cs" />
     <Compile Include="Models\MemoryCacheKey.cs" />
+    <Compile Include="Models\PlayerCountModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\DotaLeagueExtensions.cs" />

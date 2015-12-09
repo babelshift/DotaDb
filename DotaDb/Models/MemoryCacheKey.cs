@@ -15,6 +15,7 @@ namespace DotaDb.Models
         InGameItems,
         LiveLeagueGames,
         Schema,
-        Leagues
+        Leagues,
+        PlayerCounts
     }
 }

@@ -13,11 +13,25 @@ namespace DotaDb
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+
+            routes.MapRoute(
+                name: "HeroSpecificsWithName",
+                url: "heroes/{id}/{heroName}",
+                defaults: new { controller = "Heroes", action = "Hero", heroName = UrlParameter.Optional }
+            );
+
             routes.MapRoute(
                 name: "HeroSpecifics",
                 url: "heroes/{id}",
                 defaults: new { controller = "Heroes", action = "Hero" }
             );
+
+            routes.MapRoute(
+                name: "HeroItemBuildsWithName",
+                url: "heroes/{id}/{heroName}/{action}",
+                defaults: new { controller = "Heroes", heroName = UrlParameter.Optional }
+            );
+
             routes.MapRoute(
                 name: "HeroItemBuilds",
                 url: "heroes/{id}/{action}",

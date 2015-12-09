@@ -112,7 +112,7 @@
                         </a>
                     </li>
                     <li role="presentation" class="@(Model.ActiveTab == "ItemBuilds" ? "active" : String.Empty)">
-                        <a href="@Url.Action("build", "heroes")">
+                        <a href="@Url.Action("build", "heroes", new { id = Model.Id, heroName = Model.Name.ToLower() })">
                             <i class="fa fa-cogs"></i>
                             Item Builds
                         </a>

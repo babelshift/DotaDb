@@ -40,6 +40,7 @@ namespace DotaDb.Controllers
             {
                 strHeroes.Add(new HeroSelectItemViewModel()
                 {
+                    HeroId = strHero.Value.HeroId,
                     Url = strHero.Value.Url,
                     Name = strHero.Value.Name,
                     AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", strHero.Value.Name.Replace("npc_dota_hero_", ""))
@@ -51,6 +52,7 @@ namespace DotaDb.Controllers
             {
                 agiHeroes.Add(new HeroSelectItemViewModel()
                 {
+                    HeroId = agiHero.Value.HeroId,
                     Url = agiHero.Value.Url,
                     Name = agiHero.Value.Name,
                     AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", agiHero.Value.Name.Replace("npc_dota_hero_", ""))
@@ -62,6 +64,7 @@ namespace DotaDb.Controllers
             {
                 intHeroes.Add(new HeroSelectItemViewModel()
                 {
+                    HeroId = intHero.Value.HeroId,
                     Url = intHero.Value.Url,
                     Name = intHero.Value.Name,
                     AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", intHero.Value.Name.Replace("npc_dota_hero_", ""))
@@ -80,11 +83,17 @@ namespace DotaDb.Controllers
 
         #region Hero Specifics
 
-        public ActionResult Build(int id)
+        public ActionResult Build(int id, string heroName = null)
         {
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
 
             var hero = db.GetHeroKeyValue(id);
+            
+            if (heroName != hero.Url.ToLower())
+            {
+                RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
+            }
+
             SetupHeroViewModel(hero, viewModel);
 
             viewModel.ActiveTab = "ItemBuilds";
@@ -138,11 +147,17 @@ namespace DotaDb.Controllers
             return itemGroupViewModels;
         }
 
-        public ActionResult Hero(int id)
+        public ActionResult Hero(int id, string heroName = null)
         {
             HeroViewModel viewModel = new HeroViewModel();
 
             var hero = db.GetHeroKeyValue(id);
+
+            if(heroName != hero.Url.ToLower())
+            {
+                RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
+            }
+
             SetupHeroViewModel(hero, viewModel);
             SetupAbilities(hero, viewModel);
 
@@ -154,6 +169,7 @@ namespace DotaDb.Controllers
         private BaseHeroViewModel SetupHeroViewModel<T>(DotaHeroSchemaItem hero, T viewModel)
             where T : BaseHeroViewModel
         {
+            viewModel.Id = hero.HeroId;
             viewModel.Name = db.GetLocalizationText(hero.Name);
             viewModel.Description = "<from localization -> npc_dota_hero_<heroname>_hype>";
             viewModel.AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_full.png", hero.Name.Replace("npc_dota_hero_", ""));
