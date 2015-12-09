@@ -8,6 +8,7 @@ namespace DotaDb.Controllers
 {
     public class MapController : Controller
     {
+        [OutputCache(Duration = 86400, Location = System.Web.UI.OutputCacheLocation.Server)]
         public ActionResult Index()
         {
             return View();
