@@ -447,13 +447,23 @@ namespace DotaDb.Models
             return schema;
         }
 
+        public async Task<int> GetLiveLeagueGameCountAsync()
+        {
+            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
+            {
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5)
+            };
+            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
+            return liveLeagueGames.Count;
+        }
+
         public async Task<IReadOnlyCollection<LiveLeagueGameModel>> GetLiveLeagueGamesAsync(int takeAmount)
         {
             #region Get/Add From/To Cache
 
             CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
             {
-                AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(5)
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(20)
             };
             var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
 

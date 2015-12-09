@@ -169,6 +169,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\LeaguesController.cs" />
+    <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -330,6 +331,7 @@
     <Content Include="Content\dotadb-32x32.png" />
     <Content Include="Content\dotadb-45x45.png" />
     <Content Include="Content\dota_minimap_256.jpg" />
+    <Content Include="Content\dota_minimap_help.jpg" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\icons\minimap\Abaddon_icon.png" />
     <Content Include="Content\icons\minimap\Alchemist_icon.png" />
@@ -353,11 +355,14 @@
     <Content Include="Content\icons\minimap\Chen_icon.png" />
     <Content Include="Content\icons\minimap\Clinkz_icon.png" />
     <Content Include="Content\icons\minimap\Clockwerk_icon.png" />
+    <Content Include="Content\icons\minimap\Coin_icon.png" />
     <Content Include="Content\icons\minimap\Crystal_Maiden_icon.png" />
     <Content Include="Content\icons\minimap\Dark_Seer_icon.png" />
     <Content Include="Content\icons\minimap\Dazzle_icon.png" />
     <Content Include="Content\icons\minimap\Death_Prophet_icon.png" />
+    <Content Include="Content\icons\minimap\Defend_icon.png" />
     <Content Include="Content\icons\minimap\Demon_Eater_Minimap_icon.png" />
+    <Content Include="Content\icons\minimap\Dire_ancient_icon.png" />
     <Content Include="Content\icons\minimap\Disruptor_icon.png" />
     <Content Include="Content\icons\minimap\Doom_icon.png" />
     <Content Include="Content\icons\minimap\Dragon_Knight_icon.png" />
@@ -408,9 +413,12 @@
     <Content Include="Content\icons\minimap\Pudge_icon.png" />
     <Content Include="Content\icons\minimap\Pugna_icon.png" />
     <Content Include="Content\icons\minimap\Queen_of_Pain_icon.png" />
+    <Content Include="Content\icons\minimap\Radiant_ancient_icon.png" />
     <Content Include="Content\icons\minimap\Razor_icon.png" />
     <Content Include="Content\icons\minimap\Riki_icon.png" />
+    <Content Include="Content\icons\minimap\Roshan_icon.png" />
     <Content Include="Content\icons\minimap\Rubick_icon.png" />
+    <Content Include="Content\icons\minimap\Rune_bounty_icon.png" />
     <Content Include="Content\icons\minimap\Sand_King_icon.png" />
     <Content Include="Content\icons\minimap\Shadow_Demon_icon.png" />
     <Content Include="Content\icons\minimap\Shadow_Fiend_icon.png" />
@@ -1744,6 +1752,7 @@
     <Content Include="Views\Heroes\_HeroLayout.cshtml" />
     <Content Include="Views\Items\Index.cshtml" />
     <Content Include="Views\Leagues\Index.cshtml" />
+    <Content Include="Views\Map\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

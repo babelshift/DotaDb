@@ -24,7 +24,7 @@ namespace DotaDb.Controllers
             viewModel.ShopItemCount = db.GetSchema().Items.Count;
             viewModel.LeagueCount = leagues.Count;
             viewModel.InGameItemCount = db.GetGameItems().Count;
-            viewModel.LiveLeagueGameCount = liveLeagueGames.Count;
+            viewModel.LiveLeagueGameCount = await db.GetLiveLeagueGameCountAsync();
             viewModel.InGamePlayerCount = playerCounts.InGamePlayerCount;
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;
             viewModel.AllTimePeakPlayerCount = playerCounts.AllTimePeakPlayerCount;

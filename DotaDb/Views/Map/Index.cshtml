@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.ShowTopAlertInfo = false;
+}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <i class="fa fa-map"></i>
+                    Legend
+                </h4>
+            </div>
+            <ul class="list-group" style="line-height: 13px">
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="media-object" src="~/Content/icons/minimap/Defend_icon.png" />
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading" style="margin-top: 3px">Tower</p>
+                            <small class="text-muted">All towers must be destroyed before the Ancient can be attacked. </small>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="media-object" src="~/Content/icons/minimap/Rune_bounty_icon.png" />
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading" style="margin-top: 3px">Rune spawn point</p>
+                            <small class="text-muted">One rune is always spawned as a bounty rune while the non-bounty rune is spawned as a random non-bounty rune.</small>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="media-object" src="~/Content/icons/minimap/Coin_icon.png" />
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading" style="margin-top: 3px">Shop</p>
+                            <small class="text-muted">There are two secret shops, two side shops, and two base (or fountain) shops from which heroes can purchase items.</small>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="media-object" src="~/Content/icons/minimap/Radiant_ancient_icon.png" />
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading" style="margin-top: 3px">Radiant Ancient</p>
+                            <small class="text-muted">The first team to destroy the other team's Ancient is victorious.</small>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="media-object" src="~/Content/icons/minimap/Dire_ancient_icon.png" />
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading" style="margin-top: 3px">Dire Ancient</p>
+                            <small class="text-muted">The first team to destroy the other team's Ancient is victorious.</small>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <img src="~/Content/dota_minimap_help.jpg" class="img-responsive center-block" />
+    </div>
+</div>

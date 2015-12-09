@@ -5,22 +5,16 @@
     ViewBag.ShowTopAlertInfo = false;
 }
 
-<div class="jumbotron">
-    <h2>Welcome to the Dota Database</h2>
+<div class="jumbotron" style="padding: 25px">
+    <h2>You're at the Dota Database!</h2>
     <p class="lead">
-        I created this site to help visualize and understand various in game and web API data related to Dota 2. This tool will frequently update its data
+        I created this site to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data
         directly from Dota 2 files and the Steam Web API to give you the most up to date information. Find my contact information
         in the footer and let me know if you have any neat ideas to improve or enhance this site.
     </p>
 </div>
 
-<div class="row">
-    <div class="col-xs-12 text-center">
-        <h1 style="font-weight: 100">By the Numbers</h1>
-        <hr style="margin: 5px 0" />
-    </div>
-</div>
-<div class="row text-center home-stats">
+<div class="row text-center home-stats" style="margin-bottom: 30px">
     <div class="col-sm-8 col-sm-offset-2">
         <div class="row">
             <div class="col-md-4">
@@ -66,12 +60,12 @@
         </div>
     </div>
 </div>
-<div class="row">
+@*<div class="row">
     <div class="col-xs-12 text-center">
         <h1 style="font-weight: 100">Recent Matches</h1>
         <hr style="margin: 5px 0" />
     </div>
-</div>
+</div>*@
 <div class="row">
     <div class="col-xs-12 text-center">
         <h1 style="font-weight: 100">Top Live League Games</h1>
@@ -91,10 +85,6 @@
                             <i class="fa fa-desktop fa-fw"></i>
                             <span class="text-muted text-uppercase">Spectators:</span>
                             @liveLeagueGame.SpectatorCount.ToString("N0")
-                            <br />
-                            <i class="fa fa-clock-o fa-fw"></i>
-                            <span class="text-muted text-uppercase">Elapsed:</span>
-                            @liveLeagueGame.ElapsedTime
                             <br />
                             <i class="fa fa-ticket fa-fw"></i>
                             <span class="text-muted text-uppercase">Game:</span>
@@ -119,7 +109,12 @@
                                     <img src="@liveLeagueGame.RadiantTeamLogo" width="64" height="64" class="shadow" />
                                 }
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 text-center">
+                                <h4 style="font-weight: 100; margin: 0">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span class="text-muted text-uppercase">Elapsed:</span>
+                                    @liveLeagueGame.ElapsedTime
+                                </h4>
                             </div>
                             <div class="col-md-4 text-right">
                                 <h4 style="font-weight: 100; margin: 0">@liveLeagueGame.DireTeamName</h4>
@@ -160,7 +155,6 @@
                                     }
                                     @foreach (var player in liveLeagueGame.RadiantPlayers)
                                     {
-
                                         <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
                                     }
                                 </div>
