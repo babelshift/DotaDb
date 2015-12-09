@@ -50,16 +50,16 @@ namespace DotaDb.Controllers
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
                             HeroName = y.HeroName,
-                            HeroAvatarImagePath = y.HeroAvatarImagePath,
+                            HeroAvatarFileName = y.HeroAvatarImageFileName,
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,
                             AssistCount = y.AssistCount,
                             PositionX = y.PositionX,
                             PositionY = y.PositionY,
-                            PositionXPercent = ((y.PositionX + 7552) / 15104) * 100,
-                            PositionYPercent = ((y.PositionY + 7680) / 15360) * 100,
-                            MinimapIconFileName = String.Format("{0}_icon.png", y.HeroUrl)
+                            PositionXPercent = ((y.PositionX + 7500) / 15000) * 100,
+                            PositionYPercent = ((y.PositionY + 7500) / 15000) * 100,
+                            MinimapIconFileName = !String.IsNullOrEmpty(y.HeroUrl) ? String.Format("{0}_icon.png", y.HeroUrl) : String.Empty
                         })
                         .ToList()
                         .AsReadOnly(),
@@ -68,16 +68,16 @@ namespace DotaDb.Controllers
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
                             HeroName = y.HeroName,
-                            HeroAvatarImagePath = y.HeroAvatarImagePath,
+                            HeroAvatarFileName = y.HeroAvatarImageFileName,
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,
                             AssistCount = y.AssistCount,
                             PositionX = y.PositionX,
                             PositionY = y.PositionY,
-                            PositionXPercent = ((y.PositionX + 7552) / 15104) * 100,
-                            PositionYPercent = ((y.PositionY + 7680) / 15360) * 100,
-                            MinimapIconFileName = String.Format("{0}_icon.png", y.HeroUrl)
+                            PositionXPercent = ((y.PositionX + 7500) / 15000) * 100,
+                            PositionYPercent = ((y.PositionY + 7500) / 15000) * 100,
+                            MinimapIconFileName = !String.IsNullOrEmpty(y.HeroUrl) ? String.Format("{0}_icon.png", y.HeroUrl) : String.Empty
                         })
                         .ToList()
                         .AsReadOnly()

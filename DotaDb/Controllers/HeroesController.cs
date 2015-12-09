@@ -101,7 +101,7 @@ namespace DotaDb.Controllers
             try
             {
                 string vdfPath = Path.Combine(db.AppDataPath, String.Format("default_{0}.txt", hero.Name.Replace("npc_dota_hero_", "")));
-                string vdf = System.IO.File.ReadAllText(vdfPath);
+                string[] vdf = System.IO.File.ReadAllLines(vdfPath);
                 var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
 
                 viewModel.Title = itemBuild.Title;

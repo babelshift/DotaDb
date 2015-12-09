@@ -5,10 +5,6 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotaDb", "DotaDb\DotaDb.csproj", "{C38B7F3A-7576-4FB4-8FEE-D107C97C74B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceSchemaParser", "..\..\..\GitHub\SourceSchemaParser\SourceSchemaParser\SourceSchemaParser.csproj", "{F46F6EB7-2BF1-48FD-AEAE-3145FA294A96}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebAPI2", "..\..\..\GitHub\SteamWebAPI2\SteamWebAPI2\SteamWebAPI2.csproj", "{F5BE3B4F-5F56-45CB-9EEB-2BC017AC8EB5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{C38B7F3A-7576-4FB4-8FEE-D107C97C74B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C38B7F3A-7576-4FB4-8FEE-D107C97C74B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C38B7F3A-7576-4FB4-8FEE-D107C97C74B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F46F6EB7-2BF1-48FD-AEAE-3145FA294A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F46F6EB7-2BF1-48FD-AEAE-3145FA294A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F46F6EB7-2BF1-48FD-AEAE-3145FA294A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F46F6EB7-2BF1-48FD-AEAE-3145FA294A96}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5BE3B4F-5F56-45CB-9EEB-2BC017AC8EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5BE3B4F-5F56-45CB-9EEB-2BC017AC8EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5BE3B4F-5F56-45CB-9EEB-2BC017AC8EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5BE3B4F-5F56-45CB-9EEB-2BC017AC8EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

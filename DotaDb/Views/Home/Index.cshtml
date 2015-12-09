@@ -140,7 +140,14 @@
                                     <div class="media" style="margin-top: 5px">
                                         <div class="media-left">
                                             <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                <img src="@player.HeroAvatarImagePath" class="shadow" />
+                                                @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                                {
+                                                    <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                                }
                                             </div>
                                         </div>
                                         <div class="media-body">
@@ -158,11 +165,17 @@
                                     <img src="~/Content/dota_minimap_256.jpg" style="width: 100%" />
                                     @foreach (var player in liveLeagueGame.DirePlayers)
                                     {
-                                        <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                        if (!String.IsNullOrEmpty(player.MinimapIconFileName))
+                                        {
+                                            <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                        }
                                     }
                                     @foreach (var player in liveLeagueGame.RadiantPlayers)
                                     {
-                                        <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                        if (!String.IsNullOrEmpty(player.MinimapIconFileName))
+                                        {
+                                            <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                        }
                                     }
                                 </div>
                             </div>
@@ -180,7 +193,14 @@
                                         </div>
                                         <div class="media-right">
                                             <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                <img src="@player.HeroAvatarImagePath" class="shadow" />
+                                                @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                                {
+                                                    <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                                }
                                             </div>
                                         </div>
                                     </div>

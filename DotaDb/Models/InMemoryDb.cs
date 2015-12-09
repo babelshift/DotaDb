@@ -442,7 +442,7 @@ namespace DotaDb.Models
         private DotaSchema GetSchemaFromFile()
         {
             string vdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
-            string vdf = System.IO.File.ReadAllText(vdfPath);
+            string[] vdf = System.IO.File.ReadAllLines(vdfPath);
             var schema = SourceSchemaParser.SchemaFactory.GetDotaSchema(vdf);
             return schema;
         }
@@ -490,6 +490,8 @@ namespace DotaDb.Models
                     SpectatorCount = liveLeagueGame.Spectators
                 };
 
+                #region Fill in Player Details
+
                 liveLeagueGameModel.Players = liveLeagueGame.Players
                     .Select(x => new LiveLeagueGamePlayerModel()
                     {
@@ -501,10 +503,15 @@ namespace DotaDb.Models
                     .ToList()
                     .AsReadOnly();
 
-                #region Fill in Player Details
+                Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail = null;
+                Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail = null;
 
-                var radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players.ToDictionary(x => x.AccountId, x => x);
-                var direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players.ToDictionary(x => x.AccountId, x => x);
+                // if the game hasn't started yet, the scoreboard won't exist
+                if (liveLeagueGame.Scoreboard != null)
+                {
+                    radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players.ToDictionary(x => x.AccountId, x => x);
+                    direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players.ToDictionary(x => x.AccountId, x => x);
+                }
 
                 foreach (var player in liveLeagueGameModel.Players)
                 {
@@ -515,25 +522,22 @@ namespace DotaDb.Models
                     }
 
                     var hero = GetHeroKeyValue(player.HeroId);
+
                     player.HeroName = GetLocalizationText(hero.Name);
-                    player.HeroAvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", hero.Name.Replace("npc_dota_hero_", ""));
+                    player.HeroAvatarImageFileName = GetHeroAvatarFileName(hero.Name);
 
-                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
-                    if (player.Team == 0)
+                    // if the player hasn't picked a hero yet, details won't exist
+                    if (playerDetail != null)
                     {
-                        playerDetail = radiantPlayerDetail[player.AccountId];
-                    }
-                    else if (player.Team == 1)
-                    {
-                        playerDetail = direPlayerDetail[player.AccountId];
+                        player.KillCount = playerDetail.Kills;
+                        player.DeathCount = playerDetail.Deaths;
+                        player.AssistCount = playerDetail.Assists;
+                        player.PositionX = playerDetail.PositionX;
+                        player.PositionY = playerDetail.PositionY;
                     }
 
-                    player.KillCount = playerDetail.Kills;
-                    player.DeathCount = playerDetail.Deaths;
-                    player.AssistCount = playerDetail.Assists;
-                    player.PositionX = playerDetail.PositionX;
-                    player.PositionY = playerDetail.PositionY;
                     player.HeroUrl = hero.Url;
                 }
 
@@ -547,7 +551,7 @@ namespace DotaDb.Models
                 bool success = leagues.TryGetValue(liveLeagueGame.LeagueId, out league);
                 if (success)
                 {
-                    // look up this league's in game ticket asset for the logo
+                    // look up this league's in game ticket asset for the logo and localized league name
                     var leagueTickets = GetLeagueTickets();
                     DotaLeague leagueTicket = null;
                     success = leagueTickets.TryGetValue(league.ItemDef.ToString(), out leagueTicket);
@@ -558,11 +562,13 @@ namespace DotaDb.Models
                     }
                 }
 
+                // this property will only exist if the team is a tournament/league coordinated team
                 if (liveLeagueGame.RadiantTeam != null)
                 {
                     liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
                 }
 
+                // this property will only exist if the team is a tournament/league coordinated team
                 if (liveLeagueGame.DireTeam != null)
                 {
                     liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
@@ -574,6 +580,41 @@ namespace DotaDb.Models
             }
 
             return liveLeagueGameModels.AsReadOnly();
+        }
+
+        private static string GetHeroAvatarFileName(string heroName)
+        {
+            // if the player hasn't picked a hero yet, the 'base' hero will be shown, which basically is 'unknown'
+            if (heroName == "npc_dota_hero_base")
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return heroName.Replace("npc_dota_hero_", "");
+            }
+        }
+
+        private static LiveLeagueGamePlayerDetail GetPlayerDetail(int playerTeam, int playerAccountId, Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail, Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail)
+        {
+            // team 0 is radiant, if the player hasn't picked a hero yet, details won't exist
+            if (playerTeam == 0)
+            {
+                if (radiantPlayerDetail != null)
+                {
+                    return radiantPlayerDetail[playerAccountId];
+                }
+            }
+            // team 1 is dire
+            else if (playerTeam == 1)
+            {
+                if (direPlayerDetail != null)
+                {
+                    return direPlayerDetail[playerAccountId];
+                }
+            }
+
+            return null;
         }
 
         private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPI()
@@ -607,7 +648,7 @@ namespace DotaDb.Models
         private IReadOnlyDictionary<int, DotaHeroSchemaItem> GetHeroesFromSchema()
         {
             string heroesVdfPath = Path.Combine(AppDataPath, heroesFileName);
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            string[] vdf = System.IO.File.ReadAllLines(heroesVdfPath);
             var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
             return heroes
                 .ToDictionary(x => x.HeroId, x => x);
@@ -621,7 +662,7 @@ namespace DotaDb.Models
         private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilitiesFromSchema()
         {
             string heroesVdfPath = Path.Combine(AppDataPath, heroAbilitiesFileName);
-            string vdf = System.IO.File.ReadAllText(heroesVdfPath);
+            string[] vdf = System.IO.File.ReadAllLines(heroesVdfPath);
             var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
             return abilities;
         }
@@ -634,7 +675,7 @@ namespace DotaDb.Models
         private IReadOnlyDictionary<string, string> GetPublicLocalizationFromSchema()
         {
             string vdfPath = Path.Combine(AppDataPath, tooltipsEnglishFileName);
-            string vdf = System.IO.File.ReadAllText(vdfPath);
+            string[] vdf = System.IO.File.ReadAllLines(vdfPath);
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }
@@ -647,7 +688,7 @@ namespace DotaDb.Models
         private IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilitiesFromSchema()
         {
             string vdfPath = Path.Combine(AppDataPath, itemAbilitiesFileName);
-            string vdf = System.IO.File.ReadAllText(vdfPath);
+            string[] vdf = System.IO.File.ReadAllLines(vdfPath);
             var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
             return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
         }
