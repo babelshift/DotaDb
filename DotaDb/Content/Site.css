@@ -10,8 +10,8 @@ body {
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -122,6 +122,12 @@ textarea {
 
 .home-stats h2 {
     margin-bottom: 0;
+    color: #ccc;
+    margin: 0;
+}
+
+.home-stats .row {
+    margin: 25px 0;
 }
 
 .minimap-icon {
@@ -133,4 +139,10 @@ textarea {
     width: 32px;
     height: 32px;
     position: absolute;
+}
+
+.full-screen-bg-tint {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
 }

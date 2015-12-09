@@ -322,6 +322,9 @@
     <Content Include="App_Data\default_zuus.txt" />
     <Content Include="Content\agility-40x40.png" />
     <Content Include="Content\attack-40x40.png" />
+    <Content Include="Content\backgrounds\DireAncientBackground.jpg" />
+    <Content Include="Content\backgrounds\MidLaneBackground.jpg" />
+    <Content Include="Content\backgrounds\RadiantAncientBackground.jpg" />
     <Content Include="Content\bootstrap-lumen.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -1753,6 +1756,7 @@
     <Content Include="Views\Items\Index.cshtml" />
     <Content Include="Views\Leagues\Index.cshtml" />
     <Content Include="Views\Map\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutSplash.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

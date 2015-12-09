@@ -1,77 +1,84 @@
 ﻿@model DotaDb.ViewModels.HomeViewModel
 
 @{
+    Layout = "~/Views/Shared/_LayoutSplash.cshtml";
     ViewBag.Title = "Home Page";
     ViewBag.ShowTopAlertInfo = false;
 }
 
-<div class="jumbotron" style="padding: 25px">
-    <h2>You're at the Dota Database!</h2>
-    <p class="lead">
-        I created this site to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data
-        directly from Dota 2 files and the Steam Web API to give you the most up to date information. Find my contact information
-        in the footer and let me know if you have any neat ideas to improve or enhance this site.
-    </p>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h2 style="margin: 0">You're at the Dota Database!</h2>
+        <p class="lead">
+            I created this site to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data
+            directly from Dota 2 files and the Steam Web API to give you the most up to date information. Find my contact information
+            in the footer and let me know if you have any neat ideas to improve or enhance this site.
+        </p>
+    </div>
 </div>
 
-<div class="row text-center home-stats" style="margin-bottom: 30px">
-    <div class="col-sm-8 col-sm-offset-2">
-        <div class="row">
-            <div class="col-md-4">
-                <h2>@Model.InGamePlayerCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">In Game Players</p>
-            </div>
-            <div class="col-md-4">
-                <h2>@Model.DailyPeakPlayerCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">Peak Players Today</p>
-            </div>
-            <div class="col-md-4">
-                <h2>@Model.AllTimePeakPlayerCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">All-time Peak Players</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <h2>@Model.HeroCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">Heroes</p>
-            </div>
-            <div class="col-md-4">
-                <h2>@Model.InGameItemCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">In Game Items</p>
-            </div>
-            <div class="col-md-4">
-                <h2>@Model.ShopItemCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">Cosmetic &amp; Shop Items</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <h2>@Model.LeagueCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">Leagues</p>
-            </div>
-            <div class="col-md-4">
-                <h2>@Model.HeroAbilityCount.ToString("N0")</h2>
-                <p class="text-muted text-uppercase">Hero Abilities</p>
-            </div>
-            <div class="col-md-4">
-                <h2>@Model.LiveLeagueGameCount</h2>
-                <p class="text-muted text-uppercase">Live League Games</p>
+<div style="background: url('/Content/backgrounds/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
+    <div class="full-screen-bg-tint">
+        <div class="row text-center home-stats" style="margin-bottom: 30px; padding: 30px">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h2>@Model.InGamePlayerCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">In Game Players</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>@Model.DailyPeakPlayerCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">Peak Players Today</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>@Model.AllTimePeakPlayerCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">All-time Peak Players</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h2>@Model.HeroCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">Heroes</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>@Model.InGameItemCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">In Game Items</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>@Model.ShopItemCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">Cosmetic &amp; Shop Items</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h2>@Model.LeagueCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">Leagues</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>@Model.HeroAbilityCount.ToString("N0")</h2>
+                        <p class="text-muted text-uppercase">Hero Abilities</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>@Model.LiveLeagueGameCount</h2>
+                        <p class="text-muted text-uppercase">Live League Games</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 @*<div class="row">
-    <div class="col-xs-12 text-center">
-        <h1 style="font-weight: 100">Recent Matches</h1>
-        <hr style="margin: 5px 0" />
-    </div>
-</div>*@
+        <div class="col-xs-12 text-center">
+            <h1 style="font-weight: 100">Recent Matches</h1>
+            <hr style="margin: 5px 0" />
+        </div>
+    </div>*@
 <div class="row">
-    <div class="col-xs-12 text-center">
+    <div class="col-md-10 col-md-offset-1 text-center">
         <h1 style="font-weight: 100">Top Live League Games</h1>
         <hr style="margin: 5px 0" />
     </div>
-    <div class="col-md-12">
+    <div class="col-md-10 col-md-offset-1">
         @foreach (var liveLeagueGame in Model.LiveLeagueGames)
         {
             <div class="well well-sm" style="padding: 15px;">
