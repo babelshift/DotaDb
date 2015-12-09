@@ -118,26 +118,8 @@
                                 {
                                     <img src="@liveLeagueGame.RadiantTeamLogo" width="64" height="64" class="shadow" />
                                 }
-                                <h3 style="margin: 5px 0">@liveLeagueGame.RadiantKillCount <small class="text-muted text-uppercase">kills</small></h3>
-                                @foreach (var player in liveLeagueGame.RadiantPlayers)
-                                {
-                                    <div class="media" style="margin-top: 5px">
-                                        <div class="media-left">
-                                            <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                <img src="@player.HeroAvatarImagePath" />
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="media-heading" style="margin: 0">
-                                                @player.PlayerName
-                                                <span class="text-muted">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
-                                            </h5>
-                                            <small class="text-uppercase text-muted">@player.HeroName</small>
-                                        </div>
-                                    </div>
-                                }
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-4">
                             </div>
                             <div class="col-md-4 text-right">
                                 <h4 style="font-weight: 100; margin: 0">@liveLeagueGame.DireTeamName</h4>
@@ -146,6 +128,44 @@
                                 {
                                     <img src="@liveLeagueGame.DireTeamLogo" width="64" height="64" class="shadow" />
                                 }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3 style="margin: 5px 0">@liveLeagueGame.RadiantKillCount <small class="text-muted text-uppercase">kills</small></h3>
+                                @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                {
+                                    <div class="media" style="margin-top: 5px">
+                                        <div class="media-left">
+                                            <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
+                                                <img src="@player.HeroAvatarImagePath" class="shadow" />
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="media-heading" style="margin: 0">
+                                                @player.PlayerName
+                                            </h5>
+                                            <span class="text-muted pull-right">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
+                                            <small class="text-uppercase text-muted">@player.HeroName</small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-4 text-center" style="padding: 0">
+                                <div style="position: relative; width: 90%" class="center-block">
+                                    <img src="~/Content/dota_minimap_256.jpg" style="width: 100%" />
+                                    @foreach (var player in liveLeagueGame.DirePlayers)
+                                    {
+                                        <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                    }
+                                    @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                    {
+
+                                        <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-right">
                                 <h3 style="margin: 5px 0">@liveLeagueGame.DireKillCount <small class="text-muted text-uppercase">kills</small></h3>
                                 @foreach (var player in liveLeagueGame.DirePlayers)
                                 {
@@ -153,13 +173,13 @@
                                         <div class="media-body">
                                             <h5 class="media-heading" style="margin: 0">
                                                 @player.PlayerName
-                                                <span class="text-muted">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
                                             </h5>
+                                            <span class="text-muted pull-left">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
                                             <small class="text-uppercase text-muted">@player.HeroName</small>
                                         </div>
                                         <div class="media-right">
                                             <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                <img src="@player.HeroAvatarImagePath" />
+                                                <img src="@player.HeroAvatarImagePath" class="shadow" />
                                             </div>
                                         </div>
                                     </div>

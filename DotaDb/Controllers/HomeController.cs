@@ -1,16 +1,9 @@
 ﻿using DotaDb.Models;
 using DotaDb.ViewModels;
-using HtmlAgilityPack;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using DotaDb.Utilities;
-using SourceSchemaParser.Dota2;
-using SteamWebAPI2.Models.DOTA2;
 
 namespace DotaDb.Controllers
 {
@@ -61,7 +54,12 @@ namespace DotaDb.Controllers
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,
-                            AssistCount = y.AssistCount
+                            AssistCount = y.AssistCount,
+                            PositionX = y.PositionX,
+                            PositionY = y.PositionY,
+                            PositionXPercent = ((y.PositionX + 7552) / 15104) * 100,
+                            PositionYPercent = ((y.PositionY + 7680) / 15360) * 100,
+                            MinimapIconFileName = String.Format("{0}_icon.png", y.HeroUrl)
                         })
                         .ToList()
                         .AsReadOnly(),
@@ -74,7 +72,12 @@ namespace DotaDb.Controllers
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,
-                            AssistCount = y.AssistCount
+                            AssistCount = y.AssistCount,
+                            PositionX = y.PositionX,
+                            PositionY = y.PositionY,
+                            PositionXPercent = ((y.PositionX + 7552) / 15104) * 100,
+                            PositionYPercent = ((y.PositionY + 7680) / 15360) * 100,
+                            MinimapIconFileName = String.Format("{0}_icon.png", y.HeroUrl)
                         })
                         .ToList()
                         .AsReadOnly()

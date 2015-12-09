@@ -123,3 +123,14 @@ textarea {
 .home-stats h2 {
     margin-bottom: 0;
 }
+
+.minimap-icon {
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+}

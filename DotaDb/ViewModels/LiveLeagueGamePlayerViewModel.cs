@@ -8,5 +8,10 @@
         public int KillCount { get; set; }
         public int DeathCount { get; set; }
         public int AssistCount { get; set; }
+        public double PositionX { get; set; }
+        public double PositionY { get; set; }
+        public double PositionXPercent { get; set; }
+        public double PositionYPercent { get; set; }
+        public string MinimapIconFileName { get; set; }
     }
 }

@@ -16,5 +16,8 @@ namespace DotaDb.Models
         public int KillCount { get; set; }
         public int DeathCount { get; set; }
         public int AssistCount { get; set; }
+        public double PositionX { get; set; }
+        public double PositionY { get; set; }
+        public string HeroUrl { get; set; }
     }
 }

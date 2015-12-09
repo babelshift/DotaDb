@@ -453,7 +453,7 @@ namespace DotaDb.Models
 
             CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
             {
-                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1)
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(5)
             };
             var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
 
@@ -491,6 +491,8 @@ namespace DotaDb.Models
                     .ToList()
                     .AsReadOnly();
 
+                #region Fill in Player Details
+
                 var radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players.ToDictionary(x => x.AccountId, x => x);
                 var direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players.ToDictionary(x => x.AccountId, x => x);
 
@@ -520,7 +522,12 @@ namespace DotaDb.Models
                     player.KillCount = playerDetail.Kills;
                     player.DeathCount = playerDetail.Deaths;
                     player.AssistCount = playerDetail.Assists;
+                    player.PositionX = playerDetail.PositionX;
+                    player.PositionY = playerDetail.PositionY;
+                    player.HeroUrl = hero.Url;
                 }
+
+                #endregion
 
                 #region Fill in League/Team Details
 
