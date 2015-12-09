@@ -1,17 +1,18 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DotaDb.Utilities;
+using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using SourceSchemaParser.Dota2;
+using SteamWebAPI2.Interfaces;
+using SteamWebAPI2.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Caching;
-using SteamWebAPI2;
-using SteamWebAPI2.Models.DOTA2;
-using SteamWebAPI2.Interfaces;
-using System.Configuration;
 using System.Threading.Tasks;
-using DotaDb.Utilities;
 
 namespace DotaDb.Models
 {
@@ -19,25 +20,10 @@ namespace DotaDb.Models
     {
         private static volatile InMemoryDb instance;
         private static object sync = new object();
+        private MemoryCache cache = MemoryCache.Default;
+        private CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
 
-        public static InMemoryDb Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (sync)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new InMemoryDb();
-                        }
-                    }
-                }
-
-                return instance;
-            }
-        }
+        #region Data Source File Names
 
         /// <summary>
         /// Contains information about all hero abilities and descriptions
@@ -79,8 +65,9 @@ namespace DotaDb.Models
         /// </summary>
         private const string panoramaDotaEnglishFileName = "panorama_dota_english.vdf";     // comes from dota 2 pak
 
-        private MemoryCache cache = MemoryCache.Default;
-        private CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
+        #endregion Data Source File Names
+
+        #region Enum Type Lookup Members
 
         public IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
         public IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
@@ -96,7 +83,28 @@ namespace DotaDb.Models
         public IReadOnlyDictionary<string, DotaItemShareabilityType> itemShareabilityTypes;
         public IReadOnlyDictionary<string, DotaItemDisassembleType> itemDisassembleTypes;
 
+        #endregion Enum Type Lookup Members
+
         public string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
+
+        public static InMemoryDb Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (sync)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new InMemoryDb();
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
 
         private InMemoryDb()
         {
@@ -129,19 +137,7 @@ namespace DotaDb.Models
             cache.Add(MemoryCacheKey.Heroes.ToString(), heroes, cacheItemPolicy);
         }
 
-        public string GetLocalizationText(string key)
-        {
-            string value = String.Empty;
-            var localizationKeys = GetPublicLocalization();
-            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
+        #region Enum Type Lookup Methods
 
         public IReadOnlyDictionary<string, DotaItemDisassembleType> GetItemDisassembleTypes()
         {
@@ -322,53 +318,6 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaHeroPrimaryAttributeType>(temp);
         }
 
-        public string GetJoinedItemDisassembleTypes(string value)
-        {
-            return GetJoinedValues(value, itemDisassembleTypes);
-        }
-
-        public string GetJoinedItemShareabilityTypes(string value)
-        {
-            return GetJoinedValues(value, itemShareabilityTypes);
-        }
-
-        public string GetJoinedItemDeclarationTypes(string value)
-        {
-            return GetJoinedValues(value, itemDeclarationTypes);
-        }
-
-        public string GetJoinedUnitTargetFlags(string value)
-        {
-            return GetJoinedValues(value, unitTargetFlags);
-        }
-
-        public string GetJoinedUnitTargetTypes(string value)
-        {
-            return GetJoinedValues(value, unitTargetTypes);
-        }
-
-        public string GetJoinedUnitTargetTeamTypes(string value)
-        {
-            return GetJoinedValues(value, unitTargetTeamTypes);
-        }
-
-        public string GetJoinedBehaviors(string value)
-        {
-            return GetJoinedValues(value, abilityBehaviorTypes);
-        }
-
-        private string GetJoinedValues<T>(string startingValue, IReadOnlyDictionary<string, T> lookup)
-        {
-            if (String.IsNullOrEmpty(startingValue))
-            {
-                return String.Empty;
-            }
-
-            string[] raw = startingValue.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
-            List<T> individual = raw.Select(x => GetKeyValue(x, lookup)).ToList();
-            return String.Join(", ", individual);
-        }
-
         public DotaHeroPrimaryAttributeType GetHeroPrimaryAttributeTypeKeyValue(string key)
         {
             return GetKeyValue(key, attributeTypes);
@@ -405,6 +354,8 @@ namespace DotaDb.Models
             return GetKeyValue(key, heroes);
         }
 
+        #endregion Enum Type Lookup Methods
+
         public async Task<string> GetTeamLogoUrlAsync(long ugcId)
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
@@ -420,25 +371,68 @@ namespace DotaDb.Models
             }
         }
 
-        private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
+        public string GetLocalizationText(string key)
         {
-            if (key == null || String.IsNullOrEmpty(key.ToString()))
-            {
-                return default(T);
-            }
-
-            T value;
-            if (dict != null && dict.TryGetValue(key, out value))
+            string value = String.Empty;
+            var localizationKeys = GetPublicLocalization();
+            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
             {
                 return value;
             }
             else
             {
-                return default(T);
+                return String.Empty;
             }
         }
 
         #region Cached Data
+
+        public async Task<PlayerCountModel> GetPlayerCountsAsync()
+        {
+            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
+            {
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(15)
+            };
+            return await AddOrGetCachedValue(MemoryCacheKey.PlayerCounts, GetPlayerCountsFromScrapingAsync, cacheItemPolicy);
+        }
+
+        private async Task<PlayerCountModel> GetPlayerCountsFromScrapingAsync()
+        {
+            HttpClient client = new HttpClient();
+            var steamChartsHtml = await client.GetStringAsync("http://steamcharts.com/app/570");
+            HtmlDocument doc = new HtmlDocument();
+
+            doc.LoadHtml(steamChartsHtml);
+            var appStats = doc.DocumentNode
+                .Descendants("div")
+                .Where(x => x.GetAttributeValue("class", null) == "app-stat");
+
+            PlayerCountModel model = new PlayerCountModel();
+
+            for (int i = 0; i < appStats.Count(); i++)
+            {
+                var num = appStats.ElementAt(i)
+                    .Descendants("span")
+                    .First(x => x.GetAttributeValue("class", null) == "num");
+                int value = 0;
+                bool success = int.TryParse(num.InnerText, out value);
+
+                if (i == 0)
+                {
+                    model.InGamePlayerCount = value;
+                }
+                else if (i == 1)
+                {
+                    model.DailyPeakPlayerCount = value;
+                }
+                else if (i == 2)
+                {
+                    model.AllTimePeakPlayerCount = value;
+                }
+            }
+
+            return model;
+        }
 
         public DotaSchema GetSchema()
         {
@@ -463,7 +457,7 @@ namespace DotaDb.Models
             };
             var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
 
-            #endregion
+            #endregion Get/Add From/To Cache
 
             var filteredLiveLeagueGames = liveLeagueGames
                 .OrderByDescending(x => x.Spectators)
@@ -503,7 +497,7 @@ namespace DotaDb.Models
                 foreach (var player in liveLeagueGameModel.Players)
                 {
                     // skip over spectators/observers/commentators
-                    if(player.Team != 0 && player.Team != 1)
+                    if (player.Team != 0 && player.Team != 1)
                     {
                         continue;
                     }
@@ -557,38 +551,12 @@ namespace DotaDb.Models
                     liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
                 }
 
-                #endregion
+                #endregion Fill in League/Team Details
 
                 liveLeagueGameModels.Add(liveLeagueGameModel);
             }
 
             return liveLeagueGameModels.AsReadOnly();
-        }
-
-        private static int GetBestOfCountFromSeriesType(int seriesType)
-        {
-            if (seriesType == 0)
-            {
-                return 1;
-            }
-            else if (seriesType == 1)
-            {
-                return 3;
-            }
-            else if (seriesType == 2)
-            {
-                return 5;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        private static string GetElapsedTime(double seconds)
-        {
-            TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
-            return String.Format("{0}m {1}s", timeSpan.Minutes, timeSpan.Seconds);
         }
 
         private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPI()
@@ -696,8 +664,6 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaLeague>(leagues.ToDictionary(x => x.ItemDef, x => x));
         }
 
-        #endregion Cached Data
-
         private T AddOrGetCachedValue<T>(MemoryCacheKey key, Func<T> func, CacheItemPolicy overrideCacheItemPolicy = null)
         {
             object value = cache.Get(key.ToString());
@@ -721,5 +687,102 @@ namespace DotaDb.Models
                 return newValue;
             }
         }
+
+        #endregion Cached Data
+
+        #region Utility Methods
+
+        private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
+        {
+            if (key == null || String.IsNullOrEmpty(key.ToString()))
+            {
+                return default(T);
+            }
+
+            T value;
+            if (dict != null && dict.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return default(T);
+            }
+        }
+
+        public string GetJoinedItemDisassembleTypes(string value)
+        {
+            return GetJoinedValues(value, itemDisassembleTypes);
+        }
+
+        public string GetJoinedItemShareabilityTypes(string value)
+        {
+            return GetJoinedValues(value, itemShareabilityTypes);
+        }
+
+        public string GetJoinedItemDeclarationTypes(string value)
+        {
+            return GetJoinedValues(value, itemDeclarationTypes);
+        }
+
+        public string GetJoinedUnitTargetFlags(string value)
+        {
+            return GetJoinedValues(value, unitTargetFlags);
+        }
+
+        public string GetJoinedUnitTargetTypes(string value)
+        {
+            return GetJoinedValues(value, unitTargetTypes);
+        }
+
+        public string GetJoinedUnitTargetTeamTypes(string value)
+        {
+            return GetJoinedValues(value, unitTargetTeamTypes);
+        }
+
+        public string GetJoinedBehaviors(string value)
+        {
+            return GetJoinedValues(value, abilityBehaviorTypes);
+        }
+
+        private string GetJoinedValues<T>(string startingValue, IReadOnlyDictionary<string, T> lookup)
+        {
+            if (String.IsNullOrEmpty(startingValue))
+            {
+                return String.Empty;
+            }
+
+            string[] raw = startingValue.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
+            List<T> individual = raw.Select(x => GetKeyValue(x, lookup)).ToList();
+            return String.Join(", ", individual);
+        }
+
+        private static int GetBestOfCountFromSeriesType(int seriesType)
+        {
+            if (seriesType == 0)
+            {
+                return 1;
+            }
+            else if (seriesType == 1)
+            {
+                return 3;
+            }
+            else if (seriesType == 2)
+            {
+                return 5;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        private static string GetElapsedTime(double seconds)
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+            return String.Format("{0}m {1}s", timeSpan.Minutes, timeSpan.Seconds);
+        }
+
+        #endregion Utility Methods
     }
 }
