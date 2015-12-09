@@ -11,6 +11,7 @@ using SteamWebAPI2.Models.DOTA2;
 using SteamWebAPI2.Interfaces;
 using System.Configuration;
 using System.Threading.Tasks;
+using DotaDb.Utilities;
 
 namespace DotaDb.Models
 {
@@ -102,7 +103,7 @@ namespace DotaDb.Models
             cache.Remove(MemoryCacheKey.LocalizationKeys.ToString());
             cache.Remove(MemoryCacheKey.Heroes.ToString());
             cache.Remove(MemoryCacheKey.HeroAbilities.ToString());
-            cache.Remove(MemoryCacheKey.Leagues.ToString());
+            cache.Remove(MemoryCacheKey.LeagueTickets.ToString());
             cache.Remove(MemoryCacheKey.ItemAbilities.ToString());
 
             abilityBehaviorTypes = GetAbilityBehaviorTypes();
@@ -398,15 +399,30 @@ namespace DotaDb.Models
             return GetKeyValue(key, damageTypes);
         }
 
-        public DotaHeroSchemaItem GetHeroKeyValue(string key)
+        public DotaHeroSchemaItem GetHeroKeyValue(int key)
         {
             var heroes = GetHeroes();
             return GetKeyValue(key, heroes);
         }
 
-        private T GetKeyValue<T>(string key, IReadOnlyDictionary<string, T> dict)
+        public async Task<string> GetTeamLogoUrlAsync(long ugcId)
         {
-            if (String.IsNullOrEmpty(key))
+            string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
+            var steamRemoteStorage = new SteamRemoteStorage(steamWebApiKey);
+            var ugcFileDetails = await steamRemoteStorage.GetUGCFileDetailsAsync(ugcId, 570);
+            if (ugcFileDetails != null)
+            {
+                return ugcFileDetails.URL;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
+        {
+            if (key == null || String.IsNullOrEmpty(key.ToString()))
             {
                 return default(T);
             }
@@ -423,7 +439,7 @@ namespace DotaDb.Models
         }
 
         #region Cached Data
-        
+
         public DotaSchema GetSchema()
         {
             return AddOrGetCachedValue(MemoryCacheKey.Schema, GetSchemaFromFile);
@@ -437,16 +453,145 @@ namespace DotaDb.Models
             return schema;
         }
 
-        public async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesAsync()
+        public async Task<IReadOnlyCollection<LiveLeagueGameModel>> GetLiveLeagueGamesAsync(int takeAmount)
         {
+            #region Get/Add From/To Cache
+
             CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
             {
-                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5)
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1)
             };
-            return await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
+            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
+
+            #endregion
+
+            var filteredLiveLeagueGames = liveLeagueGames
+                .OrderByDescending(x => x.Spectators)
+                .Take(takeAmount);
+
+            List<LiveLeagueGameModel> liveLeagueGameModels = new List<LiveLeagueGameModel>();
+
+            foreach (var liveLeagueGame in filteredLiveLeagueGames)
+            {
+                LiveLeagueGameModel liveLeagueGameModel = new LiveLeagueGameModel()
+                {
+                    BestOf = GetBestOfCountFromSeriesType(liveLeagueGame.SeriesType),
+                    DireKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.Score : 0,
+                    RadiantKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Radiant != null) ? liveLeagueGame.Scoreboard.Radiant.Score : 0,
+                    GameNumber = liveLeagueGame.RadiantSeriesWins + liveLeagueGame.DireSeriesWins + 1,
+                    ElapsedTime = GetElapsedTime(liveLeagueGame.Scoreboard.Duration),
+                    DireTeamName = liveLeagueGame.DireTeam != null ? liveLeagueGame.DireTeam.TeamName : "Dire",
+                    RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
+                    SeriesStatus = String.Format("{0} - {1}", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins),
+                    SpectatorCount = liveLeagueGame.Spectators
+                };
+
+                liveLeagueGameModel.Players = liveLeagueGame.Players
+                    .Select(x => new LiveLeagueGamePlayerModel()
+                    {
+                        AccountId = x.AccountId,
+                        HeroId = x.HeroId,
+                        Name = x.Name,
+                        Team = x.Team
+                    })
+                    .ToList()
+                    .AsReadOnly();
+
+                var radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players.ToDictionary(x => x.AccountId, x => x);
+                var direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players.ToDictionary(x => x.AccountId, x => x);
+
+                foreach (var player in liveLeagueGameModel.Players)
+                {
+                    // skip over spectators/observers/commentators
+                    if(player.Team != 0 && player.Team != 1)
+                    {
+                        continue;
+                    }
+
+                    var hero = GetHeroKeyValue(player.HeroId);
+                    player.HeroName = GetLocalizationText(hero.Name);
+                    player.HeroAvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", hero.Name.Replace("npc_dota_hero_", ""));
+
+                    LiveLeagueGamePlayerDetail playerDetail = null;
+
+                    if (player.Team == 0)
+                    {
+                        playerDetail = radiantPlayerDetail[player.AccountId];
+                    }
+                    else if (player.Team == 1)
+                    {
+                        playerDetail = direPlayerDetail[player.AccountId];
+                    }
+
+                    player.KillCount = playerDetail.Kills;
+                    player.DeathCount = playerDetail.Deaths;
+                    player.AssistCount = playerDetail.Assists;
+                }
+
+                #region Fill in League/Team Details
+
+                // look up whatever league this game belongs to in the league listing to get more details about it
+                var leagues = await GetLeaguesAsync();
+                League league = null;
+                bool success = leagues.TryGetValue(liveLeagueGame.LeagueId, out league);
+                if (success)
+                {
+                    // look up this league's in game ticket asset for the logo
+                    var leagueTickets = GetLeagueTickets();
+                    DotaLeague leagueTicket = null;
+                    success = leagueTickets.TryGetValue(league.ItemDef.ToString(), out leagueTicket);
+                    if (success)
+                    {
+                        liveLeagueGameModel.LeagueLogo = leagueTicket.GetLogoFileName();
+                        liveLeagueGameModel.LeagueName = leagueTicket.NameLocalized;
+                    }
+                }
+
+                if (liveLeagueGame.RadiantTeam != null)
+                {
+                    liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
+                }
+
+                if (liveLeagueGame.DireTeam != null)
+                {
+                    liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
+                }
+
+                #endregion
+
+                liveLeagueGameModels.Add(liveLeagueGameModel);
+            }
+
+            return liveLeagueGameModels.AsReadOnly();
         }
 
-        public async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPI()
+        private static int GetBestOfCountFromSeriesType(int seriesType)
+        {
+            if (seriesType == 0)
+            {
+                return 1;
+            }
+            else if (seriesType == 1)
+            {
+                return 3;
+            }
+            else if (seriesType == 2)
+            {
+                return 5;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        private static string GetElapsedTime(double seconds)
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+            return String.Format("{0}m {1}s", timeSpan.Minutes, timeSpan.Seconds);
+        }
+
+        private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPI()
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
             var dota2Match = new DOTA2Match(steamWebApiKey);
@@ -469,19 +614,18 @@ namespace DotaDb.Models
             return items.AsReadOnly();
         }
 
-        public IReadOnlyDictionary<string, DotaHeroSchemaItem> GetHeroes()
+        public IReadOnlyDictionary<int, DotaHeroSchemaItem> GetHeroes()
         {
             return AddOrGetCachedValue(MemoryCacheKey.Heroes, GetHeroesFromSchema);
         }
 
-        private IReadOnlyDictionary<string, DotaHeroSchemaItem> GetHeroesFromSchema()
+        private IReadOnlyDictionary<int, DotaHeroSchemaItem> GetHeroesFromSchema()
         {
             string heroesVdfPath = Path.Combine(AppDataPath, heroesFileName);
             string vdf = System.IO.File.ReadAllText(heroesVdfPath);
             var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
             return heroes
-                .Where(x => !String.IsNullOrEmpty(x.Url))
-                .ToDictionary(x => x.Url.ToLower(), x => x);
+                .ToDictionary(x => x.HeroId, x => x);
         }
 
         public IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
@@ -523,17 +667,33 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
         }
 
-        public IReadOnlyCollection<DotaLeague> GetLeagues()
+        public async Task<IReadOnlyDictionary<int, League>> GetLeaguesAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.Leagues, GetLeaguesFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.Leagues, GetLeaguesFromWebAPI);
         }
 
-        private IReadOnlyCollection<DotaLeague> GetLeaguesFromSchema()
+        public IReadOnlyDictionary<string, DotaLeague> GetLeagueTickets()
+        {
+            return AddOrGetCachedValue(MemoryCacheKey.LeagueTickets, GetLeagueTicketsFromSchema);
+        }
+
+        private async Task<IReadOnlyDictionary<int, League>> GetLeaguesFromWebAPI()
+        {
+            string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
+            var dota2Match = new DOTA2Match(steamWebApiKey);
+            var leagueList = await dota2Match.GetLeagueListingAsync();
+            var distinctLeagues = leagueList.Leagues
+                .GroupBy(x => x.LeagueId)
+                .Select(x => x.First());
+            return new ReadOnlyDictionary<int, League>(distinctLeagues.ToDictionary(x => x.LeagueId, x => x));
+        }
+
+        private IReadOnlyDictionary<string, DotaLeague> GetLeagueTicketsFromSchema()
         {
             string schemaVdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
             string localizationVdfPath = Path.Combine(AppDataPath, itemsWearableEnglishFileName);
             var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromFile(schemaVdfPath, localizationVdfPath);
-            return leagues;
+            return new ReadOnlyDictionary<string, DotaLeague>(leagues.ToDictionary(x => x.ItemDef, x => x));
         }
 
         #endregion Cached Data
@@ -549,7 +709,7 @@ namespace DotaDb.Models
             {
                 var newValue = func();
 
-                if(overrideCacheItemPolicy != null)
+                if (overrideCacheItemPolicy != null)
                 {
                     cache.Add(key.ToString(), newValue, overrideCacheItemPolicy);
                 }
@@ -557,7 +717,7 @@ namespace DotaDb.Models
                 {
                     cache.Add(key.ToString(), newValue, cacheItemPolicy);
                 }
-                
+
                 return newValue;
             }
         }

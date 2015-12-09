@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using DotaDb.Utilities;
 
 namespace DotaDb.Controllers
 {
@@ -15,32 +16,20 @@ namespace DotaDb.Controllers
 
         public ActionResult Index(int? page)
         {
-            var leagues = db.GetLeagues();
+            var leagues = db.GetLeagueTickets();
 
             List<LeagueViewModel> viewModel = new List<LeagueViewModel>();
             
-            foreach (var league in leagues)
+            foreach (var league in leagues.Values)
             {
-                string itemIconFileName = String.Empty;
-
-                if (String.IsNullOrEmpty(league.ImageBannerPath) || league.ImageBannerPath.EndsWith("ingame"))
-                {
-                    itemIconFileName = league.ImageInventoryPath.Replace("econ/leagues/", "") + ".png";
-                }
-                else
-                {
-                    itemIconFileName = league.ImageBannerPath.Replace("econ/leagues/", "") + ".png";
-                }
-
                 LeagueViewModel leagueViewModel = new LeagueViewModel()
                 {
-
+                    LogoFileName = league.GetLogoFileName(),
                     Name = league.NameLocalized,
                     Description = league.DescriptionLocalized,
                     Location = league.Location,
                     Tier = league.Tier,
-                    Url = league.TournamentUrl,
-                    LogoFileName = itemIconFileName
+                    Url = league.TournamentUrl
                 };
 
                 viewModel.Add(leagueViewModel);

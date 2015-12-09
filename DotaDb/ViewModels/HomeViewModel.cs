@@ -16,5 +16,7 @@ namespace DotaDb.ViewModels
         public int LeagueCount { get; set; }
         public int HeroAbilityCount { get; set; }
         public int LiveLeagueGameCount { get; set; }
+
+        public IReadOnlyCollection<LiveLeagueGameOverviewViewModel> LiveLeagueGames { get; set; }
     }
 }

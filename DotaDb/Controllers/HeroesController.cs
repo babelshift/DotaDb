@@ -80,7 +80,7 @@ namespace DotaDb.Controllers
 
         #region Hero Specifics
 
-        public ActionResult Build(string id)
+        public ActionResult Build(int id)
         {
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
 
@@ -138,7 +138,7 @@ namespace DotaDb.Controllers
             return itemGroupViewModels;
         }
 
-        public ActionResult Hero(string id)
+        public ActionResult Hero(int id)
         {
             HeroViewModel viewModel = new HeroViewModel();
 

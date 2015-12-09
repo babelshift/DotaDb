@@ -10,10 +10,11 @@ namespace DotaDb.Models
         LocalizationKeys,
         Heroes,
         HeroAbilities,
-        Leagues,
+        LeagueTickets,
         ItemAbilities,
         InGameItems,
         LiveLeagueGames,
-        Schema
+        Schema,
+        Leagues
     }
 }
