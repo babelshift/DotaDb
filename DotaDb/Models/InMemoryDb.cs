@@ -565,13 +565,13 @@ namespace DotaDb.Models
                 // this property will only exist if the team is a tournament/league coordinated team
                 if (liveLeagueGame.RadiantTeam != null)
                 {
-                    liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
+                    //liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
                 }
 
                 // this property will only exist if the team is a tournament/league coordinated team
                 if (liveLeagueGame.DireTeam != null)
                 {
-                    liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
+                    //liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
                 }
 
                 #endregion Fill in League/Team Details
