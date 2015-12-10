@@ -327,8 +327,6 @@
     <Content Include="App_Data\default_wisp.txt" />
     <Content Include="App_Data\default_witch_doctor.txt" />
     <Content Include="App_Data\default_zuus.txt" />
-    <Content Include="Content\agility-40x40.png" />
-    <Content Include="Content\attack-40x40.png" />
     <Content Include="Content\backgrounds\DireAncientBackground.jpg" />
     <Content Include="Content\backgrounds\MidLaneBackground.jpg" />
     <Content Include="Content\backgrounds\RadiantAncientBackground.jpg" />
@@ -337,7 +335,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\defense-40x40.png" />
     <Content Include="Content\dotadb-32x32.png" />
     <Content Include="Content\dotadb-45x45.png" />
     <Content Include="Content\dota_minimap_256.jpg" />
@@ -475,7 +472,6 @@
     <Content Include="Content\icon_int.png" />
     <Content Include="Content\icon_speed.png" />
     <Content Include="Content\icon_str.png" />
-    <Content Include="Content\intelligence-40x40.png" />
     <Content Include="Content\logos\leagues\captains_draft_2_ticket.png" />
     <Content Include="Content\logos\leagues\subscriptions_1_minas_esports.png" />
     <Content Include="Content\logos\leagues\subscriptions_2014nestticket.png" />
@@ -1706,9 +1702,7 @@
     <Content Include="Content\logos\leagues\subscription_logo_the_wildcards.png" />
     <Content Include="Content\logos\leagues\subscription_theasia.png" />
     <Content Include="Content\logos\leagues\the_defense.png" />
-    <Content Include="Content\move-40x40.png" />
     <Content Include="Content\PagedList.css" />
-    <Content Include="Content\strength-40x40.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
