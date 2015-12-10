@@ -7,33 +7,28 @@
             @Model.Name
         </a>
     </td>
+    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+    {
+        <td><img src="~/Content/icon_str.png" width="32" height="32" /></td>
+    }
+    else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+    {
+        <td><img src="~/Content/icon_agi.png" width="32" height="32" /></td>
+    }
+    else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+    {
+        <td><img src="~/Content/icon_int.png" width="32" height="32" /></td>
+    }
+    else
+    {
+        <td><i class="fa fa-question-circle"></i></td>
+    }
     <td>@Model.GetBaseHealth()</td>
     <td>@Model.GetBaseMana()</td>
     <td>@Model.BaseArmor</td>
-    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
-    {
-        <td class="danger">@Model.BaseStrength</td>
-    }
-    else
-    {
-        <td>@Model.BaseStrength</td>
-    }
-    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
-    {
-        <td class="success">@Model.BaseAgility</td>
-    }
-    else
-    {
-        <td>@Model.BaseAgility</td>
-    }
-    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
-    {
-        <td class="info">@Model.BaseIntelligence</td>
-    }
-    else
-    {
-        <td>@Model.BaseIntelligence</td>
-    }
+    <td>@Model.BaseStrength</td>
+    <td>@Model.BaseAgility</td>
+    <td>@Model.BaseIntelligence</td>
     <td>@Model.StrengthGain</td>
     <td>@Model.AgilityGain</td>
     <td>@Model.IntelligenceGain</td>

@@ -1,6 +1,6 @@
 ﻿@model DotaDb.ViewModels.BaseHeroViewModel
 
-@{ 
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
@@ -60,8 +60,26 @@
             <div class="col-xs-6 text-uppercase">
                 @if (Model.PrimaryAttribute != null)
                 {
-                    <small class="text-muted">Attr:</small>
-                    <small><strong>@Model.PrimaryAttribute</strong></small>
+                    <small class="text-muted">Primary:</small>
+                    if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                    {
+                        <img src="~/Content/icon_str.png" width="24" height="24" />
+                        @:STR
+                    }
+                    else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                    {
+                        <img src="~/Content/icon_agi.png" width="24" height="24" />
+                        @:AGI
+                    }
+                    else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                    {
+                        <img src="~/Content/icon_int.png" width="24" height="24" />
+                        @:INT
+                    }
+                    else
+                    {
+                        <i class="fa fa-question-circle"></i>
+                    }
                     <br />
                 }
                 <small class="text-muted">Team:</small>
