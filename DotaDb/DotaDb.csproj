@@ -199,7 +199,6 @@
     <Compile Include="ViewModels\HeroItemBuildItemViewModel.cs" />
     <Compile Include="ViewModels\HeroItemBuildViewModel.cs" />
     <Compile Include="ViewModels\HeroRoleViewModel.cs" />
-    <Compile Include="ViewModels\HeroSelectItemViewModel.cs" />
     <Compile Include="ViewModels\HeroSelectViewModel.cs" />
     <Compile Include="ViewModels\HeroViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
@@ -349,7 +348,7 @@
     <Content Include="Content\icons\minimap\Alchemist_icon.png" />
     <Content Include="Content\icons\minimap\Ancient_Apparition_icon.png" />
     <Content Include="Content\icons\minimap\Anti-Mage_icon.png" />
-    <Content Include="Content\icons\minimap\Arc_Warden_icon.png" />
+    <Content Include="Content\icons\minimap\Arc Warden_icon.png" />
     <Content Include="Content\icons\minimap\Axe_icon.png" />
     <Content Include="Content\icons\minimap\Bane_icon.png" />
     <Content Include="Content\icons\minimap\Batrider_icon.png" />
@@ -417,6 +416,7 @@
     <Content Include="Content\icons\minimap\Nyx_Assassin_icon.png" />
     <Content Include="Content\icons\minimap\Ogre_Magi_icon.png" />
     <Content Include="Content\icons\minimap\Omniknight_icon.png" />
+    <Content Include="Content\icons\minimap\Oracle_icon.png" />
     <Content Include="Content\icons\minimap\Outworld_Devourer_icon.png" />
     <Content Include="Content\icons\minimap\Phantom_Assassin_icon.png" />
     <Content Include="Content\icons\minimap\Phantom_Lancer_icon.png" />
@@ -1766,6 +1766,8 @@
     <Content Include="Views\Leagues\Index.cshtml" />
     <Content Include="Views\Map\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutSplash.cshtml" />
+    <Content Include="Views\Heroes\IndexTable.cshtml" />
+    <Content Include="Views\Heroes\_HeroTableRowPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

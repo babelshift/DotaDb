@@ -7,8 +7,8 @@ namespace DotaDb.ViewModels
 {
     public class HeroSelectViewModel
     {
-        public IReadOnlyCollection<HeroSelectItemViewModel> StrengthHeroes { get; set; }
-        public IReadOnlyCollection<HeroSelectItemViewModel> AgilityHeroes { get; set; }
-        public IReadOnlyCollection<HeroSelectItemViewModel> IntelligenceHeroes { get; set; }
+        public IReadOnlyCollection<HeroViewModel> StrengthHeroes { get; set; }
+        public IReadOnlyCollection<HeroViewModel> AgilityHeroes { get; set; }
+        public IReadOnlyCollection<HeroViewModel> IntelligenceHeroes { get; set; }
     }
 }

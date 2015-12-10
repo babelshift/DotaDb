@@ -1,0 +1,64 @@
+﻿@model DotaDb.ViewModels.HeroSelectViewModel
+
+<ul class="nav nav-pills" style="margin-bottom: 10px">
+    <li role="presentation">
+        <a href="@Url.Action("index", new { tab = "grid" })">
+            <i class="fa fa-th"></i> Grid
+        </a>
+    </li>
+    <li role="presentation" class="active">
+        <a href="@Url.Action("index", new { tab = "table" })">
+            <i class="fa fa-table"></i> Table
+        </a>
+    </li>
+</ul>
+<table class="table table-striped table-condensed hero-table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th colspan="3">Gain per Level</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th colspan="3">Attack</th>
+        </tr>
+        <tr>
+            <th style="text-align: left">Hero</th>
+            <th>HP</th>
+            <th>MP</th>
+            <th>Armor</th>
+            <th>Str</th>
+            <th>Agi</th>
+            <th>Int</th>
+            <th>Str</th>
+            <th>Agi</th>
+            <th>Int</th>
+            <th>Speed</th>
+            <th>Min dmg</th>
+            <th>Max dmg</th>
+            <th>Range</th>
+            <th>Rate</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hero in Model.StrengthHeroes)
+        {
+            Html.RenderPartial("_HeroTableRowPartial", hero);
+        }
+        @foreach (var hero in Model.AgilityHeroes)
+        {
+            Html.RenderPartial("_HeroTableRowPartial", hero);
+        }
+        @foreach (var hero in Model.IntelligenceHeroes)
+        {
+            Html.RenderPartial("_HeroTableRowPartial", hero);
+        }
+    </tbody>
+</table>

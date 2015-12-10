@@ -5,6 +5,7 @@
 }
 
 body {
+    margin-top: 75px;
     padding-bottom: 200px;
 }
 
@@ -150,4 +151,12 @@ textarea {
     height: 100%;
     width: 100%;
     background: rgba(0, 0, 0, 0.8);
+}
+
+.hero-table td, .hero-table th {
+    text-align: center;
+}
+
+.hero-table td:empty, .hero-table th:empty {
+    border: 0;
 }

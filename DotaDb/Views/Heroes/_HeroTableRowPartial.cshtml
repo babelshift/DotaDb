@@ -1,0 +1,46 @@
+﻿@model DotaDb.ViewModels.HeroViewModel
+
+<tr>
+    <td style="text-align: left">
+        <img src="@Url.Content("~/Content/icons/minimap/" + Model.Url + "_icon.png")" />
+        <a href="@Url.Action("hero", new { id = Model.Id, heroName = Model.Url.ToLower() })">
+            @Model.Name
+        </a>
+    </td>
+    <td>@Model.GetBaseHealth()</td>
+    <td>@Model.GetBaseMana()</td>
+    <td>@Model.BaseArmor</td>
+    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+    {
+        <td class="danger">@Model.BaseStrength</td>
+    }
+    else
+    {
+        <td>@Model.BaseStrength</td>
+    }
+    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+    {
+        <td class="success">@Model.BaseAgility</td>
+    }
+    else
+    {
+        <td>@Model.BaseAgility</td>
+    }
+    @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+    {
+        <td class="info">@Model.BaseIntelligence</td>
+    }
+    else
+    {
+        <td>@Model.BaseIntelligence</td>
+    }
+    <td>@Model.StrengthGain</td>
+    <td>@Model.AgilityGain</td>
+    <td>@Model.IntelligenceGain</td>
+    <td>@Model.BaseMoveSpeed</td>
+    <td>@Model.BaseDamageMin</td>
+    <td>@Model.BaseDamageMax</td>
+    <td>@Model.AttackRange</td>
+    <td>@Model.AttackRate</td>
+    <td>@Model.AttackType</td>
+</tr>

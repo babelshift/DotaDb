@@ -1,5 +1,16 @@
 ﻿@model DotaDb.ViewModels.HeroSelectViewModel
-
+<ul class="nav nav-pills" style="margin-bottom: 10px">
+    <li role="presentation" class="active">
+        <a href="@Url.Action("index", new { tab = "grid" })">
+            <i class="fa fa-th"></i> Grid
+        </a>
+    </li>
+    <li role="presentation">
+        <a href="@Url.Action("index", new { tab = "table" })">
+            <i class="fa fa-table"></i> Table
+        </a>
+    </li>
+</ul>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
@@ -13,7 +24,7 @@
             {
                 <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
                     <div class="thumbnail" style="margin-bottom: 0; padding: 0; border: 0;">
-                        <a href="@Url.Action("hero", "heroes", new { id = hero.HeroId, heroName = hero.Url.ToLower() })">
+                        <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
                             <img src="@hero.AvatarImagePath" />
                         </a>
                     </div>
@@ -35,7 +46,7 @@
             {
                 <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
                     <div class="thumbnail" style="margin-bottom: 0; padding: 0; border: 0;">
-                        <a href="@Url.Action("hero", "heroes", new { id = hero.HeroId, heroName = hero.Url.ToLower() })">
+                        <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url.ToLower() })" title="@hero.Name">
                             <img src="@hero.AvatarImagePath" />
                         </a>
                     </div>
@@ -57,7 +68,7 @@
             {
                 <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
                     <div class="thumbnail" style="margin-bottom: 0; padding: 0; border: 0;">
-                        <a href="@Url.Action("hero", "heroes", new { id = hero.HeroId, heroName = hero.Url.ToLower() })">
+                        <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url.ToLower() })" title="@hero.Name">
                             <img src="@hero.AvatarImagePath" />
                         </a>
                     </div>
