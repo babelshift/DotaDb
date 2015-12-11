@@ -41,40 +41,56 @@
         <hr />
         <div class="row">
             <div class="col-xs-6">
-                <div style="line-height: 5px;">
-                    <p class="text-uppercase">
-                        <span class="label label-primary">@Model.AttackType</span>
-                    </p>
+                <div class="text-uppercase">
                     @foreach (var role in Model.Roles)
                     {
-                        var color = String.Empty;
-                        if (role.Level == "1") { color = "label-danger"; }
-                        else if (role.Level == "2") { color = "label-warning"; }
-                        else if (role.Level == "3") { color = "label-success"; }
-                        <p class="text-uppercase">
-                            <span class="label @color">@role.Name (@role.Level)</span>
-                        </p>
+                        string color = String.Empty;
+                        int percent = 0;
+                        if (role.Level == "1")
+                        {
+                            color = "progress-bar-danger";
+                            percent = 33;
+                        }
+                        else if (role.Level == "2")
+                        {
+                            color = "progress-bar-warning";
+                            percent = 66;
+                        }
+                        else if (role.Level == "3")
+                        {
+                            color = "progress-bar-success";
+                            percent = 100;
+                        }
+                        <small class="text-muted">@role.Name</small>
+                        <div class="progress" style="margin-bottom: 0">
+                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                @role.Level
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
             <div class="col-xs-6 text-uppercase">
+                <small class="text-muted">Atk Type:</small>
+                <small>@Model.AttackType</small>
+                <br />
                 @if (Model.PrimaryAttribute != null)
                 {
                     <small class="text-muted">Primary:</small>
                     if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
                     {
                         <img src="~/Content/icon_str.png" width="24" height="24" />
-                        @:STR
+                        <small>STR</small>
                     }
                     else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
                     {
                         <img src="~/Content/icon_agi.png" width="24" height="24" />
-                        @:AGI
+                        <small>AGI</small>
                     }
                     else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
                     {
                         <img src="~/Content/icon_int.png" width="24" height="24" />
-                        @:INT
+                        <small>INT</small>
                     }
                     else
                     {
