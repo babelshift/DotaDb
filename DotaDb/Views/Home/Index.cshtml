@@ -165,16 +165,16 @@
                                     <img src="~/Content/dota_minimap_256.jpg" style="width: 100%" />
                                     @foreach (var player in liveLeagueGame.DirePlayers)
                                     {
-                                        if (!String.IsNullOrEmpty(player.MinimapIconFileName))
+                                        if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                                         {
-                                            <img src="@player.MinimapIconFileName" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                            <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
                                         }
                                     }
                                     @foreach (var player in liveLeagueGame.RadiantPlayers)
                                     {
-                                        if (!String.IsNullOrEmpty(player.MinimapIconFileName))
+                                        if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                                         {
-                                            <img src="@player.MinimapIconFileName" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                            <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
                                         }
                                     }
                                 </div>
