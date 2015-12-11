@@ -48,6 +48,14 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EasyAzureKeyVault, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyAzureKeyVault.1.0.0.0\lib\net452\EasyAzureKeyVault.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EasyAzureStorage, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyAzureStorage.1.1.2.0\lib\net452\EasyAzureStorage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
       <Private>True</Private>
@@ -60,11 +68,55 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Hyak.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hyak.Common.1.0.2\lib\net45\Hyak.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Common, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Common.2.0.4\lib\net45\Microsoft.Azure.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Common.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Common.2.0.4\lib\net45\Microsoft.Azure.Common.NetFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.1.0.0\lib\net45\Microsoft.Azure.KeyVault.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Extensions.1.0.0\lib\net45\Microsoft.Azure.KeyVault.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.19.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.19.208020213\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms, Version=2.19.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.19.208020213\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -83,6 +135,22 @@
     </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=6.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.6.1.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -112,7 +180,20 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -181,7 +262,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\GameItem.cs" />
     <Compile Include="Models\InMemoryDb.cs" />
     <Compile Include="Models\LiveLeagueGamePlayerModel.cs" />
     <Compile Include="Models\LiveLeagueGameModel.cs" />
@@ -207,126 +287,6 @@
     <Compile Include="ViewModels\LiveLeagueGamePlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\item_abilities.vdf" />
-    <Content Include="App_Data\heroes.vdf" />
-    <Content Include="App_Data\hero_abilities.vdf" />
-    <Content Include="App_Data\items_ingame.json" />
-    <Content Include="App_Data\items_wearable_english.vdf" />
-    <Content Include="App_Data\items_wearable_schema.vdf" />
-    <None Include="App_Data\panorama_dota_english.vdf" />
-    <None Include="App_Data\public_dota_english.vdf" />
-    <Content Include="App_Data\default_abaddon.txt" />
-    <Content Include="App_Data\default_alchemist.txt" />
-    <Content Include="App_Data\default_ancient_apparition.txt" />
-    <Content Include="App_Data\default_antimage.txt" />
-    <Content Include="App_Data\default_axe.txt" />
-    <Content Include="App_Data\default_bane.txt" />
-    <Content Include="App_Data\default_batrider.txt" />
-    <Content Include="App_Data\default_beastmaster.txt" />
-    <Content Include="App_Data\default_bloodseeker.txt" />
-    <Content Include="App_Data\default_bounty_hunter.txt" />
-    <Content Include="App_Data\default_brewmaster.txt" />
-    <Content Include="App_Data\default_bristleback.txt" />
-    <Content Include="App_Data\default_broodmother.txt" />
-    <Content Include="App_Data\default_centaur.txt" />
-    <Content Include="App_Data\default_chaos_knight.txt" />
-    <Content Include="App_Data\default_chen.txt" />
-    <Content Include="App_Data\default_clinkz.txt" />
-    <Content Include="App_Data\default_crystal_maiden.txt" />
-    <Content Include="App_Data\default_dark_seer.txt" />
-    <Content Include="App_Data\default_dazzle.txt" />
-    <Content Include="App_Data\default_death_prophet.txt" />
-    <Content Include="App_Data\default_disruptor.txt" />
-    <Content Include="App_Data\default_doom_bringer.txt" />
-    <Content Include="App_Data\default_dragon_knight.txt" />
-    <Content Include="App_Data\default_drow_ranger.txt" />
-    <Content Include="App_Data\default_earthshaker.txt" />
-    <Content Include="App_Data\default_earth_spirit.txt" />
-    <Content Include="App_Data\default_elder_titan.txt" />
-    <Content Include="App_Data\default_ember_spirit.txt" />
-    <Content Include="App_Data\default_enchantress.txt" />
-    <Content Include="App_Data\default_enigma.txt" />
-    <Content Include="App_Data\default_faceless_void.txt" />
-    <Content Include="App_Data\default_furion.txt" />
-    <Content Include="App_Data\default_generic.txt" />
-    <Content Include="App_Data\default_gyrocopter.txt" />
-    <Content Include="App_Data\default_huskar.txt" />
-    <Content Include="App_Data\default_invoker.txt" />
-    <Content Include="App_Data\default_jakiro.txt" />
-    <Content Include="App_Data\default_juggernaut.txt" />
-    <Content Include="App_Data\default_keeper_of_the_light.txt" />
-    <Content Include="App_Data\default_kunkka.txt" />
-    <Content Include="App_Data\default_legion_commander.txt" />
-    <Content Include="App_Data\default_leshrac.txt" />
-    <Content Include="App_Data\default_lich.txt" />
-    <Content Include="App_Data\default_life_stealer.txt" />
-    <Content Include="App_Data\default_lina.txt" />
-    <Content Include="App_Data\default_lion.txt" />
-    <Content Include="App_Data\default_lone_druid.txt" />
-    <Content Include="App_Data\default_luna.txt" />
-    <Content Include="App_Data\default_lycan.txt" />
-    <Content Include="App_Data\default_magnataur.txt" />
-    <Content Include="App_Data\default_medusa.txt" />
-    <Content Include="App_Data\default_meepo.txt" />
-    <Content Include="App_Data\default_mirana.txt" />
-    <Content Include="App_Data\default_morphling.txt" />
-    <Content Include="App_Data\default_naga_siren.txt" />
-    <Content Include="App_Data\default_necrolyte.txt" />
-    <Content Include="App_Data\default_nevermore.txt" />
-    <Content Include="App_Data\default_night_stalker.txt" />
-    <Content Include="App_Data\default_nyx_assassin.txt" />
-    <Content Include="App_Data\default_obsidian_destroyer.txt" />
-    <Content Include="App_Data\default_ogre_magi.txt" />
-    <Content Include="App_Data\default_omniknight.txt" />
-    <Content Include="App_Data\default_oracle.txt" />
-    <Content Include="App_Data\default_phantom_assassin.txt" />
-    <Content Include="App_Data\default_phantom_lancer.txt" />
-    <Content Include="App_Data\default_phoenix.txt" />
-    <Content Include="App_Data\default_puck.txt" />
-    <Content Include="App_Data\default_pudge.txt" />
-    <Content Include="App_Data\default_pugna.txt" />
-    <Content Include="App_Data\default_queenofpain.txt" />
-    <Content Include="App_Data\default_rattletrap.txt" />
-    <Content Include="App_Data\default_razor.txt" />
-    <Content Include="App_Data\default_riki.txt" />
-    <Content Include="App_Data\default_rubick.txt" />
-    <Content Include="App_Data\default_sand_king.txt" />
-    <Content Include="App_Data\default_shadow_demon.txt" />
-    <Content Include="App_Data\default_shadow_shaman.txt" />
-    <Content Include="App_Data\default_shredder.txt" />
-    <Content Include="App_Data\default_silencer.txt" />
-    <Content Include="App_Data\default_skeleton_king.txt" />
-    <Content Include="App_Data\default_skywrath_mage.txt" />
-    <Content Include="App_Data\default_slardar.txt" />
-    <Content Include="App_Data\default_slark.txt" />
-    <Content Include="App_Data\default_sniper.txt" />
-    <Content Include="App_Data\default_sniper_tutorial.txt" />
-    <Content Include="App_Data\default_spectre.txt" />
-    <Content Include="App_Data\default_spirit_breaker.txt" />
-    <Content Include="App_Data\default_storm_spirit.txt" />
-    <Content Include="App_Data\default_sven.txt" />
-    <Content Include="App_Data\default_techies.txt" />
-    <Content Include="App_Data\default_templar_assassin.txt" />
-    <Content Include="App_Data\default_terrorblade.txt" />
-    <Content Include="App_Data\default_tidehunter.txt" />
-    <Content Include="App_Data\default_tinker.txt" />
-    <Content Include="App_Data\default_tiny.txt" />
-    <Content Include="App_Data\default_treant.txt" />
-    <Content Include="App_Data\default_troll_warlord.txt" />
-    <Content Include="App_Data\default_tusk.txt" />
-    <Content Include="App_Data\default_undying.txt" />
-    <Content Include="App_Data\default_ursa.txt" />
-    <Content Include="App_Data\default_vengefulspirit.txt" />
-    <Content Include="App_Data\default_venomancer.txt" />
-    <Content Include="App_Data\default_viper.txt" />
-    <Content Include="App_Data\default_visage.txt" />
-    <Content Include="App_Data\default_warlock.txt" />
-    <Content Include="App_Data\default_weaver.txt" />
-    <Content Include="App_Data\default_windrunner.txt" />
-    <Content Include="App_Data\default_winter_wyvern.txt" />
-    <Content Include="App_Data\default_wisp.txt" />
-    <Content Include="App_Data\default_witch_doctor.txt" />
-    <Content Include="App_Data\default_zuus.txt" />
     <Content Include="Content\backgrounds\DireAncientBackground.jpg" />
     <Content Include="Content\backgrounds\MidLaneBackground.jpg" />
     <Content Include="Content\backgrounds\RadiantAncientBackground.jpg" />
@@ -1763,7 +1723,9 @@
     <Content Include="Views\Heroes\IndexTable.cshtml" />
     <Content Include="Views\Heroes\_HeroTableRowPartial.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
@@ -1802,6 +1764,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

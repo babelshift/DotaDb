@@ -18,12 +18,16 @@ namespace DotaDb.Controllers
             var playerCounts = await db.GetPlayerCountsAsync();
             var leagues = await db.GetLeaguesAsync();
             var liveLeagueGames = await db.GetLiveLeagueGamesAsync(5);
+            var gameItems = await db.GetGameItemsAsync();
+            var schema = await db.GetSchemaAsync();
+            var heroes = await db.GetHeroesAsync();
+            var heroAbilities = await db.GetHeroAbilitiesAsync();
 
-            viewModel.HeroCount = db.GetHeroes().Count;
-            viewModel.HeroAbilityCount = db.GetHeroAbilities().Count;
-            viewModel.ShopItemCount = db.GetSchema().Items.Count;
+            viewModel.HeroCount = heroes.Count;
+            viewModel.HeroAbilityCount = heroAbilities.Count;
+            viewModel.ShopItemCount = schema.Items.Count;
             viewModel.LeagueCount = leagues.Count;
-            viewModel.InGameItemCount = db.GetGameItems().Count;
+            viewModel.InGameItemCount = gameItems.Count;
             viewModel.LiveLeagueGameCount = await db.GetLiveLeagueGameCountAsync();
             viewModel.InGamePlayerCount = playerCounts.InGamePlayerCount;
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;

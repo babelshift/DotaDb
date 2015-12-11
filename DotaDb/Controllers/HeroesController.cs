@@ -1,11 +1,14 @@
 ﻿using DotaDb.Models;
 using DotaDb.ViewModels;
+using EasyAzureStorage;
 using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace DotaDb.Controllers
@@ -16,24 +19,24 @@ namespace DotaDb.Controllers
 
         #region Hero Index
 
-        public ActionResult Index(string tab = "")
+        public async Task<ActionResult> Index(string tab = "")
         {
-            var heroes = db.GetHeroes();
+            var heroes = await db.GetHeroesAsync();
             var str = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.STRENGTH.Key);
             var agi = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.AGILITY.Key);
             var intel = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.INTELLECT.Key);
 
             HeroSelectViewModel viewModel = new HeroSelectViewModel();
 
-            viewModel.StrengthHeroes = TranslateToViewModel(str);
-            viewModel.AgilityHeroes = TranslateToViewModel(agi);
-            viewModel.IntelligenceHeroes = TranslateToViewModel(intel);
+            viewModel.StrengthHeroes = await TranslateToViewModelAsync(str);
+            viewModel.AgilityHeroes = await TranslateToViewModelAsync(agi);
+            viewModel.IntelligenceHeroes = await TranslateToViewModelAsync(intel);
 
-            if(tab == "grid")
+            if (tab == "grid")
             {
                 return View(viewModel);
             }
-            else if(tab == "table")
+            else if (tab == "table")
             {
                 return View("IndexTable", viewModel);
             }
@@ -43,14 +46,14 @@ namespace DotaDb.Controllers
             }
         }
 
-        private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<int, DotaHeroSchemaItem>> heroes)
+        private async Task<IReadOnlyCollection<HeroViewModel>> TranslateToViewModelAsync(IEnumerable<KeyValuePair<int, DotaHeroSchemaItem>> heroes)
         {
             List<HeroViewModel> heroViewModels = new List<HeroViewModel>();
 
-            foreach(var hero in heroes)
+            foreach (var hero in heroes)
             {
                 HeroViewModel viewModel = new HeroViewModel();
-                SetupHeroViewModel(hero.Value, viewModel);
+                await SetupHeroViewModelAsync(hero.Value, viewModel);
                 heroViewModels.Add(viewModel);
             }
 
@@ -69,30 +72,27 @@ namespace DotaDb.Controllers
 
         #region Hero Specifics
 
-        public ActionResult Build(int id, string heroName = null)
+        public async Task<ActionResult> Build(int id, string heroName = null)
         {
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
 
-            var hero = db.GetHeroKeyValue(id);
-            
+            var hero = await db.GetHeroKeyValueAsync(id);
+
             if (heroName != hero.Url.ToLower())
             {
                 RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
             }
 
-            SetupHeroViewModel(hero, viewModel);
+            await SetupHeroViewModelAsync(hero, viewModel);
 
             viewModel.ActiveTab = "ItemBuilds";
 
             try
             {
-                string vdfPath = Path.Combine(db.AppDataPath, String.Format("default_{0}.txt", hero.Name.Replace("npc_dota_hero_", "")));
-                string[] vdf = System.IO.File.ReadAllLines(vdfPath);
-                var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
-
+                var itemBuild = await db.GetItemBuildAsync(hero.Name);
                 viewModel.Title = itemBuild.Title;
                 viewModel.Author = itemBuild.Author;
-                viewModel.ItemGroups = GetItemGroups(itemBuild);
+                viewModel.ItemGroups = await GetItemGroupsAsync(itemBuild);
             }
             catch (FileNotFoundException)
             {
@@ -102,22 +102,24 @@ namespace DotaDb.Controllers
             return PartialView("_ItemBuildsPartial", viewModel);
         }
 
-        private List<HeroItemBuildGroupViewModel> GetItemGroups(DotaItemBuildSchemaItem itemBuild)
+        private async Task<List<HeroItemBuildGroupViewModel>> GetItemGroupsAsync(DotaItemBuildSchemaItem itemBuild)
         {
             List<HeroItemBuildGroupViewModel> itemGroupViewModels = new List<HeroItemBuildGroupViewModel>();
             foreach (var itemGroup in itemBuild.Items)
             {
                 HeroItemBuildGroupViewModel itemGroupViewModel = new HeroItemBuildGroupViewModel();
-                itemGroupViewModel.Title = db.GetLocalizationText(itemGroup.Name.Remove(0, 1));
+                itemGroupViewModel.Title = await db.GetLocalizationTextAsync(itemGroup.Name.Remove(0, 1));
 
                 List<HeroItemBuildItemViewModel> itemViewModels = new List<HeroItemBuildItemViewModel>();
 
-                itemGroupViewModel.Items = itemGroup.Items
-                    .Select(x => new HeroItemBuildItemViewModel()
-                    {
-                        IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", x.Replace("item_", "")),
-                        Name = db.GetLocalizationText(String.Format("DOTA_Tooltip_Ability_{0}", x))
-                    })
+                var tasks = itemGroup.Items.Select(async (x) => new HeroItemBuildItemViewModel()
+                {
+                    IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", x.Replace("item_", "")),
+                    Name = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", x))
+                });
+                var selectedItems = await Task.WhenAll(tasks);
+
+                itemGroupViewModel.Items = selectedItems
                     .GroupBy(x => new { x.Name, x.IconPath })
                     .Select(x => new HeroItemBuildItemViewModel()
                     {
@@ -133,31 +135,31 @@ namespace DotaDb.Controllers
             return itemGroupViewModels;
         }
 
-        public ActionResult Hero(int id, string heroName = null)
+        public async Task<ActionResult> Hero(int id, string heroName = null)
         {
             HeroViewModel viewModel = new HeroViewModel();
 
-            var hero = db.GetHeroKeyValue(id);
+            var hero = await db.GetHeroKeyValueAsync(id);
 
-            if(heroName != hero.Url.ToLower())
+            if (heroName != hero.Url.ToLower())
             {
                 RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
             }
 
-            SetupHeroViewModel(hero, viewModel);
-            SetupAbilities(hero, viewModel);
+            await SetupHeroViewModelAsync(hero, viewModel);
+            await SetupAbilitiesAsync(hero, viewModel);
 
             viewModel.ActiveTab = "Overview";
 
             return PartialView("_HeroOverviewPartial", viewModel);
         }
 
-        private BaseHeroViewModel SetupHeroViewModel<T>(DotaHeroSchemaItem hero, T viewModel)
+        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(DotaHeroSchemaItem hero, T viewModel)
             where T : BaseHeroViewModel
         {
             viewModel.Id = hero.HeroId;
             viewModel.Url = hero.Url.ToLower();
-            viewModel.Name = db.GetLocalizationText(hero.Name);
+            viewModel.Name = await db.GetLocalizationTextAsync(hero.Name);
             viewModel.Description = "<from localization -> npc_dota_hero_<heroname>_hype>";
             viewModel.AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_full.png", hero.Name.Replace("npc_dota_hero_", ""));
             viewModel.BaseAgility = hero.AttributeBaseAgility;
@@ -179,34 +181,34 @@ namespace DotaDb.Controllers
             viewModel.PrimaryAttribute = db.GetHeroPrimaryAttributeTypeKeyValue(hero.AttributePrimary);
             return viewModel;
         }
-        
-        private void SetupAbilities(DotaHeroSchemaItem hero, HeroViewModel viewModel)
+
+        private async Task SetupAbilitiesAsync(DotaHeroSchemaItem hero, HeroViewModel viewModel)
         {
-            var abilities = db.GetHeroAbilities();
+            var abilities = await db.GetHeroAbilitiesAsync();
 
             List<HeroAbilityViewModel> abilityViewModels = new List<HeroAbilityViewModel>();
 
-            AddAbilityToViewModel(hero.Ability1, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability2, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability3, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability4, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability5, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability6, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability7, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability8, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability9, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability10, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability11, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability12, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability13, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability14, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability15, abilities, abilityViewModels);
-            AddAbilityToViewModel(hero.Ability16, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability1, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability2, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability3, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability4, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability5, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability6, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability7, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability8, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability9, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability10, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability11, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability12, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability13, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability14, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability15, abilities, abilityViewModels);
+            await AddAbilityToViewModelAsync(hero.Ability16, abilities, abilityViewModels);
 
             viewModel.Abilities = abilityViewModels.AsReadOnly();
         }
 
-        private void AddAbilityToViewModel(string abilityName, IReadOnlyCollection<DotaAbilitySchemaItem> abilities, List<HeroAbilityViewModel> abilityViewModels)
+        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<DotaAbilitySchemaItem> abilities, List<HeroAbilityViewModel> abilityViewModels)
         {
             if (String.IsNullOrEmpty(abilityName))
             {
@@ -225,7 +227,7 @@ namespace DotaDb.Controllers
             {
                 abilitySpecialViewModels.Add(new HeroAbilitySpecialViewModel()
                 {
-                    Name = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, abilitySpecial.Name)),
+                    Name = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, abilitySpecial.Name)),
                     RawName = abilitySpecial.Name,
                     Value = abilitySpecial.Value.ToSlashSeparatedString()
                 });
@@ -233,9 +235,9 @@ namespace DotaDb.Controllers
 
             var abilityViewModel = new HeroAbilityViewModel()
             {
-                Name = db.GetLocalizationText(String.Format("{0}_{1}", "DOTA_Tooltip_ability", abilityName)),
+                Name = await db.GetLocalizationTextAsync(String.Format("{0}_{1}", "DOTA_Tooltip_ability", abilityName)),
                 AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/abilities/{0}_lg.png", ability.Name),
-                Description = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Description")),
+                Description = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Description")),
                 CastPoint = ability.AbilityCastPoint.ToSlashSeparatedString(),
                 CastRange = ability.AbilityCastRange.ToSlashSeparatedString(),
                 Cooldown = ability.AbilityCooldown.ToSlashSeparatedString(),
@@ -250,12 +252,12 @@ namespace DotaDb.Controllers
                 TargetFlags = joinedUnitTargetFlags,
                 TargetTypes = joinedUnitTargetTypes,
                 TeamTargets = joinedUnitTargetTeamTypes,
-                Note0 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note0")),
-                Note1 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note1")),
-                Note2 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note2")),
-                Note3 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note3")),
-                Note4 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note4")),
-                Note5 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note5")),
+                Note0 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note0")),
+                Note1 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note1")),
+                Note2 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note2")),
+                Note3 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note3")),
+                Note4 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note4")),
+                Note5 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Note5")),
             };
 
             abilityViewModels.Add(abilityViewModel);

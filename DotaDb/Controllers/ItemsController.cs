@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using DotaDb.Models;
 using DotaDb.ViewModels;
 using SourceSchemaParser.Dota2;
+using System.Threading.Tasks;
 
 namespace DotaDb.Controllers
 {
@@ -16,36 +17,37 @@ namespace DotaDb.Controllers
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var items = db.GetGameItems();
+            var items = await db.GetGameItemsAsync();
 
-            var itemsViewModel = items
-                .Where(x => !x.IsRecipe)
-                .Select(x => new GameItemViewModel()
+            var tasks = items
+                .Where(x => x.Recipe == 0)
+                .Select(async (x) => new GameItemViewModel()
                 {
                     Cost = x.Cost,
-                    Name = db.GetLocalizationText(String.Format("DOTA_Tooltip_Ability_{0}", x.Name)),
-                    Description = db.GetLocalizationText(String.Format("DOTA_Tooltip_ability_{0}_Description", x.Name)),
-                    Lore = db.GetLocalizationText(String.Format("DOTA_Tooltip_ability_{0}_Lore", x.Name)),
+                    Name = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", x.Name)),
+                    Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", x.Name)),
+                    Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", x.Name)),
                     Id = x.Id,
-                    IsRecipe = x.IsRecipe,
-                    SecretShop = x.SecretShop,
-                    SideShop = x.SideShop,
-                    IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", x.IsRecipe ? "recipe" : x.Name.Replace("item_", "")),
-                }).ToList();
+                    IsRecipe = x.Recipe == 1 ? true : false,
+                    SecretShop = x.SecretShop == 1 ? true : false,
+                    SideShop = x.SideShop == 1 ? true : false,
+                    IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", x.Recipe == 1 ? "recipe" : x.Name.Replace("item_", "")),
+                });
+            var itemsViewModel = await Task.WhenAll(tasks);
 
-            var abilities = db.GetItemAbilities();
+            var abilities = await db.GetItemAbilitiesAsync();
 
             foreach (var itemViewModel in itemsViewModel)
             {
-                AddAbilityToItemViewModel(itemViewModel, abilities);
+                await AddAbilityToItemViewModelAsync(itemViewModel, abilities);
             }
 
-            return View(itemsViewModel);
+            return View(itemsViewModel.ToList());
         }
 
-        private void AddAbilityToItemViewModel(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
         {
             DotaItemAbilitySchemaItem ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
@@ -62,7 +64,7 @@ namespace DotaDb.Controllers
                 {
                     abilitySpecialViewModels.Add(new HeroAbilitySpecialViewModel()
                     {
-                        Name = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, abilitySpecial.Name)),
+                        Name = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, abilitySpecial.Name)),
                         RawName = abilitySpecial.Name,
                         Value = abilitySpecial.Value.ToSlashSeparatedString()
                     });
@@ -79,12 +81,12 @@ namespace DotaDb.Controllers
                 viewModel.TargetFlags = joinedUnitTargetFlags;
                 viewModel.TargetTypes = joinedUnitTargetTypes;
                 viewModel.TeamTargets = joinedUnitTargetTeamTypes;
-                viewModel.Note0 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note0"));
-                viewModel.Note1 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note1"));
-                viewModel.Note2 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note2"));
-                viewModel.Note3 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note3"));
-                viewModel.Note4 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note4"));
-                viewModel.Note5 = db.GetLocalizationText(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note5"));
+                viewModel.Note0 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note0"));
+                viewModel.Note1 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note1"));
+                viewModel.Note2 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note2"));
+                viewModel.Note3 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note3"));
+                viewModel.Note4 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note4"));
+                viewModel.Note5 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note5"));
                 viewModel.CastsOnPickup = ability.ItemCastOnPickup;
                 viewModel.ContributesToNetWorthWhenDropped = ability.ItemContributesToNetWorthWhenDropped;
                 viewModel.Declarations = db.GetJoinedItemDeclarationTypes(ability.ItemDeclarations);

@@ -1,4 +1,5 @@
 ﻿using DotaDb.Utilities;
+using EasyAzureStorage;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using SourceSchemaParser.Dota2;
@@ -18,10 +19,13 @@ namespace DotaDb.Models
 {
     public sealed class InMemoryDb
     {
+        private const string storageContainerName = "schemas";
+
         private static volatile InMemoryDb instance;
         private static object sync = new object();
         private MemoryCache cache = MemoryCache.Default;
         private CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
+        private AzureStorage storage;
 
         #region Data Source File Names
 
@@ -48,12 +52,12 @@ namespace DotaDb.Models
         /// <summary>
         /// Contains a list and details of all items that can be purchased from the game shop (wearables, cosmetics, announcers, etc)
         /// </summary>
-        private const string itemsWearableSchemaFileName = "items_wearable_schema.vdf";     // comes from web API GetSchemaURL >> download from result URL
+        private const string mainSchemaFileName = "items_wearable_schema.vdf";     // comes from web API GetSchemaURL >> download from result URL
 
         /// <summary>
         /// Contains localization text for wearable items
         /// </summary>
-        private const string itemsWearableEnglishFileName = "items_wearable_english.vdf";   // comes from public dota 2 resource folder
+        private const string mainSchemaEnglishFileName = "items_wearable_english.vdf";   // comes from public dota 2 resource folder
 
         /// <summary>
         /// Contains localization text for in game tooltips
@@ -84,8 +88,6 @@ namespace DotaDb.Models
         public IReadOnlyDictionary<string, DotaItemDisassembleType> itemDisassembleTypes;
 
         #endregion Enum Type Lookup Members
-
-        public string AppDataPath { get { return AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); } }
 
         public static InMemoryDb Instance
         {
@@ -128,13 +130,10 @@ namespace DotaDb.Models
             itemShareabilityTypes = GetItemShareabilityTypes();
             itemDisassembleTypes = GetItemDisassembleTypes();
 
-            var localizationKeys = GetPublicLocalization();
-            var heroes = GetHeroes();
-
             cacheItemPolicy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddDays(1);
 
-            cache.Add(MemoryCacheKey.LocalizationKeys.ToString(), localizationKeys, cacheItemPolicy);
-            cache.Add(MemoryCacheKey.Heroes.ToString(), heroes, cacheItemPolicy);
+            string schemaStorageConnectionString = ConfigurationManager.AppSettings["StorageConnectionString"].ToString();
+            storage = new AzureStorage(schemaStorageConnectionString);
         }
 
         #region Enum Type Lookup Methods
@@ -348,9 +347,9 @@ namespace DotaDb.Models
             return GetKeyValue(key, damageTypes);
         }
 
-        public DotaHeroSchemaItem GetHeroKeyValue(int key)
+        public async Task<DotaHeroSchemaItem> GetHeroKeyValueAsync(int key)
         {
-            var heroes = GetHeroes();
+            var heroes = await GetHeroesAsync();
             return GetKeyValue(key, heroes);
         }
 
@@ -371,10 +370,10 @@ namespace DotaDb.Models
             }
         }
 
-        public string GetLocalizationText(string key)
+        public async Task<string> GetLocalizationTextAsync(string key)
         {
             string value = String.Empty;
-            var localizationKeys = GetPublicLocalization();
+            var localizationKeys = await GetPublicLocalizationAsync();
             if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
             {
                 return value;
@@ -383,6 +382,35 @@ namespace DotaDb.Models
             {
                 return String.Empty;
             }
+        }
+
+        public async Task<DotaItemBuildSchemaItem> GetItemBuildAsync(string heroName)
+        {
+            string fileName = String.Format("default_{0}.txt", heroName.Replace("npc_dota_hero_", ""));
+            var fileLines = await GetFileLinesFromStorageAsync(fileName);
+            string[] vdf = fileLines.ToArray();
+            var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
+            return itemBuild;
+        }
+
+        private async Task<IList<string>> GetFileLinesFromStorageAsync(string fileName)
+        {
+            var blob = await storage.DownloadBlobAsync(storageContainerName, fileName);
+
+            List<string> contents = new List<string>();
+            using (var ms = new MemoryStream(blob))
+            {
+                using (var sr = new StreamReader(ms))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string line = await sr.ReadLineAsync();
+                        contents.Add(line);
+                    }
+                }
+            }
+
+            return contents;
         }
 
         #region Cached Data
@@ -434,15 +462,14 @@ namespace DotaDb.Models
             return model;
         }
 
-        public DotaSchema GetSchema()
+        public async Task<DotaSchema> GetSchemaAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.Schema, GetSchemaFromFile);
+            return await AddOrGetCachedValue(MemoryCacheKey.Schema, GetSchemaFromFileAsync);
         }
 
-        private DotaSchema GetSchemaFromFile()
+        private async Task<DotaSchema> GetSchemaFromFileAsync()
         {
-            string vdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
-            string[] vdf = System.IO.File.ReadAllLines(vdfPath);
+            string[] vdf = (await GetFileLinesFromStorageAsync(mainSchemaFileName)).ToArray();
             var schema = SourceSchemaParser.SchemaFactory.GetDotaSchema(vdf);
             return schema;
         }
@@ -453,7 +480,7 @@ namespace DotaDb.Models
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5)
             };
-            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
+            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
             return liveLeagueGames.Count;
         }
 
@@ -465,7 +492,7 @@ namespace DotaDb.Models
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(20)
             };
-            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPI, cacheItemPolicy);
+            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
 
             #endregion Get/Add From/To Cache
 
@@ -521,9 +548,9 @@ namespace DotaDb.Models
                         continue;
                     }
 
-                    var hero = GetHeroKeyValue(player.HeroId);
+                    var hero = await GetHeroKeyValueAsync(player.HeroId);
 
-                    player.HeroName = GetLocalizationText(hero.Name);
+                    player.HeroName = await GetLocalizationTextAsync(hero.Name);
                     player.HeroAvatarImageFileName = GetHeroAvatarFileName(hero.Name);
 
                     LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
@@ -541,7 +568,7 @@ namespace DotaDb.Models
                     player.HeroUrl = hero.Url;
                 }
 
-                #endregion
+                #endregion Fill in Player Details
 
                 #region Fill in League/Team Details
 
@@ -552,7 +579,7 @@ namespace DotaDb.Models
                 if (success)
                 {
                     // look up this league's in game ticket asset for the logo and localized league name
-                    var leagueTickets = GetLeagueTickets();
+                    var leagueTickets = await GetLeagueTicketsAsync();
                     DotaLeague leagueTicket = null;
                     success = leagueTickets.TryGetValue(league.ItemDef.ToString(), out leagueTicket);
                     if (success)
@@ -617,7 +644,7 @@ namespace DotaDb.Models
             return null;
         }
 
-        private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPI()
+        private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPIAsync()
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
             var dota2Match = new DOTA2Match(steamWebApiKey);
@@ -625,85 +652,78 @@ namespace DotaDb.Models
             return liveLeagueGames;
         }
 
-        public IReadOnlyCollection<GameItem> GetGameItems()
+        public async Task<IReadOnlyCollection<GameItem>> GetGameItemsAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.InGameItems, GetGameItemsFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.InGameItems, GetGameItemsFromWebAPIAsync);
         }
 
-        private IReadOnlyCollection<GameItem> GetGameItemsFromSchema()
+        private async Task<IReadOnlyCollection<GameItem>> GetGameItemsFromWebAPIAsync()
         {
-            string itemsJsonPath = Path.Combine(AppDataPath, itemsInGameFileName);
-            string itemsJson = System.IO.File.ReadAllText(itemsJsonPath);
-            JObject parsedItems = JObject.Parse(itemsJson);
-            var itemsArray = parsedItems["result"]["items"];
-            var items = itemsArray.ToObject<List<GameItem>>();
-            return items.AsReadOnly();
+            string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
+            var dota2Econ = new DOTA2Econ(steamWebApiKey);
+            var gameItems = await dota2Econ.GetGameItemsAsync();
+            return gameItems;
         }
 
-        public IReadOnlyDictionary<int, DotaHeroSchemaItem> GetHeroes()
+        public async Task<IReadOnlyDictionary<int, DotaHeroSchemaItem>> GetHeroesAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.Heroes, GetHeroesFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.Heroes, GetHeroesFromSchemaAsync);
         }
 
-        private IReadOnlyDictionary<int, DotaHeroSchemaItem> GetHeroesFromSchema()
+        private async Task<IReadOnlyDictionary<int, DotaHeroSchemaItem>> GetHeroesFromSchemaAsync()
         {
-            string heroesVdfPath = Path.Combine(AppDataPath, heroesFileName);
-            string[] vdf = System.IO.File.ReadAllLines(heroesVdfPath);
+            string[] vdf = (await GetFileLinesFromStorageAsync(heroesFileName)).ToArray();
             var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
-            return heroes
-                .ToDictionary(x => x.HeroId, x => x);
+            return heroes.ToDictionary(x => x.HeroId, x => x);
         }
 
-        public IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilities()
+        public async Task<IReadOnlyCollection<DotaAbilitySchemaItem>> GetHeroAbilitiesAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.HeroAbilities, GetHeroAbilitiesFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.HeroAbilities, GetHeroAbilitiesFromSchemaAsync);
         }
 
-        private IReadOnlyCollection<DotaAbilitySchemaItem> GetHeroAbilitiesFromSchema()
+        private async Task<IReadOnlyCollection<DotaAbilitySchemaItem>> GetHeroAbilitiesFromSchemaAsync()
         {
-            string heroesVdfPath = Path.Combine(AppDataPath, heroAbilitiesFileName);
-            string[] vdf = System.IO.File.ReadAllLines(heroesVdfPath);
+            string[] vdf = (await GetFileLinesFromStorageAsync(heroAbilitiesFileName)).ToArray();
             var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
             return abilities;
         }
 
-        public IReadOnlyDictionary<string, string> GetPublicLocalization()
+        public async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.LocalizationKeys, GetPublicLocalizationFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.LocalizationKeys, GetPublicLocalizationFromSchemaAsync);
         }
 
-        private IReadOnlyDictionary<string, string> GetPublicLocalizationFromSchema()
+        private async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationFromSchemaAsync()
         {
-            string vdfPath = Path.Combine(AppDataPath, tooltipsEnglishFileName);
-            string[] vdf = System.IO.File.ReadAllLines(vdfPath);
+            string[] vdf = (await GetFileLinesFromStorageAsync(tooltipsEnglishFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }
 
-        public IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilities()
+        public async Task<IReadOnlyDictionary<int, DotaItemAbilitySchemaItem>> GetItemAbilitiesAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.ItemAbilities, GetItemAbilitiesFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.ItemAbilities, GetItemAbilitiesFromSchemaAsync);
         }
 
-        private IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> GetItemAbilitiesFromSchema()
+        private async Task<IReadOnlyDictionary<int, DotaItemAbilitySchemaItem>> GetItemAbilitiesFromSchemaAsync()
         {
-            string vdfPath = Path.Combine(AppDataPath, itemAbilitiesFileName);
-            string[] vdf = System.IO.File.ReadAllLines(vdfPath);
+            string[] vdf = (await GetFileLinesFromStorageAsync(itemAbilitiesFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
             return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
         }
 
         public async Task<IReadOnlyDictionary<int, League>> GetLeaguesAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.Leagues, GetLeaguesFromWebAPI);
+            return await AddOrGetCachedValue(MemoryCacheKey.Leagues, GetLeaguesFromWebAPIAsync);
         }
 
-        public IReadOnlyDictionary<string, DotaLeague> GetLeagueTickets()
+        public async Task<IReadOnlyDictionary<string, DotaLeague>> GetLeagueTicketsAsync()
         {
-            return AddOrGetCachedValue(MemoryCacheKey.LeagueTickets, GetLeagueTicketsFromSchema);
+            return await AddOrGetCachedValue(MemoryCacheKey.LeagueTickets, GetLeagueTicketsFromSchemaAsync);
         }
 
-        private async Task<IReadOnlyDictionary<int, League>> GetLeaguesFromWebAPI()
+        private async Task<IReadOnlyDictionary<int, League>> GetLeaguesFromWebAPIAsync()
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
             var dota2Match = new DOTA2Match(steamWebApiKey);
@@ -714,15 +734,15 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<int, League>(distinctLeagues.ToDictionary(x => x.LeagueId, x => x));
         }
 
-        private IReadOnlyDictionary<string, DotaLeague> GetLeagueTicketsFromSchema()
+        private async Task<IReadOnlyDictionary<string, DotaLeague>> GetLeagueTicketsFromSchemaAsync()
         {
-            string schemaVdfPath = Path.Combine(AppDataPath, itemsWearableSchemaFileName);
-            string localizationVdfPath = Path.Combine(AppDataPath, itemsWearableEnglishFileName);
-            var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromFile(schemaVdfPath, localizationVdfPath);
+            string[] schemaVdf = (await GetFileLinesFromStorageAsync(mainSchemaFileName)).ToArray();
+            string[] localizationVdf = (await GetFileLinesFromStorageAsync(mainSchemaEnglishFileName)).ToArray();
+            var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromText(schemaVdf, localizationVdf);
             return new ReadOnlyDictionary<string, DotaLeague>(leagues.ToDictionary(x => x.ItemDef, x => x));
         }
 
-        private T AddOrGetCachedValue<T>(MemoryCacheKey key, Func<T> func, CacheItemPolicy overrideCacheItemPolicy = null)
+        private async Task<T> AddOrGetCachedValue<T>(MemoryCacheKey key, Func<Task<T>> func, CacheItemPolicy overrideCacheItemPolicy = null)
         {
             object value = cache.Get(key.ToString());
             if (value != null)
@@ -731,8 +751,8 @@ namespace DotaDb.Models
             }
             else
             {
-                var newValue = func();
-
+                var newValue = await func();
+                
                 if (overrideCacheItemPolicy != null)
                 {
                     cache.Add(key.ToString(), newValue, overrideCacheItemPolicy);

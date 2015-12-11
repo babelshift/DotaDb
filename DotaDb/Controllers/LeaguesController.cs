@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using DotaDb.Utilities;
+using System.Threading.Tasks;
 
 namespace DotaDb.Controllers
 {
@@ -14,9 +15,9 @@ namespace DotaDb.Controllers
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
-        public ActionResult Index(int? page)
+        public async Task<ActionResult> Index(int? page)
         {
-            var leagues = db.GetLeagueTickets();
+            var leagues = await db.GetLeagueTicketsAsync();
 
             List<LeagueViewModel> viewModel = new List<LeagueViewModel>();
             
