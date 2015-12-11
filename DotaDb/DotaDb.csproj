@@ -181,6 +181,10 @@
       <HintPath>..\packages\SourceSchemaParser.1.0.0.30\lib\net46\SourceSchemaParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SteamWebAPI2, Version=1.1.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SteamWebAPI2.1.1.0.15\lib\net46\SteamWebAPI2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
