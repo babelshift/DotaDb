@@ -23,6 +23,11 @@ namespace DotaDb.Utilities
         {
             string fileName = !String.IsNullOrEmpty(player.HeroUrl) ? String.Format("{0}_icon.png", player.HeroUrl) : String.Empty;
 
+            if(String.IsNullOrEmpty(fileName))
+            {
+                return String.Empty;
+            }
+
             return String.Format("{0}{1}", minimapIconsBaseUrl, fileName);
         }
     }

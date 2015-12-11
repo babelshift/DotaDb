@@ -24,6 +24,11 @@ namespace DotaDb.Utilities
                 fileName = league.ImageBannerPath.Replace("econ/leagues/", "") + ".jpg";
             }
 
+            if (String.IsNullOrEmpty(fileName))
+            {
+                return String.Empty;
+            }
+
             return String.Format("{0}{1}", leagueImagesBaseUrl, fileName);
         }
     }
