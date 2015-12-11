@@ -10,11 +10,11 @@
             <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
                 <div class="media">
                     <div class="media-left">
-                        @if (!String.IsNullOrEmpty(league.LogoFileName))
+                        @if (!String.IsNullOrEmpty(league.LogoFilePath))
                         {
                             <a href="@league.Url">
                                 <div class="thumbnail" style="margin: 0; border: 0; width: 200px" title="@league.Name">
-                                    <img src="@Url.Content("~/Content/logos/leagues/" + league.LogoFileName)" class="shadow" />
+                                    <img src="@league.LogoFilePath" class="shadow" />
                                 </div>
                             </a>
                         }

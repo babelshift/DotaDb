@@ -1,7 +1,6 @@
 ﻿using DotaDb.Utilities;
 using EasyAzureStorage;
 using HtmlAgilityPack;
-using Newtonsoft.Json.Linq;
 using SourceSchemaParser.Dota2;
 using SteamWebAPI2.Interfaces;
 using SteamWebAPI2.Models.DOTA2;
@@ -752,7 +751,7 @@ namespace DotaDb.Models
             else
             {
                 var newValue = await func();
-                
+
                 if (overrideCacheItemPolicy != null)
                 {
                     cache.Add(key.ToString(), newValue, overrideCacheItemPolicy);

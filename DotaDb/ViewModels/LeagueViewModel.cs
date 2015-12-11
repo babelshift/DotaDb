@@ -12,6 +12,6 @@ namespace DotaDb.ViewModels
         public string Url { get; set; }
         public string Tier { get; set; }
         public string Location { get; set; }
-        public string LogoFileName { get; set; }
+        public string LogoFilePath { get; set; }
     }
 }
