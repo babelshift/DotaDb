@@ -1,6 +1,7 @@
 ﻿using DotaDb.Models;
 using DotaDb.ViewModels;
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -33,6 +34,8 @@ namespace DotaDb.Controllers
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;
             viewModel.AllTimePeakPlayerCount = playerCounts.AllTimePeakPlayerCount;
 
+            string leagueImagesBaseUrl = ConfigurationManager.AppSettings["leagueImagesBaseUrl"].ToString();
+
             var liveLeagueGameViewModels = liveLeagueGames
                 .Select(x => new LiveLeagueGameOverviewViewModel()
                 {
@@ -42,7 +45,7 @@ namespace DotaDb.Controllers
                     DireTeamName = x.DireTeamName,
                     ElapsedTime = x.ElapsedTime,
                     GameNumber = x.GameNumber,
-                    LeagueLogo = x.LeagueLogo,
+                    LeagueLogoPath = String.Format("{0}{1}", leagueImagesBaseUrl, x.LeagueLogo),
                     LeagueName = x.LeagueName,
                     RadiantKillCount = x.RadiantKillCount,
                     RadiantTeamLogo = x.RadiantTeamLogo,

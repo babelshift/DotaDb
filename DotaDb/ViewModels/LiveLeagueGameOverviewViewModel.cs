@@ -17,7 +17,7 @@ namespace DotaDb.ViewModels
         public int GameNumber { get; set; }
         public int BestOf { get; set; }
         public string SeriesStatus { get; set; }
-        public string LeagueLogo { get; set; }
+        public string LeagueLogoPath { get; set; }
         public string RadiantTeamLogo { get; set; }
         public string DireTeamLogo { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> RadiantPlayers { get; set; }

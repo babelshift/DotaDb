@@ -12,11 +12,11 @@ namespace DotaDb.Utilities
         {
             if (String.IsNullOrEmpty(league.ImageBannerPath) || league.ImageBannerPath.EndsWith("ingame"))
             {
-                return league.ImageInventoryPath.Replace("econ/leagues/", "") + ".png";
+                return league.ImageInventoryPath.Replace("econ/leagues/", "") + ".jpg";
             }
             else
             {
-                return league.ImageBannerPath.Replace("econ/leagues/", "") + ".png";
+                return league.ImageBannerPath.Replace("econ/leagues/", "") + ".jpg";
             }
         }
     }
