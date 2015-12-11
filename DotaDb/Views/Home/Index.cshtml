@@ -167,14 +167,14 @@
                                     {
                                         if (!String.IsNullOrEmpty(player.MinimapIconFileName))
                                         {
-                                            <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                            <img src="@player.MinimapIconFileName" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
                                         }
                                     }
                                     @foreach (var player in liveLeagueGame.RadiantPlayers)
                                     {
                                         if (!String.IsNullOrEmpty(player.MinimapIconFileName))
                                         {
-                                            <img src="@Url.Content("~/Content/icons/minimap/" + player.MinimapIconFileName)" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                            <img src="@player.MinimapIconFileName" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
                                         }
                                     }
                                 </div>

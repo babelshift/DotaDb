@@ -12,6 +12,6 @@
         public double PositionY { get; set; }
         public double PositionXPercent { get; set; }
         public double PositionYPercent { get; set; }
-        public string MinimapIconFileName { get; set; }
+        public string MinimapIconFilePath { get; set; }
     }
 }

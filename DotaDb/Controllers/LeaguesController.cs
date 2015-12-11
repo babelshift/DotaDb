@@ -25,7 +25,7 @@ namespace DotaDb.Controllers
             {
                 LeagueViewModel leagueViewModel = new LeagueViewModel()
                 {
-                    LogoFileName = league.GetLogoFileName(),
+                    LogoFileName = league.GetLogoFilePath(),
                     Name = league.NameLocalized,
                     Description = league.DescriptionLocalized,
                     Location = league.Location,

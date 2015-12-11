@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using DotaDb.Utilities;
 
 namespace DotaDb.Controllers
 {
@@ -34,7 +35,6 @@ namespace DotaDb.Controllers
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;
             viewModel.AllTimePeakPlayerCount = playerCounts.AllTimePeakPlayerCount;
 
-            string leagueImagesBaseUrl = ConfigurationManager.AppSettings["leagueImagesBaseUrl"].ToString();
 
             var liveLeagueGameViewModels = liveLeagueGames
                 .Select(x => new LiveLeagueGameOverviewViewModel()
@@ -45,7 +45,7 @@ namespace DotaDb.Controllers
                     DireTeamName = x.DireTeamName,
                     ElapsedTime = x.ElapsedTime,
                     GameNumber = x.GameNumber,
-                    LeagueLogoPath = String.Format("{0}{1}", leagueImagesBaseUrl, x.LeagueLogo),
+                    LeagueLogoPath = x.LeagueLogoPath,
                     LeagueName = x.LeagueName,
                     RadiantKillCount = x.RadiantKillCount,
                     RadiantTeamLogo = x.RadiantTeamLogo,
@@ -64,9 +64,9 @@ namespace DotaDb.Controllers
                             AssistCount = y.AssistCount,
                             PositionX = y.PositionX,
                             PositionY = y.PositionY,
-                            PositionXPercent = ((y.PositionX + 7500) / 15000) * 100,
-                            PositionYPercent = ((y.PositionY + 7500) / 15000) * 100,
-                            MinimapIconFileName = !String.IsNullOrEmpty(y.HeroUrl) ? String.Format("{0}_icon.png", y.HeroUrl) : String.Empty
+                            PositionXPercent = y.PositionX.GetPercentOfPositionValue(),
+                            PositionYPercent = y.PositionY.GetPercentOfPositionValue(),
+                            MinimapIconFilePath = y.GetMinimapIconFilePath()
                         })
                         .ToList()
                         .AsReadOnly(),
@@ -82,9 +82,9 @@ namespace DotaDb.Controllers
                             AssistCount = y.AssistCount,
                             PositionX = y.PositionX,
                             PositionY = y.PositionY,
-                            PositionXPercent = ((y.PositionX + 7500) / 15000) * 100,
-                            PositionYPercent = ((y.PositionY + 7500) / 15000) * 100,
-                            MinimapIconFileName = !String.IsNullOrEmpty(y.HeroUrl) ? String.Format("{0}_icon.png", y.HeroUrl) : String.Empty
+                            PositionXPercent = y.PositionX.GetPercentOfPositionValue(),
+                            PositionYPercent = y.PositionY.GetPercentOfPositionValue(),
+                            MinimapIconFilePath = y.GetMinimapIconFilePath()
                         })
                         .ToList()
                         .AsReadOnly()

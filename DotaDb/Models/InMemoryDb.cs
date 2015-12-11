@@ -584,7 +584,7 @@ namespace DotaDb.Models
                     success = leagueTickets.TryGetValue(league.ItemDef.ToString(), out leagueTicket);
                     if (success)
                     {
-                        liveLeagueGameModel.LeagueLogo = leagueTicket.GetLogoFileName();
+                        liveLeagueGameModel.LeagueLogoPath = leagueTicket.GetLogoFilePath();
                         liveLeagueGameModel.LeagueName = leagueTicket.NameLocalized;
                     }
                 }
