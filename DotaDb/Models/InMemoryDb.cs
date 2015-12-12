@@ -608,6 +608,127 @@ namespace DotaDb.Models
             return liveLeagueGameModels.AsReadOnly();
         }
 
+        public async Task<LiveLeagueGameModel> GetLiveLeagueGameAsync(long matchId)
+        {
+            #region Get/Add From/To Cache
+
+            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy()
+            {
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(20)
+            };
+            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
+
+            var liveLeagueGame = liveLeagueGames.FirstOrDefault(x => x.MatchId == matchId);
+
+            if (liveLeagueGame == null)
+            {
+                return null;
+            }
+
+            #endregion Get/Add From/To Cache
+
+            LiveLeagueGameModel liveLeagueGameModel = new LiveLeagueGameModel()
+            {
+                BestOf = GetBestOfCountFromSeriesType(liveLeagueGame.SeriesType),
+                DireKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.Score : 0,
+                RadiantKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Radiant != null) ? liveLeagueGame.Scoreboard.Radiant.Score : 0,
+                GameNumber = liveLeagueGame.RadiantSeriesWins + liveLeagueGame.DireSeriesWins + 1,
+                ElapsedTime = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
+                DireTeamName = liveLeagueGame.DireTeam != null ? liveLeagueGame.DireTeam.TeamName : "Dire",
+                RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
+                SeriesStatus = String.Format("{0} - {1}", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins),
+                SpectatorCount = liveLeagueGame.Spectators
+            };
+
+            #region Fill in Player Details
+
+            liveLeagueGameModel.Players = liveLeagueGame.Players
+                .Select(x => new LiveLeagueGamePlayerModel()
+                {
+                    AccountId = x.AccountId,
+                    HeroId = x.HeroId,
+                    Name = x.Name,
+                    Team = x.Team
+                })
+                .ToList()
+                .AsReadOnly();
+
+            Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail = null;
+            Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail = null;
+
+            // if the game hasn't started yet, the scoreboard won't exist
+            if (liveLeagueGame.Scoreboard != null)
+            {
+                radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players.ToDictionary(x => x.AccountId, x => x);
+                direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players.ToDictionary(x => x.AccountId, x => x);
+            }
+
+            foreach (var player in liveLeagueGameModel.Players)
+            {
+                // skip over spectators/observers/commentators
+                if (player.Team != 0 && player.Team != 1)
+                {
+                    continue;
+                }
+
+                var hero = await GetHeroKeyValueAsync(player.HeroId);
+
+                player.HeroName = await GetLocalizationTextAsync(hero.Name);
+                player.HeroAvatarImageFileName = GetHeroAvatarFileName(hero.Name);
+
+                LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
+
+                // if the player hasn't picked a hero yet, details won't exist
+                if (playerDetail != null)
+                {
+                    player.KillCount = playerDetail.Kills;
+                    player.DeathCount = playerDetail.Deaths;
+                    player.AssistCount = playerDetail.Assists;
+                    player.PositionX = playerDetail.PositionX;
+                    player.PositionY = playerDetail.PositionY;
+                }
+
+                player.HeroUrl = hero.Url;
+            }
+
+            #endregion Fill in Player Details
+
+            #region Fill in League/Team Details
+
+            // look up whatever league this game belongs to in the league listing to get more details about it
+            var leagues = await GetLeaguesAsync();
+            League league = null;
+            bool success = leagues.TryGetValue(liveLeagueGame.LeagueId, out league);
+            if (success)
+            {
+                // look up this league's in game ticket asset for the logo and localized league name
+                var leagueTickets = await GetLeagueTicketsAsync();
+                DotaLeague leagueTicket = null;
+                success = leagueTickets.TryGetValue(league.ItemDef.ToString(), out leagueTicket);
+                if (success)
+                {
+                    liveLeagueGameModel.LeagueLogoPath = leagueTicket.GetLogoFilePath();
+                    liveLeagueGameModel.LeagueName = leagueTicket.NameLocalized;
+                }
+            }
+
+            // this property will only exist if the team is a tournament/league coordinated team
+            if (liveLeagueGame.RadiantTeam != null)
+            {
+                //liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
+            }
+
+            // this property will only exist if the team is a tournament/league coordinated team
+            if (liveLeagueGame.DireTeam != null)
+            {
+                //liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
+            }
+
+            #endregion Fill in League/Team Details
+
+            return liveLeagueGameModel;
+        }
+
         private static string GetHeroAvatarFileName(string heroName)
         {
             // if the player hasn't picked a hero yet, the 'base' hero will be shown, which basically is 'unknown'

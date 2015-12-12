@@ -295,6 +295,7 @@
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LeagueViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameOverviewViewModel.cs" />
+    <Compile Include="ViewModels\LiveLeagueGameDetailViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGamePlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

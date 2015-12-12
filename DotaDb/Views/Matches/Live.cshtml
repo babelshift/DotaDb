@@ -1,4 +1,4 @@
-﻿@model DotaDb.ViewModels.HomeViewModel
+﻿@model DotaDb.ViewModels.LiveLeagueGameDetailViewModel
 
 @{
     Layout = "~/Views/Shared/_LayoutSplash.cshtml";
@@ -10,9 +10,9 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="row">
             <div class="col-md-4">
-                <h4 style="margin: 0">The Summit 4</h4>
+                <h4 style="margin: 0">@Model.LeagueName</h4>
                 <div class="thumbnail" style="margin: 0; border: 0; width: 100px">
-                    <img src="https://dotadb.blob.core.windows.net/leagueimages/subscriptions_the_summit_4.jpg" class="shadow" />
+                    <img src="@Model.LeagueLogoPath" class="shadow" />
                 </div>
                 <p class="text-uppercase" style="margin: 0">
                     <i class="fa fa-list-alt fa-fw"></i>
@@ -43,11 +43,11 @@
                 <p style="margin: 0">
                     <i class="fa fa-ticket fa-fw"></i>
                     <span class="text-muted">Game #:</span>
-                    2
+                    @Model.GameNumber
                 </p>
                 <p style="margin: 0">
                     <span class="text-muted">Series:</span>
-                    Best of 3
+                    @Model.SeriesStatus
                 </p>
                 <p style="margin: 0">
                     <i class="fa fa-clock-o fa-fw"></i>
@@ -65,29 +65,29 @@
     <div class="col-md-10 col-md-offset-1">
         <div class="row">
             <div class="col-md-4">
-                <h3 style="margin: 0; font-weight: 100;" class="pull-left">Evil Geniuses</h3>
-                <h2 style="margin: 0;" class="pull-right">31 <small class="text-uppercase">kills</small></h2>
+                <h3 style="margin: 0; font-weight: 100;" class="pull-left">@Model.RadiantTeamName</h3>
+                <h2 style="margin: 0;" class="pull-right">@Model.RadiantKillCount <small class="text-uppercase">kills</small></h2>
             </div>
             <div class="col-md-4 text-center">
                 <h4 style="margin: 0;">
                     <i class="fa fa-clock-o"></i>
                     <span class="text-muted text-uppercase">Elapsed:</span>
-                    31m 22s
+                    @Model.ElapsedTime
                 </h4>
             </div>
             <div class="col-md-4 text-right">
-                <h3 style="margin: 0; font-weight: 100;" class="pull-right">Vici Gaming</h3>
-                <h2 style="margin: 0;" class="pull-left">27 <small class="text-uppercase">kills</small></h2>
+                <h3 style="margin: 0; font-weight: 100;" class="pull-right">@Model.DireTeamName</h3>
+                <h2 style="margin: 0;" class="pull-left">@Model.DireKillCount <small class="text-uppercase">kills</small></h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                @for (int i = 0; i < 5; i++)
+                @foreach (var player in Model.RadiantPlayers)
                 {
                     <div style="margin: 10px 0">
                         <h4 class="media-heading" style="margin: 0">
-                            arosian
-                            <small class="text-uppercase text-muted">Axe</small>
+                            @player.PlayerName
+                            <small class="text-uppercase text-muted">@player.HeroName</small>
                         </h4>
                         <div class="pull-left text-right" style="margin: 9px 5px 0 0; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
@@ -96,16 +96,23 @@
                         <div class="media" style="margin-top: 5px">
                             <div class="media-left">
                                 <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
-                                    <img src="http://cdn.dota2.com/apps/dota2/images/heroes/axe_lg.png" class="shadow" />
+                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                    {
+                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                    }
                                 </div>
                             </div>
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h4 style="margin: 0">
-                                            7 <small class="text-muted text-uppercase">kill</small>, 22 <small class="text-muted text-uppercase">assist</small>
+                                            @player.KillCount <small class="text-muted text-uppercase">kill</small>, @player.AssistCount <small class="text-muted text-uppercase">assist</small>
                                             <br />
-                                            1 <small class="text-muted text-uppercase">death</small>
+                                            @player.DeathCount <small class="text-muted text-uppercase">death</small>
                                         </h4>
                                     </div>
                                     <div class="col-md-6 live-game-items">
@@ -135,8 +142,24 @@
                     </div>
                 }
             </div>
-            <div class="col-md-4">
-                <img src="~/Content/dota_minimap_512.jpg" style="width: 90%" class="img-responsive center-block" />
+            <div class="col-md-4 text-center">
+                <div style="position: relative; width: 90%" class="center-block">
+                    <img src="~/Content/dota_minimap_512.jpg" style="width: 100%" />
+                    @foreach (var player in Model.DirePlayers)
+                    {
+                        if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
+                        {
+                            <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                        }
+                    }
+                    @foreach (var player in Model.RadiantPlayers)
+                    {
+                        if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
+                        {
+                            <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                        }
+                    }
+                </div>
                 <div class="text-center">
                     <h5 style="margin-bottom: 0" class="text-uppercase">
                         <span class="text-muted">Roshan Status:</span>
@@ -147,7 +170,7 @@
                         <span class="text-lowercase">(3m 22s)</span>
                     </h5>
                 </div>
-                <hr style="margin: 5px 0"/>
+                <hr style="margin: 5px 0" />
                 <h5 style="margin: 0" class="text-uppercase text-muted">
                     Total Worth:
                 </h5>
@@ -175,13 +198,14 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4 text-right">
-                @for (int i = 0; i < 5; i++)
+                @foreach (var player in Model.DirePlayers)
                 {
                     <div style="margin: 10px 0">
                         <h4 class="media-heading" style="margin: 0">
-                            arosian
-                            <small class="text-uppercase text-muted">Axe</small>
+                            @player.PlayerName
+                            <small class="text-uppercase text-muted">@player.HeroName</small>
                         </h4>
                         <div class="pull-right text-left" style="margin: 9px 0 0 5px; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
@@ -213,16 +237,23 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4 style="margin: 0">
-                                            7 <small class="text-muted text-uppercase">kill</small>, 22 <small class="text-muted text-uppercase">assist</small>
+                                            @player.KillCount <small class="text-muted text-uppercase">kill</small>, @player.AssistCount <small class="text-muted text-uppercase">assist</small>
                                             <br />
-                                            1 <small class="text-muted text-uppercase">death</small>
+                                            @player.DeathCount <small class="text-muted text-uppercase">death</small>
                                         </h4>
                                     </div>
                                 </div>
                             </div>
                             <div class="media-right">
                                 <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
-                                    <img src="http://cdn.dota2.com/apps/dota2/images/heroes/axe_lg.png" class="shadow" />
+                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                    {
+                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                    }
                                 </div>
                             </div>
                         </div>

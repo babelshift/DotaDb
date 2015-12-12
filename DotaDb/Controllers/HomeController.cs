@@ -35,7 +35,6 @@ namespace DotaDb.Controllers
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;
             viewModel.AllTimePeakPlayerCount = playerCounts.AllTimePeakPlayerCount;
 
-
             var liveLeagueGameViewModels = liveLeagueGames
                 .Select(x => new LiveLeagueGameOverviewViewModel()
                 {

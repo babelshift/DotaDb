@@ -2,7 +2,7 @@
 
 namespace DotaDb.ViewModels
 {
-    public class LiveLeagueGameOverviewViewModel
+    public class LiveLeagueGameDetailViewModel
     {
         public string LeagueName { get; set; }
         public int SpectatorCount { get; set; }
