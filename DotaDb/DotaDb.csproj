@@ -267,6 +267,7 @@
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\LeaguesController.cs" />
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\MatchesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -308,6 +309,7 @@
     <Content Include="Content\dotadb-32x32.png" />
     <Content Include="Content\dotadb-45x45.png" />
     <Content Include="Content\dota_minimap_256.jpg" />
+    <Content Include="Content\dota_minimap_512.jpg" />
     <Content Include="Content\dota_minimap_help.jpg" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\icons\heroes\base_lg.png" />
@@ -383,6 +385,7 @@
     <Content Include="Views\Shared\_LayoutSplash.cshtml" />
     <Content Include="Views\Heroes\IndexTable.cshtml" />
     <Content Include="Views\Heroes\_HeroTableRowPartial.cshtml" />
+    <Content Include="Views\Matches\Live.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

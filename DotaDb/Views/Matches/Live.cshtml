@@ -1,0 +1,234 @@
+﻿@model DotaDb.ViewModels.HomeViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutSplash.cshtml";
+    ViewBag.Title = "Live Match";
+    ViewBag.ShowTopAlertInfo = false;
+}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            <div class="col-md-4">
+                <h4 style="margin: 0">The Summit 4</h4>
+                <div class="thumbnail" style="margin: 0; border: 0; width: 100px">
+                    <img src="https://dotadb.blob.core.windows.net/leagueimages/subscriptions_the_summit_4.jpg" class="shadow" />
+                </div>
+                <p class="text-uppercase" style="margin: 0">
+                    <i class="fa fa-list-alt fa-fw"></i>
+                    <span class="text-muted">Tier:</span>
+                    Professional
+                </p>
+                <p class="text-uppercase" style="margin: 0">
+                    <i class="fa fa-globe fa-fw"></i>
+                    <span class="text-muted">Location:</span>
+                    North America
+                </p>
+            </div>
+            <div class="col-md-4 text-center text-uppercase">
+            </div>
+            <div class="col-md-4 text-right text-uppercase">
+                <p style="margin: 0">
+                    <span class="text-muted">Lobby ID:</span>
+                    0987654321
+                </p>
+                <p style="margin: 0">
+                    <span class="text-muted">Match ID:</span>
+                    1234567890
+                </p>
+                <p style="margin: 0">
+                    <span class="text-muted">Stream Delay:</span>
+                    300 sec
+                </p>
+                <p style="margin: 0">
+                    <i class="fa fa-ticket fa-fw"></i>
+                    <span class="text-muted">Game #:</span>
+                    2
+                </p>
+                <p style="margin: 0">
+                    <span class="text-muted">Series:</span>
+                    Best of 3
+                </p>
+                <p style="margin: 0">
+                    <i class="fa fa-clock-o fa-fw"></i>
+                    <span class="text-muted">
+                        Started:
+                    </span>
+                    Nov 13, 2015 @@ 16:15
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="row">
+            <div class="col-md-4">
+                <h3 style="margin: 0; font-weight: 100;" class="pull-left">Evil Geniuses</h3>
+                <h2 style="margin: 0;" class="pull-right">31 <small class="text-uppercase">kills</small></h2>
+            </div>
+            <div class="col-md-4 text-center">
+                <h4 style="margin: 0;">
+                    <i class="fa fa-clock-o"></i>
+                    <span class="text-muted text-uppercase">Elapsed:</span>
+                    31m 22s
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <h3 style="margin: 0; font-weight: 100;" class="pull-right">Vici Gaming</h3>
+                <h2 style="margin: 0;" class="pull-left">27 <small class="text-uppercase">kills</small></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                @for (int i = 0; i < 5; i++)
+                {
+                    <div style="margin: 10px 0">
+                        <h4 class="media-heading" style="margin: 0">
+                            arosian
+                            <small class="text-uppercase text-muted">Axe</small>
+                        </h4>
+                        <div class="pull-left text-right" style="margin: 9px 5px 0 0; line-height: 13px">
+                            <small class="text-uppercase text-muted">Level</small>
+                            <h4 style="margin: 0;">13</h4>
+                        </div>
+                        <div class="media" style="margin-top: 5px">
+                            <div class="media-left">
+                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
+                                    <img src="http://cdn.dota2.com/apps/dota2/images/heroes/axe_lg.png" class="shadow" />
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4 style="margin: 0">
+                                            7 <small class="text-muted text-uppercase">kill</small>, 22 <small class="text-muted text-uppercase">assist</small>
+                                            <br />
+                                            1 <small class="text-muted text-uppercase">death</small>
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-6 live-game-items">
+                                        <div class="thumbnail pull-right">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail pull-right">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail pull-right">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="thumbnail pull-right">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail pull-right">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail pull-right">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-4">
+                <img src="~/Content/dota_minimap_512.jpg" style="width: 90%" class="img-responsive center-block" />
+                <div class="text-center">
+                    <h5 style="margin-bottom: 0" class="text-uppercase">
+                        <span class="text-muted">Roshan Status:</span>
+                        <span class="text-danger">
+                            <i class="fa fa-remove"></i>
+                            Dead
+                        </span>
+                        <span class="text-lowercase">(3m 22s)</span>
+                    </h5>
+                </div>
+                <hr style="margin: 5px 0"/>
+                <h5 style="margin: 0" class="text-uppercase text-muted">
+                    Total Worth:
+                </h5>
+                <div class="progress" style="margin-bottom: 5px">
+                    <div class="progress-bar progress-bar-success" style="width: 66.6%">
+                        <span class="sr-only">66%</span>
+                        7213
+                    </div>
+                    <div class="progress-bar progress-bar-danger" style="width: 33.3%">
+                        <span class="sr-only">33%</span>
+                        3122
+                    </div>
+                </div>
+                <h5 style="margin: 0" class="text-uppercase text-muted">
+                    Total XP:
+                </h5>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" style="width: 55%">
+                        <span class="sr-only">66%</span>
+                        12456
+                    </div>
+                    <div class="progress-bar progress-bar-danger" style="width: 45%">
+                        <span class="sr-only">33%</span>
+                        12322
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                @for (int i = 0; i < 5; i++)
+                {
+                    <div style="margin: 10px 0">
+                        <h4 class="media-heading" style="margin: 0">
+                            arosian
+                            <small class="text-uppercase text-muted">Axe</small>
+                        </h4>
+                        <div class="pull-right text-left" style="margin: 9px 0 0 5px; line-height: 13px">
+                            <small class="text-uppercase text-muted">Level</small>
+                            <h4 style="margin: 0;">13</h4>
+                        </div>
+                        <div class="media" style="margin-top: 5px">
+                            <div class="media-body">
+                                <div class="row">
+                                    <div class="col-md-6 live-game-items">
+                                        <div class="thumbnail">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="thumbnail">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                        <div class="thumbnail">
+                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4 style="margin: 0">
+                                            7 <small class="text-muted text-uppercase">kill</small>, 22 <small class="text-muted text-uppercase">assist</small>
+                                            <br />
+                                            1 <small class="text-muted text-uppercase">death</small>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="media-right">
+                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
+                                    <img src="http://cdn.dota2.com/apps/dota2/images/heroes/axe_lg.png" class="shadow" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

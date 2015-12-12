@@ -157,6 +157,14 @@ textarea {
     text-align: center;
 }
 
-.hero-table td:empty, .hero-table th:empty {
+    .hero-table td:empty, .hero-table th:empty {
+        border: 0;
+    }
+
+.live-game-items .thumbnail {
+    float: left;
+    margin: 1px 1px;
     border: 0;
+    padding: 0;
+    width: 32px;
 }
