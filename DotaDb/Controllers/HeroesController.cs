@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using DotaDb.Utilities;
 
 namespace DotaDb.Controllers
 {
@@ -179,6 +180,7 @@ namespace DotaDb.Controllers
             viewModel.IntelligenceGain = hero.AttributeIntelligenceGain;
             viewModel.StrengthGain = hero.AttributeStrengthGain;
             viewModel.PrimaryAttribute = db.GetHeroPrimaryAttributeTypeKeyValue(hero.AttributePrimary);
+            viewModel.MinimapIconPath = hero.GetMinimapIconFilePath();
             return viewModel;
         }
 

@@ -1,4 +1,13 @@
 ﻿@model DotaDb.ViewModels.HeroSelectViewModel
+
+<div class="row">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            <li><a href="@Url.Action("index", "home")">Home</a></li>
+            <li class="active">Heroes</li>
+        </ol>
+    </div>
+</div>
 <ul class="nav nav-pills" style="margin-bottom: 10px">
     <li role="presentation" class="active">
         <a href="@Url.Action("index", new { tab = "grid" })">

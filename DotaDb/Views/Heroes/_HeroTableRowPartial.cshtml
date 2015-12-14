@@ -2,7 +2,7 @@
 
 <tr>
     <td style="text-align: left">
-        <img src="@Url.Content("~/Content/icons/minimap/" + Model.Url + "_icon.png")" />
+        <img src="@Model.MinimapIconPath" />
         <a href="@Url.Action("hero", new { id = Model.Id, heroName = Model.Url.ToLower() })">
             @Model.Name
         </a>

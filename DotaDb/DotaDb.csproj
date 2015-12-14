@@ -281,6 +281,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\DotaLeagueExtensions.cs" />
     <Compile Include="Utilities\GameItemExtensions.cs" />
+    <Compile Include="Utilities\HeroExtensions.cs" />
     <Compile Include="Utilities\HtmlHelperExtensions.cs" />
     <Compile Include="Utilities\HeroExperience.cs" />
     <Compile Include="Utilities\LiveLeagueGamePlayerExtensions.cs" />

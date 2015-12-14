@@ -3,6 +3,11 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("index", "home")">Home</a></li>
+    <li><a href="@Url.Action("index", "heroes")">Heroes</a></li>
+    <li class="active">@Model.Name (@Model.ActiveTab)</li>
+</ol>
 <div class="row">
     <div class="col-lg-3">
         <h2 style="margin-top: 0;">

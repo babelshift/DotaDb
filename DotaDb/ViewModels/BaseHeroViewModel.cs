@@ -31,5 +31,6 @@ namespace DotaDb.ViewModels
         public IReadOnlyCollection<HeroRoleViewModel> Roles { get; set; }
         public DotaHeroPrimaryAttributeType PrimaryAttribute { get; set; }
         public string ActiveTab { get; set; }
+        public string MinimapIconPath { get; internal set; }
     }
 }
