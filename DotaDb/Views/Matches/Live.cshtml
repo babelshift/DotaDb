@@ -301,22 +301,22 @@
                     Statistics
                 </h4>
             </div>
-            <table class="table table-condensed">
+            <table id="table-stats" class="table table-condensed" data-toggle="table">
                 <thead>
                     <tr>
                         <th>Player</th>
                         <th>Hero</th>
-                        <th>Level</th>
-                        <th>Worth</th>
-                        <th>Gold</th>
-                        <th>XP</th>
-                        <th>Kills</th>
-                        <th>Deaths</th>
-                        <th>Assists</th>
-                        <th>Gold / Min</th>
-                        <th>XP / Min</th>
-                        <th>Last Hits</th>
-                        <th>Denies</th>
+                        <th data-sortable="true">Level</th>
+                        <th data-sortable="true">Worth</th>
+                        <th data-sortable="true">Gold</th>
+                        <th data-sortable="true">XP</th>
+                        <th data-sortable="true">Kills</th>
+                        <th data-sortable="true">Deaths</th>
+                        <th data-sortable="true">Assists</th>
+                        <th data-sortable="true">Gold / Min</th>
+                        <th data-sortable="true">XP / Min</th>
+                        <th data-sortable="true">Last Hits</th>
+                        <th data-sortable="true">Denies</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -367,3 +367,6 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/bootstrap-table")
+}

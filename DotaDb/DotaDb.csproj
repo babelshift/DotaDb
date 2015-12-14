@@ -308,6 +308,7 @@
     <Content Include="Content\backgrounds\MidLaneBackground.jpg" />
     <Content Include="Content\backgrounds\RadiantAncientBackground.jpg" />
     <Content Include="Content\bootstrap-lumen.min.css" />
+    <Content Include="Content\bootstrap-table.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -320,6 +321,12 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\icons\heroes\base_lg.png" />
     <Content Include="Content\icons\items\base_lg.png" />
+    <Content Include="Content\icons\minimap\coin_icon.png" />
+    <Content Include="Content\icons\minimap\Defend_icon.png" />
+    <Content Include="Content\icons\minimap\dire_ancient_icon.png" />
+    <Content Include="Content\icons\minimap\radiant_ancient_icon.png" />
+    <Content Include="Content\icons\minimap\Roshan_icon.png" />
+    <Content Include="Content\icons\minimap\Rune_bounty_icon.png" />
     <Content Include="Content\icon_agi.png" />
     <Content Include="Content\icon_atk.png" />
     <Content Include="Content\icon_def.png" />
@@ -352,6 +359,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />

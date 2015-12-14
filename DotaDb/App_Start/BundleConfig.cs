@@ -24,7 +24,11 @@ namespace DotaDb
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/bootstrap-table.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-table").Include(
+                      "~/Scripts/bootstrap-table.js"));
         }
     }
 }

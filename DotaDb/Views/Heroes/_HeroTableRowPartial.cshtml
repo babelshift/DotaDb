@@ -1,11 +1,13 @@
 ﻿@model DotaDb.ViewModels.HeroViewModel
 
 <tr>
-    <td style="text-align: left">
-        <img src="@Model.MinimapIconPath" />
-        <a href="@Url.Action("hero", new { id = Model.Id, heroName = Model.Url.ToLower() })">
-            @Model.Name
-        </a>
+    <td>
+        <div class="text-left">
+            <img src="@Model.MinimapIconPath" />
+            <a href="@Url.Action("hero", new { id = Model.Id, heroName = Model.Url.ToLower() })">
+                @Model.Name
+            </a>
+        </div>
     </td>
     @if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
     {
