@@ -132,11 +132,6 @@ textarea {
 }
 
 .minimap-icon {
-    -webkit-transform-origin: 50% 50%;
-    -moz-transform-origin: 50% 50%;
-    -o-transform-origin: 50% 50%;
-    -ms-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
     width: 32px;
     height: 32px;
     position: absolute;
@@ -145,7 +140,32 @@ textarea {
     -o-transform: translate(-50%, 50%);
     -webkit-transform: translate(-50%, 50%);
     transform: translate(-50%, 50%);
+    z-index: 1;
 }
+
+.minimap-icon-circle {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    -moz-transform: translate(-50%, 50%);
+    -ms-transform: translate(-50%, 50%);
+    -o-transform: translate(-50%, 50%);
+    -webkit-transform: translate(-50%, 50%);
+    transform: translate(-50%, 50%);
+    border-radius: 20px;
+    z-index: 0;
+}
+
+.minimap-icon-circle-radiant {
+    background-color: rgba(0, 255, 33, 0.5);
+    border: 2px solid #004008;
+}
+
+.minimap-icon-circle-dire {
+    background-color: rgba(255, 0, 0, 0.50);
+    border: 2px solid #4f0000;
+}
+
 
 .full-screen-bg-tint {
     height: 100%;

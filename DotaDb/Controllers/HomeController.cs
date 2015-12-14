@@ -49,7 +49,8 @@ namespace DotaDb.Controllers
                     RadiantKillCount = x.RadiantKillCount,
                     RadiantTeamLogo = x.RadiantTeamLogo,
                     RadiantTeamName = x.RadiantTeamName,
-                    SeriesStatus = x.SeriesStatus,
+                    RadiantSeriesWins = x.RadiantSeriesWins,
+                    DireSeriesWins = x.DireSeriesWins,
                     SpectatorCount = x.SpectatorCount,
                     DirePlayers = x.Players
                         .Where(y => y.Team == 1)

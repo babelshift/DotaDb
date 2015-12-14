@@ -47,7 +47,7 @@
                 </p>
                 <p style="margin: 0">
                     <span class="text-muted">Series:</span>
-                    @Model.SeriesStatus
+                    @String.Format("{0} (radiant) - {1} (dire)", Model.RadiantSeriesWins, Model.DireSeriesWins) (Best of @Model.BestOf)
                 </p>
                 <p style="margin: 0">
                     <i class="fa fa-clock-o fa-fw"></i>
@@ -55,6 +55,13 @@
                         Started:
                     </span>
                     @Model.TimeStarted.ToString("dd MMM yyyy HH:mm:ss")
+                </p>
+                <p style="margin: 0">
+                    <i class="fa fa-desktop fa-fw"></i>
+                    <span class="text-muted">
+                        Spectators:
+                    </span>
+                    @Model.SpectatorCount
                 </p>
             </div>
         </div>
@@ -84,7 +91,7 @@
             <div class="col-md-4">
                 @foreach (var player in Model.RadiantPlayers)
                 {
-                    <div style="margin: 10px 0">
+                    <div class="well well-sm" style="padding: 5px; margin-bottom: 10px">
                         <h4 class="media-heading" style="margin: 0">
                             @player.PlayerName
                             <small class="text-uppercase text-muted">@player.HeroName</small>
@@ -151,6 +158,7 @@
                         if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                         {
                             <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                            <div class="minimap-icon-circle minimap-icon-circle-dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
                         }
                     }
                     @foreach (var player in Model.RadiantPlayers)
@@ -158,6 +166,7 @@
                         if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                         {
                             <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                            <div class="minimap-icon-circle minimap-icon-circle-radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
                         }
                     }
                 </div>
@@ -213,7 +222,7 @@
             <div class="col-md-4 text-right">
                 @foreach (var player in Model.DirePlayers)
                 {
-                    <div style="margin: 10px 0">
+                    <div class="well well-sm" style="padding: 5px; margin-bottom: 10px">
                         <h4 class="media-heading" style="margin: 0">
                             @player.PlayerName
                             <small class="text-uppercase text-muted">@player.HeroName</small>
@@ -235,7 +244,7 @@
                                             {
                                                 <div class="clearfix"></div>
                                             }
-                                            <div class="thumbnail pull-right">
+                                            <div class="thumbnail pull-left">
                                                 @if (player.Items[i] != null)
                                                 {
                                                     <img src="@player.Items[i].IconPath" title="@player.Items[i].Name" />

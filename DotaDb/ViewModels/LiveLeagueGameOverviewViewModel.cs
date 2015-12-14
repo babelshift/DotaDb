@@ -13,7 +13,8 @@ namespace DotaDb.ViewModels
         public string ElapsedTime { get; set; }
         public int GameNumber { get; set; }
         public int BestOf { get; set; }
-        public string SeriesStatus { get; set; }
+        public int RadiantSeriesWins { get; set; }
+        public int DireSeriesWins { get; set; }
         public string LeagueLogoPath { get; set; }
         public string RadiantTeamLogo { get; set; }
         public string DireTeamLogo { get; set; }

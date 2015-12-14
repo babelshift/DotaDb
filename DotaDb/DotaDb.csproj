@@ -48,12 +48,12 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EasyAzureKeyVault, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyAzureKeyVault.1.0.1.0\lib\net46\EasyAzureKeyVault.dll</HintPath>
+    <Reference Include="EasyAzureKeyVault, Version=1.1.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyAzureKeyVault.1.1.0.9\lib\net46\EasyAzureKeyVault.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EasyAzureStorage, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyAzureStorage.1.1.2.0\lib\net452\EasyAzureStorage.dll</HintPath>
+    <Reference Include="EasyAzureStorage, Version=1.2.0.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyAzureStorage.1.2.0.8\lib\net46\EasyAzureStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">

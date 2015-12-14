@@ -513,7 +513,8 @@ namespace DotaDb.Models
                     ElapsedTimeDisplay = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
                     DireTeamName = liveLeagueGame.DireTeam != null ? liveLeagueGame.DireTeam.TeamName : "Dire",
                     RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
-                    SeriesStatus = String.Format("{0} - {1}", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins),
+                    RadiantSeriesWins = liveLeagueGame.RadiantSeriesWins,
+                    DireSeriesWins = liveLeagueGame.DireSeriesWins,
                     SpectatorCount = liveLeagueGame.Spectators
                 };
 
@@ -637,7 +638,8 @@ namespace DotaDb.Models
                 ElapsedTimeDisplay = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
                 DireTeamName = liveLeagueGame.DireTeam != null ? liveLeagueGame.DireTeam.TeamName : "Dire",
                 RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
-                SeriesStatus = String.Format("{0} - {1}", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins),
+                RadiantSeriesWins = liveLeagueGame.RadiantSeriesWins,
+                DireSeriesWins = liveLeagueGame.DireSeriesWins,
                 SpectatorCount = liveLeagueGame.Spectators,
                 RoshanRespawnTimer = liveLeagueGame.Scoreboard != null ? liveLeagueGame.Scoreboard.RoshanRespawnTimer : 0,
                 LobbyId = liveLeagueGame.LobbyId,

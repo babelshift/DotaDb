@@ -16,6 +16,10 @@ namespace DotaDb.Controllers
         public async Task<ActionResult> Live(long id)
         {
             var liveLeagueGame = await db.GetLiveLeagueGameAsync(id);
+            if(liveLeagueGame == null)
+            {
+                return new HttpNotFoundResult();
+            }
 
             LiveLeagueGameDetailViewModel viewModel = new LiveLeagueGameDetailViewModel()
             {
@@ -31,7 +35,8 @@ namespace DotaDb.Controllers
                 RadiantKillCount = liveLeagueGame.RadiantKillCount,
                 RadiantTeamLogo = liveLeagueGame.RadiantTeamLogo,
                 RadiantTeamName = liveLeagueGame.RadiantTeamName,
-                SeriesStatus = liveLeagueGame.SeriesStatus,
+                RadiantSeriesWins = liveLeagueGame.RadiantSeriesWins,
+                DireSeriesWins = liveLeagueGame.DireSeriesWins,
                 SpectatorCount = liveLeagueGame.SpectatorCount,
                 IsRoshanAlive = liveLeagueGame.RoshanRespawnTimer == 0 ? true : false,
                 LobbyId = liveLeagueGame.LobbyId,
