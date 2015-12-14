@@ -292,3 +292,78 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <i class="fa fa-line-chart"></i>
+                    Statistics
+                </h4>
+            </div>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Hero</th>
+                        <th>Level</th>
+                        <th>Worth</th>
+                        <th>Gold</th>
+                        <th>XP</th>
+                        <th>Kills</th>
+                        <th>Deaths</th>
+                        <th>Assists</th>
+                        <th>Gold / Min</th>
+                        <th>XP / Min</th>
+                        <th>Last Hits</th>
+                        <th>Denies</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var player in Model.RadiantPlayers)
+                    {
+                        <tr class="success">
+                            <td>
+                                <img src="@player.MinimapIconFilePath" width="24" height="24" />
+                                @player.PlayerName
+                            </td>
+                            <td>@player.HeroName</td>
+                            <td>@player.Level</td>
+                            <td>@player.NetWorth</td>
+                            <td>@player.Gold</td>
+                            <td>@player.XP</td>
+                            <td>@player.KillCount</td>
+                            <td>@player.DeathCount</td>
+                            <td>@player.AssistCount</td>
+                            <td>@player.GoldPerMinute</td>
+                            <td>@player.XpPerMinute</td>
+                            <td>@player.LastHits</td>
+                            <td>@player.Denies</td>
+                        </tr>
+                    }
+                    @foreach (var player in Model.DirePlayers)
+                    {
+                        <tr class="danger">
+                            <td>
+                                <img src="@player.MinimapIconFilePath" width="24" height="24" />
+                                @player.PlayerName
+                            </td>
+                            <td>@player.HeroName</td>
+                            <td>@player.Level</td>
+                            <td>@player.NetWorth</td>
+                            <td>@player.Gold</td>
+                            <td>@player.XP</td>
+                            <td>@player.KillCount</td>
+                            <td>@player.DeathCount</td>
+                            <td>@player.AssistCount</td>
+                            <td>@player.GoldPerMinute</td>
+                            <td>@player.XpPerMinute</td>
+                            <td>@player.LastHits</td>
+                            <td>@player.Denies</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DotaDb.Utilities;
+using System.Collections.Generic;
 
 namespace DotaDb.ViewModels
 {
@@ -28,5 +29,12 @@ namespace DotaDb.ViewModels
         public int XpPerMinute { get; set; }
         public int UltimateState { get; set; }
         public int UltimateCooldown { get; set; }
+        public int XP
+        {
+            get
+            {
+                return HeroExperience.ToReachLevel(Level);
+            }
+        }
     }
 }
