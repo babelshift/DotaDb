@@ -515,7 +515,8 @@ namespace DotaDb.Models
                     RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
                     RadiantSeriesWins = liveLeagueGame.RadiantSeriesWins,
                     DireSeriesWins = liveLeagueGame.DireSeriesWins,
-                    SpectatorCount = liveLeagueGame.Spectators
+                    SpectatorCount = liveLeagueGame.Spectators,
+                    MatchId = liveLeagueGame.MatchId,
                 };
 
                 #region Fill in Player Details

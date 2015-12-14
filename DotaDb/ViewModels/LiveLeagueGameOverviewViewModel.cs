@@ -4,6 +4,7 @@ namespace DotaDb.ViewModels
 {
     public class LiveLeagueGameOverviewViewModel
     {
+        public long MatchId { get; set; }
         public string LeagueName { get; set; }
         public int SpectatorCount { get; set; }
         public string RadiantTeamName { get; set; }

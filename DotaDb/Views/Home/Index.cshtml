@@ -81,135 +81,139 @@
     <div class="col-md-10 col-md-offset-1">
         @foreach (var liveLeagueGame in Model.LiveLeagueGames)
         {
-            <div class="well well-sm" style="padding: 15px;">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.LeagueName</h3>
-                        <div class="thumbnail" style="margin: 0; border: 0; width: 150px">
-                            <img src="@liveLeagueGame.LeagueLogoPath" class="shadow" />
+            <a href="@Url.Action("live", "matches", new { id = liveLeagueGame.MatchId })" class="live-league-game-link">
+                <div class="well well-sm" style="padding: 15px;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.LeagueName</h3>
+                            <div class="thumbnail" style="margin: 0; border: 0; width: 150px">
+                                <img src="@liveLeagueGame.LeagueLogoPath" class="shadow" />
+                            </div>
+                            <p style="margin-top: 10px; margin-bottom: 0">
+                                <i class="fa fa-desktop fa-fw"></i>
+                                <span class="text-muted text-uppercase">Spectators:</span>
+                                @liveLeagueGame.SpectatorCount.ToString("N0")
+                                <br />
+                                <i class="fa fa-ticket fa-fw"></i>
+                                <span class="text-muted text-uppercase">Game:</span>
+                                @liveLeagueGame.GameNumber
+                                <br />
+                                <i class="fa fa-list-alt fa-fw"></i>
+                                <span class="text-muted text-uppercase">Best of:</span>
+                                @liveLeagueGame.BestOf
+                                <br />
+                                <i class="fa fa-trophy fa-fw"></i>
+                                <span class="text-muted text-uppercase">Series:</span>
+                                @String.Format("{0} (radiant) - {1} (dire)", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins)
+                            </p>
                         </div>
-                        <p style="margin-top: 10px; margin-bottom: 0">
-                            <i class="fa fa-desktop fa-fw"></i>
-                            <span class="text-muted text-uppercase">Spectators:</span>
-                            @liveLeagueGame.SpectatorCount.ToString("N0")
-                            <br />
-                            <i class="fa fa-ticket fa-fw"></i>
-                            <span class="text-muted text-uppercase">Game:</span>
-                            @liveLeagueGame.GameNumber
-                            <br />
-                            <i class="fa fa-list-alt fa-fw"></i>
-                            <span class="text-muted text-uppercase">Best of:</span>
-                            @liveLeagueGame.BestOf
-                            <br />
-                            <i class="fa fa-trophy fa-fw"></i>
-                            <span class="text-muted text-uppercase">Series:</span>
-                            @String.Format("{0} (radiant) - {1} (dire)", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins)
-                        </p>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.RadiantTeamName</h3>
-                                <hr style="margin: 5px 0" />
-                                @if (!String.IsNullOrEmpty(liveLeagueGame.RadiantTeamLogo))
-                                {
-                                    <img src="@liveLeagueGame.RadiantTeamLogo" width="64" height="64" class="shadow" />
-                                }
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <h4 style="font-weight: 100; margin: 0">
-                                    <i class="fa fa-clock-o"></i>
-                                    <span class="text-muted text-uppercase">Elapsed:</span>
-                                    @liveLeagueGame.ElapsedTime
-                                </h4>
-                            </div>
-                            <div class="col-md-4 text-right">
-                                <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.DireTeamName</h3>
-                                <hr style="margin: 5px 0" />
-                                @if (!String.IsNullOrEmpty(liveLeagueGame.DireTeamLogo))
-                                {
-                                    <img src="@liveLeagueGame.DireTeamLogo" width="64" height="64" class="shadow" />
-                                }
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3 style="margin: 5px 0">@liveLeagueGame.RadiantKillCount <small class="text-muted text-uppercase">kills</small></h3>
-                                @foreach (var player in liveLeagueGame.RadiantPlayers)
-                                {
-                                    <div class="media" style="margin-top: 5px">
-                                        <div class="media-left">
-                                            <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
-                                                {
-                                                    <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
-                                                }
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5 class="media-heading" style="margin: 0">
-                                                @player.PlayerName
-                                            </h5>
-                                            <span class="text-muted pull-right">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
-                                            <small class="text-uppercase text-muted">@player.HeroName</small>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                            <div class="col-md-4 text-center" style="padding: 0">
-                                <div style="position: relative; width: 90%" class="center-block">
-                                    <img src="~/Content/dota_minimap_256.jpg" style="width: 100%" />
-                                    @foreach (var player in liveLeagueGame.DirePlayers)
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.RadiantTeamName</h3>
+                                    <hr style="margin: 5px 0" />
+                                    @if (!String.IsNullOrEmpty(liveLeagueGame.RadiantTeamLogo))
                                     {
-                                        if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
-                                        {
-                                            <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                        }
+                                        <img src="@liveLeagueGame.RadiantTeamLogo" width="64" height="64" class="shadow" />
                                     }
-                                    @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <h4 style="font-weight: 100; margin: 0">
+                                        <i class="fa fa-clock-o"></i>
+                                        <span class="text-muted text-uppercase">Elapsed:</span>
+                                        @liveLeagueGame.ElapsedTime
+                                    </h4>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.DireTeamName</h3>
+                                    <hr style="margin: 5px 0" />
+                                    @if (!String.IsNullOrEmpty(liveLeagueGame.DireTeamLogo))
                                     {
-                                        if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
-                                        {
-                                            <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                        }
+                                        <img src="@liveLeagueGame.DireTeamLogo" width="64" height="64" class="shadow" />
                                     }
                                 </div>
                             </div>
-                            <div class="col-md-4 text-right">
-                                <h3 style="margin: 5px 0">@liveLeagueGame.DireKillCount <small class="text-muted text-uppercase">kills</small></h3>
-                                @foreach (var player in liveLeagueGame.DirePlayers)
-                                {
-                                    <div class="media" style="margin-top: 5px">
-                                        <div class="media-body">
-                                            <h5 class="media-heading" style="margin: 0">
-                                                @player.PlayerName
-                                            </h5>
-                                            <span class="text-muted pull-left">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
-                                            <small class="text-uppercase text-muted">@player.HeroName</small>
-                                        </div>
-                                        <div class="media-right">
-                                            <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
-                                                {
-                                                    <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
-                                                }
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h3 style="margin: 5px 0">@liveLeagueGame.RadiantKillCount <small class="text-muted text-uppercase">kills</small></h3>
+                                    @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                    {
+                                        <div class="media" style="margin-top: 5px">
+                                            <div class="media-left">
+                                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
+                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                                    {
+                                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="media-heading" style="margin: 0">
+                                                    @player.PlayerName
+                                                </h5>
+                                                <span class="text-muted pull-right">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
+                                                <small class="text-uppercase text-muted">@player.HeroName</small>
                                             </div>
                                         </div>
+                                    }
+                                </div>
+                                <div class="col-md-4 text-center" style="padding: 0">
+                                    <div style="position: relative; width: 90%" class="center-block">
+                                        <img src="~/Content/dota_minimap_256.jpg" style="width: 100%" />
+                                        @foreach (var player in liveLeagueGame.DirePlayers)
+                                        {
+                                            if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
+                                            {
+                                                <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                                <div class="minimap-icon-circle minimap-icon-circle-dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                            }
+                                        }
+                                        @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                        {
+                                            if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
+                                            {
+                                                <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                                <div class="minimap-icon-circle minimap-icon-circle-radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                            }
+                                        }
                                     </div>
-                                }
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <h3 style="margin: 5px 0">@liveLeagueGame.DireKillCount <small class="text-muted text-uppercase">kills</small></h3>
+                                    @foreach (var player in liveLeagueGame.DirePlayers)
+                                    {
+                                        <div class="media" style="margin-top: 5px">
+                                            <div class="media-body">
+                                                <h5 class="media-heading" style="margin: 0">
+                                                    @player.PlayerName
+                                                </h5>
+                                                <span class="text-muted pull-left">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
+                                                <small class="text-uppercase text-muted">@player.HeroName</small>
+                                            </div>
+                                            <div class="media-right">
+                                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
+                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                                    {
+                                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         }
     </div>
 </div>

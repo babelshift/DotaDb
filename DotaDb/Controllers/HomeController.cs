@@ -38,6 +38,7 @@ namespace DotaDb.Controllers
             var liveLeagueGameViewModels = liveLeagueGames
                 .Select(x => new LiveLeagueGameOverviewViewModel()
                 {
+                    MatchId = x.MatchId,
                     BestOf = x.BestOf,
                     DireKillCount = x.DireKillCount,
                     DireTeamLogo = x.DireTeamLogo,

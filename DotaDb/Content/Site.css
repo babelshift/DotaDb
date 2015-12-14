@@ -187,3 +187,11 @@ textarea {
     padding: 0;
     width: 32px;
 }
+
+.live-league-game-link, .live-league-game-link:hover, .live-league-game-link:active, .live-league-game-link:visited {
+    color: inherit;
+}
+
+.live-league-game-link .well:hover {
+    background-color: #eee;
+}
