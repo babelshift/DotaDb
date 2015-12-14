@@ -17,12 +17,12 @@
                 <p class="text-uppercase" style="margin: 0">
                     <i class="fa fa-list-alt fa-fw"></i>
                     <span class="text-muted">Tier:</span>
-                    Professional
+                    Unknown
                 </p>
                 <p class="text-uppercase" style="margin: 0">
                     <i class="fa fa-globe fa-fw"></i>
                     <span class="text-muted">Location:</span>
-                    North America
+                    Unknown
                 </p>
             </div>
             <div class="col-md-4 text-center text-uppercase">
@@ -30,15 +30,15 @@
             <div class="col-md-4 text-right text-uppercase">
                 <p style="margin: 0">
                     <span class="text-muted">Lobby ID:</span>
-                    0987654321
+                    @Model.LobbyId
                 </p>
                 <p style="margin: 0">
                     <span class="text-muted">Match ID:</span>
-                    1234567890
+                    @Model.MatchId
                 </p>
                 <p style="margin: 0">
                     <span class="text-muted">Stream Delay:</span>
-                    300 sec
+                    <span class="text-lowercase">@Model.StreamDelay</span>
                 </p>
                 <p style="margin: 0">
                     <i class="fa fa-ticket fa-fw"></i>
@@ -54,7 +54,7 @@
                     <span class="text-muted">
                         Started:
                     </span>
-                    Nov 13, 2015 @@ 16:15
+                    @Model.TimeStarted.ToString("dd MMM yyyy HH:mm:ss")
                 </p>
             </div>
         </div>
@@ -72,7 +72,7 @@
                 <h4 style="margin: 0;">
                     <i class="fa fa-clock-o"></i>
                     <span class="text-muted text-uppercase">Elapsed:</span>
-                    @Model.ElapsedTime
+                    @Model.ElapsedTimeDisplay
                 </h4>
             </div>
             <div class="col-md-4 text-right">
@@ -91,7 +91,7 @@
                         </h4>
                         <div class="pull-left text-right" style="margin: 9px 5px 0 0; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
-                            <h4 style="margin: 0;">13</h4>
+                            <h4 style="margin: 0;">@player.Level</h4>
                         </div>
                         <div class="media" style="margin-top: 5px">
                             <div class="media-left">
@@ -116,25 +116,26 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-6 live-game-items">
-                                        <div class="thumbnail pull-right">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail pull-right">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail pull-right">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="thumbnail pull-right">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail pull-right">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail pull-right">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
+                                        @for (int i = 0; i < player.Items.Count; i++)
+                                        {
+                                            // after the third item we need to clear because the items should be arranged like so:
+                                            // [item1][item2][item3]
+                                            // [item4][item5][item6]
+                                            if (i == 3)
+                                            {
+                                                <div class="clearfix"></div>
+                                            }
+                                            <div class="thumbnail pull-right">
+                                                @if (player.Items[i] != null)
+                                                {
+                                                    <img src="@player.Items[i].IconPath" title="@player.Items[i].Name" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Url.Content("~/Content/icons/items/base_lg.png")" title="Empty or unknown" />
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -162,12 +163,22 @@
                 </div>
                 <div class="text-center">
                     <h5 style="margin-bottom: 0" class="text-uppercase">
-                        <span class="text-muted">Roshan Status:</span>
-                        <span class="text-danger">
-                            <i class="fa fa-remove"></i>
-                            Dead
-                        </span>
-                        <span class="text-lowercase">(3m 22s)</span>
+                        <span class="text-muted">Roshan:</span>
+                        @if (Model.IsRoshanAlive)
+                        {
+                            <span class="text-success">
+                                <i class="fa fa-check"></i>
+                                Alive
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">
+                                <i class="fa fa-remove"></i>
+                                Dead
+                            </span>
+                            <span class="text-lowercase">(@Model.RoshanRespawnTimer)</span>
+                        }
                     </h5>
                 </div>
                 <hr style="margin: 5px 0" />
@@ -175,26 +186,26 @@
                     Total Worth:
                 </h5>
                 <div class="progress" style="margin-bottom: 5px">
-                    <div class="progress-bar progress-bar-success" style="width: 66.6%">
-                        <span class="sr-only">66%</span>
-                        7213
+                    <div class="progress-bar progress-bar-success" style="width: @Model.RadiantTotalWorthPercent%">
+                        <span class="sr-only">@String.Format("{0}%", Model.RadiantTotalWorthPercent)</span>
+                        @Model.RadiantTotalWorth.ToString("N0")
                     </div>
-                    <div class="progress-bar progress-bar-danger" style="width: 33.3%">
-                        <span class="sr-only">33%</span>
-                        3122
+                    <div class="progress-bar progress-bar-danger" style="width: @Model.DireTotalWorthPercent%">
+                        <span class="sr-only">@String.Format("{0}%", Model.DireTotalWorthPercent)</span>
+                        @Model.DireTotalWorth.ToString("N0")
                     </div>
                 </div>
                 <h5 style="margin: 0" class="text-uppercase text-muted">
                     Total XP:
                 </h5>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-success" style="width: 55%">
-                        <span class="sr-only">66%</span>
-                        12456
+                    <div class="progress-bar progress-bar-success" style="width: @Model.RadiantTotalExperiencePercent%">
+                        <span class="sr-only">@String.Format("{0}%", Model.RadiantTotalExperiencePercent)</span>
+                        @Model.RadiantTotalExperience.ToString("N0")
                     </div>
-                    <div class="progress-bar progress-bar-danger" style="width: 45%">
-                        <span class="sr-only">33%</span>
-                        12322
+                    <div class="progress-bar progress-bar-danger" style="width: @Model.DireTotalExperiencePercent%">
+                        <span class="sr-only">@String.Format("{0}%", Model.DireTotalExperiencePercent)</span>
+                        @Model.DireTotalExperience.ToString("N0")
                     </div>
                 </div>
             </div>
@@ -209,31 +220,32 @@
                         </h4>
                         <div class="pull-right text-left" style="margin: 9px 0 0 5px; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
-                            <h4 style="margin: 0;">13</h4>
+                            <h4 style="margin: 0;">@player.Level</h4>
                         </div>
                         <div class="media" style="margin-top: 5px">
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-md-6 live-game-items">
-                                        <div class="thumbnail">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="thumbnail">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
-                                        <div class="thumbnail">
-                                            <img src="http://cdn.dota2.com/apps/dota2/images/items/blink_lg.png" />
-                                        </div>
+                                        @for (int i = 0; i < player.Items.Count; i++)
+                                        {
+                                            // after the third item we need to clear because the items should be arranged like so:
+                                            // [item1][item2][item3]
+                                            // [item4][item5][item6]
+                                            if (i == 3)
+                                            {
+                                                <div class="clearfix"></div>
+                                            }
+                                            <div class="thumbnail pull-right">
+                                                @if (player.Items[i] != null)
+                                                {
+                                                    <img src="@player.Items[i].IconPath" title="@player.Items[i].Name" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Url.Content("~/Content/icons/items/base_lg.png")" title="Empty or unknown" />
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                     <div class="col-md-6">
                                         <h4 style="margin: 0">

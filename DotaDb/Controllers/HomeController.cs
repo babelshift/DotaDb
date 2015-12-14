@@ -42,7 +42,7 @@ namespace DotaDb.Controllers
                     DireKillCount = x.DireKillCount,
                     DireTeamLogo = x.DireTeamLogo,
                     DireTeamName = x.DireTeamName,
-                    ElapsedTime = x.ElapsedTime,
+                    ElapsedTime = x.ElapsedTimeDisplay,
                     GameNumber = x.GameNumber,
                     LeagueLogoPath = x.LeagueLogoPath,
                     LeagueName = x.LeagueName,

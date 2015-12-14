@@ -272,6 +272,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\InMemoryDb.cs" />
+    <Compile Include="Models\LiveLeagueGameItemModel.cs" />
     <Compile Include="Models\LiveLeagueGamePlayerModel.cs" />
     <Compile Include="Models\LiveLeagueGameModel.cs" />
     <Compile Include="Models\MemoryCacheKey.cs" />
@@ -279,7 +280,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\DotaLeagueExtensions.cs" />
+    <Compile Include="Utilities\GameItemExtensions.cs" />
     <Compile Include="Utilities\HtmlHelperExtensions.cs" />
+    <Compile Include="Utilities\HeroExperience.cs" />
     <Compile Include="Utilities\LiveLeagueGamePlayerExtensions.cs" />
     <Compile Include="Utilities\LogHelper.cs" />
     <Compile Include="ViewModels\BaseHeroViewModel.cs" />
@@ -296,6 +299,7 @@
     <Compile Include="ViewModels\LeagueViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameOverviewViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameDetailViewModel.cs" />
+    <Compile Include="ViewModels\LiveLeagueGameItemViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGamePlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +318,7 @@
     <Content Include="Content\dota_minimap_help.jpg" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\icons\heroes\base_lg.png" />
+    <Content Include="Content\icons\items\base_lg.png" />
     <Content Include="Content\icon_agi.png" />
     <Content Include="Content\icon_atk.png" />
     <Content Include="Content\icon_def.png" />

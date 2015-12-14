@@ -509,7 +509,8 @@ namespace DotaDb.Models
                     DireKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.Score : 0,
                     RadiantKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Radiant != null) ? liveLeagueGame.Scoreboard.Radiant.Score : 0,
                     GameNumber = liveLeagueGame.RadiantSeriesWins + liveLeagueGame.DireSeriesWins + 1,
-                    ElapsedTime = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
+                    ElapsedTime = liveLeagueGame.Scoreboard != null ? liveLeagueGame.Scoreboard.Duration : 0,
+                    ElapsedTimeDisplay = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
                     DireTeamName = liveLeagueGame.DireTeam != null ? liveLeagueGame.DireTeam.TeamName : "Dire",
                     RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
                     SeriesStatus = String.Format("{0} - {1}", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins),
@@ -633,11 +634,15 @@ namespace DotaDb.Models
                 DireKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.Score : 0,
                 RadiantKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Radiant != null) ? liveLeagueGame.Scoreboard.Radiant.Score : 0,
                 GameNumber = liveLeagueGame.RadiantSeriesWins + liveLeagueGame.DireSeriesWins + 1,
-                ElapsedTime = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
+                ElapsedTimeDisplay = liveLeagueGame.Scoreboard != null ? GetElapsedTime(liveLeagueGame.Scoreboard.Duration) : "Unknown",
                 DireTeamName = liveLeagueGame.DireTeam != null ? liveLeagueGame.DireTeam.TeamName : "Dire",
                 RadiantTeamName = liveLeagueGame.RadiantTeam != null ? liveLeagueGame.RadiantTeam.TeamName : "Radiant",
                 SeriesStatus = String.Format("{0} - {1}", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins),
-                SpectatorCount = liveLeagueGame.Spectators
+                SpectatorCount = liveLeagueGame.Spectators,
+                RoshanRespawnTimer = liveLeagueGame.Scoreboard != null ? liveLeagueGame.Scoreboard.RoshanRespawnTimer : 0,
+                LobbyId = liveLeagueGame.LobbyId,
+                MatchId = liveLeagueGame.MatchId,
+                StreamDelay = liveLeagueGame.StreamDelaySeconds
             };
 
             #region Fill in Player Details
@@ -686,6 +691,55 @@ namespace DotaDb.Models
                     player.AssistCount = playerDetail.Assists;
                     player.PositionX = playerDetail.PositionX;
                     player.PositionY = playerDetail.PositionY;
+                    player.Denies = playerDetail.Denies;
+                    player.LastHits = playerDetail.LastHits;
+                    player.Gold = playerDetail.Gold;
+                    player.GoldPerMinute = playerDetail.GoldPerMinute;
+                    player.XpPerMinute = playerDetail.ExperiencePerMinute;
+                    player.UltimateCooldown = playerDetail.UltimateCooldown;
+                    player.UltimateState = playerDetail.UltimateState;
+                    player.RespawnTimer = playerDetail.RespawnTimer;
+                    player.AccountId = playerDetail.AccountId;
+                    player.Level = playerDetail.Level;
+                    player.NetWorth = playerDetail.NetWorth;
+                }
+
+                var items = await GetGameItemsAsync();
+
+                var item0 = items.FirstOrDefault(x => x.Id == playerDetail.Item0);
+                if (item0 != null)
+                {
+                    player.Item0 = new LiveLeagueGameItemModel() { Id = item0.Id, Name = item0.Name, IconFileName = item0.GetIconPath() };
+                }
+
+                var item1 = items.FirstOrDefault(x => x.Id == playerDetail.Item1);
+                if (item1 != null)
+                {
+                    player.Item1 = new LiveLeagueGameItemModel() { Id = item1.Id, Name = item1.Name, IconFileName = item1.GetIconPath() };
+                }
+
+                var item2 = items.FirstOrDefault(x => x.Id == playerDetail.Item2);
+                if (item2 != null)
+                {
+                    player.Item2 = new LiveLeagueGameItemModel() { Id = item2.Id, Name = item2.Name, IconFileName = item2.GetIconPath() };
+                }
+
+                var item3 = items.FirstOrDefault(x => x.Id == playerDetail.Item3);
+                if (item3 != null)
+                {
+                    player.Item3 = new LiveLeagueGameItemModel() { Id = item3.Id, Name = item3.Name, IconFileName = item3.GetIconPath() };
+                }
+
+                var item4 = items.FirstOrDefault(x => x.Id == playerDetail.Item4);
+                if (item4 != null)
+                {
+                    player.Item4 = new LiveLeagueGameItemModel() { Id = item4.Id, Name = item4.Name, IconFileName = item4.GetIconPath() };
+                }
+
+                var item5 = items.FirstOrDefault(x => x.Id == playerDetail.Item5);
+                if (item5 != null)
+                {
+                    player.Item5 = new LiveLeagueGameItemModel() { Id = item5.Id, Name = item5.Name, IconFileName = item5.GetIconPath() };
                 }
 
                 player.HeroUrl = hero.Url;
