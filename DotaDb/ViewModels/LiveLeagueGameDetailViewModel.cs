@@ -94,5 +94,10 @@ namespace DotaDb.ViewModels
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> RadiantPlayers { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> DirePlayers { get; set; }
         public double ElapsedTime { get; internal set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> RadiantPickedHeroes { get; set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> RadiantBannedHeroes { get; set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> DirePickedHeroes { get; set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> DireBannedHeroes { get; set; }
+
     }
 }

@@ -192,6 +192,44 @@ textarea {
     color: inherit;
 }
 
-.live-league-game-link .well:hover {
-    background-color: #eee;
+    .live-league-game-link .well:hover {
+        background-color: #eee;
+    }
+
+.picks-and-bans .col-xs-1, .picks-and-bans .col-md-7, .picks-and-bans .col-md-5 {
+    padding: 0 1px;
+}
+
+.picks-and-bans .thumbnail {
+    padding: 2px;
+    margin: 0;
+    width: 100%;
+}
+
+.picks-and-bans .radiant {
+    margin: 0;
+    background-color: rgb(0, 144, 19);
+    width: 100%;
+}
+
+.picks-and-bans .dire {
+    margin: 0;
+    background-color: rgb(202, 0, 0);
+    width: 100%;
+}
+
+.picks-and-bans .ban {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+}
+
+.picks-and-bans .row {
+    margin: 1px 0;
 }

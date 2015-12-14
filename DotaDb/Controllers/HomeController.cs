@@ -58,7 +58,7 @@ namespace DotaDb.Controllers
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
                             HeroName = y.HeroName,
-                            HeroAvatarFileName = y.HeroAvatarImageFileName,
+                            HeroAvatarFilePath = y.HeroAvatarImageFilePath,
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,
@@ -76,7 +76,7 @@ namespace DotaDb.Controllers
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
                             HeroName = y.HeroName,
-                            HeroAvatarFileName = y.HeroAvatarImageFileName,
+                            HeroAvatarFilePath = y.HeroAvatarImageFilePath,
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,

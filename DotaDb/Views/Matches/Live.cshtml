@@ -6,7 +6,7 @@
 }
 
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-10 col-md-offset-1">
         <ol class="breadcrumb">
             <li><a href="@Url.Action("index", "matches")">Matches</a></li>
             <li><a href="@Url.Action("live", "matches")">Live League Games</a></li>
@@ -15,9 +15,9 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-10 col-md-offset-1">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h4 style="margin: 0">@Model.LeagueName</h4>
                 <div class="thumbnail" style="margin: 0; border: 0; width: 100px">
                     <img src="@Model.LeagueLogoPath" class="shadow" />
@@ -33,9 +33,65 @@
                     Unknown
                 </p>
             </div>
-            <div class="col-md-4 text-center text-uppercase">
+            <div class="col-md-6 text-uppercase picks-and-bans">
+                <div class="row">
+                    <div class="col-md-7 text-uppercase text-muted">
+                        Radiant Picks
+                    </div>
+                    <div class="col-md-5 text-uppercase text-muted">
+                        Dire Picks
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var hero in Model.RadiantPickedHeroes)
+                    {
+                        <div class="col-xs-1">
+                            <div class="thumbnail radiant">
+                                <img src="@hero.AvatarImagePath" />
+                            </div>
+                        </div>
+                    }
+                    <div class="col-xs-2"></div>
+                    @foreach (var hero in Model.DirePickedHeroes)
+                    {
+                        <div class="col-xs-1">
+                            <div class="thumbnail dire">
+                                <img src="@hero.AvatarImagePath" />
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-md-7 text-uppercase text-muted">
+                        Radiant Bans
+                    </div>
+                    <div class="col-md-5 text-uppercase text-muted">
+                        Dire Bans
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var hero in Model.RadiantBannedHeroes)
+                    {
+                        <div class="col-xs-1 text-right">
+                            <div class="thumbnail radiant">
+                                <img src="@hero.AvatarImagePath" />
+                            </div>
+                            <i class="fa fa-ban fa-2x text-danger ban"></i>
+                        </div>
+                    }
+                    <div class="col-xs-2"></div>
+                    @foreach (var hero in Model.DireBannedHeroes)
+                    {
+                        <div class="col-xs-1">
+                            <div class="thumbnail dire">
+                                <img src="@hero.AvatarImagePath" />
+                            </div>
+                            <i class="fa fa-ban fa-2x text-danger ban"></i>
+                        </div>
+                    }
+                </div>
             </div>
-            <div class="col-md-4 text-right text-uppercase">
+            <div class="col-md-3 text-right text-uppercase">
                 <p style="margin: 0">
                     <span class="text-muted">Lobby ID:</span>
                     @Model.LobbyId
@@ -113,14 +169,14 @@
                         <div class="media" style="margin-top: 5px">
                             <div class="media-left">
                                 <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
-                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                     {
                                         <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
                                     }
                                     else
                                     {
                                         <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
-                                            <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                            <img src="@player.HeroAvatarFilePath" class="shadow" />
                                         </a>
                                     }
                                 </div>
@@ -307,14 +363,14 @@
                             </div>
                             <div class="media-right">
                                 <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
-                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                     {
                                         <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
                                     }
                                     else
                                     {
                                         <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
-                                            <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                            <img src="@player.HeroAvatarFilePath" class="shadow" />
                                         </a>
                                     }
                                 </div>

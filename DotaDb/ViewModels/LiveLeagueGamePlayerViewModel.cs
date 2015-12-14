@@ -10,7 +10,7 @@ namespace DotaDb.ViewModels
         public string PlayerName { get; set; }
         public int HeroId { get; set; }
         public string HeroName { get; set; }
-        public string HeroAvatarFileName { get; set; }
+        public string HeroAvatarFilePath { get; set; }
         public int KillCount { get; set; }
         public int DeathCount { get; set; }
         public int AssistCount { get; set; }

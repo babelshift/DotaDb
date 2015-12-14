@@ -27,5 +27,9 @@ namespace DotaDb.Models
         public double StreamDelay { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerModel> Players { get; set; }
         public double ElapsedTime { get; internal set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroModel> RadiantPicks { get; set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroModel> DirePicks { get; set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroModel> RadiantBans { get; set; }
+        public IReadOnlyCollection<LiveLeagueGameHeroModel> DireBans { get; set; }
     }
 }

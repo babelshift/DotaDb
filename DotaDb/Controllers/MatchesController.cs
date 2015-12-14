@@ -41,13 +41,49 @@ namespace DotaDb.Controllers
                 IsRoshanAlive = liveLeagueGame.RoshanRespawnTimer == 0 ? true : false,
                 LobbyId = liveLeagueGame.LobbyId,
                 MatchId = liveLeagueGame.MatchId,
+                RadiantPickedHeroes = liveLeagueGame.RadiantPicks
+                    .Select(x => new LiveLeagueGameHeroViewModel()
+                    {
+                        Id = x.Id,
+                        AvatarImagePath = x.AvatarImagePath,
+                        Name = x.Name
+                    })
+                    .ToList()
+                    .AsReadOnly(),
+                RadiantBannedHeroes = liveLeagueGame.RadiantBans
+                    .Select(x => new LiveLeagueGameHeroViewModel()
+                    {
+                        Id = x.Id,
+                        AvatarImagePath = x.AvatarImagePath,
+                        Name = x.Name
+                    })
+                    .ToList()
+                    .AsReadOnly(),
+                DirePickedHeroes = liveLeagueGame.DirePicks
+                    .Select(x => new LiveLeagueGameHeroViewModel()
+                    {
+                        Id = x.Id,
+                        AvatarImagePath = x.AvatarImagePath,
+                        Name = x.Name
+                    })
+                    .ToList()
+                    .AsReadOnly(),
+                DireBannedHeroes = liveLeagueGame.DireBans
+                    .Select(x => new LiveLeagueGameHeroViewModel()
+                    {
+                        Id = x.Id,
+                        AvatarImagePath = x.AvatarImagePath,
+                        Name = x.Name
+                    })
+                    .ToList()
+                    .AsReadOnly(),
                 DirePlayers = liveLeagueGame.Players
                         .Where(y => y.Team == 1)
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
                             HeroId = y.HeroId,
                             HeroName = y.HeroName,
-                            HeroAvatarFileName = y.HeroAvatarImageFileName,
+                            HeroAvatarFilePath = y.HeroAvatarImageFilePath,
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,
@@ -86,7 +122,7 @@ namespace DotaDb.Controllers
                         {
                             HeroId = y.HeroId,
                             HeroName = y.HeroName,
-                            HeroAvatarFileName = y.HeroAvatarImageFileName,
+                            HeroAvatarFilePath = y.HeroAvatarImageFilePath,
                             PlayerName = y.Name,
                             DeathCount = y.DeathCount,
                             KillCount = y.KillCount,

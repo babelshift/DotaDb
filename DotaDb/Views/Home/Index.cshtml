@@ -141,13 +141,13 @@
                                         <div class="media" style="margin-top: 5px">
                                             <div class="media-left">
                                                 <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                                     {
                                                         <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
                                                     }
                                                     else
                                                     {
-                                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                                        <img src="@player.HeroAvatarFilePath" class="shadow" />
                                                     }
                                                 </div>
                                             </div>
@@ -196,13 +196,13 @@
                                             </div>
                                             <div class="media-right">
                                                 <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFileName))
+                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                                     {
                                                         <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
                                                     }
                                                     else
                                                     {
-                                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                                        <img src="@player.HeroAvatarFilePath" class="shadow" />
                                                     }
                                                 </div>
                                             </div>

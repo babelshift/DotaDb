@@ -553,7 +553,7 @@ namespace DotaDb.Models
                     var hero = await GetHeroKeyValueAsync(player.HeroId);
 
                     player.HeroName = await GetLocalizationTextAsync(hero.Name);
-                    player.HeroAvatarImageFileName = GetHeroAvatarFileName(hero.Name);
+                    player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
 
                     LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
@@ -611,6 +611,79 @@ namespace DotaDb.Models
             return liveLeagueGameModels.AsReadOnly();
         }
 
+        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetPicks(LiveLeagueGame game, int team)
+        {
+            List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
+            var heroes = await GetHeroesAsync();
+
+            if (team == 0)
+            {
+                if(game.Scoreboard != null && game.Scoreboard.Radiant != null && game.Scoreboard.Radiant.Picks != null)
+                {
+                    foreach(var pickedHeroItem in game.Scoreboard.Radiant.Picks)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+            else
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Dire != null && game.Scoreboard.Dire.Picks != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Dire.Picks)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+
+            return selectedHeroes.AsReadOnly();
+        }
+
+        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetBans(LiveLeagueGame game, int team)
+        {
+            List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
+            var heroes = await GetHeroesAsync();
+
+            if (team == 0)
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Radiant != null && game.Scoreboard.Radiant.Bans != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Radiant.Bans)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+            else
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Dire != null && game.Scoreboard.Dire.Bans != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Dire.Bans)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+
+            return selectedHeroes.AsReadOnly();
+        }
+
+        private LiveLeagueGameHeroModel GetHero(IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes, int heroId)
+        {
+            var pickedHero = GetKeyValue(heroId, heroes);
+            return new LiveLeagueGameHeroModel()
+            {
+                Id = heroId,
+                Name = pickedHero.Name,
+                AvatarImagePath = pickedHero.GetAvatarImageFilePath()
+            };
+        }
+
         public async Task<LiveLeagueGameModel> GetLiveLeagueGameAsync(long matchId)
         {
             #region Get/Add From/To Cache
@@ -645,7 +718,11 @@ namespace DotaDb.Models
                 RoshanRespawnTimer = liveLeagueGame.Scoreboard != null ? liveLeagueGame.Scoreboard.RoshanRespawnTimer : 0,
                 LobbyId = liveLeagueGame.LobbyId,
                 MatchId = liveLeagueGame.MatchId,
-                StreamDelay = liveLeagueGame.StreamDelaySeconds
+                StreamDelay = liveLeagueGame.StreamDelaySeconds,
+                RadiantPicks = await GetPicks(liveLeagueGame, 0),
+                DirePicks = await GetPicks(liveLeagueGame, 1),
+                RadiantBans = await GetBans(liveLeagueGame, 0),
+                DireBans = await GetBans(liveLeagueGame, 1)
             };
 
             #region Fill in Player Details
@@ -682,7 +759,7 @@ namespace DotaDb.Models
                 var hero = await GetHeroKeyValueAsync(player.HeroId);
 
                 player.HeroName = await GetLocalizationTextAsync(hero.Name);
-                player.HeroAvatarImageFileName = GetHeroAvatarFileName(hero.Name);
+                player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
 
                 LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
@@ -784,19 +861,6 @@ namespace DotaDb.Models
             #endregion Fill in League/Team Details
 
             return liveLeagueGameModel;
-        }
-
-        private static string GetHeroAvatarFileName(string heroName)
-        {
-            // if the player hasn't picked a hero yet, the 'base' hero will be shown, which basically is 'unknown'
-            if (heroName == "npc_dota_hero_base")
-            {
-                return String.Empty;
-            }
-            else
-            {
-                return heroName.Replace("npc_dota_hero_", "");
-            }
         }
 
         private static LiveLeagueGamePlayerDetail GetPlayerDetail(int playerTeam, int playerAccountId, Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail, Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail)

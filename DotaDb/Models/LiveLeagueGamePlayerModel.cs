@@ -11,7 +11,7 @@ namespace DotaDb.Models
         public string Name { get; set; }
         public int HeroId { get; set; }
         public string HeroName { get; set; }
-        public string HeroAvatarImageFileName { get; set; }
+        public string HeroAvatarImageFilePath { get; set; }
         public int Team { get; set; }
         public int KillCount { get; set; }
         public int DeathCount { get; set; }
