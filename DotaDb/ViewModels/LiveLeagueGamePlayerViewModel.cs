@@ -8,6 +8,7 @@ namespace DotaDb.ViewModels
         public int PlayerSlot { get; set; }
         public int AccountId { get; set; }
         public string PlayerName { get; set; }
+        public int HeroId { get; set; }
         public string HeroName { get; set; }
         public string HeroAvatarFileName { get; set; }
         public int KillCount { get; set; }

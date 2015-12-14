@@ -45,6 +45,7 @@ namespace DotaDb.Controllers
                         .Where(y => y.Team == 1)
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
+                            HeroId = y.HeroId,
                             HeroName = y.HeroName,
                             HeroAvatarFileName = y.HeroAvatarImageFileName,
                             PlayerName = y.Name,
@@ -83,6 +84,7 @@ namespace DotaDb.Controllers
                         .Where(y => y.Team == 0)
                         .Select(y => new LiveLeagueGamePlayerViewModel()
                         {
+                            HeroId = y.HeroId,
                             HeroName = y.HeroName,
                             HeroAvatarFileName = y.HeroAvatarImageFileName,
                             PlayerName = y.Name,

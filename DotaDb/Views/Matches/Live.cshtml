@@ -102,7 +102,9 @@
                     <div class="well well-sm" style="padding: 5px; margin-bottom: 10px">
                         <h4 class="media-heading" style="margin: 0">
                             @player.PlayerName
-                            <small class="text-uppercase text-muted">@player.HeroName</small>
+                            <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
+                                <small class="text-uppercase text-muted">@player.HeroName</small>
+                            </a>
                         </h4>
                         <div class="pull-left text-right" style="margin: 9px 5px 0 0; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
@@ -117,7 +119,9 @@
                                     }
                                     else
                                     {
-                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                        <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
+                                            <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                        </a>
                                     }
                                 </div>
                             </div>
@@ -153,6 +157,33 @@
                                         }
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <hr style="margin: 5px 0" />
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">Gold:</span>
+                                    @player.Gold
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">Worth:</span>
+                                    @player.NetWorth
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">GPM:</span>
+                                    @player.GoldPerMinute
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">XPM:</span>
+                                    @player.XpPerMinute
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -226,14 +257,15 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4 text-right">
                 @foreach (var player in Model.DirePlayers)
                 {
                     <div class="well well-sm" style="padding: 5px; margin-bottom: 10px">
                         <h4 class="media-heading" style="margin: 0">
                             @player.PlayerName
-                            <small class="text-uppercase text-muted">@player.HeroName</small>
+                            <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
+                                <small class="text-uppercase text-muted">@player.HeroName</small>
+                            </a>
                         </h4>
                         <div class="pull-right text-left" style="margin: 9px 0 0 5px; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
@@ -281,9 +313,38 @@
                                     }
                                     else
                                     {
-                                        <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                        <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
+                                            <img src="@String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_lg.png", player.HeroAvatarFileName)" class="shadow" />
+                                        </a>
                                     }
                                 </div>
+                            </div>
+                        </div>
+                        <hr style="margin: 5px 0" />
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">Gold:</span>
+                                    @player.Gold
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">Worth:</span>
+                                    @player.NetWorth
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">GPM:</span>
+                                    @player.GoldPerMinute
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <small>
+                                    <span class="text-muted text-uppercase">XPM:</span>
+                                    @player.XpPerMinute
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -320,7 +381,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var player in Model.RadiantPlayers)
+                    @foreach (var player in Model.RadiantPlayers)
                     {
                         <tr class="success">
                             <td>
