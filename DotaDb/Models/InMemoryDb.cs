@@ -680,7 +680,8 @@ namespace DotaDb.Models
             {
                 Id = heroId,
                 Name = pickedHero.Name,
-                AvatarImagePath = pickedHero.GetAvatarImageFilePath()
+                AvatarImagePath = pickedHero.GetAvatarImageFilePath(),
+                Url = pickedHero.Url
             };
         }
 

@@ -46,18 +46,22 @@
                     @foreach (var hero in Model.RadiantPickedHeroes)
                     {
                         <div class="col-xs-1">
-                            <div class="thumbnail radiant">
-                                <img src="@hero.AvatarImagePath" />
-                            </div>
+                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
+                                <div class="thumbnail radiant">
+                                    <img src="@hero.AvatarImagePath" />
+                                </div>
+                            </a>
                         </div>
                     }
                     <div class="col-xs-2"></div>
                     @foreach (var hero in Model.DirePickedHeroes)
                     {
                         <div class="col-xs-1">
-                            <div class="thumbnail dire">
-                                <img src="@hero.AvatarImagePath" />
-                            </div>
+                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
+                                <div class="thumbnail dire">
+                                    <img src="@hero.AvatarImagePath" />
+                                </div>
+                            </a>
                         </div>
                     }
                 </div>
@@ -73,20 +77,24 @@
                     @foreach (var hero in Model.RadiantBannedHeroes)
                     {
                         <div class="col-xs-1 text-right">
-                            <div class="thumbnail radiant">
-                                <img src="@hero.AvatarImagePath" />
-                            </div>
-                            <i class="fa fa-ban fa-2x text-danger ban"></i>
+                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
+                                <div class="thumbnail radiant">
+                                    <img src="@hero.AvatarImagePath" />
+                                </div>
+                                <i class="fa fa-ban fa-2x text-danger ban"></i>
+                            </a>
                         </div>
                     }
                     <div class="col-xs-2"></div>
                     @foreach (var hero in Model.DireBannedHeroes)
                     {
                         <div class="col-xs-1">
-                            <div class="thumbnail dire">
-                                <img src="@hero.AvatarImagePath" />
-                            </div>
-                            <i class="fa fa-ban fa-2x text-danger ban"></i>
+                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
+                                <div class="thumbnail dire">
+                                    <img src="@hero.AvatarImagePath" />
+                                </div>
+                                <i class="fa fa-ban fa-2x text-danger ban"></i>
+                            </a>
                         </div>
                     }
                 </div>

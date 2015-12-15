@@ -46,7 +46,8 @@ namespace DotaDb.Controllers
                     {
                         Id = x.Id,
                         AvatarImagePath = x.AvatarImagePath,
-                        Name = x.Name
+                        Name = x.Name,
+                        Url = x.Url
                     })
                     .ToList()
                     .AsReadOnly(),
@@ -55,7 +56,8 @@ namespace DotaDb.Controllers
                     {
                         Id = x.Id,
                         AvatarImagePath = x.AvatarImagePath,
-                        Name = x.Name
+                        Name = x.Name,
+                        Url = x.Url
                     })
                     .ToList()
                     .AsReadOnly(),
@@ -64,7 +66,8 @@ namespace DotaDb.Controllers
                     {
                         Id = x.Id,
                         AvatarImagePath = x.AvatarImagePath,
-                        Name = x.Name
+                        Name = x.Name,
+                        Url = x.Url
                     })
                     .ToList()
                     .AsReadOnly(),
@@ -73,7 +76,8 @@ namespace DotaDb.Controllers
                     {
                         Id = x.Id,
                         AvatarImagePath = x.AvatarImagePath,
-                        Name = x.Name
+                        Name = x.Name,
+                        Url = x.Url
                     })
                     .ToList()
                     .AsReadOnly(),
