@@ -233,3 +233,52 @@ textarea {
 .picks-and-bans .row {
     margin: 1px 0;
 }
+
+.live-league-game-list .league-logo {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 150px;
+}
+
+.live-league-game-list .teams {
+    margin: 3px 0;
+}
+
+.live-league-game-list .stats {
+    line-height: 15px;
+}
+
+.live-league-game-list .media-heading {
+    margin: 0;
+}
+
+.live-league-game-list .hero {
+    padding: 5px;
+}
+
+    .live-league-game-list .hero .team {
+        margin: 0;
+    }
+
+    .live-league-game-list .hero .kills {
+        margin: 7px 0 0 0;
+    }
+
+    .live-league-game-list .hero .avatar {
+        margin: 0;
+        padding: 0;
+        border: 3px solid;
+    }
+    
+    .live-league-game-list .hero .avatar.radiant {
+        border-color: #28B62C;
+    }
+
+    .live-league-game-list .hero .avatar.dire {
+        border-color: #FF4136;
+    }
+
+.live-league-game-list .radiant-hero-list {
+    margin-bottom: 10px;
+}

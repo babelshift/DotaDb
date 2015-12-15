@@ -300,6 +300,7 @@
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LeagueViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameHeroViewModel.cs" />
+    <Compile Include="ViewModels\LiveLeagueGameListItemViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameOverviewViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameDetailViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameItemViewModel.cs" />
@@ -403,6 +404,7 @@
     <Content Include="Views\Heroes\IndexTable.cshtml" />
     <Content Include="Views\Heroes\_HeroTableRowPartial.cshtml" />
     <Content Include="Views\Matches\Live.cshtml" />
+    <Content Include="Views\Matches\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

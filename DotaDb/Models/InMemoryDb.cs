@@ -483,7 +483,7 @@ namespace DotaDb.Models
             return liveLeagueGames.Count;
         }
 
-        public async Task<IReadOnlyCollection<LiveLeagueGameModel>> GetLiveLeagueGamesAsync(int takeAmount)
+        public async Task<IReadOnlyCollection<LiveLeagueGameModel>> GetLiveLeagueGamesAsync(int? takeAmount = null)
         {
             #region Get/Add From/To Cache
 
@@ -497,7 +497,12 @@ namespace DotaDb.Models
 
             var filteredLiveLeagueGames = liveLeagueGames
                 .OrderByDescending(x => x.Spectators)
-                .Take(takeAmount);
+                .AsEnumerable();
+
+            if(takeAmount.HasValue)
+            {
+                filteredLiveLeagueGames = filteredLiveLeagueGames.Take(takeAmount.Value);
+            }
 
             List<LiveLeagueGameModel> liveLeagueGameModels = new List<LiveLeagueGameModel>();
 
@@ -565,6 +570,8 @@ namespace DotaDb.Models
                         player.AssistCount = playerDetail.Assists;
                         player.PositionX = playerDetail.PositionX;
                         player.PositionY = playerDetail.PositionY;
+                        player.NetWorth = playerDetail.NetWorth;
+                        player.Level = playerDetail.Level;
                     }
 
                     player.HeroUrl = hero.Url;

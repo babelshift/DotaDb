@@ -6,12 +6,68 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using PagedList;
 
 namespace DotaDb.Controllers
 {
     public class MatchesController : Controller
     {
         private InMemoryDb db = InMemoryDb.Instance;
+
+        public async Task<ActionResult> Index(int? page)
+        {
+            var liveLeagueGames = await db.GetLiveLeagueGamesAsync();
+
+            var liveLeagueGameViewModels = liveLeagueGames
+                .Select(x => new LiveLeagueGameListItemViewModel()
+                {
+                    MatchId = x.MatchId,
+                    BestOf = x.BestOf,
+                    DireKillCount = x.DireKillCount,
+                    DireTeamName = x.DireTeamName,
+                    ElapsedTime = x.ElapsedTimeDisplay,
+                    LeagueLogoPath = x.LeagueLogoPath,
+                    LeagueName = x.LeagueName,
+                    RadiantKillCount = x.RadiantKillCount,
+                    RadiantTeamName = x.RadiantTeamName,
+                    RadiantSeriesWins = x.RadiantSeriesWins,
+                    DireSeriesWins = x.DireSeriesWins,
+                    SpectatorCount = x.SpectatorCount,
+                    DirePlayers = x.Players
+                        .Where(y => y.Team == 1)
+                        .Select(y => new LiveLeagueGamePlayerViewModel()
+                        {
+                            HeroId = y.HeroId,
+                            HeroName = y.HeroName,
+                            HeroAvatarFilePath = y.HeroAvatarImageFilePath,
+                            PlayerName = y.Name,
+                            AccountId = y.AccountId,
+                            NetWorth = y.NetWorth,
+                            Level = y.Level,
+                            MinimapIconFilePath = y.GetMinimapIconFilePath()
+                        })
+                        .ToList()
+                        .AsReadOnly(),
+                    RadiantPlayers = x.Players
+                        .Where(y => y.Team == 0)
+                        .Select(y => new LiveLeagueGamePlayerViewModel()
+                        {
+                            HeroId = y.HeroId,
+                            HeroName = y.HeroName,
+                            HeroAvatarFilePath = y.HeroAvatarImageFilePath,
+                            PlayerName = y.Name,
+                            AccountId = y.AccountId,
+                            NetWorth = y.NetWorth,
+                            Level = y.Level,
+                            MinimapIconFilePath = y.GetMinimapIconFilePath()
+                        })
+                        .ToList()
+                        .AsReadOnly()
+                })
+                .ToPagedList(page ?? 1, 25);
+
+            return View(liveLeagueGameViewModels);
+        }
 
         public async Task<ActionResult> Live(long id)
         {
