@@ -97,6 +97,8 @@ namespace DotaDb.Controllers
                 IsRoshanAlive = liveLeagueGame.RoshanRespawnTimer == 0 ? true : false,
                 LobbyId = liveLeagueGame.LobbyId,
                 MatchId = liveLeagueGame.MatchId,
+                RadiantTowerStates = liveLeagueGame.RadiantTowerStates,
+                DireTowerStates = liveLeagueGame.DireTowerStates,
                 RadiantPickedHeroes = liveLeagueGame.RadiantPicks
                     .Select(x => new LiveLeagueGameHeroViewModel()
                     {

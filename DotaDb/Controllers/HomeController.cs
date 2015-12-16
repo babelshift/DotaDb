@@ -53,6 +53,8 @@ namespace DotaDb.Controllers
                     RadiantSeriesWins = x.RadiantSeriesWins,
                     DireSeriesWins = x.DireSeriesWins,
                     SpectatorCount = x.SpectatorCount,
+                    RadiantTowerStates = x.RadiantTowerStates,
+                    DireTowerStates = x.DireTowerStates,
                     DirePlayers = x.Players
                         .Where(y => y.Team == 1)
                         .Select(y => new LiveLeagueGamePlayerViewModel()

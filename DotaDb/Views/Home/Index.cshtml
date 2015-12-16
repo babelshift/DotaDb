@@ -163,13 +163,13 @@
                                 </div>
                                 <div class="col-md-4 text-center" style="padding: 0">
                                     <div style="position: relative; width: 90%" class="center-block">
-                                        <img src="~/Content/dota_minimap_256.jpg" style="width: 100%" />
+                                        <img src="~/Content/dota_minimap_256.jpg" style="width: 100%; z-index: 0;" />
                                         @foreach (var player in liveLeagueGame.DirePlayers)
                                         {
                                             if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                                             {
                                                 <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                                <div class="minimap-icon-circle minimap-icon-circle-dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                                <div class="minimap-icon-circle-large minimap-icon-circle-dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
                                             }
                                         }
                                         @foreach (var player in liveLeagueGame.RadiantPlayers)
@@ -177,7 +177,102 @@
                                             if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                                             {
                                                 <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                                <div class="minimap-icon-circle minimap-icon-circle-radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                                <div class="minimap-icon-circle-large minimap-icon-circle-radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                            }
+                                        }
+                                        @if (liveLeagueGame.RadiantTowerStates != null)
+                                        {
+                                            if (liveLeagueGame.RadiantTowerStates.IsAncientBottomAlive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 17%; left: 18%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsAncientTopAlive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 20%; left: 15%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsBottomTier1Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 13%; left: 80%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsBottomTier2Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 13%; left: 46%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsBottomTier3Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 13%; left: 28%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsMiddleTier1Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 43%; left: 43%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsMiddleTier2Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 33%; left: 28%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsMiddleTier3Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 27%; left: 22%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsTopTier1Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 65%; left: 12%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsTopTier2Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 45%; left: 12%"></div>
+                                            }
+                                            if (liveLeagueGame.RadiantTowerStates.IsTopTier3Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 31%; left: 9%"></div>
+                                            }
+                                        }
+
+                                        @if (liveLeagueGame.DireTowerStates != null)
+                                        {
+                                            if (liveLeagueGame.DireTowerStates.IsAncientBottomAlive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 80%; left: 87%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsAncientTopAlive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 83%; left: 83%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsBottomTier1Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 38%; left: 87%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsBottomTier2Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 56%; left: 90%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsBottomTier3Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 68%; left: 89%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsMiddleTier1Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 50%; left: 56%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsMiddleTier2Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 65%; left: 65%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsMiddleTier3Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 73%; left: 75%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsTopTier1Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 88%; left: 17%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsTopTier2Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 85%; left: 56%"></div>
+                                            }
+                                            if (liveLeagueGame.DireTowerStates.IsTopTier3Alive)
+                                            {
+                                                <div class="minimap-icon-circle-small minimap-icon-circle-tower" style="bottom: 85%; left: 71%"></div>
                                             }
                                         }
                                     </div>

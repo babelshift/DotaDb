@@ -522,6 +522,8 @@ namespace DotaDb.Models
                     DireSeriesWins = liveLeagueGame.DireSeriesWins,
                     SpectatorCount = liveLeagueGame.Spectators,
                     MatchId = liveLeagueGame.MatchId,
+                    RadiantTowerStates = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Radiant != null) ? liveLeagueGame.Scoreboard.Radiant.TowerStates : null,
+                    DireTowerStates = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.TowerStates : null,
                 };
 
                 #region Fill in Player Details
@@ -730,7 +732,9 @@ namespace DotaDb.Models
                 RadiantPicks = await GetPicks(liveLeagueGame, 0),
                 DirePicks = await GetPicks(liveLeagueGame, 1),
                 RadiantBans = await GetBans(liveLeagueGame, 0),
-                DireBans = await GetBans(liveLeagueGame, 1)
+                DireBans = await GetBans(liveLeagueGame, 1),
+                RadiantTowerStates = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Radiant != null) ? liveLeagueGame.Scoreboard.Radiant.TowerStates : null,
+                DireTowerStates = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.TowerStates : null
             };
 
             #region Fill in Player Details
