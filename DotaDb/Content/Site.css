@@ -143,7 +143,7 @@ textarea {
     z-index: 3;
 }
 
-.minimap-icon-circle-large {
+.minimap-icon-circle.large {
     width: 40px;
     height: 40px;
     position: absolute;
@@ -156,7 +156,7 @@ textarea {
     z-index: 2;
 }
 
-.minimap-icon-circle-small {
+.minimap-icon-circle.small {
     width: 24px;
     height: 24px;
     position: absolute;
@@ -169,20 +169,23 @@ textarea {
     z-index: 2;
 }
 
-.minimap-icon-circle-radiant {
+.minimap-icon-circle.radiant {
     background-color: rgba(0, 255, 33, 0.5);
     border: 2px solid #004008;
 }
 
-.minimap-icon-circle-dire {
+.minimap-icon-circle.dire {
     background-color: rgba(255, 0, 0, 0.50);
     border: 2px solid #4f0000;
 }
 
-.minimap-icon-circle-tower {
+.minimap-icon-circle.tower {
+    z-index: 1;
+}
+
+.minimap-icon-circle.dead {
     background-color: rgba(33, 33, 33, 0.50);
     border: 2px solid #000000;
-    z-index: 1;
 }
 
 .full-screen-bg-tint {
