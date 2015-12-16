@@ -21,30 +21,33 @@ namespace DotaDb.Controllers
         {
             var items = await db.GetGameItemsAsync();
 
-            var tasks = items
-                .Where(x => x.Recipe == 0)
-                .Select(async (x) => new GameItemViewModel()
-                {
-                    Cost = x.Cost,
-                    Name = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", x.Name)),
-                    Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", x.Name)),
-                    Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", x.Name)),
-                    Id = x.Id,
-                    IsRecipe = x.Recipe == 1 ? true : false,
-                    SecretShop = x.SecretShop == 1 ? true : false,
-                    SideShop = x.SideShop == 1 ? true : false,
-                    IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", x.Recipe == 1 ? "recipe" : x.Name.Replace("item_", "")),
-                });
-            var itemsViewModel = await Task.WhenAll(tasks);
+            var itemsWithoutRecipes = items.Where(x => x.Recipe == 0);
 
+            List<GameItemViewModel> gameItems = new List<GameItemViewModel>();
+            foreach(var item in itemsWithoutRecipes)
+            {
+                gameItems.Add(new GameItemViewModel()
+                {
+                    Cost = item.Cost,
+                    Name = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", item.Name)),
+                    Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
+                    Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
+                    Id = item.Id,
+                    IsRecipe = item.Recipe == 1 ? true : false,
+                    SecretShop = item.SecretShop == 1 ? true : false,
+                    SideShop = item.SideShop == 1 ? true : false,
+                    IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
+                });
+            }
+            
             var abilities = await db.GetItemAbilitiesAsync();
 
-            foreach (var itemViewModel in itemsViewModel)
+            foreach (var itemViewModel in gameItems)
             {
                 await AddAbilityToItemViewModelAsync(itemViewModel, abilities);
             }
 
-            return View(itemsViewModel.ToList());
+            return View(gameItems.ToList());
         }
 
         private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
