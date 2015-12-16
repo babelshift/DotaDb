@@ -3,6 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if (ViewBag.RefreshPageTime != null)
+    {
+        <meta http-equiv="refresh" content="@ViewBag.RefreshPageTime" />
+    }
     <title>DotaDb</title>
     <link rel="canonical" href="@Request.Url.AbsoluteUri" />
     <link rel="shortcut icon" href="~/Content/favicon.ico" type="image/x-icon">
