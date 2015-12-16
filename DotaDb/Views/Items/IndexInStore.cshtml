@@ -1,0 +1,71 @@
+﻿@model DotaDb.ViewModels.InStoreViewModel
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Items in the Store";
+}
+
+<div class="row">
+    <div class="col-xs-12" style="padding: 4px">
+        <ol class="breadcrumb">
+            <li><a href="@Url.Action("index", "home")">Home</a></li>
+            <li class="active">In Store Items</li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12" style="padding: 4px">
+        <ul class="nav nav-pills" style="margin-bottom: 10px">
+            <li role="presentation">
+                <a href="@Url.Action("index", new { tab = "ingame" })">
+                    <i class="fa fa-ticket"></i> In Game
+                </a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="@Url.Action("index", new { tab = "instore" })">
+                    <i class="fa fa-dollar"></i> In Store
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="list-group">
+                @foreach (var prefab in Model.Prefabs)
+                {
+                    <a class="list-group-item text-uppercase" href="#">@prefab.Name</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-md-6">
+                    <div class="well well-sm" style="padding: 5px;">
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="thumbnail" style="padding: 0; margin: 0; border: 0; width: 125px">
+                                    <img class="media-object" src="@item.IconPath" alt="...">
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">@item.Name</h4>
+                                @item.Description
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-md-12">
+                @if (Model.Items.PageCount > 1)
+                {
+                    @Html.PagedListPager(Model.Items, page => Url.Action("index", new { tab = "instore", page }))
+                }
+            </div>
+        </div>
+    </div>
+</div>

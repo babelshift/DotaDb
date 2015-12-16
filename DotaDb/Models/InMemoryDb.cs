@@ -114,6 +114,12 @@ namespace DotaDb.Models
             cache.Remove(MemoryCacheKey.HeroAbilities.ToString());
             cache.Remove(MemoryCacheKey.LeagueTickets.ToString());
             cache.Remove(MemoryCacheKey.ItemAbilities.ToString());
+            cache.Remove(MemoryCacheKey.InGameItems.ToString());
+            cache.Remove(MemoryCacheKey.LiveLeagueGames.ToString());
+            cache.Remove(MemoryCacheKey.Schema.ToString());
+            cache.Remove(MemoryCacheKey.Leagues.ToString());
+            cache.Remove(MemoryCacheKey.PlayerCounts.ToString());
+            cache.Remove(MemoryCacheKey.InStoreItemLocalizationKeys.ToString());
 
             abilityBehaviorTypes = GetAbilityBehaviorTypes();
             attackTypes = GetAttackTypes();
@@ -371,8 +377,31 @@ namespace DotaDb.Models
 
         public async Task<string> GetLocalizationTextAsync(string key)
         {
+            if(String.IsNullOrEmpty(key))
+            {
+                return String.Empty;
+            }
+
             string value = String.Empty;
             var localizationKeys = await GetPublicLocalizationAsync();
+            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        public async Task<string> GetInStoreItemLocalizationTextAsync(string key)
+        {
+            if (String.IsNullOrEmpty(key))
+            {
+                return String.Empty;
+            }
+            string value = String.Empty;
+            var localizationKeys = await GetInStoreItemLocalizationAsync();
             if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
             {
                 return value;
@@ -950,6 +979,18 @@ namespace DotaDb.Models
         private async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationFromSchemaAsync()
         {
             string[] vdf = (await GetFileLinesFromStorageAsync(tooltipsEnglishFileName)).ToArray();
+            var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
+            return result;
+        }
+
+        public async Task<IReadOnlyDictionary<string, string>> GetInStoreItemLocalizationAsync()
+        {
+            return await AddOrGetCachedValue(MemoryCacheKey.InStoreItemLocalizationKeys, GetInStoreItemLocalizationFromSchemaAsync);
+        }
+
+        private async Task<IReadOnlyDictionary<string, string>> GetInStoreItemLocalizationFromSchemaAsync()
+        {
+            string[] vdf = (await GetFileLinesFromStorageAsync(mainSchemaEnglishFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }

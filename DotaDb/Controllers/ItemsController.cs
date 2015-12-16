@@ -1,15 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DotaDb.Models;
+using DotaDb.ViewModels;
+using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.IO;
-using Newtonsoft.Json;
-using DotaDb.Models;
-using DotaDb.ViewModels;
-using SourceSchemaParser.Dota2;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+using PagedList;
 
 namespace DotaDb.Controllers
 {
@@ -17,14 +14,59 @@ namespace DotaDb.Controllers
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string tab, int? page)
+        {
+            if (tab == "ingame")
+            {
+                var gameItems = await GetGameItemsAsync();
+                return View(gameItems);
+            }
+            else if (tab == "instore")
+            {
+                var schema = await db.GetSchemaAsync();
+
+                InStoreViewModel viewModel = new InStoreViewModel();
+
+                viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
+                {
+                    Name = x.Type.Replace('_', ' ')
+                })
+                .ToList()
+                .AsReadOnly();
+
+                List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
+                foreach(var item in schema.Items)
+                {
+                    string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
+                    string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
+
+                    inStoreItems.Add(new InStoreItemViewModel()
+                    {
+                        Name = await db.GetInStoreItemLocalizationTextAsync(name),
+                        Description = await db.GetInStoreItemLocalizationTextAsync(description),
+                        IconPath = String.Format("{0}{1}.jpg", "http://dotadb.azureedge.net/instoreitemicons/", item.DefIndex)
+                    });
+                }
+
+                viewModel.Items = inStoreItems.ToPagedList(page ?? 1, 25);
+
+                return View("IndexInStore", viewModel);
+            }
+            else
+            {
+                var gameItems = await GetGameItemsAsync();
+                return View(gameItems);
+            }
+        }
+
+        private async Task<IReadOnlyCollection<GameItemViewModel>> GetGameItemsAsync()
         {
             var items = await db.GetGameItemsAsync();
 
             var itemsWithoutRecipes = items.Where(x => x.Recipe == 0);
 
             List<GameItemViewModel> gameItems = new List<GameItemViewModel>();
-            foreach(var item in itemsWithoutRecipes)
+            foreach (var item in itemsWithoutRecipes)
             {
                 gameItems.Add(new GameItemViewModel()
                 {
@@ -39,7 +81,7 @@ namespace DotaDb.Controllers
                     IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
                 });
             }
-            
+
             var abilities = await db.GetItemAbilitiesAsync();
 
             foreach (var itemViewModel in gameItems)
@@ -47,7 +89,7 @@ namespace DotaDb.Controllers
                 await AddAbilityToItemViewModelAsync(itemViewModel, abilities);
             }
 
-            return View(gameItems.ToList());
+            return gameItems.AsReadOnly();
         }
 
         private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
