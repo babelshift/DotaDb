@@ -75,6 +75,42 @@
                                 <span class="text-muted">@item.Description</span>
                             </div>
                         </div>
+                        @if (!String.IsNullOrEmpty(item.Rarity))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Rarity:</span>
+                                    @if (!String.IsNullOrEmpty(item.RarityColor))
+                                    {
+                                        <span style="color: @item.RarityColor">
+                                            @item.Rarity
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Rarity
+                                    }
+                                </small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(item.Quality))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Quality:</span>
+                                    @if (!String.IsNullOrEmpty(item.QualityColor))
+                                    {
+                                        <span style="color: @item.QualityColor">
+                                            @item.Quality
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Quality
+                                    }
+                                </small>
+                            </p>
+                        }
                         @if (!String.IsNullOrEmpty(item.PriceBucket))
                         {
                             <p>

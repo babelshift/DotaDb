@@ -51,13 +51,19 @@ namespace DotaDb.Controllers
             List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
             foreach (var item in schema.Items)
             {
-                if(item.Prefab != prefab)
+                // if the user picked a prefab and the item doesn't fit that, skip it
+                if (!String.IsNullOrEmpty(prefab) && item.Prefab != prefab)
                 {
                     continue;
                 }
 
                 string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
                 string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
+
+                var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
+                var rarityColor = rarity != null ? schema.Colors.FirstOrDefault(x => x.Name == rarity.Color) : null;
+
+                var quality = schema.Qualities.FirstOrDefault(x => x.Name == item.ItemQuality);
 
                 var itemViewModel = new InStoreItemViewModel()
                 {
@@ -72,7 +78,10 @@ namespace DotaDb.Controllers
                     PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
                     PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : null,
                     Price = item.PriceInfo != null ? item.PriceInfo.Price : null,
-                    
+                    Rarity = rarity != null ? rarity.Name : String.Empty,
+                    RarityColor = rarityColor != null ? rarityColor.HexColor : String.Empty,
+                    Quality = quality != null ? quality.Name : String.Empty,
+                    QualityColor = quality != null ? quality.HexColor : String.Empty
                 };
 
                 inStoreItems.Add(itemViewModel);

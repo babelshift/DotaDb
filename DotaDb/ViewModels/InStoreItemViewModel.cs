@@ -18,5 +18,9 @@ namespace DotaDb.ViewModels
         public DateTime? PriceDate { get; set; }
         public decimal? Price { get; set; }
         public string StorePath { get; internal set; }
+        public string Rarity { get; set; }
+        public string RarityColor { get; set; }
+        public string Quality { get; set; }
+        public string QualityColor { get; set; }
     }
 }
