@@ -115,6 +115,12 @@ textarea {
     margin-bottom: 3px;
 }
 
+.instore-item-list p {
+    margin-top: 3px;
+    line-height: 15px;
+    margin-bottom: 3px;
+}
+
 .league-list p {
     margin-top: 3px;
     line-height: 15px;

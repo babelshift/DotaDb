@@ -10,5 +10,12 @@ namespace DotaDb.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public string IconPath { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public string PriceBucket { get; set; }
+        public string PriceClass { get; set; }
+        public string PriceCategoryTags { get; set; }
+        public string PriceDate { get; set; }
+        public double? Price { get; set; }
     }
 }

@@ -44,19 +44,82 @@
         <div class="row">
             @foreach (var item in Model.Items)
             {
-                <div class="col-md-6">
-                    <div class="well well-sm" style="padding: 5px;">
+                <div class="col-md-6 instore-item-list">
+                    <div class="well well-sm" style="padding: 5px; line-height: 15px">
                         <div class="media">
                             <div class="media-left">
                                 <div class="thumbnail" style="padding: 0; margin: 0; border: 0; width: 125px">
-                                    <img class="media-object" src="@item.IconPath" alt="...">
+                                    <img class="media-object" src="@item.IconPath" alt="No icon available">
                                 </div>
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">@item.Name</h4>
-                                @item.Description
+                                <span class="text-muted">@item.Description</span>
                             </div>
                         </div>
+                        @if (!String.IsNullOrEmpty(item.PriceBucket))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Price Bucket:</span>
+                                    @item.PriceBucket
+                                </small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(item.PriceCategoryTags))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Category Tags:</span>
+                                    @item.PriceCategoryTags
+                                </small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(item.PriceClass))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Price Class:</span>
+                                    @item.PriceClass
+                                </small>
+                            </p>
+                        }
+                        @if (!String.IsNullOrEmpty(item.PriceDate))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Price Date:</span>
+                                    @item.PriceDate
+                                </small>
+                            </p>
+                        }
+                        @if (item.Price.HasValue)
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Price:</span>
+                                    @item.Price.Value
+                                </small>
+                            </p>
+                        }
+                        @if (item.CreationDate.HasValue)
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Creation Date:</span>
+                                    @item.CreationDate.Value.ToShortDateString()
+                                </small>
+                            </p>
+                        }
+                        @if (item.ExpirationDate.HasValue)
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Expiration Date:</span>
+                                    @item.ExpirationDate.Value.ToShortDateString()
+                                </small>
+                            </p>
+                        }
                     </div>
                 </div>
             }

@@ -574,8 +574,12 @@ namespace DotaDb.Models
                 // if the game hasn't started yet, the scoreboard won't exist
                 if (liveLeagueGame.Scoreboard != null)
                 {
-                    radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players.ToDictionary(x => x.AccountId, x => x);
-                    direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players.ToDictionary(x => x.AccountId, x => x);
+                    radiantPlayerDetail = liveLeagueGame.Scoreboard.Radiant.Players
+                        .Distinct(new LiveLeagueGamePlayerDetailComparer())
+                        .ToDictionary(x => x.AccountId, x => x);
+                    direPlayerDetail = liveLeagueGame.Scoreboard.Dire.Players
+                        .Distinct(new LiveLeagueGamePlayerDetailComparer())
+                        .ToDictionary(x => x.AccountId, x => x);
                 }
 
                 foreach (var player in liveLeagueGameModel.Players)
