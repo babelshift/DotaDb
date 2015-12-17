@@ -53,7 +53,7 @@ namespace DotaDb.Controllers
                 string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
                 string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
 
-                inStoreItems.Add(new InStoreItemViewModel()
+                var itemViewModel = new InStoreItemViewModel()
                 {
                     Name = await db.GetInStoreItemLocalizationTextAsync(name),
                     Description = await db.GetInStoreItemLocalizationTextAsync(description),
@@ -61,12 +61,14 @@ namespace DotaDb.Controllers
                     StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
                     CreationDate = item.CreationDate,
                     ExpirationDate = item.ExpirationDate,
-                    Price = item.PriceInfo != null ? item.PriceInfo.Price : 0,
                     PriceBucket = item.PriceInfo != null ? item.PriceInfo.Bucket : String.Empty,
                     PriceCategoryTags = item.PriceInfo != null ? item.PriceInfo.CategoryTags : String.Empty,
                     PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
-                    PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : String.Empty
-                });
+                    PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : null,
+                    Price = item.PriceInfo != null ? item.PriceInfo.Price : null
+                };
+
+                inStoreItems.Add(itemViewModel);
             }
 
             viewModel.Items = inStoreItems.ToPagedList(page ?? 1, 25);

@@ -56,12 +56,12 @@
                                 <h4 class="media-heading">@item.Name</h4>
                                 @if (item.Price.HasValue && item.Price.Value > 0)
                                 {
-                                    <a href="@item.StorePath">
+                                    <a href="@item.StorePath" target="_blank">
                                         View in Dota 2 Store
                                     </a>
+                                    <i class="fa fa-external-link-square"></i>
+                                    <br />
                                 }
-                                <i class="fa fa-external-link-square"></i>
-                                <br />
                                 <span class="text-muted">@item.Description</span>
                             </div>
                         </div>
@@ -92,21 +92,21 @@
                                 </small>
                             </p>
                         }
-                        @if (!String.IsNullOrEmpty(item.PriceDate))
+                        @if (item.PriceDate.HasValue)
                         {
                             <p>
                                 <small class="text-uppercase">
                                     <span class="text-muted">Price Date:</span>
-                                    @item.PriceDate
+                                    @item.PriceDate.Value.ToShortDateString()
                                 </small>
                             </p>
                         }
-                        @if (item.Price.HasValue)
+                        @if (item.Price.HasValue && item.Price.Value > 0)
                         {
                             <p>
                                 <small class="text-uppercase">
                                     <span class="text-muted">Price:</span>
-                                    @item.Price.Value
+                                    @item.Price.Value.ToString("C")
                                 </small>
                             </p>
                         }
