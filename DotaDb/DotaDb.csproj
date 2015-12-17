@@ -300,6 +300,7 @@
     <Compile Include="ViewModels\HeroViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\InStoreItemPrefabViewModel.cs" />
+    <Compile Include="ViewModels\InStoreItemUsedByHeroViewModel.cs" />
     <Compile Include="ViewModels\InStoreItemViewModel.cs" />
     <Compile Include="ViewModels\InStoreViewModel.cs" />
     <Compile Include="ViewModels\LeagueViewModel.cs" />

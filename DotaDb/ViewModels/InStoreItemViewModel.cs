@@ -22,5 +22,6 @@ namespace DotaDb.ViewModels
         public string RarityColor { get; set; }
         public string Quality { get; set; }
         public string QualityColor { get; set; }
+        public IReadOnlyCollection<InStoreItemUsedByHeroViewModel> UsedBy { get; set; }
     }
 }

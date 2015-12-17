@@ -54,12 +54,12 @@
             }
             @foreach (var item in Model.Items)
             {
-                <div class="col-md-6 instore-item-list">
-                    <div class="well well-sm" style="padding: 5px; line-height: 15px">
-                        <div class="media">
+                <div class="col-md-6 instore-item-list" style="padding: 4px;">
+                    <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
+                        <div class="media" style="margin-bottom: 0">
                             <div class="media-left">
-                                <div class="thumbnail" style="padding: 0; margin: 0; border: 0; width: 125px">
-                                    <img class="media-object" src="@item.IconPath" alt="No icon available">
+                                <div class="thumbnail" style="margin: 0; border: 0; width: 125px">
+                                    <img class="shadow" src="@item.IconPath" alt="No icon available" >
                                 </div>
                             </div>
                             <div class="media-body">
@@ -75,105 +75,126 @@
                                 <span class="text-muted">@item.Description</span>
                             </div>
                         </div>
-                        @if (!String.IsNullOrEmpty(item.Rarity))
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Rarity:</span>
-                                    @if (!String.IsNullOrEmpty(item.RarityColor))
-                                    {
-                                        <span style="color: @item.RarityColor">
-                                            @item.Rarity
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        @item.Rarity
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(item.Quality))
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Quality:</span>
-                                    @if (!String.IsNullOrEmpty(item.QualityColor))
-                                    {
-                                        <span style="color: @item.QualityColor">
-                                            @item.Quality
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        @item.Quality
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(item.PriceBucket))
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Price Bucket:</span>
-                                    @item.PriceBucket
-                                </small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(item.PriceCategoryTags))
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Category Tags:</span>
-                                    @item.PriceCategoryTags
-                                </small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(item.PriceClass))
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Price Class:</span>
-                                    @item.PriceClass
-                                </small>
-                            </p>
-                        }
-                        @if (item.PriceDate.HasValue)
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Price Date:</span>
-                                    @item.PriceDate.Value.ToShortDateString()
-                                </small>
-                            </p>
-                        }
-                        @if (item.Price.HasValue && item.Price.Value > 0)
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Price:</span>
-                                    @item.Price.Value.ToString("C")
-                                </small>
-                            </p>
-                        }
-                        @if (item.CreationDate.HasValue)
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Creation Date:</span>
-                                    @item.CreationDate.Value.ToShortDateString()
-                                </small>
-                            </p>
-                        }
-                        @if (item.ExpirationDate.HasValue)
-                        {
-                            <p>
-                                <small class="text-uppercase">
-                                    <span class="text-muted">Expiration Date:</span>
-                                    @item.ExpirationDate.Value.ToShortDateString()
-                                </small>
-                            </p>
-                        }
+                        <div class="row">
+                            @if (item.UsedBy != null && item.UsedBy.Count > 0)
+                            {
+                                <div class="col-md-6">
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Used by:</span>
+                                        </small>
+                                        @foreach (var hero in item.UsedBy)
+                                        {
+                                            <img src="@hero.MinimapIconPath" />
+                                            <a href="@Url.Action("hero", "heroes", new { id = hero.HeroId })">
+                                                @hero.HeroName
+                                            </a>
+                                        }
+                                    </p>
+                                </div>
+                            }
+                            <div class="col-md-6">
+                                @if (!String.IsNullOrEmpty(item.Rarity))
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Rarity:</span>
+                                            @if (!String.IsNullOrEmpty(item.RarityColor))
+                                            {
+                                                <span style="color: @item.RarityColor">
+                                                    @item.Rarity
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @item.Rarity
+                                            }
+                                        </small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(item.Quality))
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Quality:</span>
+                                            @if (!String.IsNullOrEmpty(item.QualityColor))
+                                            {
+                                                <span style="color: @item.QualityColor">
+                                                    @item.Quality
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @item.Quality
+                                            }
+                                        </small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(item.PriceBucket))
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Price Bucket:</span>
+                                            @item.PriceBucket
+                                        </small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(item.PriceCategoryTags))
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Category Tags:</span>
+                                            @item.PriceCategoryTags
+                                        </small>
+                                    </p>
+                                }
+                                @if (!String.IsNullOrEmpty(item.PriceClass))
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Price Class:</span>
+                                            @item.PriceClass
+                                        </small>
+                                    </p>
+                                }
+                                @if (item.PriceDate.HasValue)
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Price Date:</span>
+                                            @item.PriceDate.Value.ToShortDateString()
+                                        </small>
+                                    </p>
+                                }
+                                @if (item.Price.HasValue && item.Price.Value > 0)
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Price:</span>
+                                            @item.Price.Value.ToString("C")
+                                        </small>
+                                    </p>
+                                }
+                                @if (item.CreationDate.HasValue)
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Creation Date:</span>
+                                            @item.CreationDate.Value.ToShortDateString()
+                                        </small>
+                                    </p>
+                                }
+                                @if (item.ExpirationDate.HasValue)
+                                {
+                                    <p>
+                                        <small class="text-uppercase">
+                                            <span class="text-muted">Expiration Date:</span>
+                                            @item.ExpirationDate.Value.ToShortDateString()
+                                        </small>
+                                    </p>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             }

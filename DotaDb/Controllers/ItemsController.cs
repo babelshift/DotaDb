@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using PagedList;
+using DotaDb.Utilities;
 
 namespace DotaDb.Controllers
 {
@@ -48,6 +49,7 @@ namespace DotaDb.Controllers
             .ToList()
             .AsReadOnly();
 
+            var heroes = await db.GetHeroesAsync();
             List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
             foreach (var item in schema.Items)
             {
@@ -62,8 +64,26 @@ namespace DotaDb.Controllers
 
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
                 var rarityColor = rarity != null ? schema.Colors.FirstOrDefault(x => x.Name == rarity.Color) : null;
-
                 var quality = schema.Qualities.FirstOrDefault(x => x.Name == item.ItemQuality);
+
+                List<InStoreItemUsedByHeroViewModel> usedByHeroes = new List<InStoreItemUsedByHeroViewModel>();
+                if (item.UsedByHeroes != null)
+                {
+                    foreach (var heroName in item.UsedByHeroes)
+                    {
+                        var hero = heroes.FirstOrDefault(x => x.Value.Name == heroName);
+                        if (hero.Value != null)
+                        {
+                            usedByHeroes.Add(new InStoreItemUsedByHeroViewModel()
+                            {
+                                HeroId = hero.Value.HeroId,
+                                HeroName = await db.GetLocalizationTextAsync(hero.Value.Name),
+                                MinimapIconPath = hero.Value.GetMinimapIconFilePath()
+                            });
+                        }
+                    }
+
+                }
 
                 var itemViewModel = new InStoreItemViewModel()
                 {
@@ -81,7 +101,8 @@ namespace DotaDb.Controllers
                     Rarity = rarity != null ? rarity.Name : String.Empty,
                     RarityColor = rarityColor != null ? rarityColor.HexColor : String.Empty,
                     Quality = quality != null ? quality.Name : String.Empty,
-                    QualityColor = quality != null ? quality.HexColor : String.Empty
+                    QualityColor = quality != null ? quality.HexColor : String.Empty,
+                    UsedBy = usedByHeroes.AsReadOnly()
                 };
 
                 inStoreItems.Add(itemViewModel);
