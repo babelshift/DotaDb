@@ -4,11 +4,13 @@
     ViewBag.Title = "Items in Game";
 }
 
+
 <div class="row">
     <div class="col-xs-12" style="padding: 4px">
         <ol class="breadcrumb">
             <li><a href="@Url.Action("index", "home")">Home</a></li>
-            <li class="active">In Game Items</li>
+            <li><a href="@Url.Action("index", "items", new { tab = (string)null })">Items</a></li>
+            <li class="active">In Game</li>
         </ol>
     </div>
 </div>
@@ -30,7 +32,7 @@
 </div>
 <div class="row item-list">
     @foreach (var gameItem in Model)
-            {
+    {
         <div class="col-md-4" style="padding: 4px">
             <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
                 <div class="media" style="margin-bottom: 0">

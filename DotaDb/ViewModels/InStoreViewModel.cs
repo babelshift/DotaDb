@@ -10,5 +10,6 @@ namespace DotaDb.ViewModels
     {
         public IReadOnlyCollection<InStoreItemPrefabViewModel> Prefabs { get; set; }
         public IPagedList<InStoreItemViewModel> Items { get; set; }
+        public string SelectedPrefab { get; set; }
     }
 }

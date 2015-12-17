@@ -9,7 +9,8 @@
     <div class="col-xs-12" style="padding: 4px">
         <ol class="breadcrumb">
             <li><a href="@Url.Action("index", "home")">Home</a></li>
-            <li class="active">In Store Items</li>
+            <li><a href="@Url.Action("index", "items", new { tab = "ingame" })">Items</a></li>
+            <li class="active">In Store</li>
         </ol>
     </div>
 </div>
@@ -27,6 +28,7 @@
                 </a>
             </li>
         </ul>
+        <hr />
     </div>
 </div>
 <div class="row">
@@ -35,13 +37,21 @@
             <div class="list-group">
                 @foreach (var prefab in Model.Prefabs)
                 {
-                    <a class="list-group-item text-uppercase" href="#">@prefab.Name</a>
+                    <a class="list-group-item text-uppercase" href="@Url.Action("index", "items", new { tab = "instore", prefab = prefab.Id })">
+                        @prefab.Name
+                    </a>
                 }
             </div>
         </div>
     </div>
     <div class="col-md-10">
         <div class="row">
+            @if (!String.IsNullOrEmpty(Model.SelectedPrefab))
+            {
+                <div class="col-xs-12">
+                    <h4>Showing items tagged with '<strong>@Model.SelectedPrefab</strong>'</h4>
+                </div>
+            }
             @foreach (var item in Model.Items)
             {
                 <div class="col-md-6 instore-item-list">
@@ -132,6 +142,7 @@
                 </div>
             }
             <div class="col-md-12">
+                <hr />
                 @if (Model.Items.PageCount > 1)
                 {
                     @Html.PagedListPager(Model.Items, page => Url.Action("index", new { tab = "instore", page }))

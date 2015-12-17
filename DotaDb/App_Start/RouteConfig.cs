@@ -38,6 +38,11 @@ namespace DotaDb
                 defaults: new { controller = "Heroes" }
             );
 
+            routes.MapRoute(
+                name: "InStoreItemWithTab",
+                url: "items/{tab}/{prefab}",
+                defaults: new { controller = "Items", Action = "Index", tab = UrlParameter.Optional, prefab = UrlParameter.Optional }
+            );
 
             routes.MapRoute(
                 name: "Default",

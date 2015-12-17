@@ -72,19 +72,19 @@ namespace DotaDb.Models
 
         #region Enum Type Lookup Members
 
-        public IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
-        public IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
-        public IReadOnlyDictionary<string, DotaAttackType> attackTypes;
-        public IReadOnlyDictionary<string, DotaTeamType> teamTypes;
-        public IReadOnlyDictionary<string, DotaDamageType> damageTypes;
-        public IReadOnlyDictionary<string, DotaSpellImmunityType> spellImmunityTypes;
-        public IReadOnlyDictionary<string, DotaUnitTargetFlag> unitTargetFlags;
-        public IReadOnlyDictionary<string, DotaUnitTargetTeamType> unitTargetTeamTypes;
-        public IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
-        public IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> attributeTypes;
-        public IReadOnlyDictionary<string, DotaItemDeclarationType> itemDeclarationTypes;
-        public IReadOnlyDictionary<string, DotaItemShareabilityType> itemShareabilityTypes;
-        public IReadOnlyDictionary<string, DotaItemDisassembleType> itemDisassembleTypes;
+        private IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> abilityBehaviorTypes;
+        private IReadOnlyDictionary<string, DotaHeroAbilityType> abilityTypes;
+        private IReadOnlyDictionary<string, DotaAttackType> attackTypes;
+        private IReadOnlyDictionary<string, DotaTeamType> teamTypes;
+        private IReadOnlyDictionary<string, DotaDamageType> damageTypes;
+        private IReadOnlyDictionary<string, DotaSpellImmunityType> spellImmunityTypes;
+        private IReadOnlyDictionary<string, DotaUnitTargetFlag> unitTargetFlags;
+        private IReadOnlyDictionary<string, DotaUnitTargetTeamType> unitTargetTeamTypes;
+        private IReadOnlyDictionary<string, DotaUnitTargetType> unitTargetTypes;
+        private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> attributeTypes;
+        private IReadOnlyDictionary<string, DotaItemDeclarationType> itemDeclarationTypes;
+        private IReadOnlyDictionary<string, DotaItemShareabilityType> itemShareabilityTypes;
+        private IReadOnlyDictionary<string, DotaItemDisassembleType> itemDisassembleTypes;
 
         #endregion Enum Type Lookup Members
 

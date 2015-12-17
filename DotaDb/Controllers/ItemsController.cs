@@ -14,7 +14,7 @@ namespace DotaDb.Controllers
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
-        public async Task<ActionResult> Index(string tab, int? page)
+        public async Task<ActionResult> Index(string tab, string prefab, int? page)
         {
             if (tab == "ingame")
             {
@@ -23,7 +23,7 @@ namespace DotaDb.Controllers
             }
             else if (tab == "instore")
             {
-                InStoreViewModel viewModel = await GetInStoreItemsAsync(page);
+                InStoreViewModel viewModel = await GetInStoreItemsAsync(prefab, page);
 
                 return View("IndexInStore", viewModel);
             }
@@ -34,7 +34,7 @@ namespace DotaDb.Controllers
             }
         }
 
-        private async Task<InStoreViewModel> GetInStoreItemsAsync(int? page)
+        private async Task<InStoreViewModel> GetInStoreItemsAsync(string prefab, int? page)
         {
             var schema = await db.GetSchemaAsync();
 
@@ -42,6 +42,7 @@ namespace DotaDb.Controllers
 
             viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
             {
+                Id = x.Type,
                 Name = x.Type.Replace('_', ' ')
             })
             .ToList()
@@ -50,6 +51,11 @@ namespace DotaDb.Controllers
             List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
             foreach (var item in schema.Items)
             {
+                if(item.Prefab != prefab)
+                {
+                    continue;
+                }
+
                 string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
                 string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
 
@@ -65,13 +71,16 @@ namespace DotaDb.Controllers
                     PriceCategoryTags = item.PriceInfo != null ? item.PriceInfo.CategoryTags : String.Empty,
                     PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
                     PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : null,
-                    Price = item.PriceInfo != null ? item.PriceInfo.Price : null
+                    Price = item.PriceInfo != null ? item.PriceInfo.Price : null,
+                    
                 };
 
                 inStoreItems.Add(itemViewModel);
             }
 
             viewModel.Items = inStoreItems.ToPagedList(page ?? 1, 25);
+            viewModel.SelectedPrefab = prefab;
+
             return viewModel;
         }
 
