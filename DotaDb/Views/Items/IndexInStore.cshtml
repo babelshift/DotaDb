@@ -54,6 +54,14 @@
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">@item.Name</h4>
+                                @if (item.Price.HasValue && item.Price.Value > 0)
+                                {
+                                    <a href="@item.StorePath">
+                                        View in Dota 2 Store
+                                    </a>
+                                }
+                                <i class="fa fa-external-link-square"></i>
+                                <br />
                                 <span class="text-muted">@item.Description</span>
                             </div>
                         </div>

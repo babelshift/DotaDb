@@ -17,5 +17,6 @@ namespace DotaDb.ViewModels
         public string PriceCategoryTags { get; set; }
         public string PriceDate { get; set; }
         public double? Price { get; set; }
+        public string StorePath { get; internal set; }
     }
 }

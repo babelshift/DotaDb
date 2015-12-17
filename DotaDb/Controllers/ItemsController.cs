@@ -23,39 +23,7 @@ namespace DotaDb.Controllers
             }
             else if (tab == "instore")
             {
-                var schema = await db.GetSchemaAsync();
-
-                InStoreViewModel viewModel = new InStoreViewModel();
-
-                viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
-                {
-                    Name = x.Type.Replace('_', ' ')
-                })
-                .ToList()
-                .AsReadOnly();
-
-                List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
-                foreach (var item in schema.Items)
-                {
-                    string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
-                    string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
-
-                    inStoreItems.Add(new InStoreItemViewModel()
-                    {
-                        Name = await db.GetInStoreItemLocalizationTextAsync(name),
-                        Description = await db.GetInStoreItemLocalizationTextAsync(description),
-                        IconPath = String.Format("{0}{1}.jpg", "http://dotadb.azureedge.net/instoreitemicons/", item.DefIndex),
-                        CreationDate = item.CreationDate,
-                        ExpirationDate = item.ExpirationDate,
-                        Price = item.PriceInfo != null ? item.PriceInfo.Price : 0,
-                        PriceBucket = item.PriceInfo != null ? item.PriceInfo.Bucket : String.Empty,
-                        PriceCategoryTags = item.PriceInfo != null ? item.PriceInfo.CategoryTags : String.Empty,
-                        PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
-                        PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : String.Empty
-                    });
-                }
-
-                viewModel.Items = inStoreItems.ToPagedList(page ?? 1, 25);
+                InStoreViewModel viewModel = await GetInStoreItemsAsync(page);
 
                 return View("IndexInStore", viewModel);
             }
@@ -64,6 +32,45 @@ namespace DotaDb.Controllers
                 var gameItems = await GetGameItemsAsync();
                 return View(gameItems);
             }
+        }
+
+        private async Task<InStoreViewModel> GetInStoreItemsAsync(int? page)
+        {
+            var schema = await db.GetSchemaAsync();
+
+            InStoreViewModel viewModel = new InStoreViewModel();
+
+            viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
+            {
+                Name = x.Type.Replace('_', ' ')
+            })
+            .ToList()
+            .AsReadOnly();
+
+            List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
+            foreach (var item in schema.Items)
+            {
+                string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
+                string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
+
+                inStoreItems.Add(new InStoreItemViewModel()
+                {
+                    Name = await db.GetInStoreItemLocalizationTextAsync(name),
+                    Description = await db.GetInStoreItemLocalizationTextAsync(description),
+                    IconPath = String.Format("http://dotadb.azureedge.net/instoreitemicons/{0}.jpg", item.DefIndex),
+                    StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
+                    CreationDate = item.CreationDate,
+                    ExpirationDate = item.ExpirationDate,
+                    Price = item.PriceInfo != null ? item.PriceInfo.Price : 0,
+                    PriceBucket = item.PriceInfo != null ? item.PriceInfo.Bucket : String.Empty,
+                    PriceCategoryTags = item.PriceInfo != null ? item.PriceInfo.CategoryTags : String.Empty,
+                    PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
+                    PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : String.Empty
+                });
+            }
+
+            viewModel.Items = inStoreItems.ToPagedList(page ?? 1, 25);
+            return viewModel;
         }
 
         private async Task<IReadOnlyCollection<GameItemViewModel>> GetGameItemsAsync()
