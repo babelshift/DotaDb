@@ -8,6 +8,7 @@ namespace DotaDb.ViewModels
 {
     public class HeroAbilityViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string AvatarImagePath { get; set; }
         public string Description { get; set; }

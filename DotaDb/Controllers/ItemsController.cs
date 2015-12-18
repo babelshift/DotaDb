@@ -45,9 +45,7 @@ namespace DotaDb.Controllers
             {
                 Id = x.Type,
                 Name = x.Type.Replace('_', ' ')
-            })
-            .ToList()
-            .AsReadOnly();
+            }).ToList().AsReadOnly();
 
             var heroes = await db.GetHeroesAsync();
             List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
@@ -59,13 +57,16 @@ namespace DotaDb.Controllers
                     continue;
                 }
 
+                // if there's a name or description, remove the "#" character before 
                 string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
                 string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
 
+                // look up the rarity and quality details
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
                 var rarityColor = rarity != null ? schema.Colors.FirstOrDefault(x => x.Name == rarity.Color) : null;
                 var quality = schema.Qualities.FirstOrDefault(x => x.Name == item.ItemQuality);
 
+                // setup the heroes that are able to use this item
                 List<InStoreItemUsedByHeroViewModel> usedByHeroes = new List<InStoreItemUsedByHeroViewModel>();
                 if (item.UsedByHeroes != null)
                 {

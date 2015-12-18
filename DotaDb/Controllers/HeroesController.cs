@@ -237,6 +237,7 @@ namespace DotaDb.Controllers
 
             var abilityViewModel = new HeroAbilityViewModel()
             {
+                Id = ability.Id,
                 Name = await db.GetLocalizationTextAsync(String.Format("{0}_{1}", "DOTA_Tooltip_ability", abilityName)),
                 AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/abilities/{0}_lg.png", ability.Name),
                 Description = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", abilityName, "Description")),
