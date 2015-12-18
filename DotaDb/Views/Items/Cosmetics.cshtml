@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="col-md-10">
-        <div class="row">
+        <div class="row instore-item-list">
             @if (!String.IsNullOrEmpty(Model.SelectedPrefab))
             {
                 <div class="col-xs-12">
@@ -31,7 +31,7 @@
             }
             @foreach (var item in Model.Items)
             {
-                <div class="col-md-6 instore-item-list" style="padding: 4px;">
+                <div class="col-md-6" style="padding: 4px;">
                     <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
                         <div class="media" style="margin-bottom: 0">
                             <div class="media-left">

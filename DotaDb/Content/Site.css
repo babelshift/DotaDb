@@ -86,6 +86,14 @@ textarea {
     clear: both;
 }
 
+.instore-item-list .col-md-6:nth-child(2n+1) {
+    clear: both;
+}
+
+.itemset-list > .col-md-4:nth-child(3n+1) {
+    clear: both;
+}
+
 .league-list > .col-md-6:nth-child(2n+1) {
     clear: both;
 }

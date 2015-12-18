@@ -17,12 +17,28 @@ namespace DotaDb.Controllers
 
         public async Task<ActionResult> Sets(int? page)
         {
-            return View();
+            var schema = await db.GetSchemaAsync();
+
+            List<ItemSetViewModel> itemSets = new List<ItemSetViewModel>();
+            foreach(var itemSet in schema.ItemSets)
+            {
+                var itemSetViewModel = new ItemSetViewModel()
+                {
+                    Name = await db.GetInStoreItemLocalizationTextAsync(itemSet.LocalizedName.Remove(0, 1)),
+                    Items = itemSet.Items.ToList().AsReadOnly()
+                };
+
+                itemSets.Add(itemSetViewModel);
+            }
+
+            return View(itemSets.AsReadOnly());
         }
+
         public async Task<ActionResult> Autographs(int? page)
         {
             return View();
         }
+
         public async Task<ActionResult> Cosmetics(string prefab, int? page)
         {
             var viewModel = await GetCosmeticItemsAsync(prefab, page);
@@ -102,8 +118,8 @@ namespace DotaDb.Controllers
                     RarityColor = rarityColor != null ? rarityColor.HexColor : String.Empty,
                     Quality = quality != null ? quality.Name : String.Empty,
                     QualityColor = quality != null ? quality.HexColor : String.Empty,
-                    UsedBy = usedByHeroes.AsReadOnly(),
-                    BundledItems = item.BundledItems.ToList().AsReadOnly()
+                    UsedBy = usedByHeroes != null ? usedByHeroes.AsReadOnly() : null,
+                    BundledItems = item.BundledItems != null ? item.BundledItems.ToList().AsReadOnly() : null
                 };
 
                 inStoreItems.Add(itemViewModel);

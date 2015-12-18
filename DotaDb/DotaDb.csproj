@@ -303,6 +303,7 @@
     <Compile Include="ViewModels\InStoreItemUsedByHeroViewModel.cs" />
     <Compile Include="ViewModels\InStoreItemViewModel.cs" />
     <Compile Include="ViewModels\InStoreViewModel.cs" />
+    <Compile Include="ViewModels\ItemSetViewModel.cs" />
     <Compile Include="ViewModels\LeagueViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameHeroViewModel.cs" />
     <Compile Include="ViewModels\LiveLeagueGameListItemViewModel.cs" />
