@@ -285,6 +285,8 @@
     <Compile Include="Utilities\HeroExtensions.cs" />
     <Compile Include="Utilities\HtmlHelperExtensions.cs" />
     <Compile Include="Utilities\HeroExperience.cs" />
+    <Compile Include="Utilities\InStoreItemExtensions.cs" />
+    <Compile Include="Utilities\ItemAutographExtensions.cs" />
     <Compile Include="Utilities\LiveLeagueGamePlayerDetailComparer.cs" />
     <Compile Include="Utilities\LiveLeagueGamePlayerExtensions.cs" />
     <Compile Include="Utilities\LogHelper.cs" />

@@ -39,6 +39,13 @@ namespace DotaDb.Controllers
         {
             var schema = await db.GetSchemaAsync();
 
+            var autographs = await GetAutographItemsAsync(schema);
+
+            return View(autographs.AsReadOnly());
+        }
+
+        private async Task<List<ItemAutographViewModel>> GetAutographItemsAsync(DotaSchema schema)
+        {
             List<ItemAutographViewModel> autographs = new List<ItemAutographViewModel>();
             foreach (var autograph in schema.ItemAutographs)
             {
@@ -49,13 +56,13 @@ namespace DotaDb.Controllers
                     Language = autograph.Language,
                     WorkshopLink = autograph.WorkshopLink,
                     Modifier = !String.IsNullOrEmpty(autograph.Modifier) ? await db.GetLocalizationTextAsync(autograph.Modifier.Remove(0, 1)) : String.Empty,
-                    IconPath = String.Format("http://dotadb.azureedge.net/autographicons/{0}.jpg", Path.GetFileName(autograph.IconPath)),
+                    IconPath = autograph.GetIconPath()
                 };
 
                 autographs.Add(autographViewModel);
             }
 
-            return View(autographs.AsReadOnly());
+            return autographs;
         }
 
         public async Task<ActionResult> Cosmetics(string prefab, int? page)
@@ -124,7 +131,7 @@ namespace DotaDb.Controllers
                 {
                     Name = await db.GetInStoreItemLocalizationTextAsync(name),
                     Description = await db.GetInStoreItemLocalizationTextAsync(description),
-                    IconPath = String.Format("http://dotadb.azureedge.net/instoreitemicons/{0}.jpg", item.DefIndex),
+                    IconPath = item.GetIconPath(),
                     StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
                     CreationDate = item.CreationDate,
                     ExpirationDate = item.ExpirationDate,
