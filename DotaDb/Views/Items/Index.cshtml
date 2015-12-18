@@ -5,31 +5,9 @@
 }
 
 
-<div class="row">
-    <div class="col-xs-12" style="padding: 4px">
-        <ol class="breadcrumb">
-            <li><a href="@Url.Action("index", "home")">Home</a></li>
-            <li><a href="@Url.Action("index", "items", new { tab = (string)null })">Items</a></li>
-            <li class="active">In Game</li>
-        </ol>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-12" style="padding: 4px">
-        <ul class="nav nav-pills" style="margin-bottom: 10px">
-            <li role="presentation" class="active">
-                <a href="@Url.Action("index", new { tab = "ingame" })">
-                    <i class="fa fa-ticket"></i> In Game
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="@Url.Action("index", new { tab = "instore" })">
-                    <i class="fa fa-star"></i> Cosmetics &amp; In Store
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+
+@Html.Partial("_BreadcrumbMenuPartial", "In Game")
+@Html.Partial("_TabMenuPartial", "ingame")
 <div class="row item-list">
     @foreach (var gameItem in Model)
     {

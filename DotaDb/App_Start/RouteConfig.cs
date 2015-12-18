@@ -12,8 +12,7 @@ namespace DotaDb
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-
+            
             routes.MapRoute(
                 name: "HeroSpecificsWithName",
                 url: "heroes/{id}/{heroName}",
@@ -39,9 +38,9 @@ namespace DotaDb
             );
 
             routes.MapRoute(
-                name: "InStoreItemWithTab",
-                url: "items/{tab}/{prefab}",
-                defaults: new { controller = "Items", Action = "Index", tab = UrlParameter.Optional, prefab = UrlParameter.Optional }
+                name: "CosmeticItems",
+                url: "items/cosmetics/{prefab}",
+                defaults: new { controller = "Items", Action = "Cosmetics", prefab = UrlParameter.Optional }
             );
 
             routes.MapRoute(

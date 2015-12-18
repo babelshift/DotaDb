@@ -1,0 +1,11 @@
+﻿@model string
+
+<div class="row">
+    <div class="col-xs-12" style="padding: 4px">
+        <ol class="breadcrumb">
+            <li ><a href="@Url.Action("index", "home")">Home</a></li>
+            <li><a href="@Url.Action("index", "items")">Items</a></li>
+            <li class="active">@Model</li>
+        </ol>
+    </div>
+</div>

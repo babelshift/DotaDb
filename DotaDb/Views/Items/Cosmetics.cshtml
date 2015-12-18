@@ -2,42 +2,19 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Items in the Store";
+    ViewBag.Title = "Cosmetic Items";
 }
 
-<div class="row">
-    <div class="col-xs-12" style="padding: 4px">
-        <ol class="breadcrumb">
-            <li><a href="@Url.Action("index", "home")">Home</a></li>
-            <li><a href="@Url.Action("index", "items", new { tab = "ingame" })">Items</a></li>
-            <li class="active">In Store</li>
-        </ol>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-12" style="padding: 4px">
-        <ul class="nav nav-pills" style="margin-bottom: 10px">
-            <li role="presentation">
-                <a href="@Url.Action("index", new { tab = "ingame" })">
-                    <i class="fa fa-ticket"></i> In Game
-                </a>
-            </li>
-            <li role="presentation" class="active">
-                <a href="@Url.Action("index", new { tab = "instore" })">
-                    <i class="fa fa-star"></i> Cosmetics &amp; In Store
-                </a>
-            </li>
-        </ul>
-        <hr />
-    </div>
-</div>
+
+@Html.Partial("_BreadcrumbMenuPartial", "Cosmetics")
+@Html.Partial("_TabMenuPartial", "cosmetics")
 <div class="row">
     <div class="col-md-2">
         <div class="panel panel-default">
             <div class="list-group">
                 @foreach (var prefab in Model.Prefabs)
                 {
-                    <a class="list-group-item text-uppercase" href="@Url.Action("index", "items", new { tab = "instore", prefab = prefab.Id })">
+                    <a class="list-group-item text-uppercase" href="@Url.Action("cosmetics", "items", new { prefab = prefab.Id })">
                         @prefab.Name
                     </a>
                 }
@@ -59,7 +36,7 @@
                         <div class="media" style="margin-bottom: 0">
                             <div class="media-left">
                                 <div class="thumbnail" style="margin: 0; border: 0; width: 125px">
-                                    <img class="shadow" src="@item.IconPath" alt="No icon available" >
+                                    <img class="shadow" src="@item.IconPath" alt="No icon available">
                                 </div>
                             </div>
                             <div class="media-body">
@@ -85,12 +62,32 @@
                                         </small>
                                         @foreach (var hero in item.UsedBy)
                                         {
-                                            <img src="@hero.MinimapIconPath" />
+                                            <img src="@hero.MinimapIconPath" width="24" height="24" />
                                             <a href="@Url.Action("hero", "heroes", new { id = hero.HeroId })">
                                                 @hero.HeroName
                                             </a>
                                         }
                                     </p>
+                                    @if (item.BundledItems != null && item.BundledItems.Count > 0)
+                                    {
+                                        <p>
+                                            <small class="text-uppercase">
+                                                <span class="text-muted">Bundled Items:</span>
+                                            </small>
+                                        </p>
+                                        <ul class="list-unstyled">
+                                            @foreach (var bundledItem in item.BundledItems)
+                                            {
+                                                <li>
+                                                    <small class="text-uppercase">
+                                                        <i class="fa fa-chevron-right"></i>
+                                                        @bundledItem
+                                                    </small>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    }
                                 </div>
                             }
                             <div class="col-md-6">
@@ -202,7 +199,7 @@
                 <hr />
                 @if (Model.Items.PageCount > 1)
                 {
-                    @Html.PagedListPager(Model.Items, page => Url.Action("index", new { tab = "instore", page }))
+                    @Html.PagedListPager(Model.Items, page => Url.Action("index", new { tab = "cosmetics", page }))
                 }
             </div>
         </div>

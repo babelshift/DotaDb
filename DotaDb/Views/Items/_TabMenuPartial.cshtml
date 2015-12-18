@@ -1,0 +1,29 @@
+﻿@model string
+
+<div class="row">
+    <div class="col-xs-12" style="padding: 4px">
+        <ul class="nav nav-pills">
+            <li role="presentation" @(Model == "ingame" ? "class=active" : String.Empty)>
+                <a href="@Url.Action("index", "items")">
+                    <i class="fa fa-ticket"></i> In Game
+                </a>
+            </li>
+            <li role="presentation" @(Model == "cosmetics" ? "class=active" : String.Empty)>
+                <a href="@Url.Action("cosmetics", "items")">
+                    <i class="fa fa-star"></i> Cosmetics
+                </a>
+            </li>
+            <li role="presentation" @(Model == "sets" ? "class=active" : String.Empty)>
+                <a href="@Url.Action("sets", "items")">
+                    <i class="fa fa-cubes"></i> Sets
+                </a>
+            </li>
+            <li role="presentation" @(Model == "autographs" ? "class=active" : String.Empty)>
+                <a href="@Url.Action("autographs", "items")">
+                    <i class="fa fa-edit"></i> Autographs
+                </a>
+            </li>
+        </ul>
+        <hr />
+    </div>
+</div>

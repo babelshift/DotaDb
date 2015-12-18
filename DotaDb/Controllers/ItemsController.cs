@@ -15,27 +15,27 @@ namespace DotaDb.Controllers
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
-        public async Task<ActionResult> Index(string tab, string prefab, int? page)
+        public async Task<ActionResult> Sets(int? page)
         {
-            if (tab == "ingame")
-            {
-                var gameItems = await GetGameItemsAsync();
-                return View(gameItems);
-            }
-            else if (tab == "instore")
-            {
-                InStoreViewModel viewModel = await GetInStoreItemsAsync(prefab, page);
-
-                return View("IndexInStore", viewModel);
-            }
-            else
-            {
-                var gameItems = await GetGameItemsAsync();
-                return View(gameItems);
-            }
+            return View();
+        }
+        public async Task<ActionResult> Autographs(int? page)
+        {
+            return View();
+        }
+        public async Task<ActionResult> Cosmetics(string prefab, int? page)
+        {
+            var viewModel = await GetCosmeticItemsAsync(prefab, page);
+            return View(viewModel);
         }
 
-        private async Task<InStoreViewModel> GetInStoreItemsAsync(string prefab, int? page)
+        public async Task<ActionResult> Index(int? page)
+        {
+            var viewModel = await GetGameItemsAsync();
+            return View(viewModel);
+        }
+
+        private async Task<InStoreViewModel> GetCosmeticItemsAsync(string prefab, int? page)
         {
             var schema = await db.GetSchemaAsync();
 
@@ -83,7 +83,6 @@ namespace DotaDb.Controllers
                             });
                         }
                     }
-
                 }
 
                 var itemViewModel = new InStoreItemViewModel()
@@ -103,7 +102,8 @@ namespace DotaDb.Controllers
                     RarityColor = rarityColor != null ? rarityColor.HexColor : String.Empty,
                     Quality = quality != null ? quality.Name : String.Empty,
                     QualityColor = quality != null ? quality.HexColor : String.Empty,
-                    UsedBy = usedByHeroes.AsReadOnly()
+                    UsedBy = usedByHeroes.AsReadOnly(),
+                    BundledItems = item.BundledItems.ToList().AsReadOnly()
                 };
 
                 inStoreItems.Add(itemViewModel);
