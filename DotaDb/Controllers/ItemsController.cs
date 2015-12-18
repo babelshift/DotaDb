@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using PagedList;
 using DotaDb.Utilities;
+using System.IO;
 
 namespace DotaDb.Controllers
 {
@@ -36,7 +37,25 @@ namespace DotaDb.Controllers
 
         public async Task<ActionResult> Autographs(int? page)
         {
-            return View();
+            var schema = await db.GetSchemaAsync();
+
+            List<ItemAutographViewModel> autographs = new List<ItemAutographViewModel>();
+            foreach (var autograph in schema.ItemAutographs)
+            {
+                var autographViewModel = new ItemAutographViewModel()
+                {
+                    Name = autograph.Name,
+                    Autograph = autograph.Autograph,
+                    Language = autograph.Language,
+                    WorkshopLink = autograph.WorkshopLink,
+                    Modifier = !String.IsNullOrEmpty(autograph.Modifier) ? await db.GetLocalizationTextAsync(autograph.Modifier.Remove(0, 1)) : String.Empty,
+                    IconPath = String.Format("http://dotadb.azureedge.net/autographicons/{0}.jpg", Path.GetFileName(autograph.IconPath)),
+                };
+
+                autographs.Add(autographViewModel);
+            }
+
+            return View(autographs.AsReadOnly());
         }
 
         public async Task<ActionResult> Cosmetics(string prefab, int? page)

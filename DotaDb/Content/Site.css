@@ -98,6 +98,10 @@ textarea {
     clear: both;
 }
 
+.autograph-list > .col-md-4:nth-child(3+1) {
+    clear: both;
+}
+
 .abilities p {
     margin-top: 3px;
     line-height: 15px;
@@ -117,19 +121,7 @@ textarea {
     margin-bottom: 5px;
 }
 
-.item-list p {
-    margin-top: 3px;
-    line-height: 15px;
-    margin-bottom: 3px;
-}
-
-.instore-item-list p {
-    margin-top: 3px;
-    line-height: 15px;
-    margin-bottom: 3px;
-}
-
-.league-list p {
+.instore-item-list p, .league-list p, .item-list p, .autograph-list p {
     margin-top: 3px;
     line-height: 15px;
     margin-bottom: 3px;
@@ -305,14 +297,14 @@ textarea {
         padding: 0;
         border: 3px solid;
     }
-    
-    .live-league-game-list .hero .avatar.radiant {
-        border-color: #28B62C;
-    }
 
-    .live-league-game-list .hero .avatar.dire {
-        border-color: #FF4136;
-    }
+        .live-league-game-list .hero .avatar.radiant {
+            border-color: #28B62C;
+        }
+
+        .live-league-game-list .hero .avatar.dire {
+            border-color: #FF4136;
+        }
 
 .live-league-game-list .radiant-hero-list {
     margin-bottom: 10px;

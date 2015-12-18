@@ -1,7 +1,55 @@
-﻿
+﻿@model IReadOnlyCollection<DotaDb.ViewModels.ItemAutographViewModel>
+
 @{
     ViewBag.Title = "Item Autographs";
 }
 
 @Html.Partial("_BreadcrumbMenuPartial", "Autographs")
 @Html.Partial("_TabMenuPartial", "autographs")
+
+<div class="row autograph-list">
+    @foreach (var autograph in Model)
+    {
+        <div class="col-md-4" style="padding: 4px;">
+            <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
+                <div class="media" style="margin-bottom: 0">
+                    <div class="media-left">
+                        <div class="thumbnail" style="margin: 0; border: 0; width: 125px">
+                            <img class="shadow" src="@autograph.IconPath" alt="No icon available">
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">@autograph.Name</h4>
+                        @if (!String.IsNullOrEmpty(autograph.Autograph))
+                        {
+                            <p>
+                                <small class="text-uppercase">
+                                    <span class="text-muted">Autograph:</span>
+                                    @autograph.Autograph
+                                </small>
+                            </p>
+                        }
+                    </div>
+                </div>
+                @if (autograph.WorkshopLink.HasValue)
+                {
+                    <p>
+                        <small class="text-uppercase">
+                            <span class="text-muted">Workshop:</span>
+                            @autograph.WorkshopLink
+                        </small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(autograph.Modifier))
+                {
+                    <p>
+                        <small class="text-uppercase">
+                            <span class="text-muted">Modifier:</span>
+                            @autograph.Modifier
+                        </small>
+                    </p>
+                }
+            </div>
+        </div>
+    }
+</div>
