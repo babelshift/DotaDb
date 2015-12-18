@@ -98,7 +98,7 @@ textarea {
     clear: both;
 }
 
-.autograph-list > .col-md-4:nth-child(3+1) {
+.autograph-list > .col-md-4:nth-child(3n+1) {
     clear: both;
 }
 
