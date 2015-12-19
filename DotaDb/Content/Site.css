@@ -322,14 +322,38 @@ textarea {
     text-align: left;
 }
 
-.death span {
-    color: rgb(255, 36, 36);
+    .death span {
+        color: rgb(255, 36, 36);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+.ultimate-dot {
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
     position: absolute;
+    bottom: -5px;
     left: 50%;
-    top: 50%;
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
 }
+
+    .ultimate-dot.ready {
+        background-color: rgba(0, 255, 33, 1);
+        border: 2px solid #007c0f;
+    }
+
+    .ultimate-dot.not-ready {
+        background-color: rgba(255, 0, 0, 1);
+        border: 2px solid #7c0000;
+    }

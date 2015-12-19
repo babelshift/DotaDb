@@ -193,7 +193,7 @@
                         </div>
                         <div class="media" style="margin-top: 5px">
                             <div class="media-left">
-                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
+                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px; position: relative">
                                     @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                     {
                                         <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
@@ -203,6 +203,14 @@
                                         <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
                                             <img src="@player.HeroAvatarFilePath" class="shadow" />
                                         </a>
+                                    }
+                                    @if (player.UltimateState == 1)
+                                    {
+                                        <div class="ultimate-dot ready"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="ultimate-dot not-ready"></div>
                                     }
                                 </div>
                             </div>
@@ -488,7 +496,7 @@
                                 </div>
                             </div>
                             <div class="media-right">
-                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px;">
+                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px; position: relative">
                                     @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                     {
                                         <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
@@ -498,6 +506,14 @@
                                         <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
                                             <img src="@player.HeroAvatarFilePath" class="shadow" />
                                         </a>
+                                    }
+                                    @if (player.UltimateState == 1)
+                                    {
+                                        <div class="ultimate-dot ready"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="ultimate-dot not-ready"></div>
                                     }
                                 </div>
                             </div>
