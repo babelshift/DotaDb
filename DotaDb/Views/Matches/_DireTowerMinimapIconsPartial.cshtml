@@ -1,0 +1,49 @@
+﻿@model SteamWebAPI2.Models.DOTA2.TowerState
+
+@if (Model != null)
+{
+    if (Model.IsAncientBottomAlive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 80%; left: 87%"></div>
+    }
+    if (Model.IsAncientTopAlive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 83%; left: 83%"></div>
+    }
+    if (Model.IsBottomTier1Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 38%; left: 87%"></div>
+    }
+    if (Model.IsBottomTier2Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 56%; left: 90%"></div>
+    }
+    if (Model.IsBottomTier3Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 68%; left: 89%"></div>
+    }
+    if (Model.IsMiddleTier1Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 50%; left: 56%"></div>
+    }
+    if (Model.IsMiddleTier2Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 65%; left: 65%"></div>
+    }
+    if (Model.IsMiddleTier3Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 73%; left: 75%"></div>
+    }
+    if (Model.IsTopTier1Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 88%; left: 17%"></div>
+    }
+    if (Model.IsTopTier2Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 56%"></div>
+    }
+    if (Model.IsTopTier3Alive)
+    {
+        <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 71%"></div>
+    }
+}

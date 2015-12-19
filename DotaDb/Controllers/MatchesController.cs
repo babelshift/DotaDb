@@ -88,6 +88,7 @@ namespace DotaDb.Controllers
                 GameNumber = liveLeagueGame.GameNumber,
                 LeagueLogoPath = liveLeagueGame.LeagueLogoPath,
                 LeagueName = liveLeagueGame.LeagueName,
+                LeagueTier = liveLeagueGame.LeagueTier,
                 RadiantKillCount = liveLeagueGame.RadiantKillCount,
                 RadiantTeamLogo = liveLeagueGame.RadiantTeamLogo,
                 RadiantTeamName = liveLeagueGame.RadiantTeamName,

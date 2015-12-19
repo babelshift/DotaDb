@@ -761,6 +761,7 @@ namespace DotaDb.Models
                 RoshanRespawnTimer = liveLeagueGame.Scoreboard != null ? liveLeagueGame.Scoreboard.RoshanRespawnTimer : 0,
                 LobbyId = liveLeagueGame.LobbyId,
                 MatchId = liveLeagueGame.MatchId,
+                LeagueTier = liveLeagueGame.LeagueTier.ToString(),
                 StreamDelay = liveLeagueGame.StreamDelaySeconds,
                 RadiantPicks = await GetPicks(liveLeagueGame, 0),
                 DirePicks = await GetPicks(liveLeagueGame, 1),

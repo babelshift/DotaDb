@@ -101,6 +101,6 @@ namespace DotaDb.ViewModels
         public IReadOnlyList<LiveLeagueGameHeroViewModel> RadiantBannedHeroes { get; set; }
         public IReadOnlyList<LiveLeagueGameHeroViewModel> DirePickedHeroes { get; set; }
         public IReadOnlyList<LiveLeagueGameHeroViewModel> DireBannedHeroes { get; set; }
-
+        public string LeagueTier { get; set; }
     }
 }

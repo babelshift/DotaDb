@@ -34,5 +34,6 @@ namespace DotaDb.Models
         public IReadOnlyCollection<LiveLeagueGameHeroModel> DirePicks { get; set; }
         public IReadOnlyCollection<LiveLeagueGameHeroModel> RadiantBans { get; set; }
         public IReadOnlyCollection<LiveLeagueGameHeroModel> DireBans { get; set; }
+        public string LeagueTier { get; internal set; }
     }
 }

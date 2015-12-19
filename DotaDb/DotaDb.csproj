@@ -69,7 +69,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Hyak.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hyak.Common.1.0.3\lib\net45\Hyak.Common.dll</HintPath>
+      <HintPath>..\packages\Hyak.Common.1.1.0\lib\net45\Hyak.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.Common, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -177,12 +177,12 @@
       <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SourceSchemaParser, Version=1.0.0.42, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SourceSchemaParser.1.0.0.42\lib\net46\SourceSchemaParser.dll</HintPath>
+    <Reference Include="SourceSchemaParser, Version=1.0.0.43, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SourceSchemaParser.1.0.0.43\lib\net46\SourceSchemaParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SteamWebAPI2, Version=1.1.0.18, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamWebAPI2.1.1.0.18\lib\net46\SteamWebAPI2.dll</HintPath>
+    <Reference Include="SteamWebAPI2, Version=1.1.0.19, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SteamWebAPI2.1.1.0.19\lib\net46\SteamWebAPI2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -419,6 +419,14 @@
     <Content Include="Views\Items\Sets.cshtml" />
     <Content Include="Views\Items\Autographs.cshtml" />
     <Content Include="Views\Items\_BreadcrumbMenuPartial.cshtml" />
+    <Content Include="Views\Matches\_PlayerUltimateStateDisplayPartial.cshtml" />
+    <Content Include="Views\Matches\_PlayerHeroAvatarPartial.cshtml" />
+    <Content Include="Views\Matches\_PlayerItemIconPartial.cshtml" />
+    <Content Include="Views\Matches\_PlayerKillDeathAssistPartial.cshtml" />
+    <Content Include="Views\Matches\_PlayerStatsPartial.cshtml" />
+    <Content Include="Views\Matches\_RadiantTowerMinimapIconsPartial.cshtml" />
+    <Content Include="Views\Matches\_DireTowerMinimapIconsPartial.cshtml" />
+    <Content Include="Views\Matches\_PlayerDetailTableRowPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

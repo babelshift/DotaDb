@@ -1,0 +1,12 @@
+﻿@model DotaDb.ViewModels.LiveLeagueGamePlayerViewModel
+
+<h4 style="margin: 0">
+    @Model.KillCount
+    <span class="text-muted">/</span>
+    @Model.DeathCount
+    <span class="text-muted">/</span>
+    @Model.AssistCount
+</h4>
+<a href="@Url.Action("hero", "heroes", new { id = Model.HeroId })">
+    <small class="text-uppercase text-muted">@Model.HeroName</small>
+</a>

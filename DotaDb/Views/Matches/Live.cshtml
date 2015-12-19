@@ -26,7 +26,7 @@
                 <p class="text-uppercase" style="margin: 0">
                     <i class="fa fa-list-alt fa-fw"></i>
                     <span class="text-muted">Tier:</span>
-                    Unknown
+                    @Model.LeagueTier
                 </p>
                 <p class="text-uppercase" style="margin: 0">
                     <i class="fa fa-globe fa-fw"></i>
@@ -183,9 +183,6 @@
                         }
                         <h4 class="media-heading" style="margin: 0">
                             @player.PlayerName
-                            <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
-                                <small class="text-uppercase text-muted">@player.HeroName</small>
-                            </a>
                         </h4>
                         <div class="pull-left text-right" style="margin: 9px 5px 0 0; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
@@ -193,35 +190,12 @@
                         </div>
                         <div class="media" style="margin-top: 5px">
                             <div class="media-left">
-                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px; position: relative">
-                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
-                                    {
-                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
-                                    }
-                                    else
-                                    {
-                                        <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
-                                            <img src="@player.HeroAvatarFilePath" class="shadow" />
-                                        </a>
-                                    }
-                                    @if (player.UltimateState == 1)
-                                    {
-                                        <div class="ultimate-dot ready"></div>
-                                    }
-                                    else
-                                    {
-                                        <div class="ultimate-dot not-ready"></div>
-                                    }
-                                </div>
+                                @Html.Partial("_PlayerHeroAvatarPartial", player)
                             </div>
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h4 style="margin: 0">
-                                            @player.KillCount <small class="text-muted text-uppercase">kill</small>, @player.AssistCount <small class="text-muted text-uppercase">assist</small>
-                                            <br />
-                                            @player.DeathCount <small class="text-muted text-uppercase">death</small>
-                                        </h4>
+                                        @Html.Partial("_PlayerKillDeathAssistPartial", player)
                                     </div>
                                     <div class="col-md-6 live-game-items">
                                         @for (int i = 0; i < player.Items.Count; i++)
@@ -234,14 +208,7 @@
                                                 <div class="clearfix"></div>
                                             }
                                             <div class="thumbnail pull-right">
-                                                @if (player.Items[i] != null)
-                                                {
-                                                    <img src="@player.Items[i].IconPath" title="@player.Items[i].Name" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="@Url.Content("~/Content/icons/items/base_lg.png")" title="Empty or unknown" />
-                                                }
+                                                @Html.Partial("_PlayerItemIconPartial", player.Items[i], new ViewDataDictionary())
                                             </div>
                                         }
                                     </div>
@@ -250,30 +217,7 @@
                         </div>
                         <hr style="margin: 5px 0" />
                         <div class="row text-center">
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">Gold:</span>
-                                    @player.Gold
-                                </small>
-                            </div>
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">Worth:</span>
-                                    @player.NetWorth
-                                </small>
-                            </div>
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">GPM:</span>
-                                    @player.GoldPerMinute
-                                </small>
-                            </div>
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">XPM:</span>
-                                    @player.XpPerMinute
-                                </small>
-                            </div>
+                            @Html.Partial("_PlayerStatsPartial", player)
                         </div>
                     </div>
                 }
@@ -297,101 +241,8 @@
                             <div class="minimap-icon-circle large radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
                         }
                     }
-                    @if (Model.RadiantTowerStates != null)
-                    {
-                        if (Model.RadiantTowerStates.IsAncientBottomAlive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 17%; left: 18%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsAncientTopAlive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 20%; left: 15%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsBottomTier1Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 80%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsBottomTier2Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 46%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsBottomTier3Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 28%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsMiddleTier1Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 43%; left: 43%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsMiddleTier2Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 33%; left: 28%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsMiddleTier3Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 27%; left: 22%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsTopTier1Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 65%; left: 12%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsTopTier2Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 45%; left: 12%"></div>
-                        }
-                        if (Model.RadiantTowerStates.IsTopTier3Alive)
-                        {
-                            <div class="minimap-icon-circle small radiant tower" style="bottom: 31%; left: 9%"></div>
-                        }
-                    }
-
-                    @if (Model.DireTowerStates != null)
-                    {
-                        if (Model.DireTowerStates.IsAncientBottomAlive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 80%; left: 87%"></div>
-                        }
-                        if (Model.DireTowerStates.IsAncientTopAlive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 83%; left: 83%"></div>
-                        }
-                        if (Model.DireTowerStates.IsBottomTier1Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 38%; left: 87%"></div>
-                        }
-                        if (Model.DireTowerStates.IsBottomTier2Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 56%; left: 90%"></div>
-                        }
-                        if (Model.DireTowerStates.IsBottomTier3Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 68%; left: 89%"></div>
-                        }
-                        if (Model.DireTowerStates.IsMiddleTier1Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 50%; left: 56%"></div>
-                        }
-                        if (Model.DireTowerStates.IsMiddleTier2Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 65%; left: 65%"></div>
-                        }
-                        if (Model.DireTowerStates.IsMiddleTier3Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 73%; left: 75%"></div>
-                        }
-                        if (Model.DireTowerStates.IsTopTier1Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 88%; left: 17%"></div>
-                        }
-                        if (Model.DireTowerStates.IsTopTier2Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 56%"></div>
-                        }
-                        if (Model.DireTowerStates.IsTopTier3Alive)
-                        {
-                            <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 71%"></div>
-                        }
-                    }
+                    @Html.Partial("_RadiantTowerMinimapIconsPartial", Model.RadiantTowerStates, new ViewDataDictionary())
+                    @Html.Partial("_DireTowerMinimapIconsPartial", Model.DireTowerStates, new ViewDataDictionary())
                 </div>
                 <div class="text-center">
                     <h5 style="margin-bottom: 0" class="text-uppercase">
@@ -453,9 +304,6 @@
                         }
                         <h4 class="media-heading" style="margin: 0">
                             @player.PlayerName
-                            <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
-                                <small class="text-uppercase text-muted">@player.HeroName</small>
-                            </a>
                         </h4>
                         <div class="pull-right text-left" style="margin: 9px 0 0 5px; line-height: 13px">
                             <small class="text-uppercase text-muted">Level</small>
@@ -475,75 +323,22 @@
                                                 <div class="clearfix"></div>
                                             }
                                             <div class="thumbnail pull-left">
-                                                @if (player.Items[i] != null)
-                                                {
-                                                    <img src="@player.Items[i].IconPath" title="@player.Items[i].Name" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="@Url.Content("~/Content/icons/items/base_lg.png")" title="Empty or unknown" />
-                                                }
+                                                @Html.Partial("_PlayerItemIconPartial", player.Items[i], new ViewDataDictionary())
                                             </div>
                                         }
                                     </div>
                                     <div class="col-md-6">
-                                        <h4 style="margin: 0">
-                                            @player.KillCount <small class="text-muted text-uppercase">kill</small>, @player.AssistCount <small class="text-muted text-uppercase">assist</small>
-                                            <br />
-                                            @player.DeathCount <small class="text-muted text-uppercase">death</small>
-                                        </h4>
+                                        @Html.Partial("_PlayerKillDeathAssistPartial", player)
                                     </div>
                                 </div>
                             </div>
                             <div class="media-right">
-                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px; position: relative">
-                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
-                                    {
-                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
-                                    }
-                                    else
-                                    {
-                                        <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })" class="player-hero-link">
-                                            <img src="@player.HeroAvatarFilePath" class="shadow" />
-                                        </a>
-                                    }
-                                    @if (player.UltimateState == 1)
-                                    {
-                                        <div class="ultimate-dot ready"></div>
-                                    }
-                                    else
-                                    {
-                                        <div class="ultimate-dot not-ready"></div>
-                                    }
-                                </div>
+                                @Html.Partial("_PlayerHeroAvatarPartial", player)
                             </div>
                         </div>
                         <hr style="margin: 5px 0" />
                         <div class="row text-center">
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">Gold:</span>
-                                    @player.Gold
-                                </small>
-                            </div>
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">Worth:</span>
-                                    @player.NetWorth
-                                </small>
-                            </div>
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">GPM:</span>
-                                    @player.GoldPerMinute
-                                </small>
-                            </div>
-                            <div class="col-md-3">
-                                <small>
-                                    <span class="text-muted text-uppercase">XPM:</span>
-                                    @player.XpPerMinute
-                                </small>
-                            </div>
+                            @Html.Partial("_PlayerStatsPartial", player)
                         </div>
                     </div>
                 }
@@ -582,43 +377,13 @@
                     @foreach (var player in Model.RadiantPlayers)
                     {
                         <tr class="success">
-                            <td>
-                                <img src="@player.MinimapIconFilePath" width="24" height="24" />
-                                @player.PlayerName
-                            </td>
-                            <td>@player.HeroName</td>
-                            <td>@player.Level</td>
-                            <td>@player.NetWorth</td>
-                            <td>@player.Gold</td>
-                            <td>@player.XP</td>
-                            <td>@player.KillCount</td>
-                            <td>@player.DeathCount</td>
-                            <td>@player.AssistCount</td>
-                            <td>@player.GoldPerMinute</td>
-                            <td>@player.XpPerMinute</td>
-                            <td>@player.LastHits</td>
-                            <td>@player.Denies</td>
+                            @Html.Partial("_PlayerDetailTableRowPartial", player)
                         </tr>
                     }
                     @foreach (var player in Model.DirePlayers)
                     {
                         <tr class="danger">
-                            <td>
-                                <img src="@player.MinimapIconFilePath" width="24" height="24" />
-                                @player.PlayerName
-                            </td>
-                            <td>@player.HeroName</td>
-                            <td>@player.Level</td>
-                            <td>@player.NetWorth</td>
-                            <td>@player.Gold</td>
-                            <td>@player.XP</td>
-                            <td>@player.KillCount</td>
-                            <td>@player.DeathCount</td>
-                            <td>@player.AssistCount</td>
-                            <td>@player.GoldPerMinute</td>
-                            <td>@player.XpPerMinute</td>
-                            <td>@player.LastHits</td>
-                            <td>@player.Denies</td>
+                            @Html.Partial("_PlayerDetailTableRowPartial", player)
                         </tr>
                     }
                 </tbody>

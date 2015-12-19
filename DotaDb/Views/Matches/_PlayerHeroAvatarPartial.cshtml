@@ -1,0 +1,15 @@
+﻿@model DotaDb.ViewModels.LiveLeagueGamePlayerViewModel
+
+<div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 75px; position: relative">
+    @if (String.IsNullOrEmpty(Model.HeroAvatarFilePath))
+    {
+        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+    }
+    else
+    {
+        <a href="@Url.Action("hero", "heroes", new { id = Model.HeroId })" class="player-hero-link">
+            <img src="@Model.HeroAvatarFilePath" class="shadow" />
+        </a>
+    }
+    @Html.Partial("_PlayerUltimateStateDisplayPartial", Model.UltimateState)
+</div>
