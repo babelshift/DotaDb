@@ -920,7 +920,9 @@ namespace DotaDb.Models
             {
                 if (radiantPlayerDetail != null)
                 {
-                    return radiantPlayerDetail[playerAccountId];
+                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    radiantPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
+                    return playerDetail;
                 }
             }
             // team 1 is dire
@@ -928,7 +930,9 @@ namespace DotaDb.Models
             {
                 if (direPlayerDetail != null)
                 {
-                    return direPlayerDetail[playerAccountId];
+                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    direPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
+                    return playerDetail;
                 }
             }
 
