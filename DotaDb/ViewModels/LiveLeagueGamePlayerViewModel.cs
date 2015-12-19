@@ -1,4 +1,5 @@
 ﻿using DotaDb.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace DotaDb.ViewModels
@@ -20,7 +21,6 @@ namespace DotaDb.ViewModels
         public double PositionYPercent { get; set; }
         public string MinimapIconFilePath { get; set; }
         public IReadOnlyList<LiveLeagueGameItemViewModel> Items { get; set; }
-        public int RespawnTimer { get; set; }
         public int NetWorth { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
@@ -37,5 +37,8 @@ namespace DotaDb.ViewModels
                 return HeroExperience.ToReachLevel(Level);
             }
         }
+        public int RespawnTimerSeconds { get; set; }
+        public TimeSpan RespawnTimer { get { return TimeSpan.FromSeconds(RespawnTimerSeconds); } }
+        public bool IsAlive { get { return RespawnTimerSeconds <= 0; } }
     }
 }

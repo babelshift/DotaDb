@@ -159,13 +159,13 @@ namespace DotaDb.Controllers
                             Denies = y.Denies,
                             Gold = y.Gold,
                             GoldPerMinute = y.GoldPerMinute,
-                            RespawnTimer = y.RespawnTimer,
                             UltimateState = y.UltimateState,
                             LastHits = y.LastHits,
                             Level = y.Level,
                             NetWorth = y.NetWorth,
                             UltimateCooldown = y.UltimateCooldown,
                             XpPerMinute = y.XpPerMinute,
+                            RespawnTimerSeconds = y.RespawnTimer,
                             Items = new List<LiveLeagueGameItemViewModel>()
                             {
                                 MakeGameItemViewModel(y.Item0),
@@ -198,13 +198,13 @@ namespace DotaDb.Controllers
                             Denies = y.Denies,
                             Gold = y.Gold,
                             GoldPerMinute = y.GoldPerMinute,
-                            RespawnTimer = y.RespawnTimer,
                             UltimateState = y.UltimateState,
                             LastHits = y.LastHits,
                             Level = y.Level,
                             NetWorth = y.NetWorth,
                             UltimateCooldown = y.UltimateCooldown,
                             XpPerMinute = y.XpPerMinute,
+                            RespawnTimerSeconds = y.RespawnTimer,
                             Items = new List<LiveLeagueGameItemViewModel>()
                             {
                                 MakeGameItemViewModel(y.Item0),
