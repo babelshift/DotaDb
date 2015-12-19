@@ -831,44 +831,44 @@ namespace DotaDb.Models
                     player.AccountId = playerDetail.AccountId;
                     player.Level = playerDetail.Level;
                     player.NetWorth = playerDetail.NetWorth;
-                }
 
-                var items = await GetGameItemsAsync();
+                    var items = await GetGameItemsAsync();
 
-                var item0 = items.FirstOrDefault(x => x.Id == playerDetail.Item0);
-                if (item0 != null)
-                {
-                    player.Item0 = new LiveLeagueGameItemModel() { Id = item0.Id, Name = item0.Name, IconFileName = item0.GetIconPath() };
-                }
+                    var item0 = items.FirstOrDefault(x => x.Id == playerDetail.Item0);
+                    if (item0 != null)
+                    {
+                        player.Item0 = new LiveLeagueGameItemModel() { Id = item0.Id, Name = item0.Name, IconFileName = item0.GetIconPath() };
+                    }
 
-                var item1 = items.FirstOrDefault(x => x.Id == playerDetail.Item1);
-                if (item1 != null)
-                {
-                    player.Item1 = new LiveLeagueGameItemModel() { Id = item1.Id, Name = item1.Name, IconFileName = item1.GetIconPath() };
-                }
+                    var item1 = items.FirstOrDefault(x => x.Id == playerDetail.Item1);
+                    if (item1 != null)
+                    {
+                        player.Item1 = new LiveLeagueGameItemModel() { Id = item1.Id, Name = item1.Name, IconFileName = item1.GetIconPath() };
+                    }
 
-                var item2 = items.FirstOrDefault(x => x.Id == playerDetail.Item2);
-                if (item2 != null)
-                {
-                    player.Item2 = new LiveLeagueGameItemModel() { Id = item2.Id, Name = item2.Name, IconFileName = item2.GetIconPath() };
-                }
+                    var item2 = items.FirstOrDefault(x => x.Id == playerDetail.Item2);
+                    if (item2 != null)
+                    {
+                        player.Item2 = new LiveLeagueGameItemModel() { Id = item2.Id, Name = item2.Name, IconFileName = item2.GetIconPath() };
+                    }
 
-                var item3 = items.FirstOrDefault(x => x.Id == playerDetail.Item3);
-                if (item3 != null)
-                {
-                    player.Item3 = new LiveLeagueGameItemModel() { Id = item3.Id, Name = item3.Name, IconFileName = item3.GetIconPath() };
-                }
+                    var item3 = items.FirstOrDefault(x => x.Id == playerDetail.Item3);
+                    if (item3 != null)
+                    {
+                        player.Item3 = new LiveLeagueGameItemModel() { Id = item3.Id, Name = item3.Name, IconFileName = item3.GetIconPath() };
+                    }
 
-                var item4 = items.FirstOrDefault(x => x.Id == playerDetail.Item4);
-                if (item4 != null)
-                {
-                    player.Item4 = new LiveLeagueGameItemModel() { Id = item4.Id, Name = item4.Name, IconFileName = item4.GetIconPath() };
-                }
+                    var item4 = items.FirstOrDefault(x => x.Id == playerDetail.Item4);
+                    if (item4 != null)
+                    {
+                        player.Item4 = new LiveLeagueGameItemModel() { Id = item4.Id, Name = item4.Name, IconFileName = item4.GetIconPath() };
+                    }
 
-                var item5 = items.FirstOrDefault(x => x.Id == playerDetail.Item5);
-                if (item5 != null)
-                {
-                    player.Item5 = new LiveLeagueGameItemModel() { Id = item5.Id, Name = item5.Name, IconFileName = item5.GetIconPath() };
+                    var item5 = items.FirstOrDefault(x => x.Id == playerDetail.Item5);
+                    if (item5 != null)
+                    {
+                        player.Item5 = new LiveLeagueGameItemModel() { Id = item5.Id, Name = item5.Name, IconFileName = item5.GetIconPath() };
+                    }
                 }
 
                 player.HeroUrl = hero.Url;

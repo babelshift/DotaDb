@@ -19,7 +19,7 @@ namespace DotaDb.Utilities
                 return String.Empty;
             }
 
-            return String.Format("{0}{1}.jpg", autographIconsBaseUrl, Path.GetFileName(autograph.IconPath));
+            return String.Format("{0}{1}.jpg?5", autographIconsBaseUrl, Path.GetFileName(autograph.IconPath));
         }
     }
 }
