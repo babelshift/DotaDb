@@ -18,8 +18,7 @@ namespace DotaDb.Models
 {
     public sealed class InMemoryDb
     {
-        private const string storageContainerName = "schemas";
-
+        private const string schemaContainerName = "schemas";
         private static volatile InMemoryDb instance;
         private static object sync = new object();
         private MemoryCache cache = MemoryCache.Default;
@@ -360,87 +359,6 @@ namespace DotaDb.Models
 
         #endregion Enum Type Lookup Methods
 
-        public async Task<string> GetTeamLogoUrlAsync(long ugcId)
-        {
-            string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
-            var steamRemoteStorage = new SteamRemoteStorage(steamWebApiKey);
-            var ugcFileDetails = await steamRemoteStorage.GetUGCFileDetailsAsync(ugcId, 570);
-            if (ugcFileDetails != null)
-            {
-                return ugcFileDetails.URL;
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
-
-        public async Task<string> GetLocalizationTextAsync(string key)
-        {
-            if(String.IsNullOrEmpty(key))
-            {
-                return String.Empty;
-            }
-
-            string value = String.Empty;
-            var localizationKeys = await GetPublicLocalizationAsync();
-            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
-
-        public async Task<string> GetInStoreItemLocalizationTextAsync(string key)
-        {
-            if (String.IsNullOrEmpty(key))
-            {
-                return String.Empty;
-            }
-            string value = String.Empty;
-            var localizationKeys = await GetInStoreItemLocalizationAsync();
-            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
-
-        public async Task<DotaItemBuildSchemaItem> GetItemBuildAsync(string heroName)
-        {
-            string fileName = String.Format("default_{0}.txt", heroName.Replace("npc_dota_hero_", ""));
-            var fileLines = await GetFileLinesFromStorageAsync(fileName);
-            string[] vdf = fileLines.ToArray();
-            var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
-            return itemBuild;
-        }
-
-        private async Task<IList<string>> GetFileLinesFromStorageAsync(string fileName)
-        {
-            var blob = await storage.DownloadBlobAsync(storageContainerName, fileName);
-
-            List<string> contents = new List<string>();
-            using (var ms = new MemoryStream(blob))
-            {
-                using (var sr = new StreamReader(ms))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        string line = await sr.ReadLineAsync();
-                        contents.Add(line);
-                    }
-                }
-            }
-
-            return contents;
-        }
-
         #region Cached Data
 
         public async Task<PlayerCountModel> GetPlayerCountsAsync()
@@ -497,7 +415,7 @@ namespace DotaDb.Models
 
         private async Task<DotaSchema> GetSchemaFromFileAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(mainSchemaFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaFileName)).ToArray();
             var schema = SourceSchemaParser.SchemaFactory.GetDotaSchema(vdf);
             return schema;
         }
@@ -582,6 +500,7 @@ namespace DotaDb.Models
                         .ToDictionary(x => x.AccountId, x => x);
                 }
 
+                // for all the players in this game, try to fill in their details, stats, names, etc.
                 foreach (var player in liveLeagueGameModel.Players)
                 {
                     // skip over spectators/observers/commentators
@@ -591,9 +510,9 @@ namespace DotaDb.Models
                     }
 
                     var hero = await GetHeroKeyValueAsync(player.HeroId);
-
                     player.HeroName = await GetLocalizationTextAsync(hero.Name);
                     player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
+                    player.HeroUrl = hero.Url;
 
                     LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
@@ -608,8 +527,6 @@ namespace DotaDb.Models
                         player.NetWorth = playerDetail.NetWorth;
                         player.Level = playerDetail.Level;
                     }
-
-                    player.HeroUrl = hero.Url;
                 }
 
                 #endregion Fill in Player Details
@@ -633,98 +550,12 @@ namespace DotaDb.Models
                     }
                 }
 
-                // this property will only exist if the team is a tournament/league coordinated team
-                if (liveLeagueGame.RadiantTeam != null)
-                {
-                    //liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
-                }
-
-                // this property will only exist if the team is a tournament/league coordinated team
-                if (liveLeagueGame.DireTeam != null)
-                {
-                    //liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
-                }
-
                 #endregion Fill in League/Team Details
 
                 liveLeagueGameModels.Add(liveLeagueGameModel);
             }
 
             return liveLeagueGameModels.AsReadOnly();
-        }
-
-        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetPicks(LiveLeagueGame game, int team)
-        {
-            List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
-            var heroes = await GetHeroesAsync();
-
-            if (team == 0)
-            {
-                if(game.Scoreboard != null && game.Scoreboard.Radiant != null && game.Scoreboard.Radiant.Picks != null)
-                {
-                    foreach(var pickedHeroItem in game.Scoreboard.Radiant.Picks)
-                    {
-                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
-                        selectedHeroes.Add(hero);
-                    }
-                }
-            }
-            else
-            {
-                if (game.Scoreboard != null && game.Scoreboard.Dire != null && game.Scoreboard.Dire.Picks != null)
-                {
-                    foreach (var pickedHeroItem in game.Scoreboard.Dire.Picks)
-                    {
-                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
-                        selectedHeroes.Add(hero);
-                    }
-                }
-            }
-
-            return selectedHeroes.AsReadOnly();
-        }
-
-        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetBans(LiveLeagueGame game, int team)
-        {
-            List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
-            var heroes = await GetHeroesAsync();
-
-            if (team == 0)
-            {
-                if (game.Scoreboard != null && game.Scoreboard.Radiant != null && game.Scoreboard.Radiant.Bans != null)
-                {
-                    foreach (var pickedHeroItem in game.Scoreboard.Radiant.Bans)
-                    {
-                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
-                        selectedHeroes.Add(hero);
-                    }
-                }
-            }
-            else
-            {
-                if (game.Scoreboard != null && game.Scoreboard.Dire != null && game.Scoreboard.Dire.Bans != null)
-                {
-                    foreach (var pickedHeroItem in game.Scoreboard.Dire.Bans)
-                    {
-                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
-                        selectedHeroes.Add(hero);
-                    }
-                }
-            }
-
-            return selectedHeroes.AsReadOnly();
-        }
-
-        private LiveLeagueGameHeroModel GetHero(IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes, int heroId)
-        {
-            var pickedHero = GetKeyValue(heroId, heroes);
-            return new LiveLeagueGameHeroModel()
-            {
-                Id = heroId,
-                Name = pickedHero.Name,
-                AvatarImagePath = pickedHero.GetAvatarImageFilePath(),
-                Url = pickedHero.Url
-            };
         }
 
         public async Task<LiveLeagueGameModel> GetLiveLeagueGameAsync(long matchId)
@@ -810,6 +641,7 @@ namespace DotaDb.Models
 
                 player.HeroName = await GetLocalizationTextAsync(hero.Name);
                 player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
+                player.HeroUrl = hero.Url;
 
                 LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
@@ -871,8 +703,6 @@ namespace DotaDb.Models
                         player.Item5 = new LiveLeagueGameItemModel() { Id = item5.Id, Name = item5.Name, IconFileName = item5.GetIconPath() };
                     }
                 }
-
-                player.HeroUrl = hero.Url;
             }
 
             #endregion Fill in Player Details
@@ -896,47 +726,9 @@ namespace DotaDb.Models
                 }
             }
 
-            // this property will only exist if the team is a tournament/league coordinated team
-            if (liveLeagueGame.RadiantTeam != null)
-            {
-                //liveLeagueGameModel.RadiantTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.RadiantTeam.TeamLogo);
-            }
-
-            // this property will only exist if the team is a tournament/league coordinated team
-            if (liveLeagueGame.DireTeam != null)
-            {
-                //liveLeagueGameModel.DireTeamLogo = await GetTeamLogoUrlAsync(liveLeagueGame.DireTeam.TeamLogo);
-            }
-
             #endregion Fill in League/Team Details
 
             return liveLeagueGameModel;
-        }
-
-        private static LiveLeagueGamePlayerDetail GetPlayerDetail(int playerTeam, int playerAccountId, Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail, Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail)
-        {
-            // team 0 is radiant, if the player hasn't picked a hero yet, details won't exist
-            if (playerTeam == 0)
-            {
-                if (radiantPlayerDetail != null)
-                {
-                    LiveLeagueGamePlayerDetail playerDetail = null;
-                    radiantPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
-                    return playerDetail;
-                }
-            }
-            // team 1 is dire
-            else if (playerTeam == 1)
-            {
-                if (direPlayerDetail != null)
-                {
-                    LiveLeagueGamePlayerDetail playerDetail = null;
-                    direPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
-                    return playerDetail;
-                }
-            }
-
-            return null;
         }
 
         private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPIAsync()
@@ -967,7 +759,7 @@ namespace DotaDb.Models
 
         private async Task<IReadOnlyDictionary<int, DotaHeroSchemaItem>> GetHeroesFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(heroesFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, heroesFileName)).ToArray();
             var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
             return heroes.ToDictionary(x => x.HeroId, x => x);
         }
@@ -979,7 +771,7 @@ namespace DotaDb.Models
 
         private async Task<IReadOnlyCollection<DotaAbilitySchemaItem>> GetHeroAbilitiesFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(heroAbilitiesFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, heroAbilitiesFileName)).ToArray();
             var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
             return abilities;
         }
@@ -991,19 +783,19 @@ namespace DotaDb.Models
 
         private async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(tooltipsEnglishFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, tooltipsEnglishFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }
 
-        public async Task<IReadOnlyDictionary<string, string>> GetInStoreItemLocalizationAsync()
+        public async Task<IReadOnlyDictionary<string, string>> GetItemsLocalizationAsync()
         {
             return await AddOrGetCachedValue(MemoryCacheKey.InStoreItemLocalizationKeys, GetInStoreItemLocalizationFromSchemaAsync);
         }
 
         private async Task<IReadOnlyDictionary<string, string>> GetInStoreItemLocalizationFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(mainSchemaEnglishFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaEnglishFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }
@@ -1015,7 +807,7 @@ namespace DotaDb.Models
 
         private async Task<IReadOnlyDictionary<int, DotaItemAbilitySchemaItem>> GetItemAbilitiesFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(itemAbilitiesFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, itemAbilitiesFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
             return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
         }
@@ -1043,8 +835,8 @@ namespace DotaDb.Models
 
         private async Task<IReadOnlyDictionary<string, DotaLeague>> GetLeagueTicketsFromSchemaAsync()
         {
-            string[] schemaVdf = (await GetFileLinesFromStorageAsync(mainSchemaFileName)).ToArray();
-            string[] localizationVdf = (await GetFileLinesFromStorageAsync(mainSchemaEnglishFileName)).ToArray();
+            string[] schemaVdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaFileName)).ToArray();
+            string[] localizationVdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaEnglishFileName)).ToArray();
             var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromText(schemaVdf, localizationVdf);
             return new ReadOnlyDictionary<string, DotaLeague>(leagues.ToDictionary(x => x.ItemDef, x => x));
         }
@@ -1076,6 +868,189 @@ namespace DotaDb.Models
         #endregion Cached Data
 
         #region Utility Methods
+
+
+        public async Task<string> GetTeamLogoUrlAsync(long ugcId)
+        {
+            string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
+            var steamRemoteStorage = new SteamRemoteStorage(steamWebApiKey);
+            var ugcFileDetails = await steamRemoteStorage.GetUGCFileDetailsAsync(ugcId, 570);
+            if (ugcFileDetails != null)
+            {
+                return ugcFileDetails.URL;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        public async Task<string> GetLocalizationTextAsync(string key)
+        {
+            if (String.IsNullOrEmpty(key))
+            {
+                return String.Empty;
+            }
+
+            string value = String.Empty;
+            var localizationKeys = await GetPublicLocalizationAsync();
+            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        public async Task<string> GetItemsLocalizationTextAsync(string key)
+        {
+            if (String.IsNullOrEmpty(key))
+            {
+                return String.Empty;
+            }
+            string value = String.Empty;
+            var localizationKeys = await GetItemsLocalizationAsync();
+            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        public async Task<DotaItemBuildSchemaItem> GetItemBuildAsync(string heroName)
+        {
+            string fileName = String.Format("default_{0}.txt", heroName.Replace("npc_dota_hero_", ""));
+            var fileLines = await GetFileLinesFromStorageAsync(schemaContainerName, fileName);
+            string[] vdf = fileLines.ToArray();
+            var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
+            return itemBuild;
+        }
+
+        private async Task<IList<string>> GetFileLinesFromStorageAsync(string containerName, string fileName)
+        {
+            var blob = await storage.DownloadBlobAsync(containerName, fileName);
+
+            List<string> contents = new List<string>();
+            using (var ms = new MemoryStream(blob))
+            {
+                using (var sr = new StreamReader(ms))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string line = await sr.ReadLineAsync();
+                        contents.Add(line);
+                    }
+                }
+            }
+
+            return contents;
+        }
+
+        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetPicks(LiveLeagueGame game, int team)
+        {
+            List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
+            var heroes = await GetHeroesAsync();
+
+            if (team == 0)
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Radiant != null && game.Scoreboard.Radiant.Picks != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Radiant.Picks)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+            else
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Dire != null && game.Scoreboard.Dire.Picks != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Dire.Picks)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+
+            return selectedHeroes.AsReadOnly();
+        }
+
+        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetBans(LiveLeagueGame game, int team)
+        {
+            List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
+            var heroes = await GetHeroesAsync();
+
+            if (team == 0)
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Radiant != null && game.Scoreboard.Radiant.Bans != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Radiant.Bans)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+            else
+            {
+                if (game.Scoreboard != null && game.Scoreboard.Dire != null && game.Scoreboard.Dire.Bans != null)
+                {
+                    foreach (var pickedHeroItem in game.Scoreboard.Dire.Bans)
+                    {
+                        var hero = GetHero(heroes, pickedHeroItem.HeroId);
+                        selectedHeroes.Add(hero);
+                    }
+                }
+            }
+
+            return selectedHeroes.AsReadOnly();
+        }
+
+        private LiveLeagueGameHeroModel GetHero(IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes, int heroId)
+        {
+            var pickedHero = GetKeyValue(heroId, heroes);
+            return new LiveLeagueGameHeroModel()
+            {
+                Id = heroId,
+                Name = pickedHero.Name,
+                AvatarImagePath = pickedHero.GetAvatarImageFilePath(),
+                Url = pickedHero.Url
+            };
+        }
+
+        private static LiveLeagueGamePlayerDetail GetPlayerDetail(int playerTeam, int playerAccountId, Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail, Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail)
+        {
+            // team 0 is radiant, if the player hasn't picked a hero yet, details won't exist
+            if (playerTeam == 0)
+            {
+                if (radiantPlayerDetail != null)
+                {
+                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    radiantPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
+                    return playerDetail;
+                }
+            }
+            // team 1 is dire
+            else if (playerTeam == 1)
+            {
+                if (direPlayerDetail != null)
+                {
+                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    direPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
+                    return playerDetail;
+                }
+            }
+
+            return null;
+        }
+
 
         private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
         {

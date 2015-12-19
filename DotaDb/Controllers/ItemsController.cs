@@ -25,7 +25,7 @@ namespace DotaDb.Controllers
             {
                 var itemSetViewModel = new ItemSetViewModel()
                 {
-                    Name = await db.GetInStoreItemLocalizationTextAsync(itemSet.LocalizedName.Remove(0, 1)),
+                    Name = await db.GetItemsLocalizationTextAsync(itemSet.LocalizedName.Remove(0, 1)),
                     Items = itemSet.Items.ToList().AsReadOnly()
                 };
 
@@ -129,8 +129,8 @@ namespace DotaDb.Controllers
 
                 var itemViewModel = new InStoreItemViewModel()
                 {
-                    Name = await db.GetInStoreItemLocalizationTextAsync(name),
-                    Description = await db.GetInStoreItemLocalizationTextAsync(description),
+                    Name = await db.GetItemsLocalizationTextAsync(name),
+                    Description = await db.GetItemsLocalizationTextAsync(description),
                     IconPath = item.GetIconPath(),
                     StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
                     CreationDate = item.CreationDate,

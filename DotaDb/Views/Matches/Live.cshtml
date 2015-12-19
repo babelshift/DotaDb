@@ -6,29 +6,30 @@
     ViewBag.RefreshPageTime = 20;
 }
 
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <ol class="breadcrumb">
-            <li><a href="@Url.Action("index", "matches")">Matches</a></li>
-            <li><a href="@Url.Action("index", "matches")">Live League Games</a></li>
-            <li class="active">ID: @Model.MatchId</li>
-        </ol>
+<div class="live-league-game">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <ol class="breadcrumb">
+                <li><a href="@Url.Action("index", "matches")">Matches</a></li>
+                <li><a href="@Url.Action("index", "matches")">Live League Games</a></li>
+                <li class="active">ID: @Model.MatchId</li>
+            </ol>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <div class="row">
-            <div class="col-md-3">
-                <h4 style="margin: 0">@Model.LeagueName</h4>
-                <div class="thumbnail" style="margin: 0; border: 0; width: 100px">
-                    <img src="@Model.LeagueLogoPath" class="shadow" />
-                </div>
-                <p class="text-uppercase" style="margin: 0">
-                    <i class="fa fa-list-alt fa-fw"></i>
-                    <span class="text-muted">Tier:</span>
-                    @Model.LeagueTier
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4 class="league-name">@Model.LeagueName</h4>
+                    <div class="thumbnail league-logo">
+                        <img src="@Model.LeagueLogoPath" class="shadow" />
+                    </div>
+                    <p class="text-uppercase league-tier">
+                        <i class="fa fa-list-alt fa-fw"></i>
+                        <span class="text-muted">Tier:</span>
+                        @Model.LeagueTier
                 </p>
-                <p class="text-uppercase" style="margin: 0">
+                <p class="text-uppercase league-location">
                     <i class="fa fa-globe fa-fw"></i>
                     <span class="text-muted">Location:</span>
                     Unknown
@@ -111,35 +112,35 @@
                 </div>
             </div>
             <div class="col-md-3 text-right text-uppercase">
-                <p style="margin: 0">
+                <p class="no-margin">
                     <span class="text-muted">Lobby ID:</span>
                     @Model.LobbyId
                 </p>
-                <p style="margin: 0">
+                <p class="no-margin">
                     <span class="text-muted">Match ID:</span>
                     @Model.MatchId
                 </p>
-                <p style="margin: 0">
+                <p class="no-margin">
                     <span class="text-muted">Stream Delay:</span>
                     <span class="text-lowercase">@Model.StreamDelay</span>
                 </p>
-                <p style="margin: 0">
+                <p class="no-margin">
                     <i class="fa fa-ticket fa-fw"></i>
                     <span class="text-muted">Game #:</span>
                     @Model.GameNumber
                 </p>
-                <p style="margin: 0">
+                <p class="no-margin">
                     <span class="text-muted">Series:</span>
                     @String.Format("{0} (radiant) - {1} (dire)", Model.RadiantSeriesWins, Model.DireSeriesWins) (Best of @Model.BestOf)
                 </p>
-                <p style="margin: 0">
+                <p class="no-margin">
                     <i class="fa fa-clock-o fa-fw"></i>
                     <span class="text-muted">
                         Started:
                     </span>
                     @Model.TimeStarted.ToString("dd MMM yyyy HH:mm:ss")
                 </p>
-                <p style="margin: 0">
+                <p class="no-margin">
                     <i class="fa fa-desktop fa-fw"></i>
                     <span class="text-muted">
                         Spectators:
@@ -155,40 +156,40 @@
     <div class="col-md-10 col-md-offset-1">
         <div class="row">
             <div class="col-md-4">
-                <h3 style="margin: 0; font-weight: 100;" class="pull-left">@Model.RadiantTeamName</h3>
-                <h2 style="margin: 0;" class="pull-right">@Model.RadiantKillCount <small class="text-uppercase">kills</small></h2>
+                <h3 class="pull-left team-name">@Model.RadiantTeamName</h3>
+                <h2 class="pull-right no-margin">@Model.RadiantKillCount <small class="text-uppercase">kills</small></h2>
             </div>
             <div class="col-md-4 text-center">
-                <h4 style="margin: 0;">
+                <h4 class="no-margin">
                     <i class="fa fa-clock-o"></i>
                     <span class="text-muted text-uppercase">Elapsed:</span>
                     @Model.ElapsedTimeDisplay
                 </h4>
             </div>
             <div class="col-md-4 text-right">
-                <h3 style="margin: 0; font-weight: 100;" class="pull-right">@Model.DireTeamName</h3>
-                <h2 style="margin: 0;" class="pull-left">@Model.DireKillCount <small class="text-uppercase">kills</small></h2>
+                <h3 class="pull-right team-name">@Model.DireTeamName</h3>
+                <h2 class="pull-left no-margin">@Model.DireKillCount <small class="text-uppercase">kills</small></h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
                 @foreach (var player in Model.RadiantPlayers)
                 {
-                    <div class="well well-sm" style="padding: 5px; margin-bottom: 10px; position: relative;">
+                    <div class="well well-sm player-well">
                         @if (!player.IsAlive)
                         {
                             <div class="death text-danger">
                                 <span>Respawn in @player.RespawnTimerSeconds sec</span>
                             </div>
                         }
-                        <h4 class="media-heading" style="margin: 0">
+                        <h4 class="media-heading no-margin">
                             @player.PlayerName
                         </h4>
-                        <div class="pull-left text-right" style="margin: 9px 5px 0 0; line-height: 13px">
+                        <div class="pull-left text-right player-level">
                             <small class="text-uppercase text-muted">Level</small>
-                            <h4 style="margin: 0;">@player.Level</h4>
+                            <h4 class="no-margin">@player.Level</h4>
                         </div>
-                        <div class="media" style="margin-top: 5px">
+                        <div class="media player-details">
                             <div class="media-left">
                                 @Html.Partial("_PlayerHeroAvatarPartial", player)
                             </div>
@@ -223,7 +224,7 @@
                 }
             </div>
             <div class="col-md-4 text-center">
-                <div style="position: relative; width: 90%" class="center-block">
+                <div class="center-block minimap-container">
                     <img src="~/Content/dota_minimap_512.jpg" style="width: 100%" />
                     @foreach (var player in Model.DirePlayers)
                     {
@@ -245,7 +246,7 @@
                     @Html.Partial("_DireTowerMinimapIconsPartial", Model.DireTowerStates, new ViewDataDictionary())
                 </div>
                 <div class="text-center">
-                    <h5 style="margin-bottom: 0" class="text-uppercase">
+                    <h5 class="text-uppercase roshan-status">
                         <span class="text-muted">Roshan:</span>
                         @if (Model.IsRoshanAlive)
                         {
@@ -259,13 +260,13 @@
                             <span class="text-danger">
                                 <i class="fa fa-remove"></i>
                                 Dead
+                                <span class="text-lowercase">(@Model.RoshanRespawnTimer)</span>
                             </span>
-                            <span class="text-lowercase">(@Model.RoshanRespawnTimer)</span>
                         }
                     </h5>
                 </div>
                 <hr style="margin: 5px 0" />
-                <h5 style="margin: 0" class="text-uppercase text-muted">
+                <h5 class="text-uppercase text-muted no-margin">
                     Total Worth:
                 </h5>
                 <div class="progress" style="margin-bottom: 5px">
@@ -278,7 +279,7 @@
                         @Model.DireTotalWorth.ToString("N0")
                     </div>
                 </div>
-                <h5 style="margin: 0" class="text-uppercase text-muted">
+                <h5 class="text-uppercase text-muted no-margin">
                     Total XP:
                 </h5>
                 <div class="progress">
@@ -295,21 +296,21 @@
             <div class="col-md-4 text-right">
                 @foreach (var player in Model.DirePlayers)
                 {
-                    <div class="well well-sm" style="padding: 5px; margin-bottom: 10px; position: relative">
+                    <div class="well well-sm player-well">
                         @if (!player.IsAlive)
                         {
                             <div class="death text-danger">
                                 <span>Respawn in @player.RespawnTimerSeconds sec</span>
                             </div>
                         }
-                        <h4 class="media-heading" style="margin: 0">
+                        <h4 class="media-heading no-margin">
                             @player.PlayerName
                         </h4>
-                        <div class="pull-right text-left" style="margin: 9px 0 0 5px; line-height: 13px">
+                        <div class="pull-right text-left player-level">
                             <small class="text-uppercase text-muted">Level</small>
-                            <h4 style="margin: 0;">@player.Level</h4>
+                            <h4 class="no-margin">@player.Level</h4>
                         </div>
-                        <div class="media" style="margin-top: 5px">
+                        <div class="media player-details">
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-md-6 live-game-items">
@@ -390,6 +391,7 @@
             </table>
         </div>
     </div>
+</div>
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/bootstrap-table")

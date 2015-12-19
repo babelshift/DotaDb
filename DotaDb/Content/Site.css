@@ -357,3 +357,54 @@ textarea {
         background-color: rgba(255, 0, 0, 1);
         border: 2px solid #7c0000;
     }
+
+.live-league-game .league-name {
+    margin: 0;
+}
+
+.live-league-game .league-logo {
+    margin: 0;
+    border: 0;
+    width: 100px;
+}
+
+.live-league-game .league-tier {
+    margin: 0;
+}
+
+.live-league-game .league-location {
+    margin: 0;
+}
+
+.live-league-game .no-margin {
+    margin: 0;
+}
+
+.live-league-game .team-name {
+    margin: 0;
+    font-weight: 100;
+}
+
+.live-league-game .player-well {
+    padding: 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.live-league-game .player-level {
+    margin: 9px 5px 0 0;
+    line-height: 13px;
+}
+
+.live-league-game .player-details {
+    margin-top: 5px;
+}
+
+.live-league-game .minimap-container {
+    position: relative;
+    width: 90%;
+}
+
+.live-league-game .roshan-status {
+    margin-bottom: 0;
+}
