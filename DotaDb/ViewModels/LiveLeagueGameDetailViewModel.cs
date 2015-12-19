@@ -97,10 +97,10 @@ namespace DotaDb.ViewModels
         public double ElapsedTime { get; internal set; }
         public TowerState RadiantTowerStates { get; set; }
         public TowerState DireTowerStates { get; set; }
-        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> RadiantPickedHeroes { get; set; }
-        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> RadiantBannedHeroes { get; set; }
-        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> DirePickedHeroes { get; set; }
-        public IReadOnlyCollection<LiveLeagueGameHeroViewModel> DireBannedHeroes { get; set; }
+        public IReadOnlyList<LiveLeagueGameHeroViewModel> RadiantPickedHeroes { get; set; }
+        public IReadOnlyList<LiveLeagueGameHeroViewModel> RadiantBannedHeroes { get; set; }
+        public IReadOnlyList<LiveLeagueGameHeroViewModel> DirePickedHeroes { get; set; }
+        public IReadOnlyList<LiveLeagueGameHeroViewModel> DireBannedHeroes { get; set; }
 
     }
 }

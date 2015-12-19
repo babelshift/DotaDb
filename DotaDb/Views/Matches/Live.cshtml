@@ -44,8 +44,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach (var hero in Model.RadiantPickedHeroes)
+                    @for (int i = 0; i < Model.RadiantPickedHeroes.Count; i++)
                     {
+                        var hero = Model.RadiantPickedHeroes[i];
                         <div class="col-xs-1">
                             <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
                                 <div class="thumbnail radiant">
@@ -53,6 +54,10 @@
                                 </div>
                             </a>
                         </div>
+                    }
+                    @for (int i = 0; i < 5 - Model.RadiantPickedHeroes.Count; i++)
+                    {
+                        <div class="col-xs-1"></div>
                     }
                     <div class="col-xs-2"></div>
                     @foreach (var hero in Model.DirePickedHeroes)
@@ -75,8 +80,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach (var hero in Model.RadiantBannedHeroes)
+                    @for (int i = 0; i < Model.RadiantBannedHeroes.Count; i++)
                     {
+                        var hero = Model.RadiantBannedHeroes[i];
                         <div class="col-xs-1 text-right">
                             <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
                                 <div class="thumbnail radiant">
@@ -85,6 +91,10 @@
                                 <i class="fa fa-ban fa-2x text-danger ban"></i>
                             </a>
                         </div>
+                    }
+                    @for (int i = 0; i < 5 - Model.RadiantBannedHeroes.Count; i++)
+                    {
+                        <div class="col-xs-1"></div>
                     }
                     <div class="col-xs-2"></div>
                     @foreach (var hero in Model.DireBannedHeroes)
