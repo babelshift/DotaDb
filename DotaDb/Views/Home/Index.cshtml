@@ -24,7 +24,9 @@
                 <div class="row">
                     <div class="col-md-4">
                         <h2>@Model.InGamePlayerCount.ToString("N0")</h2>
-                        <p class="text-muted text-uppercase">In Game Players</p>
+                        <p class="text-muted text-uppercase">
+                            In Game Now
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h2>@Model.DailyPeakPlayerCount.ToString("N0")</h2>
@@ -38,44 +40,50 @@
                 <div class="row">
                     <div class="col-md-4">
                         <h2>@Model.HeroCount.ToString("N0")</h2>
-                        <p class="text-muted text-uppercase">Heroes</p>
+                        <p class="text-muted text-uppercase">
+                            <a href="@Url.Action("index", "heroes")">Heroes</a>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h2>@Model.InGameItemCount.ToString("N0")</h2>
-                        <p class="text-muted text-uppercase">In Game Items</p>
+                        <p class="text-muted text-uppercase">
+                            <a href="@Url.Action("index", "items")">In Game Items</a>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h2>@Model.ShopItemCount.ToString("N0")</h2>
-                        <p class="text-muted text-uppercase">Cosmetic &amp; Shop Items</p>
+                        <p class="text-muted text-uppercase">
+                            <a href="@Url.Action("cosmetics", "items")">Cosmetic &amp; Shop Items</a>
+                        </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <h2>@Model.LeagueCount.ToString("N0")</h2>
-                        <p class="text-muted text-uppercase">Leagues</p>
+                        <p class="text-muted text-uppercase">
+                            <a href="@Url.Action("index", "leagues")">Leagues</a>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h2>@Model.HeroAbilityCount.ToString("N0")</h2>
-                        <p class="text-muted text-uppercase">Hero Abilities</p>
+                        <p class="text-muted text-uppercase">
+                            <a href="@Url.Action("index", "heroes")">Hero Abilities</a>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h2>@Model.LiveLeagueGameCount</h2>
-                        <p class="text-muted text-uppercase">Live League Games</p>
+                        <p class="text-muted text-uppercase">
+                            <a href="@Url.Action("index", "matches")">Live League Games</a>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@*<div class="row">
-        <div class="col-xs-12 text-center">
-            <h1 style="font-weight: 100">Recent Matches</h1>
-            <hr style="margin: 5px 0" />
-        </div>
-    </div>*@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 text-center">
-        <h1 style="font-weight: 100">Top Live League Games</h1>
+        <h1 style="font-weight: 100">Top Live Game</h1>
         <hr style="margin: 5px 0" />
     </div>
     <div class="col-md-10 col-md-offset-1">
@@ -312,3 +320,176 @@
         }
     </div>
 </div>
+
+<div class="row" style="margin-bottom: 25px">
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <h1 style="font-weight: 100">Random Hero</h1>
+        <hr style="margin: 5px 0" />
+    </div>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>
+                    <a href="@Url.Action("hero", "heroes", new { id = Model.RandomHero.Id })">
+                        @Model.RandomHero.Name
+                    </a>
+                </h2>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 25px">
+            <div class="col-md-3">
+                <a href="@Url.Action("hero", "heroes", new { id = Model.RandomHero.Id })">
+                    <div class="thumbnail" style="margin: 0; padding: 0; border: 0">
+                        <img src="@Model.RandomHero.AvatarImagePath" class="shadow" />
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4 style="margin-top: 0">Stats</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_str.png" width="40" height="40" />
+                        <strong>@Model.RandomHero.BaseStrength</strong> <small class="text-muted">(+@Model.RandomHero.StrengthGain.ToString("F"))</small>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_atk.png" height="40" />
+                        <strong>@Model.RandomHero.BaseDamageMin - @Model.RandomHero.BaseDamageMax</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_agi.png" width="40" height="40" />
+                        <strong>@Model.RandomHero.BaseAgility</strong> <small class="text-muted">(+@Model.RandomHero.AgilityGain.ToString("F"))</small>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_speed.png" height="40" />
+                        <strong>@Model.RandomHero.BaseMoveSpeed</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_int.png" width="40" height="40" />
+                        <strong>@Model.RandomHero.BaseIntelligence</strong> <small class="text-muted">(+@Model.RandomHero.IntelligenceGain.ToString("F"))</small>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_def.png" height="40" />
+                        <strong>@Model.RandomHero.GetArmor(0)</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h4 style="margin-top: 0">Roles</h4>
+                <div class="text-uppercase">
+                    @foreach (var role in Model.RandomHero.Roles)
+                    {
+                        string color = String.Empty;
+                        int percent = 0;
+                        if (role.Level == "1")
+                        {
+                            color = "progress-bar-danger";
+                            percent = 33;
+                        }
+                        else if (role.Level == "2")
+                        {
+                            color = "progress-bar-warning";
+                            percent = 66;
+                        }
+                        else if (role.Level == "3")
+                        {
+                            color = "progress-bar-success";
+                            percent = 100;
+                        }
+                        <small class="text-muted">@role.Name</small>
+                        <div class="progress" style="margin-bottom: 0">
+                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                @role.Level
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h4 style="margin-top: 0">Details</h4>
+                <div class="text-uppercase">
+                    <small class="text-muted">Attack Type:</small>
+                    <small>@Model.RandomHero.AttackType</small>
+                    <br />
+                    @if (Model.RandomHero.PrimaryAttribute != null)
+                    {
+                        <small class="text-muted">Primary:</small>
+                        if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                        {
+                            <img src="~/Content/icon_str.png" width="24" height="24" />
+                            <small>Strength</small>
+                        }
+                        else if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                        {
+                            <img src="~/Content/icon_agi.png" width="24" height="24" />
+                            <small>Agility</small>
+                        }
+                        else if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                        {
+                            <img src="~/Content/icon_int.png" width="24" height="24" />
+                            <small>Intelligence</small>
+                        }
+                        else
+                        {
+                            <i class="fa fa-question-circle"></i>
+                        }
+                        <br />
+                    }
+                    <small class="text-muted">Team:</small>
+                    <small>@Model.RandomHero.Team</small>
+                    <br />
+                    <small class="text-muted">Attack Rate:</small>
+                    <small>@Model.RandomHero.AttackRate.ToString("F")</small>
+                    <br />
+                    <small class="text-muted">Attack Range:</small>
+                    <small>@Model.RandomHero.AttackRange.ToString("F")</small>
+                    <br />
+                    <small class="text-muted">Turn Rate:</small>
+                    <small>@Model.RandomHero.TurnRate.ToString("F")</small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row random-hero-ability-list">
+                    @foreach (var ability in Model.RandomHero.Abilities)
+                    {
+                        <div class="col-md-4">
+                            <div class="well well-sm" style="line-height: 18px">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <img class="media-object shadow" src="@ability.AvatarImagePath" style="width: 64px" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">@ability.Name</h4>
+                                        <span class="text-muted">@ability.Description</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="row">
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <h1 style="font-weight: 100">Random In Game Item</h1>
+        <hr style="margin: 5px 0" />
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <h1 style="font-weight: 100">Did You Know?</h1>
+        <hr style="margin: 5px 0" />
+    </div>
+    <div class="col-md-10 col-md-offset-1">
+    </div>
+</div>*@

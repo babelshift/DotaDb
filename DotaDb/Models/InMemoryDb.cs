@@ -1050,8 +1050,7 @@ namespace DotaDb.Models
 
             return null;
         }
-
-
+        
         private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
         {
             if (key == null || String.IsNullOrEmpty(key.ToString()))

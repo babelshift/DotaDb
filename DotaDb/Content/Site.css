@@ -102,6 +102,10 @@ textarea {
     clear: both;
 }
 
+.random-hero-ability-list > .col-md-4:nth-child(3n+1) {
+    clear: both;
+}
+
 .abilities p {
     margin-top: 3px;
     line-height: 15px;
@@ -135,6 +139,10 @@ textarea {
 
 .home-stats .row {
     margin: 25px 0;
+}
+
+.home-stats a {
+    color: inherit;
 }
 
 .minimap-icon {
