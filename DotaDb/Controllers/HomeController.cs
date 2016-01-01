@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using DotaDb.Utilities;
 using System.Collections.Generic;
 using SourceSchemaParser.Dota2;
+using SteamWebAPI2.Models.DOTA2;
 
 namespace DotaDb.Controllers
 {
@@ -39,8 +40,133 @@ namespace DotaDb.Controllers
             viewModel.LiveLeagueGames = await GetTopLiveLeagueGameAsync();
 
             await SetupRandomHero(viewModel, heroes);
+            await SetupRandomItems(viewModel, gameItems);
 
             return View(viewModel);
+        }
+
+        private async Task SetupRandomItems(HomeViewModel viewModel, IReadOnlyCollection<GameItem> gameItems)
+        {
+            var randomItems = gameItems
+                .Where(x => !String.IsNullOrEmpty(x.Name.Trim())
+                && x.Name.Trim() != "Undefined"
+                && x.Recipe != 1)
+                .ToList();
+
+            var abilities = await db.GetItemAbilitiesAsync();
+
+            Random r = new Random();
+            GameItemViewModel itemViewModel1 = await GetRandomItem(r, randomItems, abilities);
+            GameItemViewModel itemViewModel2 = await GetRandomItem(r, randomItems, abilities);
+            GameItemViewModel itemViewModel3 = await GetRandomItem(r, randomItems, abilities);
+
+            List<GameItemViewModel> randomGameItems = new List<GameItemViewModel>();
+            randomGameItems.Add(itemViewModel1);
+            randomGameItems.Add(itemViewModel2);
+            randomGameItems.Add(itemViewModel3);
+
+            viewModel.RandomGameItems = randomGameItems.AsReadOnly();
+        }
+
+        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItem> randomItems, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        {
+            int index = r.Next(0, randomItems.Count);
+            var randomItem1 = randomItems[index];
+            GameItemViewModel itemViewModel = await GetItemViewModel(randomItem1);
+            await AddAbilityToItemViewModelAsync(itemViewModel, abilities);
+            randomItems.RemoveAt(index);
+            return itemViewModel;
+        }
+
+        private async Task<GameItemViewModel> GetItemViewModel(GameItem randomItem1)
+        {
+            return new GameItemViewModel()
+            {
+                Cost = randomItem1.Cost,
+                Name = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", randomItem1.Name)),
+                Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", randomItem1.Name)),
+                Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", randomItem1.Name)),
+                Id = randomItem1.Id,
+                IsRecipe = randomItem1.Recipe == 1 ? true : false,
+                SecretShop = randomItem1.SecretShop == 1 ? true : false,
+                SideShop = randomItem1.SideShop == 1 ? true : false,
+                IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", randomItem1.Recipe == 1 ? "recipe" : randomItem1.Name.Replace("item_", "")),
+            };
+        }
+
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        {
+            DotaItemAbilitySchemaItem ability = null;
+            bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
+
+            if (abilityExists)
+            {
+                string joinedBehaviors = db.GetJoinedBehaviors(ability.AbilityBehavior);
+                string joinedUnitTargetTeamTypes = db.GetJoinedUnitTargetTeamTypes(ability.AbilityUnitTargetTeam);
+                string joinedUnitTargetTypes = db.GetJoinedUnitTargetTypes(ability.AbilityUnitTargetType);
+                string joinedUnitTargetFlags = db.GetJoinedUnitTargetFlags(ability.AbilityUnitTargetFlags);
+
+                List<HeroAbilitySpecialViewModel> abilitySpecialViewModels = new List<HeroAbilitySpecialViewModel>();
+                foreach (var abilitySpecial in ability.AbilitySpecials)
+                {
+                    abilitySpecialViewModels.Add(new HeroAbilitySpecialViewModel()
+                    {
+                        Name = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, abilitySpecial.Name)),
+                        RawName = abilitySpecial.Name,
+                        Value = abilitySpecial.Value.ToSlashSeparatedString()
+                    });
+                }
+
+                viewModel.CastPoint = ability.AbilityCastPoint.ToSlashSeparatedString();
+                viewModel.CastRange = ability.AbilityCastRange.ToSlashSeparatedString();
+                viewModel.Cooldown = ability.AbilityCooldown.ToSlashSeparatedString();
+                viewModel.Damage = ability.AbilityDamage.ToSlashSeparatedString();
+                viewModel.Duration = ability.AbilityDuration.ToSlashSeparatedString();
+                viewModel.ManaCost = ability.AbilityManaCost.ToSlashSeparatedString();
+                viewModel.Attributes = abilitySpecialViewModels;
+                viewModel.Behaviors = joinedBehaviors;
+                viewModel.TargetFlags = joinedUnitTargetFlags;
+                viewModel.TargetTypes = joinedUnitTargetTypes;
+                viewModel.TeamTargets = joinedUnitTargetTeamTypes;
+                viewModel.Note0 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note0"));
+                viewModel.Note1 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note1"));
+                viewModel.Note2 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note2"));
+                viewModel.Note3 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note3"));
+                viewModel.Note4 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note4"));
+                viewModel.Note5 = await db.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note5"));
+                viewModel.CastsOnPickup = ability.ItemCastOnPickup;
+                viewModel.ContributesToNetWorthWhenDropped = ability.ItemContributesToNetWorthWhenDropped;
+                viewModel.Declarations = db.GetJoinedItemDeclarationTypes(ability.ItemDeclarations);
+                viewModel.DisassembleRule = db.GetJoinedItemDisassembleTypes(ability.ItemDisassembleRule);
+                viewModel.DisplayCharges = ability.ItemDisplayCharges;
+                viewModel.InitialCharges = ability.ItemInitialCharges;
+                viewModel.IsAlertable = ability.ItemAlertable;
+                viewModel.IsDroppable = ability.ItemDroppable;
+                viewModel.IsKillable = ability.ItemKillable;
+                viewModel.IsPermanent = ability.ItemPermanent;
+                viewModel.IsPurchasable = ability.ItemPurchasable;
+                viewModel.IsSellable = ability.ItemSellable;
+                viewModel.IsStackable = ability.ItemStackable;
+                viewModel.IsSupport = ability.ItemSupport;
+                viewModel.Shareability = db.GetJoinedItemShareabilityTypes(ability.ItemShareability);
+                viewModel.ShopTags = GetSplitAndRejoinedShopTags(ability.ItemShopTags);
+                viewModel.StockInitial = ability.ItemStockInitial;
+                viewModel.StockMax = ability.ItemStockMax;
+                viewModel.StockTime = ability.ItemStockTime;
+            }
+        }
+
+        private string GetSplitAndRejoinedShopTags(string shopTags)
+        {
+            if (!String.IsNullOrEmpty(shopTags))
+            {
+                string[] split = shopTags.Split(';');
+                return String.Join(", ", split);
+            }
+            else
+            {
+                return String.Empty;
+            }
         }
 
         private async Task SetupRandomHero(HomeViewModel viewModel, IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes)
@@ -54,8 +180,7 @@ namespace DotaDb.Controllers
             await SetupHeroViewModelAsync(randomHero, viewModel.RandomHero);
             await SetupAbilitiesAsync(randomHero, viewModel.RandomHero);
         }
-
-
+        
         private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(DotaHeroSchemaItem hero, T viewModel)
             where T : BaseHeroViewModel
         {
@@ -76,7 +201,7 @@ namespace DotaDb.Controllers
             viewModel.Team = db.GetTeamTypeKeyValue(hero.Team).ToString();
             viewModel.TurnRate = hero.MovementTurnRate;
             viewModel.AttackType = db.GetAttackTypeKeyValue(hero.AttackCapabilities).ToString();
-            viewModel.Roles = GetRoles(hero.Role, hero.RoleLevels).AsReadOnly();
+            viewModel.Roles = hero.GetRoles();
             viewModel.AgilityGain = hero.AttributeAgilityGain;
             viewModel.IntelligenceGain = hero.AttributeIntelligenceGain;
             viewModel.StrengthGain = hero.AttributeStrengthGain;
@@ -165,24 +290,6 @@ namespace DotaDb.Controllers
             };
 
             abilityViewModels.Add(abilityViewModel);
-        }
-
-        private static List<HeroRoleViewModel> GetRoles(string roles, string roleLevels)
-        {
-            string[] rolesSplit = roles.Split(',');
-            string[] roleLevelsSplit = roleLevels.Split(',');
-
-            List<HeroRoleViewModel> roleViewModels = new List<HeroRoleViewModel>();
-            for (int i = 0; i < rolesSplit.Length; i++)
-            {
-                roleViewModels.Add(new HeroRoleViewModel()
-                {
-                    Name = rolesSplit[i],
-                    Level = roleLevelsSplit[i]
-                });
-            }
-
-            return roleViewModels;
         }
 
         private async Task<IReadOnlyCollection<LiveLeagueGameOverviewViewModel>> GetTopLiveLeagueGameAsync()

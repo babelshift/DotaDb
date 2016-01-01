@@ -1,4 +1,5 @@
-﻿using SourceSchemaParser.Dota2;
+﻿using DotaDb.ViewModels;
+using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,6 +12,34 @@ namespace DotaDb.Utilities
     {
         private static readonly string minimapIconsBaseUrl = ConfigurationManager.AppSettings["minimapIconsBaseUrl"].ToString();
         private static readonly string heroAvatarsBaseUrl = ConfigurationManager.AppSettings["heroAvatarsBaseUrl"].ToString();
+
+        public static IReadOnlyList<HeroRoleViewModel> GetRoles(this DotaHeroSchemaItem hero)
+        {
+            if(hero == null)
+            {
+                return new List<HeroRoleViewModel>().AsReadOnly();
+            }
+
+            if (String.IsNullOrEmpty(hero.Role) || String.IsNullOrEmpty(hero.RoleLevels))
+            {
+                return new List<HeroRoleViewModel>();
+            }
+
+            string[] rolesSplit = hero.Role.Split(',');
+            string[] roleLevelsSplit = hero.RoleLevels.Split(',');
+
+            List<HeroRoleViewModel> roleViewModels = new List<HeroRoleViewModel>();
+            for (int i = 0; i < rolesSplit.Length; i++)
+            {
+                roleViewModels.Add(new HeroRoleViewModel()
+                {
+                    Name = rolesSplit[i],
+                    Level = roleLevelsSplit[i]
+                });
+            }
+
+            return roleViewModels.AsReadOnly();
+        }
 
         public static string GetMinimapIconFilePath(this DotaHeroSchemaItem hero)
         {

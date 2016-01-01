@@ -81,7 +81,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="margin-bottom: 50px">
     <div class="col-md-10 col-md-offset-1 text-center">
         <h1 style="font-weight: 100">Top Live Game</h1>
         <hr style="margin: 5px 0" />
@@ -89,239 +89,239 @@
     <div class="col-md-10 col-md-offset-1">
         @foreach (var liveLeagueGame in Model.LiveLeagueGames)
         {
-            <a href="@Url.Action("live", "matches", new { id = liveLeagueGame.MatchId })" class="live-league-game-link">
-                <div class="well well-sm" style="padding: 15px;">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.LeagueName</h3>
-                            <div class="thumbnail" style="margin: 0; border: 0; width: 150px">
-                                <img src="@liveLeagueGame.LeagueLogoPath" class="shadow" />
-                            </div>
-                            <p style="margin-top: 10px; margin-bottom: 0">
-                                <i class="fa fa-desktop fa-fw"></i>
-                                <span class="text-muted text-uppercase">Spectators:</span>
-                                @liveLeagueGame.SpectatorCount.ToString("N0")
-                                <br />
-                                <i class="fa fa-ticket fa-fw"></i>
-                                <span class="text-muted text-uppercase">Game:</span>
-                                @liveLeagueGame.GameNumber
-                                <br />
-                                <i class="fa fa-list-alt fa-fw"></i>
-                                <span class="text-muted text-uppercase">Best of:</span>
-                                @liveLeagueGame.BestOf
-                                <br />
-                                <i class="fa fa-trophy fa-fw"></i>
-                                <span class="text-muted text-uppercase">Series:</span>
-                                @String.Format("{0} (radiant) - {1} (dire)", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins)
-                            </p>
+        <a href="@Url.Action("live", "matches", new { id = liveLeagueGame.MatchId })" class="live-league-game-link">
+            <div class="well well-sm" style="padding: 15px;">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.LeagueName</h3>
+                        <div class="thumbnail" style="margin: 0; border: 0; width: 150px">
+                            <img src="@liveLeagueGame.LeagueLogoPath" class="shadow" />
                         </div>
-                        <div class="col-md-9">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.RadiantTeamName</h3>
-                                    <hr style="margin: 5px 0" />
-                                    @if (!String.IsNullOrEmpty(liveLeagueGame.RadiantTeamLogo))
+                        <p style="margin-top: 10px; margin-bottom: 0">
+                            <i class="fa fa-desktop fa-fw"></i>
+                            <span class="text-muted text-uppercase">Spectators:</span>
+                            @liveLeagueGame.SpectatorCount.ToString("N0")
+                            <br />
+                            <i class="fa fa-ticket fa-fw"></i>
+                            <span class="text-muted text-uppercase">Game:</span>
+                            @liveLeagueGame.GameNumber
+                            <br />
+                            <i class="fa fa-list-alt fa-fw"></i>
+                            <span class="text-muted text-uppercase">Best of:</span>
+                            @liveLeagueGame.BestOf
+                            <br />
+                            <i class="fa fa-trophy fa-fw"></i>
+                            <span class="text-muted text-uppercase">Series:</span>
+                            @String.Format("{0} (radiant) - {1} (dire)", liveLeagueGame.RadiantSeriesWins, liveLeagueGame.DireSeriesWins)
+                        </p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.RadiantTeamName</h3>
+                                <hr style="margin: 5px 0" />
+                                @if (!String.IsNullOrEmpty(liveLeagueGame.RadiantTeamLogo))
                                     {
-                                        <img src="@liveLeagueGame.RadiantTeamLogo" width="64" height="64" class="shadow" />
+                                    <img src="@liveLeagueGame.RadiantTeamLogo" width="64" height="64" class="shadow" />
                                     }
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <h4 style="font-weight: 100; margin: 0">
-                                        <i class="fa fa-clock-o"></i>
-                                        <span class="text-muted text-uppercase">Elapsed:</span>
-                                        @liveLeagueGame.ElapsedTime
-                                    </h4>
-                                </div>
-                                <div class="col-md-4 text-right">
-                                    <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.DireTeamName</h3>
-                                    <hr style="margin: 5px 0" />
-                                    @if (!String.IsNullOrEmpty(liveLeagueGame.DireTeamLogo))
-                                    {
-                                        <img src="@liveLeagueGame.DireTeamLogo" width="64" height="64" class="shadow" />
-                                    }
-                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h3 style="margin: 5px 0">@liveLeagueGame.RadiantKillCount <small class="text-muted text-uppercase">kills</small></h3>
-                                    @foreach (var player in liveLeagueGame.RadiantPlayers)
+                            <div class="col-md-4 text-center">
+                                <h4 style="font-weight: 100; margin: 0">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span class="text-muted text-uppercase">Elapsed:</span>
+                                    @liveLeagueGame.ElapsedTime
+                                </h4>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <h3 style="font-weight: 100; margin: 0">@liveLeagueGame.DireTeamName</h3>
+                                <hr style="margin: 5px 0" />
+                                @if (!String.IsNullOrEmpty(liveLeagueGame.DireTeamLogo))
                                     {
-                                        <div class="media" style="margin-top: 5px">
-                                            <div class="media-left">
-                                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
+                                    <img src="@liveLeagueGame.DireTeamLogo" width="64" height="64" class="shadow" />
+                                    }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3 style="margin: 5px 0">@liveLeagueGame.RadiantKillCount <small class="text-muted text-uppercase">kills</small></h3>
+                                @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                    {
+                                    <div class="media" style="margin-top: 5px">
+                                        <div class="media-left">
+                                            <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
+                                                @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                                     {
-                                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                                    <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
                                                     }
                                                     else
                                                     {
-                                                        <img src="@player.HeroAvatarFilePath" class="shadow" />
+                                                    <img src="@player.HeroAvatarFilePath" class="shadow" />
                                                     }
-                                                </div>
-                                            </div>
-                                            <div class="media-body">
-                                                <h5 class="media-heading" style="margin: 0">
-                                                    @player.PlayerName
-                                                </h5>
-                                                <span class="text-muted pull-right">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
-                                                <small class="text-uppercase text-muted">@player.HeroName</small>
                                             </div>
                                         </div>
+                                        <div class="media-body">
+                                            <h5 class="media-heading" style="margin: 0">
+                                                @player.PlayerName
+                                            </h5>
+                                            <span class="text-muted pull-right">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
+                                            <small class="text-uppercase text-muted">@player.HeroName</small>
+                                        </div>
+                                    </div>
                                     }
-                                </div>
-                                <div class="col-md-4 text-center" style="padding: 0">
-                                    <div style="position: relative; width: 90%" class="center-block">
-                                        <img src="~/Content/dota_minimap_256.jpg" style="width: 100%; z-index: 0;" />
-                                        @foreach (var player in liveLeagueGame.DirePlayers)
+                            </div>
+                            <div class="col-md-4 text-center" style="padding: 0">
+                                <div style="position: relative; width: 90%" class="center-block">
+                                    <img src="~/Content/dota_minimap_256.jpg" style="width: 100%; z-index: 0;" />
+                                    @foreach (var player in liveLeagueGame.DirePlayers)
                                         {
                                             if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                                             {
-                                                <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                                <div class="minimap-icon-circle large dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                        <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                        <div class="minimap-icon-circle large dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
                                             }
                                         }
-                                        @foreach (var player in liveLeagueGame.RadiantPlayers)
+                                    @foreach (var player in liveLeagueGame.RadiantPlayers)
                                         {
                                             if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
                                             {
-                                                <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                                <div class="minimap-icon-circle large radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                                        <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                                        <div class="minimap-icon-circle large radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
                                             }
                                         }
-                                        @if (liveLeagueGame.RadiantTowerStates != null)
+                                    @if (liveLeagueGame.RadiantTowerStates != null)
                                         {
                                             if (liveLeagueGame.RadiantTowerStates.IsAncientBottomAlive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 17%; left: 18%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 17%; left: 18%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsAncientTopAlive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 20%; left: 15%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 20%; left: 15%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsBottomTier1Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 80%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 80%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsBottomTier2Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 46%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 46%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsBottomTier3Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 28%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 13%; left: 28%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsMiddleTier1Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 43%; left: 43%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 43%; left: 43%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsMiddleTier2Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 33%; left: 28%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 33%; left: 28%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsMiddleTier3Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 27%; left: 22%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 27%; left: 22%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsTopTier1Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 65%; left: 12%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 65%; left: 12%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsTopTier2Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 45%; left: 12%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 45%; left: 12%"></div>
                                             }
                                             if (liveLeagueGame.RadiantTowerStates.IsTopTier3Alive)
                                             {
-                                                <div class="minimap-icon-circle small radiant tower" style="bottom: 31%; left: 9%"></div>
+                                        <div class="minimap-icon-circle small radiant tower" style="bottom: 31%; left: 9%"></div>
                                             }
                                         }
 
-                                        @if (liveLeagueGame.DireTowerStates != null)
+                                    @if (liveLeagueGame.DireTowerStates != null)
                                         {
                                             if (liveLeagueGame.DireTowerStates.IsAncientBottomAlive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 80%; left: 87%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 80%; left: 87%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsAncientTopAlive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 83%; left: 83%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 83%; left: 83%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsBottomTier1Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 38%; left: 87%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 38%; left: 87%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsBottomTier2Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 56%; left: 90%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 56%; left: 90%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsBottomTier3Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 68%; left: 89%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 68%; left: 89%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsMiddleTier1Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 50%; left: 56%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 50%; left: 56%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsMiddleTier2Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 65%; left: 65%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 65%; left: 65%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsMiddleTier3Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 73%; left: 75%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 73%; left: 75%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsTopTier1Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 88%; left: 17%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 88%; left: 17%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsTopTier2Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 56%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 56%"></div>
                                             }
                                             if (liveLeagueGame.DireTowerStates.IsTopTier3Alive)
                                             {
-                                                <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 71%"></div>
+                                        <div class="minimap-icon-circle small dire tower" style="bottom: 85%; left: 71%"></div>
                                             }
                                         }
-                                    </div>
                                 </div>
-                                <div class="col-md-4 text-right">
-                                    <h3 style="margin: 5px 0">@liveLeagueGame.DireKillCount <small class="text-muted text-uppercase">kills</small></h3>
-                                    @foreach (var player in liveLeagueGame.DirePlayers)
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <h3 style="margin: 5px 0">@liveLeagueGame.DireKillCount <small class="text-muted text-uppercase">kills</small></h3>
+                                @foreach (var player in liveLeagueGame.DirePlayers)
                                     {
-                                        <div class="media" style="margin-top: 5px">
-                                            <div class="media-body">
-                                                <h5 class="media-heading" style="margin: 0">
-                                                    @player.PlayerName
-                                                </h5>
-                                                <span class="text-muted pull-left">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
-                                                <small class="text-uppercase text-muted">@player.HeroName</small>
-                                            </div>
-                                            <div class="media-right">
-                                                <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
-                                                    @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
+                                    <div class="media" style="margin-top: 5px">
+                                        <div class="media-body">
+                                            <h5 class="media-heading" style="margin: 0">
+                                                @player.PlayerName
+                                            </h5>
+                                            <span class="text-muted pull-left">@String.Format("({0}-{1}-{2})", player.KillCount, player.DeathCount, player.AssistCount)</span>
+                                            <small class="text-uppercase text-muted">@player.HeroName</small>
+                                        </div>
+                                        <div class="media-right">
+                                            <div class="thumbnail" style="margin: 0; border: 0; padding: 0; width: 57px;">
+                                                @if (String.IsNullOrEmpty(player.HeroAvatarFilePath))
                                                     {
-                                                        <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
+                                                    <img src="@Url.Content("~/Content/icons/heroes/base_lg.png")" class="shadow" />
                                                     }
                                                     else
                                                     {
-                                                        <img src="@player.HeroAvatarFilePath" class="shadow" />
+                                                    <img src="@player.HeroAvatarFilePath" class="shadow" />
                                                     }
-                                                </div>
                                             </div>
                                         </div>
+                                    </div>
                                     }
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </a>
+            </div>
+        </a>
         }
     </div>
 </div>
 
-<div class="row" style="margin-bottom: 25px">
+<div class="row" style="margin-bottom: 50px">
     <div class="col-md-10 col-md-offset-1 text-center">
         <h1 style="font-weight: 100">Random Hero</h1>
         <hr style="margin: 5px 0" />
@@ -329,11 +329,11 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="row">
             <div class="col-xs-12">
-                <h2>
+                <h3>
                     <a href="@Url.Action("hero", "heroes", new { id = Model.RandomHero.Id })">
                         @Model.RandomHero.Name
                     </a>
-                </h2>
+                </h3>
             </div>
         </div>
         <div class="row" style="margin-bottom: 25px">
@@ -373,7 +373,7 @@
                     </div>
                     <div class="col-xs-6">
                         <img src="~/Content/icon_def.png" height="40" />
-                        <strong>@Model.RandomHero.GetArmor(0)</strong>
+                        <strong>@Math.Round(Model.RandomHero.GetArmor(0), 2).ToString()</strong>
                     </div>
                 </div>
             </div>
@@ -399,12 +399,12 @@
                             color = "progress-bar-success";
                             percent = 100;
                         }
-                        <small class="text-muted">@role.Name</small>
-                        <div class="progress" style="margin-bottom: 0">
-                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
-                                @role.Level
-                            </div>
+                    <small class="text-muted">@role.Name</small>
+                    <div class="progress" style="margin-bottom: 0">
+                        <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                            @role.Level
                         </div>
+                    </div>
                     }
                 </div>
             </div>
@@ -416,27 +416,27 @@
                     <br />
                     @if (Model.RandomHero.PrimaryAttribute != null)
                     {
-                        <small class="text-muted">Primary:</small>
+                    <small class="text-muted">Primary:</small>
                         if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
                         {
-                            <img src="~/Content/icon_str.png" width="24" height="24" />
-                            <small>Strength</small>
+                    <img src="~/Content/icon_str.png" width="24" height="24" />
+                    <small>Strength</small>
                         }
                         else if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
                         {
-                            <img src="~/Content/icon_agi.png" width="24" height="24" />
-                            <small>Agility</small>
+                    <img src="~/Content/icon_agi.png" width="24" height="24" />
+                    <small>Agility</small>
                         }
                         else if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
                         {
-                            <img src="~/Content/icon_int.png" width="24" height="24" />
-                            <small>Intelligence</small>
+                    <img src="~/Content/icon_int.png" width="24" height="24" />
+                    <small>Intelligence</small>
                         }
                         else
                         {
-                            <i class="fa fa-question-circle"></i>
+                    <i class="fa fa-question-circle"></i>
                         }
-                        <br />
+                    <br />
                     }
                     <small class="text-muted">Team:</small>
                     <small>@Model.RandomHero.Team</small>
@@ -457,19 +457,19 @@
                 <div class="row random-hero-ability-list">
                     @foreach (var ability in Model.RandomHero.Abilities)
                     {
-                        <div class="col-md-4">
-                            <div class="well well-sm" style="line-height: 18px">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img class="media-object shadow" src="@ability.AvatarImagePath" style="width: 64px" />
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">@ability.Name</h4>
-                                        <span class="text-muted">@ability.Description</span>
-                                    </div>
+                    <div class="col-md-4">
+                        <div class="well well-sm" style="line-height: 18px; height: 125px; overflow: auto">
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="media-object shadow" src="@ability.AvatarImagePath" style="width: 64px" />
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">@ability.Name</h4>
+                                    <span class="text-muted">@ability.Description</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     }
                 </div>
             </div>
@@ -477,12 +477,465 @@
     </div>
 </div>
 
-@*<div class="row">
+<div class="row item-list" style="margin-bottom: 50px">
     <div class="col-md-10 col-md-offset-1 text-center">
-        <h1 style="font-weight: 100">Random In Game Item</h1>
+        <h1 style="font-weight: 100">Random In Game Items</h1>
         <hr style="margin: 5px 0" />
     </div>
 
+    <div class="col-md-10 col-md-offset-1">
+        <div class="row">
+            @foreach (var randomGameItem in Model.RandomGameItems)
+            {
+                <div class="col-md-4">
+                    <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
+                        <div class="media" style="margin-bottom: 0">
+                            <div class="media-left">
+                                <div class="thumbnail" style="margin: 0; border: 0" title="@randomGameItem.Name">
+                                    <img src="@randomGameItem.IconPath" class="shadow" width="64" />
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    @if (!String.IsNullOrEmpty(randomGameItem.Name))
+                                    {
+                                        @randomGameItem.Name
+                                    }
+                                    else
+                                    {
+                                        @:Undefined
+                            }
+                                </h4>
+                                <p class="text-muted">@randomGameItem.Lore</p>
+                            </div>
+                            <div class="row" style="margin-bottom: 0">
+                                <div class="col-xs-6 text-uppercase">
+                                    <p>
+                                        <small class="text-muted">ID:</small>
+                                        <small>@randomGameItem.Id</small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Cost:</small>
+                                        <small class="text-warning">@randomGameItem.Cost</small>
+                                    </p>
+                                    @if (!String.IsNullOrEmpty(randomGameItem.ManaCost))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Mana Cost:</small>
+                                            <small class="text-primary">@randomGameItem.ManaCost</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.Duration))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Duration:</small>
+                                            <small class="text-warning">@randomGameItem.Duration</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.Damage))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Damage:</small>
+                                            <small class="text-warning">@randomGameItem.Damage</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.CastPoint))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Cast Point:</small>
+                                            <small>@randomGameItem.CastPoint</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.CastRange))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Cast Range:</small>
+                                            <small>@randomGameItem.CastRange</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.Cooldown))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Cooldown:</small>
+                                            <small>@randomGameItem.Cooldown</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.TargetFlags))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Target Flags:</small>
+                                            <small>@randomGameItem.TargetFlags</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.TargetTypes))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Target Types:</small>
+                                            <small>@randomGameItem.TargetTypes</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.TeamTargets))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Team Targets:</small>
+                                            <small>@randomGameItem.TeamTargets</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.Declarations))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Declarations:</small>
+                                            <small>@randomGameItem.Declarations</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.DisassembleRule))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Disassemble Rule:</small>
+                                            <small>@randomGameItem.DisassembleRule</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.Shareability))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Shareability:</small>
+                                            <small>@randomGameItem.Shareability</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(randomGameItem.ShopTags))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Shop Tags:</small>
+                                            <small>@randomGameItem.ShopTags</small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.InitialCharges.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Initial Charges:</small>
+                                            <small>@randomGameItem.InitialCharges.Value</small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.DisplayCharges.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Display Charges:</small>
+                                            <small>@randomGameItem.DisplayCharges.Value</small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.StockInitial.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Initial Stock:</small>
+                                            <small>@randomGameItem.StockInitial.Value</small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.StockMax.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Max Stock:</small>
+                                            <small>@randomGameItem.StockMax.Value</small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.StockTime.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Stock Time:</small>
+                                            <small>@randomGameItem.StockTime.Value</small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsAlertable.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Alertable:</small>
+                                            <small>
+                                                @if (randomGameItem.IsAlertable.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsDroppable.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Droppable:</small>
+                                            <small>
+                                                @if (randomGameItem.IsDroppable.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsKillable.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Killable:</small>
+                                            <small>
+                                                @if (randomGameItem.IsKillable.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsPermanent.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Permanent:</small>
+                                            <small>
+                                                @if (randomGameItem.IsPermanent.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsPurchasable.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Purchasable:</small>
+                                            <small>
+                                                @if (randomGameItem.IsPurchasable.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsSellable.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Sellable:</small>
+                                            <small>
+                                                @if (randomGameItem.IsSellable.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsStackable.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Stackable:</small>
+                                            <small>
+                                                @if (randomGameItem.IsStackable.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.IsSupport.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Support:</small>
+                                            <small>
+                                                @if (randomGameItem.IsSupport.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                    @if (randomGameItem.ContributesToNetWorthWhenDropped.HasValue)
+                                    {
+                                        <p>
+                                            <small class="text-muted">Contributes to Net Worth when Dropped:</small>
+                                            <small>
+                                                @if (randomGameItem.ContributesToNetWorthWhenDropped.Value)
+                                                {
+                                                    <span class="text-success">
+                                                        <i class="fa fa-check"></i>
+                                                        Yes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">
+                                                        <i class="fa fa-remove"></i>
+                                                        No
+                                                    </span>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
+                                </div>
+                                <div class="col-xs-6 text-uppercase">
+                                    @foreach (var abilitySpecial in randomGameItem.Attributes)
+                                    {
+                                        <p>
+                                            <small class="text-muted">
+                                                @if (!String.IsNullOrEmpty(abilitySpecial.Name))
+                                                {
+                                                    @abilitySpecial.Name
+                                                }
+                                                else
+                                                {
+                                                    @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
+                                                }
+                                            </small>
+                                            <small>@abilitySpecial.Value</small>
+                                        </p>
+                                    }
+                                    <p>
+                                        <small class="text-muted">Secret Shop:</small>
+                                        <small>
+                                            @if (randomGameItem.SecretShop)
+                                            {
+                                                <span class="text-success">
+                                                    <i class="fa fa-check"></i>
+                                                    Yes
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">
+                                                    <i class="fa fa-remove"></i>
+                                                    No
+                                                </span>
+                                            }
+                                        </small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Side Shop:</small>
+                                        <small>
+                                            @if (randomGameItem.SideShop)
+                                            {
+                                                <span class="text-success">
+                                                    <i class="fa fa-check"></i>
+                                                    Yes
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">
+                                                    <i class="fa fa-remove"></i>
+                                                    No
+                                                </span>
+                                            }
+                                        </small>
+                                    </p>
+                                    <p>
+                                        <small class="text-muted">Is Recipe:</small>
+                                        <small>
+                                            @if (randomGameItem.IsRecipe)
+                                            {
+                                                <span class="text-success">
+                                                    <i class="fa fa-check"></i>
+                                                    Yes
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">
+                                                    <i class="fa fa-remove"></i>
+                                                    No
+                                                </span>
+                                            }
+                                        </small>
+                                    </p>
+                                </div>
+                                @if (!String.IsNullOrEmpty(randomGameItem.Description))
+                                {
+                                    <div class="col-xs-12">
+                                        <hr style="margin: 5px 0 5px 0" />
+                                        <p>
+                                            <small class="text-muted">
+                                                @randomGameItem.Description
+                                            </small>
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -492,4 +945,4 @@
     </div>
     <div class="col-md-10 col-md-offset-1">
     </div>
-</div>*@
+</div>

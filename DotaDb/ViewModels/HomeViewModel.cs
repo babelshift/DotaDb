@@ -20,5 +20,7 @@ namespace DotaDb.ViewModels
         public IReadOnlyCollection<LiveLeagueGameOverviewViewModel> LiveLeagueGames { get; set; }
 
         public HeroViewModel RandomHero { get; set; }
+
+        public IReadOnlyCollection<GameItemViewModel> RandomGameItems { get; set; }
     }
 }

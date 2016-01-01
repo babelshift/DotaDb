@@ -259,7 +259,7 @@
                     <td>Armor</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetArmor(i)</td>
+                        <td>@Math.Round(Model.GetArmor(i), 2).ToString()</td>
                     }
                 </tr>
                 <tr>

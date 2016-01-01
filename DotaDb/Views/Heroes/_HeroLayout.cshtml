@@ -41,7 +41,7 @@
             </div>
             <div class="col-xs-6">
                 <img src="~/Content/icon_def.png" height="40" />
-                <strong>@Model.GetArmor(0)</strong>
+                <strong>@Math.Round(Model.GetArmor(0), 2).ToString()</strong>
             </div>
         </div>
         <hr />
