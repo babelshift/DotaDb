@@ -18,12 +18,16 @@ namespace DotaDb.Models
 {
     public sealed class InMemoryDb
     {
-        private const string schemaContainerName = "schemas";
+        private const string schemaStorageContainerName = "schemas";
         private static volatile InMemoryDb instance;
         private static object sync = new object();
         private MemoryCache cache = MemoryCache.Default;
-        private CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
         private AzureStorage storage;
+
+        private DateTimeOffset CacheExpiration
+        {
+            get { return DateTimeOffset.UtcNow.AddDays(1); }
+        }
 
         #region Data Source File Names
 
@@ -133,8 +137,6 @@ namespace DotaDb.Models
             itemDeclarationTypes = GetItemDeclarationTypes();
             itemShareabilityTypes = GetItemShareabilityTypes();
             itemDisassembleTypes = GetItemDisassembleTypes();
-
-            cacheItemPolicy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddDays(1);
 
             string schemaStorageConnectionString = ConfigurationManager.AppSettings["StorageConnectionString"].ToString();
             storage = new AzureStorage(schemaStorageConnectionString);
@@ -367,7 +369,7 @@ namespace DotaDb.Models
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(15)
             };
-            return await AddOrGetCachedValue(MemoryCacheKey.PlayerCounts, GetPlayerCountsFromScrapingAsync, cacheItemPolicy);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.PlayerCounts, GetPlayerCountsFromScrapingAsync, cacheItemPolicy);
         }
 
         private async Task<PlayerCountModel> GetPlayerCountsFromScrapingAsync()
@@ -410,12 +412,12 @@ namespace DotaDb.Models
 
         public async Task<DotaSchema> GetSchemaAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.Schema, GetSchemaFromFileAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.Schema, GetSchemaFromFileAsync);
         }
 
         private async Task<DotaSchema> GetSchemaFromFileAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, mainSchemaFileName)).ToArray();
             var schema = SourceSchemaParser.SchemaFactory.GetDotaSchema(vdf);
             return schema;
         }
@@ -426,7 +428,7 @@ namespace DotaDb.Models
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5)
             };
-            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
+            var liveLeagueGames = await AddOrGetCachedValueAsync(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
             return liveLeagueGames.Count;
         }
 
@@ -438,7 +440,7 @@ namespace DotaDb.Models
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(20)
             };
-            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
+            var liveLeagueGames = await AddOrGetCachedValueAsync(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
 
             #endregion Get/Add From/To Cache
 
@@ -566,7 +568,7 @@ namespace DotaDb.Models
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(20)
             };
-            var liveLeagueGames = await AddOrGetCachedValue(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
+            var liveLeagueGames = await AddOrGetCachedValueAsync(MemoryCacheKey.LiveLeagueGames, GetLiveLeagueGamesFromWebAPIAsync, cacheItemPolicy);
 
             var liveLeagueGame = liveLeagueGames.FirstOrDefault(x => x.MatchId == matchId);
 
@@ -741,7 +743,7 @@ namespace DotaDb.Models
 
         public async Task<IReadOnlyCollection<GameItem>> GetGameItemsAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.InGameItems, GetGameItemsFromWebAPIAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.InGameItems, GetGameItemsFromWebAPIAsync);
         }
 
         private async Task<IReadOnlyCollection<GameItem>> GetGameItemsFromWebAPIAsync()
@@ -754,72 +756,72 @@ namespace DotaDb.Models
 
         public async Task<IReadOnlyDictionary<int, DotaHeroSchemaItem>> GetHeroesAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.Heroes, GetHeroesFromSchemaAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.Heroes, GetHeroesFromSchemaAsync);
         }
 
         private async Task<IReadOnlyDictionary<int, DotaHeroSchemaItem>> GetHeroesFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, heroesFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, heroesFileName)).ToArray();
             var heroes = SourceSchemaParser.SchemaFactory.GetDotaHeroes(vdf);
             return heroes.ToDictionary(x => x.HeroId, x => x);
         }
 
         public async Task<IReadOnlyCollection<DotaAbilitySchemaItem>> GetHeroAbilitiesAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.HeroAbilities, GetHeroAbilitiesFromSchemaAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.HeroAbilities, GetHeroAbilitiesFromSchemaAsync);
         }
 
         private async Task<IReadOnlyCollection<DotaAbilitySchemaItem>> GetHeroAbilitiesFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, heroAbilitiesFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, heroAbilitiesFileName)).ToArray();
             var abilities = SourceSchemaParser.SchemaFactory.GetDotaHeroAbilities(vdf);
             return abilities;
         }
 
         public async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.LocalizationKeys, GetPublicLocalizationFromSchemaAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.LocalizationKeys, GetPublicLocalizationFromSchemaAsync);
         }
 
         private async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, tooltipsEnglishFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, tooltipsEnglishFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }
 
         public async Task<IReadOnlyDictionary<string, string>> GetItemsLocalizationAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.InStoreItemLocalizationKeys, GetInStoreItemLocalizationFromSchemaAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.InStoreItemLocalizationKeys, GetInStoreItemLocalizationFromSchemaAsync);
         }
 
         private async Task<IReadOnlyDictionary<string, string>> GetInStoreItemLocalizationFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaEnglishFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, mainSchemaEnglishFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaPublicLocalizationKeys(vdf);
             return result;
         }
 
         public async Task<IReadOnlyDictionary<int, DotaItemAbilitySchemaItem>> GetItemAbilitiesAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.ItemAbilities, GetItemAbilitiesFromSchemaAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.ItemAbilities, GetItemAbilitiesFromSchemaAsync);
         }
 
         private async Task<IReadOnlyDictionary<int, DotaItemAbilitySchemaItem>> GetItemAbilitiesFromSchemaAsync()
         {
-            string[] vdf = (await GetFileLinesFromStorageAsync(schemaContainerName, itemAbilitiesFileName)).ToArray();
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, itemAbilitiesFileName)).ToArray();
             var result = SourceSchemaParser.SchemaFactory.GetDotaItemAbilities(vdf);
             return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
         }
 
         public async Task<IReadOnlyDictionary<int, League>> GetLeaguesAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.Leagues, GetLeaguesFromWebAPIAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.Leagues, GetLeaguesFromWebAPIAsync);
         }
 
         public async Task<IReadOnlyDictionary<string, DotaLeague>> GetLeagueTicketsAsync()
         {
-            return await AddOrGetCachedValue(MemoryCacheKey.LeagueTickets, GetLeagueTicketsFromSchemaAsync);
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.LeagueTickets, GetLeagueTicketsFromSchemaAsync);
         }
 
         private async Task<IReadOnlyDictionary<int, League>> GetLeaguesFromWebAPIAsync()
@@ -835,13 +837,13 @@ namespace DotaDb.Models
 
         private async Task<IReadOnlyDictionary<string, DotaLeague>> GetLeagueTicketsFromSchemaAsync()
         {
-            string[] schemaVdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaFileName)).ToArray();
-            string[] localizationVdf = (await GetFileLinesFromStorageAsync(schemaContainerName, mainSchemaEnglishFileName)).ToArray();
+            string[] schemaVdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, mainSchemaFileName)).ToArray();
+            string[] localizationVdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, mainSchemaEnglishFileName)).ToArray();
             var leagues = SourceSchemaParser.SchemaFactory.GetDotaLeaguesFromText(schemaVdf, localizationVdf);
             return new ReadOnlyDictionary<string, DotaLeague>(leagues.ToDictionary(x => x.ItemDef, x => x));
         }
 
-        private async Task<T> AddOrGetCachedValue<T>(MemoryCacheKey key, Func<Task<T>> func, CacheItemPolicy overrideCacheItemPolicy = null)
+        private async Task<T> AddOrGetCachedValueAsync<T>(MemoryCacheKey key, Func<Task<T>> func, CacheItemPolicy overrideCacheItemPolicy = null)
         {
             object value = cache.Get(key.ToString());
             if (value != null)
@@ -858,7 +860,7 @@ namespace DotaDb.Models
                 }
                 else
                 {
-                    cache.Add(key.ToString(), newValue, cacheItemPolicy);
+                    cache.Add(key.ToString(), newValue, CacheExpiration);
                 }
 
                 return newValue;
@@ -868,8 +870,7 @@ namespace DotaDb.Models
         #endregion Cached Data
 
         #region Utility Methods
-
-
+        
         public async Task<string> GetTeamLogoUrlAsync(long ugcId)
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
@@ -925,7 +926,7 @@ namespace DotaDb.Models
         public async Task<DotaItemBuildSchemaItem> GetItemBuildAsync(string heroName)
         {
             string fileName = String.Format("default_{0}.txt", heroName.Replace("npc_dota_hero_", ""));
-            var fileLines = await GetFileLinesFromStorageAsync(schemaContainerName, fileName);
+            var fileLines = await GetFileLinesFromStorageAsync(schemaStorageContainerName, fileName);
             string[] vdf = fileLines.ToArray();
             var itemBuild = SourceSchemaParser.SchemaFactory.GetDotaItemBuild(vdf);
             return itemBuild;
