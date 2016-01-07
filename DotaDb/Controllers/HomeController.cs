@@ -9,6 +9,7 @@ using DotaDb.Utilities;
 using System.Collections.Generic;
 using SourceSchemaParser.Dota2;
 using SteamWebAPI2.Models.DOTA2;
+using System.Net.Http;
 
 namespace DotaDb.Controllers
 {
@@ -21,7 +22,15 @@ namespace DotaDb.Controllers
             HomeViewModel viewModel = new HomeViewModel();
 
             var playerCounts = await db.GetPlayerCountsAsync();
-            var leagues = await db.GetLeaguesAsync();
+
+            IReadOnlyDictionary<int, League> leagues = null;
+            try
+            {
+                leagues = await db.GetLeaguesAsync();
+            }
+            catch (HttpRequestException) { } // maybe log this in the future, for now do nothing
+            viewModel.LeagueCount = leagues != null ? (int?)leagues.Count : null;
+
             var gameItems = await db.GetGameItemsAsync();
             var schema = await db.GetSchemaAsync();
             var heroes = await db.GetHeroesAsync();
@@ -30,14 +39,28 @@ namespace DotaDb.Controllers
             viewModel.HeroCount = heroes.Count;
             viewModel.HeroAbilityCount = heroAbilities.Count;
             viewModel.ShopItemCount = schema.Items.Count;
-            viewModel.LeagueCount = leagues.Count;
             viewModel.InGameItemCount = gameItems.Count;
-            viewModel.LiveLeagueGameCount = await db.GetLiveLeagueGameCountAsync();
+
+            int? liveLeagueGameCount = null;
+            try
+            {
+                liveLeagueGameCount = await db.GetLiveLeagueGameCountAsync();
+            }
+            catch (HttpRequestException) { } // maybe log this in the future, for now do nothing
+            viewModel.LiveLeagueGameCount = liveLeagueGameCount;
+
             viewModel.InGamePlayerCount = playerCounts.InGamePlayerCount;
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;
             viewModel.AllTimePeakPlayerCount = playerCounts.AllTimePeakPlayerCount;
 
-            viewModel.LiveLeagueGames = await GetTopLiveLeagueGameAsync();
+            IReadOnlyCollection<LiveLeagueGameOverviewViewModel> liveLeagueGames = null;
+
+            try
+            {
+                liveLeagueGames = await GetTopLiveLeagueGameAsync();
+            }
+            catch (HttpRequestException ex) { } // maybe log this in the future, for now do nothing
+            viewModel.LiveLeagueGames = liveLeagueGames;
 
             await SetupRandomHero(viewModel, heroes);
             await SetupRandomItems(viewModel, gameItems);
