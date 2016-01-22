@@ -71,10 +71,15 @@ namespace DotaDb.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Index(int? page, string itemName)
+        public async Task<ActionResult> Index(string itemName)
         {
-            var viewModel = await GetGameItemsAsync(itemName);
-            return View(viewModel);
+            var gameItems = await GetGameItemsAsync(itemName);
+            if(!String.IsNullOrEmpty(itemName))
+            {
+                ViewBag.SearchItemName = itemName;
+            }
+
+            return View(gameItems);
         }
 
         private async Task<InStoreViewModel> GetCosmeticItemsAsync(string prefab, int? page)

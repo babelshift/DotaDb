@@ -4,21 +4,24 @@
     ViewBag.Title = "Items in Game";
 }
 
-
-
 @Html.Partial("_BreadcrumbMenuPartial", "In Game")
 @Html.Partial("_TabMenuPartial", "ingame")
 <div class="row">
     <div class="col-xs-12" style="padding: 4px">
-        <form class="form-inline">
+        @using (Html.BeginForm("index", "items", FormMethod.Get, new { @class = "form-inline", role = "form" }))
+        {
             <div class="form-group">
-                <input type="text" class="form-control" id="item-name" placeholder="Filter for an item by name">
+                <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Search for an item">
             </div>
             <button type="submit" class="btn btn-default">
                 <i class="fa fa-search"></i>
-                Filter Items
+                Search
             </button>
-        </form>
+        }
+        @if (!String.IsNullOrEmpty(ViewBag.SearchItemName))
+        {
+            <p>Filter: <strong>@String.Format("'{0}'", ViewBag.SearchItemName)</strong> <small><a href="@Url.Action("index", "items")"><i class="fa fa-remove"></i></a></small></p>
+        }
     </div>
 </div>
 <br />
