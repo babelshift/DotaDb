@@ -21,7 +21,7 @@ namespace DotaDb.Controllers
             var schema = await db.GetSchemaAsync();
 
             List<ItemSetViewModel> itemSets = new List<ItemSetViewModel>();
-            foreach(var itemSet in schema.ItemSets)
+            foreach (var itemSet in schema.ItemSets)
             {
                 var itemSetViewModel = new ItemSetViewModel()
                 {
@@ -71,9 +71,9 @@ namespace DotaDb.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Index(int? page)
+        public async Task<ActionResult> Index(int? page, string itemName)
         {
-            var viewModel = await GetGameItemsAsync();
+            var viewModel = await GetGameItemsAsync(itemName);
             return View(viewModel);
         }
 
@@ -157,7 +157,7 @@ namespace DotaDb.Controllers
             return viewModel;
         }
 
-        private async Task<IReadOnlyCollection<GameItemViewModel>> GetGameItemsAsync()
+        private async Task<IReadOnlyCollection<GameItemViewModel>> GetGameItemsAsync(string itemName)
         {
             var items = await db.GetGameItemsAsync();
 
@@ -166,18 +166,41 @@ namespace DotaDb.Controllers
             List<GameItemViewModel> gameItems = new List<GameItemViewModel>();
             foreach (var item in itemsWithoutRecipes)
             {
-                gameItems.Add(new GameItemViewModel()
+                string localizedName = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", item.Name));
+
+                if (!String.IsNullOrEmpty(itemName))
                 {
-                    Cost = item.Cost,
-                    Name = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", item.Name)),
-                    Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
-                    Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
-                    Id = item.Id,
-                    IsRecipe = item.Recipe == 1 ? true : false,
-                    SecretShop = item.SecretShop == 1 ? true : false,
-                    SideShop = item.SideShop == 1 ? true : false,
-                    IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
-                });
+                    if (localizedName.ToLower().Contains(itemName.ToLower()))
+                    {
+                        gameItems.Add(new GameItemViewModel()
+                        {
+                            Cost = item.Cost,
+                            Name = localizedName,
+                            Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
+                            Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
+                            Id = item.Id,
+                            IsRecipe = item.Recipe == 1 ? true : false,
+                            SecretShop = item.SecretShop == 1 ? true : false,
+                            SideShop = item.SideShop == 1 ? true : false,
+                            IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
+                        });
+                    }
+                }
+                else
+                {
+                    gameItems.Add(new GameItemViewModel()
+                    {
+                        Cost = item.Cost,
+                        Name = localizedName,
+                        Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
+                        Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
+                        Id = item.Id,
+                        IsRecipe = item.Recipe == 1 ? true : false,
+                        SecretShop = item.SecretShop == 1 ? true : false,
+                        SideShop = item.SideShop == 1 ? true : false,
+                        IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
+                    });
+                }
             }
 
             var abilities = await db.GetItemAbilitiesAsync();
