@@ -6,6 +6,27 @@
     ViewBag.ShowTopAlertInfo = false;
 }
 
+<div style="margin: 0 0 15px 0">
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <!-- top index (dotadb) -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1823005717277864"
+             data-ad-slot="5608659030"
+             data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+    }
+    else
+    {
+        <div style="width: 610px; margin: 5px auto;">
+            <img src="https://placehold.it/600x90" />
+        </div>
+    }
+</div>
+
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <h2 style="margin: 0">You're at the Dota Database!</h2>
@@ -343,6 +364,29 @@
             </div>
         }
     </div>
+</div>
+
+
+<div style="margin: 0 0 15px 0">
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- middle index (dotadb) -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1823005717277864"
+             data-ad-slot="4771054234"
+             data-ad-format="auto"></ins>
+        <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    }
+    else
+    {
+        <div style="width: 610px; margin: 5px auto;">
+            <img src="https://placehold.it/600x90" />
+        </div>
+    }
 </div>
 
 <div class="row" style="margin-bottom: 50px">
@@ -964,11 +1008,39 @@
     </div>
 </div>
 
+<div style="margin: 0 0 15px 0">
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <!-- top index (dotadb) -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1823005717277864"
+             data-ad-slot="5608659030"
+             data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+    }
+    else
+    {
+        <div style="width: 610px; margin: 5px auto;">
+            <img src="https://placehold.it/600x90" />
+        </div>
+    }
+</div>
+
 @*<div class="row">
-    <div class="col-md-10 col-md-offset-1 text-center">
-        <h1 style="font-weight: 100">Did You Know?</h1>
-        <hr style="margin: 5px 0" />
-    </div>
-    <div class="col-md-10 col-md-offset-1">
-    </div>
-</div>*@
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <h1 style="font-weight: 100">Did You Know?</h1>
+            <hr style="margin: 5px 0" />
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+        </div>
+    </div>*@
+
+@section scripts {
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    }
+}
