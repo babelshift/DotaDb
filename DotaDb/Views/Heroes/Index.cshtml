@@ -12,6 +12,30 @@
         </ol>
     </div>
 </div>
+
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- top heroes (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="1398785433"
+                 data-ad-format="auto"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
+
 <ul class="nav nav-pills" style="margin-bottom: 10px">
     <li role="presentation" class="active">
         <a href="@Url.Action("index", new { tab = "grid" })">
@@ -90,3 +114,33 @@
         </div>
     </div>
 </div>
+
+<div class="row" style="margin-top: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- bottom heroes (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="8642850639"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    }
+}
