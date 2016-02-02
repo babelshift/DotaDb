@@ -428,6 +428,7 @@
     <Content Include="Views\Matches\_RadiantTowerMinimapIconsPartial.cshtml" />
     <Content Include="Views\Matches\_DireTowerMinimapIconsPartial.cshtml" />
     <Content Include="Views\Matches\_PlayerDetailTableRowPartial.cshtml" />
+    <Content Include="Views\Home\_RandomGameItemPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
