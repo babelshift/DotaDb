@@ -161,7 +161,7 @@ namespace DotaDb.Controllers
             viewModel.Id = hero.HeroId;
             viewModel.Url = hero.Url.ToLower();
             viewModel.Name = await db.GetLocalizationTextAsync(hero.Name);
-            viewModel.Description = "<from localization -> npc_dota_hero_<heroname>_hype>";
+            viewModel.Description = await db.GetPanoramaLocalizationTextAsync(String.Format("npc_dota_hero_{0}_hype", hero.Url.ToLower()));
             viewModel.AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_full.png", hero.Name.Replace("npc_dota_hero_", ""));
             viewModel.BaseAgility = hero.AttributeBaseAgility;
             viewModel.BaseArmor = hero.ArmorPhysical;

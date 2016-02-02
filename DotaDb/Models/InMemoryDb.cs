@@ -123,6 +123,7 @@ namespace DotaDb.Models
             cache.Remove(MemoryCacheKey.Leagues.ToString());
             cache.Remove(MemoryCacheKey.PlayerCounts.ToString());
             cache.Remove(MemoryCacheKey.InStoreItemLocalizationKeys.ToString());
+            cache.Remove(MemoryCacheKey.PanoramaLocalizationKeys.ToString());
 
             abilityBehaviorTypes = GetAbilityBehaviorTypes();
             attackTypes = GetAttackTypes();
@@ -778,11 +779,23 @@ namespace DotaDb.Models
             return abilities;
         }
 
+        public async Task<IReadOnlyDictionary<string, string>> GetPanoramaLocalizationAsync()
+        {
+            return await AddOrGetCachedValueAsync(MemoryCacheKey.PanoramaLocalizationKeys, GetPanoramaLocalizationFromSchemaAsync);
+        }
+
+        private async Task<IReadOnlyDictionary<string, string>> GetPanoramaLocalizationFromSchemaAsync()
+        {
+            string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, panoramaDotaEnglishFileName)).ToArray();
+            var result = SourceSchemaParser.SchemaFactory.GetDotaPanoramaLocalizationKeys(vdf);
+            return result;
+        }
+
         public async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationAsync()
         {
             return await AddOrGetCachedValueAsync(MemoryCacheKey.LocalizationKeys, GetPublicLocalizationFromSchemaAsync);
         }
-
+        
         private async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationFromSchemaAsync()
         {
             string[] vdf = (await GetFileLinesFromStorageAsync(schemaStorageContainerName, tooltipsEnglishFileName)).ToArray();
@@ -913,6 +926,24 @@ namespace DotaDb.Models
             }
             string value = String.Empty;
             var localizationKeys = await GetItemsLocalizationAsync();
+            if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        public async Task<string> GetPanoramaLocalizationTextAsync(string key)
+        {
+            if (String.IsNullOrEmpty(key))
+            {
+                return String.Empty;
+            }
+            string value = String.Empty;
+            var localizationKeys = await GetPanoramaLocalizationAsync();
             if (localizationKeys != null && localizationKeys.TryGetValue(key, out value))
             {
                 return value;

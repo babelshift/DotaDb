@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = Model.Name;
+    ViewBag.Description = Model.Description;
+    ViewBag.ImageUrl = Model.AvatarImagePath;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <ol class="breadcrumb">
@@ -14,9 +16,8 @@
         <h2 style="margin-top: 0;">
             @Model.Name
         </h2>
-        <div class="text-center">
-            <img src="@Model.AvatarImagePath" class="shadow" />
-        </div>
+        <img src="@Model.AvatarImagePath" class="shadow" />
+        <p>@Model.Description</p>
         <hr />
         <div class="row">
             <div class="col-xs-6">
@@ -130,13 +131,13 @@
                         Item Builds
                     </a>
                     @*<a class="list-group-item" href="#">
-                        <i class="fa fa-play-circle fa-fw"></i>
-                        Matches
-                    </a>
-                    <a class="list-group-item" href="#">
-                        <i class="fa fa-list-alt fa-fw"></i>
-                        Raw Data
-                    </a>*@
+                            <i class="fa fa-play-circle fa-fw"></i>
+                            Matches
+                        </a>
+                        <a class="list-group-item" href="#">
+                            <i class="fa fa-list-alt fa-fw"></i>
+                            Raw Data
+                        </a>*@
                 </div>
             </div>
         </div>

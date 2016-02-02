@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "All Heroes";
+    ViewBag.Description = String.Format("There are currently {0} agility heroes, {1} intelligence heroes, and {2} strength heroes in Dota 2.", Model.AgilityHeroes.Count, Model.IntelligenceHeroes.Count, Model.StrengthHeroes.Count);
 }
 
 <div class="row">

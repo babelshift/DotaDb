@@ -17,6 +17,7 @@ namespace DotaDb.Models
         Schema,
         Leagues,
         PlayerCounts,
-        InStoreItemLocalizationKeys
+        InStoreItemLocalizationKeys,
+        PanoramaLocalizationKeys
     }
 }

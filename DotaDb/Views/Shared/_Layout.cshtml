@@ -15,10 +15,10 @@
     <meta name="twitter:image" content="@(!String.IsNullOrEmpty(ViewBag.ImageUrl) ? Url.Content(ViewBag.ImageUrl) : Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/Content/dotadb-200x200.png"))" />
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Dota Database">
-    <meta property="og:title" content="Home &middot; Dota Database">
-    <meta property="description" content="This site was created to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data directly from Dota 2 files and the Steam Web API to give you the most up to date information.">
-    <meta property="og:description" content="This site was created to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data directly from Dota 2 files and the Steam Web API to give you the most up to date information.">
-    <meta property="og:image" content="@(Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/Content/dotadb-200x200.png"))">
+    <meta property="og:title" content="@(String.IsNullOrEmpty(ViewBag.Title) ? "Dota Database" : String.Format("Dota Database | {0}", ViewBag.Title))">
+    <meta property="description" content="@(String.IsNullOrEmpty(ViewBag.Title) ? "This site was created to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data directly from Dota 2 files and the Steam Web API to give you the most up to date information." : ViewBag.Description)">
+    <meta property="og:description" content="@(String.IsNullOrEmpty(ViewBag.Title) ? "This site was created to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data directly from Dota 2 files and the Steam Web API to give you the most up to date information." : ViewBag.Description)">
+    <meta property="og:image" content="@(!String.IsNullOrEmpty(ViewBag.ImageUrl) ? Url.Content(ViewBag.ImageUrl) : Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/Content/dotadb-200x200.png"))" />
     @Styles.Render("~/Content/bootstrap.min.css")
     @Styles.Render("~/Content/bootstrap-lumen.min.css")
     @Styles.Render("~/Content/css")

@@ -2,7 +2,9 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutSplash.cshtml";
-    ViewBag.Title = "Live Match";
+    ViewBag.Title = Model.RadiantTeamName + " vs. " + Model.DireTeamName;
+    ViewBag.Description = "This is a Dota 2 league match between two teams in the " + Model.LeagueTier + " tier. Click to see match details.";
+    ViewBag.ImageUrl = Model.LeagueLogoPath;
     ViewBag.RefreshPageTime = 20;
 }
 
