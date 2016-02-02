@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TwolipsDating {
+namespace DotaDb {
     
     
     public partial class _403 {

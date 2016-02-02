@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace TwolipsDating
+namespace DotaDb
 {
     public partial class _500 : System.Web.UI.Page
     {
