@@ -6,6 +6,31 @@
 }
 
 @Html.Partial("_BreadcrumbMenuPartial", "Item Sets")
+
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- top sets (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="5216549432"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
+
+
 @Html.Partial("_TabMenuPartial", "sets")
 
 <div class="row itemset-list">
@@ -29,3 +54,33 @@
         </div>
     }
 </div>
+
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- bottom sets (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="8170015837"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    }
+}

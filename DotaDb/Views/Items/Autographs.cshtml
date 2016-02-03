@@ -6,6 +6,30 @@
 }
 
 @Html.Partial("_BreadcrumbMenuPartial", "Autographs")
+
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- top autographs (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="5356150232"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
+
 @Html.Partial("_TabMenuPartial", "autographs")
 
 <div class="row autograph-list">
@@ -54,3 +78,33 @@
         </div>
     }
 </div>
+
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- bottom autographs (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="6832883438"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    }
+}
