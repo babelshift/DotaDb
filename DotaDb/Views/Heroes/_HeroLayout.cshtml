@@ -6,11 +6,11 @@
     ViewBag.ImageUrl = Model.AvatarImagePath;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<ol class="breadcrumb">
+@*<ol class="breadcrumb">
     <li><a href="@Url.Action("index", "home")">Home</a></li>
     <li><a href="@Url.Action("index", "heroes")">Heroes</a></li>
     <li class="active">@Model.Name (@Model.ActiveTab)</li>
-</ol>
+</ol>*@
 <div class="row" style="margin-bottom: 15px">
     <div class="col-md-8 col-md-offset-2">
         @if (!HttpContext.Current.IsDebuggingEnabled)

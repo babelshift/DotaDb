@@ -2,14 +2,14 @@
 @using PagedList.Mvc;
 @model IPagedList<DotaDb.ViewModels.LeagueViewModel>
 
-<div class="row">
+@*<div class="row">
     <div class="col-xs-12" style="padding: 4px">
         <ol class="breadcrumb">
             <li><a href="@Url.Action("index", "home")">Home</a></li>
             <li class="active">Leagues</li>
         </ol>
     </div>
-</div>
+</div>*@
 <div class="row" style="margin-bottom: 15px">
     <div class="col-md-8 col-md-offset-2">
         @if (!HttpContext.Current.IsDebuggingEnabled)
