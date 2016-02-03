@@ -10,6 +10,28 @@
         </ol>
     </div>
 </div>
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- top leagues (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="9147221435"
+                 data-ad-format="auto"></ins>
+                <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
 <div class="row league-list">
     @foreach (var league in Model)
             {
@@ -53,8 +75,36 @@
         </div>
     }
 </div>
-
+<div class="row" style="margin-bottom: 15px">
+    <div class="col-md-8 col-md-offset-2">
+        @if (!HttpContext.Current.IsDebuggingEnabled)
+        {
+            <!-- bottom leagues (dotadb) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="1623954639"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        }
+        else
+        {
+            <div style="width: 610px; margin: 5px auto;">
+                <img src="https://placehold.it/600x90" />
+            </div>
+        }
+    </div>
+</div>
 @if (Model.PageCount > 1)
 {
     @Html.PagedListPager(Model, page => Url.Action("index", new { page }))
+}
+
+@section scripts {
+    @if (!HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    }
 }
