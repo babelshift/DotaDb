@@ -1,0 +1,61 @@
+﻿@model DotaDb.ViewModels.FilesIndexViewModel
+@using DotaDb.Utilities;
+
+@{
+    ViewBag.Title = "Source Files";
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-uppercase"><i class="fa fa-file-o fa-fw"></i> File Name</th>
+            <th class="text-uppercase"><i class="fa fa-list-alt fa-fw"></i> Description</th>
+            <th class="text-uppercase"><i class="fa fa-refresh fa-fw"></i> Update Frequency</th>
+            <th class="text-uppercase"><i class="fa fa-clock-o fa-fw"></i> Last Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="col-md-2">npc_heroes.txt</td>
+            <td class="col-md-6">Hero details related to models, portraits, sounds, roles, bot behaviors, ability names, animations, attributes, movement speeds, equippable item slots, bot loadouts, and more.</td>
+            <td class="col-md-2">Each game client update.</td>
+            <td class="col-md-2">@Model.HeroesLastUpdated.GetTimeAgo()</td>
+        </tr>
+        <tr>
+            <td class="col-md-2">npc_abilities.txt</td>
+            <td class="col-md-6">Hero ability details such as damage, cooldown, costs, special behaviors, shops, target types, damage types, immunities, and more.</td>
+            <td class="col-md-2">Each game client update.</td>
+            <td class="col-md-2">@Model.HeroAbilitiesLastUpdated.GetTimeAgo()</td>
+        </tr>
+        <tr>
+            <td class="col-md-2">item_abilities.txt</td>
+            <td class="col-md-6">Item ability details such as damage, cooldown, costs, special behaviors, shops, target types, damage types, immunities, and more.</td>
+            <td class="col-md-2">Each game client update.</td>
+            <td class="col-md-2">@Model.ItemAbilitiesLastUpdated.GetTimeAgo()</td>
+        </tr>
+        <tr>
+            <td class="col-md-2">items_game.txt</td>
+            <td class="col-md-6">Cosmetic, wearable, autograph, and set items available for purchase from the Dota 2 store. Includes details such as pricing data, images, item names, rarities, equippable slots, models, sounds, portraits, icons, and more.</td>
+            <td class="col-md-2">Every 24 hours.</td>
+            <td class="col-md-2">@Model.MainSchemaLastUpdated.GetTimeAgo()</td>
+        </tr>
+        <tr>
+            <td class="col-md-2">panorama_dota_english.txt</td>
+            <td class="col-md-6">Localization and language keys for UI controls, error messages, and helper strings and displays. (ENGLISH)</td>
+            <td class="col-md-2">Each game client update.</td>
+            <td class="col-md-2">@Model.PanoramaLocalizationLastUpdated.GetTimeAgo()</td>
+        </tr>
+        <tr>
+            <td class="col-md-2">public_dota_english.txt</td>
+            <td class="col-md-6">Localization and language keys for hero abilities, item abilities, couriers, chat wheel, hotkeys, economy, and more. (ENGLISH)</td>
+            <td class="col-md-2">Each game client update.</td>
+            <td class="col-md-2">@Model.PublicLocalizationLastUpdated.GetTimeAgo()</td>
+        </tr>
+        <tr>
+            <td class="col-md-2">items_wearable_english.txt</td>
+            <td class="col-md-6">Localization and language keys for cosmetic, wearable, and shop items. (ENGLISH)</td>
+            <td class="col-md-2">Each game client update.</td>
+            <td class="col-md-2">@Model.MainSchemaLocalizationLastUpdated.GetTimeAgo()</td>
+        </tr>
+    </tbody>
+</table>

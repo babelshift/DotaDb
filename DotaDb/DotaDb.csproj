@@ -52,8 +52,8 @@
       <HintPath>..\packages\EasyAzureKeyVault.1.1.0.10\lib\net46\EasyAzureKeyVault.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EasyAzureStorage, Version=1.2.0.10, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyAzureStorage.1.2.0.10\lib\net46\EasyAzureStorage.dll</HintPath>
+    <Reference Include="EasyAzureStorage, Version=1.2.0.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyAzureStorage.1.2.0.12\lib\net46\EasyAzureStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
@@ -181,8 +181,8 @@
       <HintPath>..\packages\SourceSchemaParser.1.0.0.47\lib\net46\SourceSchemaParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SteamWebAPI2, Version=1.1.0.24, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamWebAPI2.1.1.0.24\lib\net46\SteamWebAPI2.dll</HintPath>
+    <Reference Include="SteamWebAPI2, Version=1.1.0.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\steamwebapi2.1.1.0.26\lib\net46\SteamWebAPI2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -290,6 +290,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HeroesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
@@ -306,8 +307,10 @@
     <Compile Include="Models\LiveLeagueGameModel.cs" />
     <Compile Include="Models\MemoryCacheKey.cs" />
     <Compile Include="Models\PlayerCountModel.cs" />
+    <Compile Include="Models\SourceFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\DateTimeOffsetExtensions.cs" />
     <Compile Include="Utilities\DotaLeagueExtensions.cs" />
     <Compile Include="Utilities\GameItemExtensions.cs" />
     <Compile Include="Utilities\HeroExtensions.cs" />
@@ -319,6 +322,7 @@
     <Compile Include="Utilities\LiveLeagueGamePlayerExtensions.cs" />
     <Compile Include="Utilities\LogHelper.cs" />
     <Compile Include="ViewModels\BaseHeroViewModel.cs" />
+    <Compile Include="ViewModels\FilesIndexViewModel.cs" />
     <Compile Include="ViewModels\GameItemViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilitySpecialViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilityViewModel.cs" />
@@ -466,6 +470,7 @@
     <Content Include="Views\Matches\_DireTowerMinimapIconsPartial.cshtml" />
     <Content Include="Views\Matches\_PlayerDetailTableRowPartial.cshtml" />
     <Content Include="Views\Home\_RandomGameItemPartial.cshtml" />
+    <Content Include="Views\Files\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

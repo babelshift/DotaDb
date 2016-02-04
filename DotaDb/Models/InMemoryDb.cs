@@ -363,6 +363,43 @@ namespace DotaDb.Models
         #endregion Enum Type Lookup Methods
 
         #region Cached Data
+        public async Task<DateTimeOffset?> GetSourceFileLastModifiedDateAsync(SourceFile file)
+        {
+            if (file == SourceFile.Heroes)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, heroesFileName);
+            }
+            else if (file == SourceFile.HeroAbilities)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, heroAbilitiesFileName);
+            }
+            //else if (file == SourceFile.InGameItems)
+            //{
+            //    return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, itemsInGameFileName);
+            //}
+            else if (file == SourceFile.ItemAbilities)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, itemAbilitiesFileName);
+            }
+            else if (file == SourceFile.PanoramaLocalization)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, panoramaDotaEnglishFileName);
+            }
+            else if (file == SourceFile.PublicLocalization)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, tooltipsEnglishFileName);
+            }
+            else if (file == SourceFile.MainSchemaLocalization)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, mainSchemaEnglishFileName);
+            }
+            else if (file == SourceFile.MainSchema)
+            {
+                return await storage.GetBlobLastModifiedDateAsync(schemaStorageContainerName, mainSchemaFileName);
+            }
+            else
+                return null;
+        }
 
         public async Task<PlayerCountModel> GetPlayerCountsAsync()
         {
