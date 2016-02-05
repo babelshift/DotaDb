@@ -363,6 +363,7 @@
     <Content Include="Content\backgrounds\bg4.jpg" />
     <Content Include="Content\backgrounds\bg5.jpg" />
     <Content Include="Content\backgrounds\bg6.jpg" />
+    <Content Include="Content\backgrounds\bg7.jpg" />
     <Content Include="Content\backgrounds\DireAncientBackground.jpg" />
     <Content Include="Content\backgrounds\MidLaneBackground.jpg" />
     <Content Include="Content\backgrounds\RadiantAncientBackground.jpg" />
