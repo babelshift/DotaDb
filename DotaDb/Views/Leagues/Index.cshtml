@@ -2,6 +2,13 @@
 @using PagedList.Mvc;
 @model IPagedList<DotaDb.ViewModels.LeagueViewModel>
 
+@{
+    ViewBag.Title = "Leagues";
+    ViewBag.Description = "There are currently " + Model.Count + " registered leagues. This listing will provide an overview of each league with links to the official league sites.";
+    ViewBag.HeaderImageName = "bg2.jpg";
+    ViewBag.HeaderText = "Leagues";
+}
+
 @*<div class="row">
     <div class="col-xs-12" style="padding: 4px">
         <ol class="breadcrumb">
