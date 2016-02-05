@@ -19,8 +19,6 @@ namespace DotaDb.Controllers
 
         public async Task<ActionResult> Index()
         {
-            throw new Exception();
-
             HomeViewModel viewModel = new HomeViewModel();
 
             var playerCounts = await db.GetPlayerCountsAsync();
