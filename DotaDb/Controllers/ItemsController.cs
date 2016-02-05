@@ -16,6 +16,7 @@ namespace DotaDb.Controllers
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
+        [OutputCache(CacheProfile = "Default")]
         public async Task<ActionResult> Sets(int? page)
         {
             var schema = await db.GetSchemaAsync();
@@ -35,6 +36,7 @@ namespace DotaDb.Controllers
             return View(itemSets.AsReadOnly());
         }
 
+        [OutputCache(CacheProfile = "Default")]
         public async Task<ActionResult> Autographs(int? page)
         {
             var schema = await db.GetSchemaAsync();
@@ -71,10 +73,11 @@ namespace DotaDb.Controllers
             return View(viewModel);
         }
 
+        [OutputCache(CacheProfile = "Default")]
         public async Task<ActionResult> Index(string itemName)
         {
             var gameItems = await GetGameItemsAsync(itemName);
-            if(!String.IsNullOrEmpty(itemName))
+            if (!String.IsNullOrEmpty(itemName))
             {
                 ViewBag.SearchItemName = itemName;
             }
