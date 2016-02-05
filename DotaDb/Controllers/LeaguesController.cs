@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DotaDb.Controllers
 {
-    public class LeaguesController : Controller
+    public class LeaguesController : BaseController
     {
         private InMemoryDb db = InMemoryDb.Instance;
 

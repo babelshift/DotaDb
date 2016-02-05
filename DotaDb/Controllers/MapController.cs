@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace DotaDb.Controllers
 {
-    public class MapController : Controller
+    public class MapController : BaseController
     {
         [OutputCache(Duration = 86400, Location = System.Web.UI.OutputCacheLocation.Server)]
         public ActionResult Index()

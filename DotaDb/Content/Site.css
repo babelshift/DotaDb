@@ -202,6 +202,9 @@ textarea {
     border: 2px solid #000000;
 }
 
+.full-screen-bg {
+    height: 100%;
+}
 .full-screen-bg-tint {
     height: 100%;
     width: 100%;
@@ -416,3 +419,47 @@ textarea {
 .live-league-game .roshan-status {
     margin-bottom: 0;
 }
+
+
+.btn-twitter {
+    color: #fff;
+    background-color: #55acee;
+    border-color: #469cdd;
+}
+
+    .btn-twitter:hover,
+    .btn-twitter:focus,
+    .btn-twitter:active {
+        color: #fff;
+        background-color: #469cdd;
+        border-color: #3a8fd0;
+    }
+
+.btn-facebook {
+    color: #fff;
+    background-color: #3A5795;
+    border-color: #29488a;
+}
+
+    .btn-facebook:hover,
+    .btn-facebook:focus,
+    .btn-facebook:active {
+        color: #fff;
+        background-color: #29488a;
+        border-color: #1f3e7e;
+    }
+
+.btn-google-plus {
+    color: #fff;
+    background-color: #d34836;
+    border-color: #c13725;
+}
+
+    .btn-google-plus:hover,
+    .btn-google-plus:focus,
+    .btn-google-plus:active {
+        color: #fff;
+        background-color: #c13725;
+        border-color: #b52b1a;
+    }
+

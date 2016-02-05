@@ -12,7 +12,7 @@ using System.IO;
 
 namespace DotaDb.Controllers
 {
-    public class ItemsController : Controller
+    public class ItemsController : BaseController
     {
         private InMemoryDb db = InMemoryDb.Instance;
 

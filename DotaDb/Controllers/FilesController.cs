@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace DotaDb.Controllers
 {
-    public class FilesController : Controller
+    public class FilesController : BaseController
     {
         private InMemoryDb db = InMemoryDb.Instance;
 

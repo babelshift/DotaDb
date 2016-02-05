@@ -10,7 +10,7 @@ using PagedList;
 
 namespace DotaDb.Controllers
 {
-    public class MatchesController : Controller
+    public class MatchesController : BaseController
     {
         private InMemoryDb db = InMemoryDb.Instance;
 

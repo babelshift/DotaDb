@@ -13,12 +13,14 @@ using System.Net.Http;
 
 namespace DotaDb.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
         public async Task<ActionResult> Index()
         {
+            throw new Exception();
+
             HomeViewModel viewModel = new HomeViewModel();
 
             var playerCounts = await db.GetPlayerCountsAsync();

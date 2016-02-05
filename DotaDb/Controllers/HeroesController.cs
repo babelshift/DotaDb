@@ -14,7 +14,7 @@ using DotaDb.Utilities;
 
 namespace DotaDb.Controllers
 {
-    public class HeroesController : Controller
+    public class HeroesController : BaseController
     {
         private InMemoryDb db = InMemoryDb.Instance;
 
