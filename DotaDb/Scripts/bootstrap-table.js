@@ -1272,7 +1272,6 @@
                 '<li class="page-last"><a href="javascript:void(0)">' + this.options.paginationLastText + '</a></li>',
                 '</ul>',
                 '</div>');
-
         }
         this.$pagination.html(html.join(''));
 
@@ -1876,7 +1875,6 @@
         }).find('table').css('width', this.$el.outerWidth())
             .html('').attr('class', this.$el.attr('class'))
             .append(this.$header_);
-
 
         focusedTemp = $('.focus-temp:visible:eq(0)');
         if (focusedTemp.length > 0) {
@@ -2686,5 +2684,4 @@
     $(function () {
         $('[data-toggle="table"]').bootstrapTable();
     });
-
 }(jQuery);

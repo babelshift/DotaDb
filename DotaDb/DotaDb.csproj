@@ -185,8 +185,8 @@
       <HintPath>..\packages\SourceSchemaParser.1.0.0.47\lib\net46\SourceSchemaParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Steam.Models, Version=1.0.0.11, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Steam.Models.1.0.0.11\lib\net46\Steam.Models.dll</HintPath>
+    <Reference Include="Steam.Models, Version=1.0.0.13, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Steam.Models.1.0.0.13\lib\net46\Steam.Models.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SteamWebAPI2, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
@@ -309,11 +309,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\InMemoryDb.cs" />
-    <Compile Include="Models\LiveLeagueGameSpecificModel.cs" />
-    <Compile Include="Models\MemoryCacheKey.cs" />
-    <Compile Include="Models\PlayerCountModel.cs" />
-    <Compile Include="Models\SourceFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\DateTimeOffsetExtensions.cs" />
@@ -493,6 +488,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotaDb.Data\DotaDb.Data.csproj">
+      <Project>{2cc96a61-66ec-4626-8c78-b9f8dd65bc30}</Project>
+      <Name>DotaDb.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,16 +1,14 @@
-﻿using DotaDb.Models;
+﻿using DotaDb.Data;
+using DotaDb.Utilities;
 using DotaDb.ViewModels;
+using SourceSchemaParser.Dota2;
+using Steam.Models.DOTA2;
 using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using DotaDb.Utilities;
-using System.Collections.Generic;
-using SourceSchemaParser.Dota2;
-using SteamWebAPI2.Models.DOTA2;
-using System.Net.Http;
-using Steam.Models.DOTA2;
 
 namespace DotaDb.Controllers
 {
@@ -204,7 +202,7 @@ namespace DotaDb.Controllers
             await SetupHeroViewModelAsync(randomHero, viewModel.RandomHero);
             await SetupAbilitiesAsync(randomHero, viewModel.RandomHero);
         }
-        
+
         private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(DotaHeroSchemaItem hero, T viewModel)
             where T : BaseHeroViewModel
         {

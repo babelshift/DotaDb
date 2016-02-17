@@ -50,7 +50,7 @@ namespace DotaDb.Utilities
 
             logger.Error(logMessage.ToString());
         }
-        
+
         public void Error(string methodName, Exception e, object parameters = null)
         {
             Debug.Assert(!String.IsNullOrEmpty(methodName));
@@ -125,6 +125,5 @@ namespace DotaDb.Utilities
                 LogInnerException(e.InnerException, logMessage);
             }
         }
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Steam.Models.DOTA2;
-using SteamWebAPI2.Models.DOTA2;
 using System.Collections.Generic;
 
 namespace DotaDb.ViewModels

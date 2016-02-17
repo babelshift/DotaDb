@@ -3,8 +3,6 @@ using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace DotaDb.Utilities
 {
@@ -15,7 +13,7 @@ namespace DotaDb.Utilities
 
         public static IReadOnlyList<HeroRoleViewModel> GetRoles(this DotaHeroSchemaItem hero)
         {
-            if(hero == null)
+            if (hero == null)
             {
                 return new List<HeroRoleViewModel>().AsReadOnly();
             }
@@ -43,7 +41,7 @@ namespace DotaDb.Utilities
 
         public static string GetMinimapIconFilePath(this DotaHeroSchemaItem hero)
         {
-            if(hero == null)
+            if (hero == null)
             {
                 return String.Empty;
             }
@@ -66,7 +64,7 @@ namespace DotaDb.Utilities
             }
 
             string fileName = GetHeroAvatarFileName(hero.Name);
-            if(String.IsNullOrEmpty(fileName))
+            if (String.IsNullOrEmpty(fileName))
             {
                 return String.Empty;
             }

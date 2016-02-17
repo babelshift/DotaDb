@@ -1,9 +1,4 @@
 ﻿using DotaDb.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DotaDb.Controllers
@@ -17,7 +12,7 @@ namespace DotaDb.Controllers
         /// </summary>
         protected LogHelper Log { get; private set; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -30,7 +25,7 @@ namespace DotaDb.Controllers
         }
 
         #endregion Constructors
-        
+
         /// <summary>
         /// Global OnException filter which is used by MVC when an exception occurs in a controller. Only works in production mode.
         /// Does nothing if the exception is already handled. If the exception is unhandled, the status code is set to 500 and returned.

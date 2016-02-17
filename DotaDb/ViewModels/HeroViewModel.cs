@@ -1,6 +1,4 @@
-﻿using SourceSchemaParser.Dota2;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DotaDb.ViewModels
 {

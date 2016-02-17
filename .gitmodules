@@ -1,0 +1,3 @@
+[submodule "DotaDb.Data"]
+	path = DotaDb.Data
+	url = https://jskiles@bitbucket.org/jskiles/dotadb.data.git

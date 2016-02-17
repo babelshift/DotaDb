@@ -1,9 +1,5 @@
 ﻿using Steam.Models.DOTA2;
-using SteamWebAPI2.Models.DOTA2;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace DotaDb.Utilities
 {
@@ -13,6 +9,7 @@ namespace DotaDb.Utilities
         {
             return player1.AccountId == player2.AccountId;
         }
+
         public int GetHashCode(LiveLeagueGamePlayerDetailModel player)
         {
             return player.GetHashCode();

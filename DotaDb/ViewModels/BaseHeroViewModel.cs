@@ -1,8 +1,6 @@
 ﻿using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace DotaDb.ViewModels
 {
@@ -13,7 +11,7 @@ namespace DotaDb.ViewModels
         private const int baseMana = 0;
         private const int manaPerIntellect = 13;
         private const double armorFactor = 0.14;
-        
+
         public int Id { get; set; }
         public string Url { get; set; }
         public string Name { get; set; }
@@ -38,7 +36,6 @@ namespace DotaDb.ViewModels
         public DotaHeroPrimaryAttributeType PrimaryAttribute { get; set; }
         public string ActiveTab { get; set; }
         public string MinimapIconPath { get; internal set; }
-
 
         public double GetBaseHealth()
         {
@@ -109,10 +106,12 @@ namespace DotaDb.ViewModels
         {
             return Math.Round(BaseStrength + (level * StrengthGain));
         }
+
         public double GetAgility(int level)
         {
             return Math.Round(BaseAgility + (level * AgilityGain));
         }
+
         public double GetIntelligence(int level)
         {
             return Math.Round(BaseIntelligence + (level * IntelligenceGain));

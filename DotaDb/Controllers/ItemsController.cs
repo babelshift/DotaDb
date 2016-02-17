@@ -1,14 +1,13 @@
-﻿using DotaDb.Models;
+﻿using DotaDb.Data;
+using DotaDb.Utilities;
 using DotaDb.ViewModels;
+using PagedList;
 using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using PagedList;
-using DotaDb.Utilities;
-using System.IO;
 
 namespace DotaDb.Controllers
 {
@@ -107,7 +106,7 @@ namespace DotaDb.Controllers
                     continue;
                 }
 
-                // if there's a name or description, remove the "#" character before 
+                // if there's a name or description, remove the "#" character before
                 string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
                 string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
 

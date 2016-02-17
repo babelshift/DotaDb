@@ -30,6 +30,7 @@ namespace DotaDb.ViewModels
         public int XpPerMinute { get; set; }
         public int UltimateState { get; set; }
         public int UltimateCooldown { get; set; }
+
         public int XP
         {
             get
@@ -37,6 +38,7 @@ namespace DotaDb.ViewModels
                 return HeroExperience.ToReachLevel(Level);
             }
         }
+
         public int RespawnTimerSeconds { get; set; }
         public TimeSpan RespawnTimer { get { return TimeSpan.FromSeconds(RespawnTimerSeconds); } }
         public bool IsAlive { get { return RespawnTimerSeconds <= 0; } }

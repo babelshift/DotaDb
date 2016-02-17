@@ -1,10 +1,6 @@
-﻿using DotaDb.Models;
-using Steam.Models.DOTA2;
+﻿using Steam.Models.DOTA2;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace DotaDb.Utilities
 {
@@ -24,7 +20,7 @@ namespace DotaDb.Utilities
         {
             string fileName = !String.IsNullOrEmpty(player.HeroUrl) ? String.Format("{0}_icon.png", player.HeroUrl) : String.Empty;
 
-            if(String.IsNullOrEmpty(fileName))
+            if (String.IsNullOrEmpty(fileName))
             {
                 return String.Empty;
             }

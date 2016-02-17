@@ -1,13 +1,13 @@
-﻿using DotaDb.Models;
+﻿using DotaDb.Data;
 using DotaDb.Utilities;
 using DotaDb.ViewModels;
+using PagedList;
+using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using PagedList;
-using Steam.Models.DOTA2;
 
 namespace DotaDb.Controllers
 {
@@ -73,7 +73,7 @@ namespace DotaDb.Controllers
         public async Task<ActionResult> Live(long id)
         {
             var liveLeagueGame = await db.GetLiveLeagueGameAsync(id);
-            if(liveLeagueGame == null)
+            if (liveLeagueGame == null)
             {
                 return new HttpNotFoundResult();
             }
@@ -232,7 +232,7 @@ namespace DotaDb.Controllers
 
         private LiveLeagueGameItemViewModel MakeGameItemViewModel(LiveLeagueGameItemModel gameItem)
         {
-            if(gameItem != null)
+            if (gameItem != null)
             {
                 return new LiveLeagueGameItemViewModel() { Id = gameItem.Id, Name = gameItem.Name, IconPath = gameItem.IconFileName };
             }

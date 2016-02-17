@@ -1,8 +1,6 @@
 ﻿using DotaDb.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DotaDb.ViewModels
 {
@@ -28,6 +26,7 @@ namespace DotaDb.ViewModels
                 return RadiantPlayers.Sum(x => x.NetWorth);
             }
         }
+
         public int DireTotalWorth
         {
             get
@@ -35,6 +34,7 @@ namespace DotaDb.ViewModels
                 return DirePlayers.Sum(x => x.NetWorth);
             }
         }
+
         public double RadiantTotalWorthPercent
         {
             get
@@ -44,6 +44,7 @@ namespace DotaDb.ViewModels
                 return (radiantTotalWorth / (radiantTotalWorth + direTotalWorth)) * 100;
             }
         }
+
         public double DireTotalWorthPercent
         {
             get
@@ -53,6 +54,7 @@ namespace DotaDb.ViewModels
                 return (direTotalWorth / (radiantTotalWorth + direTotalWorth)) * 100;
             }
         }
+
         public int RadiantTotalExperience
         {
             get
@@ -60,6 +62,7 @@ namespace DotaDb.ViewModels
                 return RadiantPlayers.Sum(x => HeroExperience.ToReachLevel(x.Level));
             }
         }
+
         public int DireTotalExperience
         {
             get
@@ -67,6 +70,7 @@ namespace DotaDb.ViewModels
                 return DirePlayers.Sum(x => HeroExperience.ToReachLevel(x.Level));
             }
         }
+
         public double RadiantTotalExperiencePercent
         {
             get
@@ -76,6 +80,7 @@ namespace DotaDb.ViewModels
                 return (radiantTotalExperience / (radiantTotalExperience + direTotalExperience)) * 100;
             }
         }
+
         public double DireTotalExperiencePercent
         {
             get
@@ -85,6 +90,7 @@ namespace DotaDb.ViewModels
                 return (direTotalExperience / (radiantTotalExperience + direTotalExperience)) * 100;
             }
         }
+
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> RadiantPlayers { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> DirePlayers { get; set; }
     }

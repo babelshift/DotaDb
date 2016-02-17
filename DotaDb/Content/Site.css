@@ -15,8 +15,8 @@ body {
     padding-right: 0;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
 */
 .dl-horizontal dt {
     white-space: normal;
@@ -420,7 +420,6 @@ textarea {
 .live-league-game .roshan-status {
     margin-bottom: 0;
 }
-
 
 .btn-twitter {
     color: #fff;

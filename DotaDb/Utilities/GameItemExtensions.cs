@@ -1,10 +1,6 @@
-﻿using System.Configuration;
-using SteamWebAPI2.Models.DOTA2;
+﻿using Steam.Models.DOTA2;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Steam.Models.DOTA2;
+using System.Configuration;
 
 namespace DotaDb.Utilities
 {

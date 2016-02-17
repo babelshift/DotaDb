@@ -1,6 +1,6 @@
-﻿using DotaDb.Models;
+﻿using DotaDb.Data;
 using DotaDb.ViewModels;
-using System;
+using Steam.Models.DOTA2;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -14,15 +14,15 @@ namespace DotaDb.Controllers
         {
             FilesIndexViewModel viewModel = new FilesIndexViewModel();
 
-            viewModel.MainSchemaLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.MainSchema);
-            viewModel.HeroAbilitiesLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.HeroAbilities);
-            viewModel.HeroesLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.Heroes);
-            viewModel.InGameItemsLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.InGameItems);
-            viewModel.ItemAbilitiesLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.ItemAbilities);
-            viewModel.PanoramaLocalizationLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.PanoramaLocalization);
-            viewModel.PublicLocalizationLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.PublicLocalization);
-            viewModel.MainSchemaLocalizationLastUpdated = await db.GetSourceFileLastModifiedDateAsync(SourceFile.MainSchemaLocalization);
-            
+            viewModel.MainSchemaLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.MainSchema);
+            viewModel.HeroAbilitiesLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.HeroAbilities);
+            viewModel.HeroesLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.Heroes);
+            viewModel.InGameItemsLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.InGameItems);
+            viewModel.ItemAbilitiesLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.ItemAbilities);
+            viewModel.PanoramaLocalizationLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.PanoramaLocalization);
+            viewModel.PublicLocalizationLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.PublicLocalization);
+            viewModel.MainSchemaLocalizationLastUpdated = await db.GetGameFileLastModifiedDateAsync(GameFile.MainSchemaLocalization);
+
             return View(viewModel);
         }
     }

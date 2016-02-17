@@ -6,14 +6,14 @@ namespace DotaDb.Utilities
     {
         public static string GetTimeAgo(this DateTimeOffset? dateReviewCreated)
         {
-            if(!dateReviewCreated.HasValue)
+            if (!dateReviewCreated.HasValue)
             {
                 return "Unknown";
             }
 
             string timeAgoValue = String.Empty;
             string timeAgoSpecifier = String.Empty;
-            
+
             double totalMinutesAgo = Math.Floor(DateTime.UtcNow.Subtract(dateReviewCreated.Value.UtcDateTime).TotalMinutes);
 
             int hoursInDay = 24;
@@ -65,7 +65,7 @@ namespace DotaDb.Utilities
                 double timeAgoNumber = Math.Round((double)totalMinutesAgo / (double)minutesInHour / (double)hoursInDay);
                 timeAgoValue = timeAgoNumber.ToString("F0");
 
-                if(timeAgoNumber == 1)
+                if (timeAgoNumber == 1)
                 {
                     timeAgoSpecifier = "day ago";
                 }

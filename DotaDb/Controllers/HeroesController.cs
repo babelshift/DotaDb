@@ -1,16 +1,13 @@
-﻿using DotaDb.Models;
+﻿using DotaDb.Data;
+using DotaDb.Utilities;
 using DotaDb.ViewModels;
-using EasyAzureStorage;
 using SourceSchemaParser.Dota2;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using DotaDb.Utilities;
 
 namespace DotaDb.Controllers
 {
@@ -19,7 +16,6 @@ namespace DotaDb.Controllers
         private InMemoryDb db = InMemoryDb.Instance;
 
         #region Hero Index
-
 
         [OutputCache(CacheProfile = "Default", VaryByParam = "tab")]
         public async Task<ActionResult> Index(string tab = "")
