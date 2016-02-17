@@ -1,4 +1,5 @@
 ﻿using DotaDb.Utilities;
+using Steam.Models.DOTA2;
 using SteamWebAPI2.Models.DOTA2;
 using System;
 using System.Collections.Generic;
@@ -95,8 +96,8 @@ namespace DotaDb.ViewModels
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> RadiantPlayers { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> DirePlayers { get; set; }
         public double ElapsedTime { get; internal set; }
-        public TowerState RadiantTowerStates { get; set; }
-        public TowerState DireTowerStates { get; set; }
+        public TowerStateModel RadiantTowerStates { get; set; }
+        public TowerStateModel DireTowerStates { get; set; }
         public IReadOnlyList<LiveLeagueGameHeroViewModel> RadiantPickedHeroes { get; set; }
         public IReadOnlyList<LiveLeagueGameHeroViewModel> RadiantBannedHeroes { get; set; }
         public IReadOnlyList<LiveLeagueGameHeroViewModel> DirePickedHeroes { get; set; }

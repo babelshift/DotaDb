@@ -1,4 +1,5 @@
-﻿using SteamWebAPI2.Models.DOTA2;
+﻿using Steam.Models.DOTA2;
+using SteamWebAPI2.Models.DOTA2;
 using System.Collections.Generic;
 
 namespace DotaDb.ViewModels
@@ -20,8 +21,8 @@ namespace DotaDb.ViewModels
         public string LeagueLogoPath { get; set; }
         public string RadiantTeamLogo { get; set; }
         public string DireTeamLogo { get; set; }
-        public TowerState RadiantTowerStates { get; set; }
-        public TowerState DireTowerStates { get; set; }
+        public TowerStateModel RadiantTowerStates { get; set; }
+        public TowerStateModel DireTowerStates { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> RadiantPlayers { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerViewModel> DirePlayers { get; set; }
     }

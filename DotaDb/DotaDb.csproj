@@ -48,6 +48,10 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AutoMapper, Version=4.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EasyAzureKeyVault, Version=1.1.0.10, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyAzureKeyVault.1.1.0.10\lib\net46\EasyAzureKeyVault.dll</HintPath>
       <Private>True</Private>
@@ -181,8 +185,12 @@
       <HintPath>..\packages\SourceSchemaParser.1.0.0.47\lib\net46\SourceSchemaParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SteamWebAPI2, Version=1.1.0.29, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamWebAPI2.1.1.0.29\lib\net46\SteamWebAPI2.dll</HintPath>
+    <Reference Include="Steam.Models, Version=1.0.0.11, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Steam.Models.1.0.0.11\lib\net46\Steam.Models.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SteamWebAPI2, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SteamWebAPI2.2.0.0.1\lib\net46\SteamWebAPI2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -302,10 +310,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\InMemoryDb.cs" />
-    <Compile Include="Models\LiveLeagueGameHeroModel.cs" />
-    <Compile Include="Models\LiveLeagueGameItemModel.cs" />
-    <Compile Include="Models\LiveLeagueGamePlayerModel.cs" />
-    <Compile Include="Models\LiveLeagueGameModel.cs" />
+    <Compile Include="Models\LiveLeagueGameSpecificModel.cs" />
     <Compile Include="Models\MemoryCacheKey.cs" />
     <Compile Include="Models\PlayerCountModel.cs" />
     <Compile Include="Models\SourceFile.cs" />

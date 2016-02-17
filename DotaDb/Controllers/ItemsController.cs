@@ -169,7 +169,7 @@ namespace DotaDb.Controllers
         {
             var items = await db.GetGameItemsAsync();
 
-            var itemsWithoutRecipes = items.Where(x => x.Recipe == 0);
+            var itemsWithoutRecipes = items.Where(x => !x.IsRecipe);
 
             List<GameItemViewModel> gameItems = new List<GameItemViewModel>();
             foreach (var item in itemsWithoutRecipes)
@@ -187,10 +187,10 @@ namespace DotaDb.Controllers
                             Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
                             Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
                             Id = item.Id,
-                            IsRecipe = item.Recipe == 1 ? true : false,
-                            SecretShop = item.SecretShop == 1 ? true : false,
-                            SideShop = item.SideShop == 1 ? true : false,
-                            IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
+                            IsRecipe = item.IsRecipe,
+                            SecretShop = item.IsAvailableAtSecretShop,
+                            SideShop = item.IsAvailableAtSideShop,
+                            IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
                         });
                     }
                 }
@@ -203,10 +203,10 @@ namespace DotaDb.Controllers
                         Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
                         Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
                         Id = item.Id,
-                        IsRecipe = item.Recipe == 1 ? true : false,
-                        SecretShop = item.SecretShop == 1 ? true : false,
-                        SideShop = item.SideShop == 1 ? true : false,
-                        IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", "")),
+                        IsRecipe = item.IsRecipe,
+                        SecretShop = item.IsAvailableAtSecretShop,
+                        SideShop = item.IsAvailableAtSideShop,
+                        IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
                     });
                 }
             }

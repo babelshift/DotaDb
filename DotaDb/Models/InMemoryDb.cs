@@ -2,6 +2,7 @@
 using EasyAzureStorage;
 using HtmlAgilityPack;
 using SourceSchemaParser.Dota2;
+using Steam.Models.DOTA2;
 using SteamWebAPI2.Interfaces;
 using SteamWebAPI2.Models.DOTA2;
 using System;
@@ -145,7 +146,7 @@ namespace DotaDb.Models
 
         #region Enum Type Lookup Methods
 
-        public IReadOnlyDictionary<string, DotaItemDisassembleType> GetItemDisassembleTypes()
+        private IReadOnlyDictionary<string, DotaItemDisassembleType> GetItemDisassembleTypes()
         {
             Dictionary<string, DotaItemDisassembleType> temp = new Dictionary<string, DotaItemDisassembleType>();
 
@@ -155,7 +156,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaItemDisassembleType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaItemShareabilityType> GetItemShareabilityTypes()
+        private IReadOnlyDictionary<string, DotaItemShareabilityType> GetItemShareabilityTypes()
         {
             Dictionary<string, DotaItemShareabilityType> temp = new Dictionary<string, DotaItemShareabilityType>();
 
@@ -166,7 +167,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaItemShareabilityType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaItemDeclarationType> GetItemDeclarationTypes()
+        private IReadOnlyDictionary<string, DotaItemDeclarationType> GetItemDeclarationTypes()
         {
             Dictionary<string, DotaItemDeclarationType> temp = new Dictionary<string, DotaItemDeclarationType>();
 
@@ -177,7 +178,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaItemDeclarationType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> GetAbilityBehaviorTypes()
+        private IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> GetAbilityBehaviorTypes()
         {
             Dictionary<string, DotaHeroAbilityBehaviorType> temp = new Dictionary<string, DotaHeroAbilityBehaviorType>();
 
@@ -210,7 +211,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaHeroAbilityType> GetHeroAbilityTypes()
+        private IReadOnlyDictionary<string, DotaHeroAbilityType> GetHeroAbilityTypes()
         {
             Dictionary<string, DotaHeroAbilityType> temp = new Dictionary<string, DotaHeroAbilityType>();
 
@@ -221,7 +222,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaHeroAbilityType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaAttackType> GetAttackTypes()
+        private IReadOnlyDictionary<string, DotaAttackType> GetAttackTypes()
         {
             Dictionary<string, DotaAttackType> temp = new Dictionary<string, DotaAttackType>();
 
@@ -231,7 +232,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaAttackType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> GetPrimaryAttributeTypes()
+        private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> GetPrimaryAttributeTypes()
         {
             Dictionary<string, DotaHeroPrimaryAttributeType> temp = new Dictionary<string, DotaHeroPrimaryAttributeType>();
 
@@ -242,7 +243,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaHeroPrimaryAttributeType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaTeamType> GetTeamTypes()
+        private IReadOnlyDictionary<string, DotaTeamType> GetTeamTypes()
         {
             Dictionary<string, DotaTeamType> temp = new Dictionary<string, DotaTeamType>();
 
@@ -252,7 +253,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaTeamType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaDamageType> GetDamageTypes()
+        private IReadOnlyDictionary<string, DotaDamageType> GetDamageTypes()
         {
             Dictionary<string, DotaDamageType> temp = new Dictionary<string, DotaDamageType>();
 
@@ -263,7 +264,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaDamageType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaSpellImmunityType> GetSpellImmunityTypes()
+        private IReadOnlyDictionary<string, DotaSpellImmunityType> GetSpellImmunityTypes()
         {
             Dictionary<string, DotaSpellImmunityType> temp = new Dictionary<string, DotaSpellImmunityType>();
 
@@ -275,7 +276,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaSpellImmunityType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaUnitTargetFlag> GetUnitTargetFlags()
+        private IReadOnlyDictionary<string, DotaUnitTargetFlag> GetUnitTargetFlags()
         {
             Dictionary<string, DotaUnitTargetFlag> temp = new Dictionary<string, DotaUnitTargetFlag>();
 
@@ -289,7 +290,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaUnitTargetFlag>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaUnitTargetTeamType> GetUnitTargetTeamTypes()
+        private IReadOnlyDictionary<string, DotaUnitTargetTeamType> GetUnitTargetTeamTypes()
         {
             Dictionary<string, DotaUnitTargetTeamType> temp = new Dictionary<string, DotaUnitTargetTeamType>();
 
@@ -301,7 +302,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaUnitTargetTeamType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaUnitTargetType> GetUnitTargetTypes()
+        private IReadOnlyDictionary<string, DotaUnitTargetType> GetUnitTargetTypes()
         {
             Dictionary<string, DotaUnitTargetType> temp = new Dictionary<string, DotaUnitTargetType>();
 
@@ -313,7 +314,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<string, DotaUnitTargetType>(temp);
         }
 
-        public IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> GetAttributeTypes()
+        private IReadOnlyDictionary<string, DotaHeroPrimaryAttributeType> GetAttributeTypes()
         {
             Dictionary<string, DotaHeroPrimaryAttributeType> temp = new Dictionary<string, DotaHeroPrimaryAttributeType>();
 
@@ -470,7 +471,7 @@ namespace DotaDb.Models
             return liveLeagueGames.Count;
         }
 
-        public async Task<IReadOnlyCollection<LiveLeagueGameModel>> GetLiveLeagueGamesAsync(int? takeAmount = null)
+        public async Task<IReadOnlyCollection<LiveLeagueGameSpecificModel>> GetLiveLeagueGamesAsync(int? takeAmount = null)
         {
             #region Get/Add From/To Cache
 
@@ -491,11 +492,11 @@ namespace DotaDb.Models
                 filteredLiveLeagueGames = filteredLiveLeagueGames.Take(takeAmount.Value);
             }
 
-            List<LiveLeagueGameModel> liveLeagueGameModels = new List<LiveLeagueGameModel>();
+            List<LiveLeagueGameSpecificModel> liveLeagueGameModels = new List<LiveLeagueGameSpecificModel>();
 
             foreach (var liveLeagueGame in filteredLiveLeagueGames)
             {
-                LiveLeagueGameModel liveLeagueGameModel = new LiveLeagueGameModel()
+                LiveLeagueGameSpecificModel liveLeagueGameModel = new LiveLeagueGameSpecificModel()
                 {
                     BestOf = GetBestOfCountFromSeriesType(liveLeagueGame.SeriesType),
                     DireKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.Score : 0,
@@ -526,8 +527,8 @@ namespace DotaDb.Models
                     .ToList()
                     .AsReadOnly();
 
-                Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail = null;
-                Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail = null;
+                Dictionary<uint, LiveLeagueGamePlayerDetailModel> radiantPlayerDetail = null;
+                Dictionary<uint, LiveLeagueGamePlayerDetailModel> direPlayerDetail = null;
 
                 // if the game hasn't started yet, the scoreboard won't exist
                 if (liveLeagueGame.Scoreboard != null)
@@ -554,7 +555,7 @@ namespace DotaDb.Models
                     player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
                     player.HeroUrl = hero.Url;
 
-                    LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
+                    LiveLeagueGamePlayerDetailModel playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
                     // if the player hasn't picked a hero yet, details won't exist
                     if (playerDetail != null)
@@ -575,7 +576,7 @@ namespace DotaDb.Models
 
                 // look up whatever league this game belongs to in the league listing to get more details about it
                 var leagues = await GetLeaguesAsync();
-                League league = null;
+                LeagueModel league = null;
                 bool success = leagues.TryGetValue(liveLeagueGame.LeagueId, out league);
                 if (success)
                 {
@@ -598,7 +599,7 @@ namespace DotaDb.Models
             return liveLeagueGameModels.AsReadOnly();
         }
 
-        public async Task<LiveLeagueGameModel> GetLiveLeagueGameAsync(long matchId)
+        public async Task<LiveLeagueGameSpecificModel> GetLiveLeagueGameAsync(long matchId)
         {
             #region Get/Add From/To Cache
 
@@ -617,7 +618,7 @@ namespace DotaDb.Models
 
             #endregion Get/Add From/To Cache
 
-            LiveLeagueGameModel liveLeagueGameModel = new LiveLeagueGameModel()
+            LiveLeagueGameSpecificModel liveLeagueGameModel = new LiveLeagueGameSpecificModel()
             {
                 BestOf = GetBestOfCountFromSeriesType(liveLeagueGame.SeriesType),
                 DireKillCount = (liveLeagueGame.Scoreboard != null && liveLeagueGame.Scoreboard.Dire != null) ? liveLeagueGame.Scoreboard.Dire.Score : 0,
@@ -655,8 +656,8 @@ namespace DotaDb.Models
                 .ToList()
                 .AsReadOnly();
 
-            Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail = null;
-            Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail = null;
+            Dictionary<uint, LiveLeagueGamePlayerDetailModel> radiantPlayerDetail = null;
+            Dictionary<uint, LiveLeagueGamePlayerDetailModel> direPlayerDetail = null;
 
             // if the game hasn't started yet, the scoreboard won't exist
             if (liveLeagueGame.Scoreboard != null)
@@ -683,7 +684,7 @@ namespace DotaDb.Models
                 player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
                 player.HeroUrl = hero.Url;
 
-                LiveLeagueGamePlayerDetail playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
+                LiveLeagueGamePlayerDetailModel playerDetail = GetPlayerDetail(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
                 // if the player hasn't picked a hero yet, details won't exist
                 if (playerDetail != null)
@@ -751,7 +752,7 @@ namespace DotaDb.Models
 
             // look up whatever league this game belongs to in the league listing to get more details about it
             var leagues = await GetLeaguesAsync();
-            League league = null;
+            LeagueModel league = null;
             bool success = leagues.TryGetValue(liveLeagueGame.LeagueId, out league);
             if (success)
             {
@@ -771,7 +772,7 @@ namespace DotaDb.Models
             return liveLeagueGameModel;
         }
 
-        private async Task<IReadOnlyCollection<LiveLeagueGame>> GetLiveLeagueGamesFromWebAPIAsync()
+        private async Task<IReadOnlyCollection<LiveLeagueGameModel>> GetLiveLeagueGamesFromWebAPIAsync()
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
             var dota2Match = new DOTA2Match(steamWebApiKey);
@@ -779,12 +780,12 @@ namespace DotaDb.Models
             return liveLeagueGames;
         }
 
-        public async Task<IReadOnlyCollection<GameItem>> GetGameItemsAsync()
+        public async Task<IReadOnlyCollection<GameItemModel>> GetGameItemsAsync()
         {
             return await AddOrGetCachedValueAsync(MemoryCacheKey.InGameItems, GetGameItemsFromWebAPIAsync);
         }
 
-        private async Task<IReadOnlyCollection<GameItem>> GetGameItemsFromWebAPIAsync()
+        private async Task<IReadOnlyCollection<GameItemModel>> GetGameItemsFromWebAPIAsync()
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
             var dota2Econ = new DOTA2Econ(steamWebApiKey);
@@ -864,7 +865,7 @@ namespace DotaDb.Models
             return new ReadOnlyDictionary<int, DotaItemAbilitySchemaItem>(result.ToDictionary(x => x.Id, x => x));
         }
 
-        public async Task<IReadOnlyDictionary<int, League>> GetLeaguesAsync()
+        public async Task<IReadOnlyDictionary<int, LeagueModel>> GetLeaguesAsync()
         {
             return await AddOrGetCachedValueAsync(MemoryCacheKey.Leagues, GetLeaguesFromWebAPIAsync);
         }
@@ -874,15 +875,15 @@ namespace DotaDb.Models
             return await AddOrGetCachedValueAsync(MemoryCacheKey.LeagueTickets, GetLeagueTicketsFromSchemaAsync);
         }
 
-        private async Task<IReadOnlyDictionary<int, League>> GetLeaguesFromWebAPIAsync()
+        private async Task<IReadOnlyDictionary<int, LeagueModel>> GetLeaguesFromWebAPIAsync()
         {
             string steamWebApiKey = ConfigurationManager.AppSettings["steamWebApiKey"].ToString();
             var dota2Match = new DOTA2Match(steamWebApiKey);
             var leagueList = await dota2Match.GetLeagueListingAsync();
-            var distinctLeagues = leagueList.Leagues
+            var distinctLeagues = leagueList
                 .GroupBy(x => x.LeagueId)
                 .Select(x => x.First());
-            return new ReadOnlyDictionary<int, League>(distinctLeagues.ToDictionary(x => x.LeagueId, x => x));
+            return new ReadOnlyDictionary<int, LeagueModel>(distinctLeagues.ToDictionary(x => x.LeagueId, x => x));
         }
 
         private async Task<IReadOnlyDictionary<string, DotaLeague>> GetLeagueTicketsFromSchemaAsync()
@@ -1020,7 +1021,7 @@ namespace DotaDb.Models
             return contents;
         }
 
-        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetPicks(LiveLeagueGame game, int team)
+        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetPicks(LiveLeagueGameModel game, int team)
         {
             List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
             var heroes = await GetHeroesAsync();
@@ -1051,7 +1052,7 @@ namespace DotaDb.Models
             return selectedHeroes.AsReadOnly();
         }
 
-        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetBans(LiveLeagueGame game, int team)
+        private async Task<IReadOnlyCollection<LiveLeagueGameHeroModel>> GetBans(LiveLeagueGameModel game, int team)
         {
             List<LiveLeagueGameHeroModel> selectedHeroes = new List<LiveLeagueGameHeroModel>();
             var heroes = await GetHeroesAsync();
@@ -1094,14 +1095,17 @@ namespace DotaDb.Models
             };
         }
 
-        private static LiveLeagueGamePlayerDetail GetPlayerDetail(int playerTeam, int playerAccountId, Dictionary<int, LiveLeagueGamePlayerDetail> radiantPlayerDetail, Dictionary<int, LiveLeagueGamePlayerDetail> direPlayerDetail)
+        private static LiveLeagueGamePlayerDetailModel GetPlayerDetail(
+            int playerTeam, uint playerAccountId, 
+            IDictionary<uint, LiveLeagueGamePlayerDetailModel> radiantPlayerDetail, 
+            IDictionary<uint, LiveLeagueGamePlayerDetailModel> direPlayerDetail)
         {
             // team 0 is radiant, if the player hasn't picked a hero yet, details won't exist
             if (playerTeam == 0)
             {
                 if (radiantPlayerDetail != null)
                 {
-                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    LiveLeagueGamePlayerDetailModel playerDetail = null;
                     radiantPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
                     return playerDetail;
                 }
@@ -1111,7 +1115,7 @@ namespace DotaDb.Models
             {
                 if (direPlayerDetail != null)
                 {
-                    LiveLeagueGamePlayerDetail playerDetail = null;
+                    LiveLeagueGamePlayerDetailModel playerDetail = null;
                     direPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
                     return playerDetail;
                 }

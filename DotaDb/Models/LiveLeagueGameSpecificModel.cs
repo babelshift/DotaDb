@@ -1,4 +1,5 @@
-﻿using SteamWebAPI2.Models.DOTA2;
+﻿using Steam.Models.DOTA2;
+using SteamWebAPI2.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Web;
 
 namespace DotaDb.Models
 {
-    public class LiveLeagueGameModel
+    public class LiveLeagueGameSpecificModel
     {
         public string LeagueName { get; set; }
         public int SpectatorCount { get; set; }
@@ -28,8 +29,8 @@ namespace DotaDb.Models
         public double StreamDelay { get; set; }
         public IReadOnlyCollection<LiveLeagueGamePlayerModel> Players { get; set; }
         public double ElapsedTime { get; internal set; }
-        public TowerState RadiantTowerStates { get; set; }
-        public TowerState DireTowerStates { get; set; }
+        public TowerStateModel RadiantTowerStates { get; set; }
+        public TowerStateModel DireTowerStates { get; set; }
         public IReadOnlyCollection<LiveLeagueGameHeroModel> RadiantPicks { get; set; }
         public IReadOnlyCollection<LiveLeagueGameHeroModel> DirePicks { get; set; }
         public IReadOnlyCollection<LiveLeagueGameHeroModel> RadiantBans { get; set; }

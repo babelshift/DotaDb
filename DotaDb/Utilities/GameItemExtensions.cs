@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Steam.Models.DOTA2;
 
 namespace DotaDb.Utilities
 {
@@ -11,9 +12,9 @@ namespace DotaDb.Utilities
     {
         private static readonly string baseUrl = ConfigurationManager.AppSettings["itemIconsBaseUrl"].ToString();
 
-        public static string GetIconPath(this GameItem item)
+        public static string GetIconPath(this GameItemModel item)
         {
-            return String.Format("{0}{1}_lg.png", baseUrl, item.Recipe == 1 ? "recipe" : item.Name.Replace("item_", ""));
+            return String.Format("{0}{1}_lg.png", baseUrl, item.IsRecipe ? "recipe" : item.Name.Replace("item_", ""));
         }
     }
 }

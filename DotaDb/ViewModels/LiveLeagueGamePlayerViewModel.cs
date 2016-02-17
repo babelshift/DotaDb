@@ -7,7 +7,7 @@ namespace DotaDb.ViewModels
     public class LiveLeagueGamePlayerViewModel
     {
         public int PlayerSlot { get; set; }
-        public int AccountId { get; set; }
+        public uint AccountId { get; set; }
         public string PlayerName { get; set; }
         public int HeroId { get; set; }
         public string HeroName { get; set; }

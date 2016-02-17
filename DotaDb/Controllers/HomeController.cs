@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using SourceSchemaParser.Dota2;
 using SteamWebAPI2.Models.DOTA2;
 using System.Net.Http;
+using Steam.Models.DOTA2;
 
 namespace DotaDb.Controllers
 {
@@ -23,7 +24,7 @@ namespace DotaDb.Controllers
 
             var playerCounts = await db.GetPlayerCountsAsync();
 
-            IReadOnlyDictionary<int, League> leagues = null;
+            IReadOnlyDictionary<int, LeagueModel> leagues = null;
             try
             {
                 leagues = await db.GetLeaguesAsync();
@@ -68,12 +69,12 @@ namespace DotaDb.Controllers
             return View(viewModel);
         }
 
-        private async Task SetupRandomItems(HomeViewModel viewModel, IReadOnlyCollection<GameItem> gameItems)
+        private async Task SetupRandomItems(HomeViewModel viewModel, IReadOnlyCollection<GameItemModel> gameItems)
         {
             var randomItems = gameItems
                 .Where(x => !String.IsNullOrEmpty(x.Name.Trim())
                 && x.Name.Trim() != "Undefined"
-                && x.Recipe != 1)
+                && !x.IsRecipe)
                 .ToList();
 
             var abilities = await db.GetItemAbilitiesAsync();
@@ -91,7 +92,7 @@ namespace DotaDb.Controllers
             viewModel.RandomGameItems = randomGameItems.AsReadOnly();
         }
 
-        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItem> randomItems, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
         {
             int index = r.Next(0, randomItems.Count);
             var randomItem1 = randomItems[index];
@@ -101,7 +102,7 @@ namespace DotaDb.Controllers
             return itemViewModel;
         }
 
-        private async Task<GameItemViewModel> GetItemViewModel(GameItem randomItem1)
+        private async Task<GameItemViewModel> GetItemViewModel(GameItemModel randomItem1)
         {
             return new GameItemViewModel()
             {
@@ -110,10 +111,10 @@ namespace DotaDb.Controllers
                 Description = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", randomItem1.Name)),
                 Lore = await db.GetLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", randomItem1.Name)),
                 Id = randomItem1.Id,
-                IsRecipe = randomItem1.Recipe == 1 ? true : false,
-                SecretShop = randomItem1.SecretShop == 1 ? true : false,
-                SideShop = randomItem1.SideShop == 1 ? true : false,
-                IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", randomItem1.Recipe == 1 ? "recipe" : randomItem1.Name.Replace("item_", "")),
+                IsRecipe = randomItem1.IsRecipe,
+                SecretShop = randomItem1.IsAvailableAtSecretShop,
+                SideShop = randomItem1.IsAvailableAtSideShop,
+                IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", randomItem1.IsRecipe ? "recipe" : randomItem1.Name.Replace("item_", "")),
             };
         }
 
