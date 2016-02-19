@@ -1,7 +1,6 @@
 ﻿using DotaDb.Data;
 using DotaDb.Utilities;
 using DotaDb.ViewModels;
-using SourceSchemaParser.Dota2;
 using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
@@ -191,7 +190,7 @@ namespace DotaDb.Controllers
             }
         }
 
-        private async Task SetupRandomHero(HomeViewModel viewModel, IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes)
+        private async Task SetupRandomHero(HomeViewModel viewModel, IReadOnlyDictionary<int, HeroSchemaModel> heroes)
         {
             viewModel.RandomHero = new HeroViewModel();
 
@@ -203,7 +202,7 @@ namespace DotaDb.Controllers
             await SetupAbilitiesAsync(randomHero, viewModel.RandomHero);
         }
 
-        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(DotaHeroSchemaItem hero, T viewModel)
+        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(HeroSchemaModel hero, T viewModel)
             where T : BaseHeroViewModel
         {
             viewModel.Id = hero.HeroId;

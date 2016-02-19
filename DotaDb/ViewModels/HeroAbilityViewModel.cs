@@ -1,4 +1,4 @@
-﻿using SourceSchemaParser.Dota2;
+﻿using Steam.Models.DOTA2;
 using System.Collections.Generic;
 
 namespace DotaDb.ViewModels
