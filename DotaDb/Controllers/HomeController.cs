@@ -89,7 +89,7 @@ namespace DotaDb.Controllers
             viewModel.RandomGameItems = randomGameItems.AsReadOnly();
         }
 
-        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
         {
             int index = r.Next(0, randomItems.Count);
             var randomItem1 = randomItems[index];
@@ -115,9 +115,9 @@ namespace DotaDb.Controllers
             };
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
         {
-            DotaItemAbilitySchemaItem ability = null;
+            ItemAbilitySchemaItemModel ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
 
             if (abilityExists)
@@ -231,7 +231,7 @@ namespace DotaDb.Controllers
             return viewModel;
         }
 
-        private async Task SetupAbilitiesAsync(DotaHeroSchemaItem hero, HeroViewModel viewModel)
+        private async Task SetupAbilitiesAsync(HeroSchemaModel hero, HeroViewModel viewModel)
         {
             var abilities = await db.GetHeroAbilitiesAsync();
 
@@ -257,7 +257,7 @@ namespace DotaDb.Controllers
             viewModel.Abilities = abilityViewModels.AsReadOnly();
         }
 
-        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<DotaAbilitySchemaItem> abilities, List<HeroAbilityViewModel> abilityViewModels)
+        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities, List<HeroAbilityViewModel> abilityViewModels)
         {
             if (String.IsNullOrEmpty(abilityName))
             {

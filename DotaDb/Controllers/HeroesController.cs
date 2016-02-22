@@ -1,7 +1,7 @@
 ﻿using DotaDb.Data;
 using DotaDb.Utilities;
 using DotaDb.ViewModels;
-using SourceSchemaParser.Dota2;
+using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,7 +45,7 @@ namespace DotaDb.Controllers
             }
         }
 
-        private async Task<IReadOnlyCollection<HeroViewModel>> TranslateToViewModelAsync(IEnumerable<KeyValuePair<int, DotaHeroSchemaItem>> heroes)
+        private async Task<IReadOnlyCollection<HeroViewModel>> TranslateToViewModelAsync(IEnumerable<KeyValuePair<int, HeroSchemaModel>> heroes)
         {
             List<HeroViewModel> heroViewModels = new List<HeroViewModel>();
 
@@ -59,7 +59,7 @@ namespace DotaDb.Controllers
             return heroViewModels;
         }
 
-        private static IEnumerable<KeyValuePair<int, DotaHeroSchemaItem>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes, string attributeKey)
+        private static IEnumerable<KeyValuePair<int, HeroSchemaModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<int, HeroSchemaModel> heroes, string attributeKey)
         {
             return heroes.Where(x =>
                 x.Value.AttributePrimary == attributeKey
@@ -102,7 +102,7 @@ namespace DotaDb.Controllers
             return PartialView("_ItemBuildsPartial", viewModel);
         }
 
-        private async Task<List<HeroItemBuildGroupViewModel>> GetItemGroupsAsync(DotaItemBuildSchemaItem itemBuild)
+        private async Task<List<HeroItemBuildGroupViewModel>> GetItemGroupsAsync(ItemBuildSchemaItemModel itemBuild)
         {
             List<HeroItemBuildGroupViewModel> itemGroupViewModels = new List<HeroItemBuildGroupViewModel>();
             foreach (var itemGroup in itemBuild.Items)
@@ -155,7 +155,7 @@ namespace DotaDb.Controllers
             return PartialView("_HeroOverviewPartial", viewModel);
         }
 
-        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(DotaHeroSchemaItem hero, T viewModel)
+        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(HeroSchemaModel hero, T viewModel)
             where T : BaseHeroViewModel
         {
             viewModel.Id = hero.HeroId;
@@ -185,7 +185,7 @@ namespace DotaDb.Controllers
             return viewModel;
         }
 
-        private async Task SetupAbilitiesAsync(DotaHeroSchemaItem hero, HeroViewModel viewModel)
+        private async Task SetupAbilitiesAsync(HeroSchemaModel hero, HeroViewModel viewModel)
         {
             var abilities = await db.GetHeroAbilitiesAsync();
 
@@ -211,7 +211,7 @@ namespace DotaDb.Controllers
             viewModel.Abilities = abilityViewModels.AsReadOnly();
         }
 
-        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<DotaAbilitySchemaItem> abilities, List<HeroAbilityViewModel> abilityViewModels)
+        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities, List<HeroAbilityViewModel> abilityViewModels)
         {
             if (String.IsNullOrEmpty(abilityName))
             {

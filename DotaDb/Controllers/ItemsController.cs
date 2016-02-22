@@ -2,7 +2,7 @@
 using DotaDb.Utilities;
 using DotaDb.ViewModels;
 using PagedList;
-using SourceSchemaParser.Dota2;
+using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace DotaDb.Controllers
             return View(autographs.AsReadOnly());
         }
 
-        private async Task<List<ItemAutographViewModel>> GetAutographItemsAsync(DotaSchema schema)
+        private async Task<List<ItemAutographViewModel>> GetAutographItemsAsync(SchemaModel schema)
         {
             List<ItemAutographViewModel> autographs = new List<ItemAutographViewModel>();
             foreach (var autograph in schema.ItemAutographs)
@@ -220,9 +220,9 @@ namespace DotaDb.Controllers
             return gameItems.AsReadOnly();
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
         {
-            DotaItemAbilitySchemaItem ability = null;
+            ItemAbilitySchemaItemModel ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
 
             if (abilityExists)

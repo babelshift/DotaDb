@@ -1,4 +1,4 @@
-﻿using SourceSchemaParser.Dota2;
+﻿using Steam.Models.DOTA2;
 using System;
 using System.Configuration;
 using System.IO;
@@ -9,7 +9,7 @@ namespace DotaDb.Utilities
     {
         private static readonly string autographIconsBaseUrl = ConfigurationManager.AppSettings["autographIconsBaseUrl"].ToString();
 
-        public static string GetIconPath(this DotaSchemaItemAutograph autograph)
+        public static string GetIconPath(this SchemaItemAutographModel autograph)
         {
             if (autograph == null || String.IsNullOrEmpty(autograph.IconPath))
             {

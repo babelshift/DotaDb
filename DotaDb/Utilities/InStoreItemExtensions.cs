@@ -1,4 +1,4 @@
-﻿using SourceSchemaParser.Dota2;
+﻿using Steam.Models.DOTA2;
 using System;
 using System.Configuration;
 
@@ -8,7 +8,7 @@ namespace DotaDb.Utilities
     {
         private static readonly string inStoreItemIconsBaseUrl = ConfigurationManager.AppSettings["inStoreItemIconsBaseUrl"].ToString();
 
-        public static string GetIconPath(this DotaSchemaItem item)
+        public static string GetIconPath(this SchemaItemModel item)
         {
             if (item == null || String.IsNullOrEmpty(item.DefIndex))
             {

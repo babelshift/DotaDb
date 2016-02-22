@@ -1,4 +1,4 @@
-﻿using SourceSchemaParser.Dota2;
+﻿using Steam.Models.DOTA2;
 using System;
 using System.Configuration;
 
@@ -8,7 +8,7 @@ namespace DotaDb.Utilities
     {
         private static readonly string leagueImagesBaseUrl = ConfigurationManager.AppSettings["leagueImagesBaseUrl"].ToString();
 
-        public static string GetLogoFilePath(this DotaLeague league)
+        public static string GetLogoFilePath(this LeagueModel league)
         {
             string fileName = String.Empty;
 
