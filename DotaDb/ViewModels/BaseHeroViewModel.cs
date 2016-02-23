@@ -31,13 +31,13 @@ namespace DotaDb.ViewModels
         public string MinimapIconPath { get; set; }
         public double BaseHealth { get; set; }
         public double BaseMana { get; set; }
-        public IList<double> HealthLevels { get; set; }
-        public IList<double> ManaLevels { get; set; }
-        public IList<double> MinDamageLevels { get; set; }
-        public IList<double> MaxDamageLevels { get; set; }
-        public IList<double> ArmorLevels { get; set; }
-        public IList<double> StrengthLevels { get; set; }
-        public IList<double> AgilityLevels { get; set; }
-        public IList<double> IntelligenceLevels { get; set; }
+        public IReadOnlyDictionary<int, double> HealthLevels { get; set; }
+        public IReadOnlyDictionary<int, double> ManaLevels { get; set; }
+        public IReadOnlyDictionary<int, double> MinDamageLevels { get; set; }
+        public IReadOnlyDictionary<int, double> MaxDamageLevels { get; set; }
+        public IReadOnlyDictionary<int, double> ArmorLevels { get; set; }
+        public IReadOnlyDictionary<int, double> StrengthLevels { get; set; }
+        public IReadOnlyDictionary<int, double> AgilityLevels { get; set; }
+        public IReadOnlyDictionary<int, double> IntelligenceLevels { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using DotaDb.Utilities;
-using System.Net;
 using System.Web.Mvc;
 
 namespace DotaDb.Controllers

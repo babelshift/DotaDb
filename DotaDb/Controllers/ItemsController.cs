@@ -1,5 +1,5 @@
 ﻿using DotaDb.Data;
-using DotaDb.Utilities;
+using DotaDb.Data.Utilities;
 using DotaDb.ViewModels;
 using PagedList;
 using Steam.Models.DOTA2;
@@ -25,7 +25,7 @@ namespace DotaDb.Controllers
             {
                 var itemSetViewModel = new ItemSetViewModel()
                 {
-                    Name = await db.GetItemsLocalizationTextAsync(itemSet.LocalizedName.Remove(0, 1)),
+                    Name = await db.GetItemsLocalizationTextAsync(itemSet.Name.Remove(0, 1)),
                     Items = itemSet.Items.ToList().AsReadOnly()
                 };
 
@@ -107,8 +107,8 @@ namespace DotaDb.Controllers
                 }
 
                 // if there's a name or description, remove the "#" character before
-                string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
-                string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
+                string name = !String.IsNullOrEmpty(item.Name) ? item.Name.Remove(0, 1) : String.Empty;
+                string description = !String.IsNullOrEmpty(item.ItemDescription) ? item.ItemDescription.Remove(0, 1) : String.Empty;
 
                 // look up the rarity and quality details
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);

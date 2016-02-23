@@ -446,7 +446,7 @@
                     </div>
                     <div class="col-xs-6">
                         <img src="~/Content/icon_def.png" height="40" />
-                        <strong>@Math.Round(Model.RandomHero.GetArmor(0), 2).ToString()</strong>
+                        <strong>@Math.Round(Model.RandomHero.ArmorLevels[0], 2).ToString()</strong>
                     </div>
                 </div>
             </div>
@@ -490,17 +490,17 @@
                     @if (Model.RandomHero.PrimaryAttribute != null)
                     {
                         <small class="text-muted">Primary:</small>
-                        if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                        if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
                         {
                             <img src="~/Content/icon_str.png" width="24" height="24" />
                             <small>Strength</small>
                         }
-                        else if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                        else if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
                         {
                             <img src="~/Content/icon_agi.png" width="24" height="24" />
                             <small>Agility</small>
                         }
-                        else if (Model.RandomHero.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                        else if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
                         {
                             <img src="~/Content/icon_int.png" width="24" height="24" />
                             <small>Intelligence</small>

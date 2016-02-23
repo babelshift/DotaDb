@@ -38,7 +38,7 @@
 <div class="row">
     <div class="col-lg-3">
         <img src="@Model.AvatarImagePath" class="shadow" />
-        <p>@Model.Description</p>
+        @*<p>@Model.Description</p>*@
         <hr />
         <div class="row">
             <div class="col-xs-6">
@@ -63,7 +63,7 @@
             </div>
             <div class="col-xs-6">
                 <img src="~/Content/icon_def.png" height="40" />
-                <strong>@Math.Round(Model.GetArmor(0), 2).ToString()</strong>
+                <strong>@Math.Round(Model.ArmorLevels[0], 2).ToString()</strong>
             </div>
         </div>
         <hr />
@@ -105,17 +105,17 @@
                 @if (Model.PrimaryAttribute != null)
                 {
                     <small class="text-muted">Primary:</small>
-                    if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                    if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
                     {
                         <img src="~/Content/icon_str.png" width="24" height="24" />
                         <small>STR</small>
                     }
-                    else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                    else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
                     {
                         <img src="~/Content/icon_agi.png" width="24" height="24" />
                         <small>AGI</small>
                     }
-                    else if (Model.PrimaryAttribute.Key == SourceSchemaParser.Dota2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                    else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
                     {
                         <img src="~/Content/icon_int.png" width="24" height="24" />
                         <small>INT</small>
