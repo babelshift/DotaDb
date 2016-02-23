@@ -80,3 +80,4 @@ DotaDb/App_Data/
 .vs/
 DotaDb/Content/logos/leagues/
 DotaDb/Properties/PublishProfiles/
+publish.cmd
