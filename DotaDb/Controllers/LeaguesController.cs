@@ -1,5 +1,5 @@
 ﻿using DotaDb.Data;
-using DotaDb.Utilities;
+using DotaDb.Data.Utilities;
 using DotaDb.ViewModels;
 using PagedList;
 using System.Collections.Generic;

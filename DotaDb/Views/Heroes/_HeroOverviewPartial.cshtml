@@ -1,5 +1,4 @@
 ﻿@model DotaDb.ViewModels.HeroViewModel
-@using SourceSchemaParser.Dota2;
 
 @{
     Layout = "~/Views/Heroes/_HeroLayout.cshtml";
@@ -93,15 +92,15 @@
                 {
                             <p>
                                 <small class="text-muted">Damage Type:</small>
-                                @if (ability.DamageType.Key == DotaDamageType.PHYSICAL.Key)
+                                @if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.PHYSICAL.Key)
                                 {
                                     <small class="text-danger">@ability.DamageType</small>
                                 }
-                                else if (ability.DamageType.Key == DotaDamageType.MAGICAL.Key)
+                                else if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.MAGICAL.Key)
                                 {
                                     <small class="text-primary">@ability.DamageType</small>
                                 }
-                                else if (ability.DamageType.Key == DotaDamageType.PURE.Key)
+                                else if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.PURE.Key)
                                 {
                                     <small class="text-success">@ability.DamageType</small>
                                 }
@@ -125,7 +124,7 @@
                 {
                             <p>
                                 <small class="text-muted">Pierces Spell Immunity:</small>
-                                @if (ability.SpellImmunityType.Key == DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == DotaSpellImmunityType.ENEMIES_YES.Key)
+                                @if (ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ENEMIES_YES.Key)
                                 {
                                     <small class="text-success">
                                         <i class="fa fa-check"></i>
@@ -231,56 +230,56 @@
                     <td>HP</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetHealth(i)</td>
+                        <td>@Model.HealthLevels[i]</td>
                     }
                 </tr>
                 <tr>
                     <td>MP</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetMana(i)</td>
+                        <td>@Model.ManaLevels[i]</td>
                     }
                 </tr>
                 <tr>
                     <td>DMG (min)</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetMinDamage(i)</td>
+                        <td>@Model.MinDamageLevels[i]</td>
                     }
                 </tr>
                 <tr>
                     <td>DMG (max)</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetMaxDamage(i)</td>
+                        <td>@Model.MaxDamageLevels[i]</td>
                     }
                 </tr>
                 <tr>
                     <td>Armor</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Math.Round(Model.GetArmor(i), 2).ToString()</td>
+                        <td>@Math.Round(Model.ArmorLevels[i], 2).ToString()</td>
                     }
                 </tr>
                 <tr>
                     <td>STR</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetStrength(i)</td>
+                        <td>@Model.StrengthLevels[i]</td>
                     }
                 </tr>
                 <tr>
                     <td>AGI</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetAgility(i)</td>
+                        <td>@Model.AgilityLevels[i]</td>
                     }
                 </tr>
                 <tr>
                     <td>INT</td>
                     @for (int i = 0; i < 25; i++)
                     {
-                        <td>@Model.GetIntelligence(i)</td>
+                        <td>@Model.IntelligenceLevels[i]</td>
                     }
                 </tr>
             </tbody>

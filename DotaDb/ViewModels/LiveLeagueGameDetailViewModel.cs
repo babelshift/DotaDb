@@ -1,4 +1,5 @@
-﻿using DotaDb.Utilities;
+﻿using DotaDb.Data.Utilities;
+using DotaDb.Utilities;
 using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;

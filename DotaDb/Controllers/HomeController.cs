@@ -1,7 +1,6 @@
 ﻿using DotaDb.Data;
-using DotaDb.Utilities;
+using DotaDb.Data.Utilities;
 using DotaDb.ViewModels;
-using SourceSchemaParser.Dota2;
 using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ namespace DotaDb.Controllers
 
             var gameItems = await db.GetGameItemsAsync();
             var schema = await db.GetSchemaAsync();
-            var heroes = await db.GetHeroesAsync();
+            var heroes = await db.GetHeroDetailsAsync();
             var heroAbilities = await db.GetHeroAbilitiesAsync();
 
             viewModel.HeroCount = heroes.Count;
@@ -61,7 +60,7 @@ namespace DotaDb.Controllers
             catch (HttpRequestException ex) { } // maybe log this in the future, for now do nothing
             viewModel.LiveLeagueGames = liveLeagueGames;
 
-            await SetupRandomHero(viewModel, heroes);
+            viewModel.RandomHero = GetRandomHeroViewModel(heroes);
             await SetupRandomItems(viewModel, gameItems);
 
             return View(viewModel);
@@ -90,7 +89,7 @@ namespace DotaDb.Controllers
             viewModel.RandomGameItems = randomGameItems.AsReadOnly();
         }
 
-        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
         {
             int index = r.Next(0, randomItems.Count);
             var randomItem1 = randomItems[index];
@@ -116,9 +115,9 @@ namespace DotaDb.Controllers
             };
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
         {
-            DotaItemAbilitySchemaItem ability = null;
+            ItemAbilitySchemaItemModel ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
 
             if (abilityExists)
@@ -191,19 +190,16 @@ namespace DotaDb.Controllers
             }
         }
 
-        private async Task SetupRandomHero(HomeViewModel viewModel, IReadOnlyDictionary<int, DotaHeroSchemaItem> heroes)
+        private HeroViewModel GetRandomHeroViewModel(IReadOnlyDictionary<int, HeroDetailModel> heroes)
         {
-            viewModel.RandomHero = new HeroViewModel();
-
             Random r = new Random();
             int index = r.Next(0, heroes.Count);
             var randomHero = heroes.ElementAt(index).Value;
 
-            await SetupHeroViewModelAsync(randomHero, viewModel.RandomHero);
-            await SetupAbilitiesAsync(randomHero, viewModel.RandomHero);
+            return AutoMapperConfiguration.Mapper.Map<HeroDetailModel, HeroViewModel>(randomHero);
         }
 
-        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(DotaHeroSchemaItem hero, T viewModel)
+        private async Task<BaseHeroViewModel> SetupHeroViewModelAsync<T>(HeroSchemaModel hero, T viewModel)
             where T : BaseHeroViewModel
         {
             viewModel.Id = hero.HeroId;
@@ -223,16 +219,19 @@ namespace DotaDb.Controllers
             viewModel.Team = db.GetTeamTypeKeyValue(hero.Team).ToString();
             viewModel.TurnRate = hero.MovementTurnRate;
             viewModel.AttackType = db.GetAttackTypeKeyValue(hero.AttackCapabilities).ToString();
-            viewModel.Roles = hero.GetRoles();
             viewModel.AgilityGain = hero.AttributeAgilityGain;
             viewModel.IntelligenceGain = hero.AttributeIntelligenceGain;
             viewModel.StrengthGain = hero.AttributeStrengthGain;
             viewModel.PrimaryAttribute = db.GetHeroPrimaryAttributeTypeKeyValue(hero.AttributePrimary);
             viewModel.MinimapIconPath = hero.GetMinimapIconFilePath();
+            
+            var roles = hero.GetRoles();
+            viewModel.Roles = AutoMapperConfiguration.Mapper.Map<IReadOnlyList<HeroRoleModel>, IReadOnlyList<HeroRoleViewModel>>(roles);
+
             return viewModel;
         }
 
-        private async Task SetupAbilitiesAsync(DotaHeroSchemaItem hero, HeroViewModel viewModel)
+        private async Task SetupAbilitiesAsync(HeroSchemaModel hero, HeroViewModel viewModel)
         {
             var abilities = await db.GetHeroAbilitiesAsync();
 
@@ -258,7 +257,7 @@ namespace DotaDb.Controllers
             viewModel.Abilities = abilityViewModels.AsReadOnly();
         }
 
-        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<DotaAbilitySchemaItem> abilities, List<HeroAbilityViewModel> abilityViewModels)
+        private async Task AddAbilityToViewModelAsync(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities, List<HeroAbilityViewModel> abilityViewModels)
         {
             if (String.IsNullOrEmpty(abilityName))
             {

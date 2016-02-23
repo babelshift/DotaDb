@@ -1,8 +1,8 @@
 ﻿using DotaDb.Data;
-using DotaDb.Utilities;
+using DotaDb.Data.Utilities;
 using DotaDb.ViewModels;
 using PagedList;
-using SourceSchemaParser.Dota2;
+using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace DotaDb.Controllers
             {
                 var itemSetViewModel = new ItemSetViewModel()
                 {
-                    Name = await db.GetItemsLocalizationTextAsync(itemSet.LocalizedName.Remove(0, 1)),
+                    Name = await db.GetItemsLocalizationTextAsync(itemSet.Name.Remove(0, 1)),
                     Items = itemSet.Items.ToList().AsReadOnly()
                 };
 
@@ -45,7 +45,7 @@ namespace DotaDb.Controllers
             return View(autographs.AsReadOnly());
         }
 
-        private async Task<List<ItemAutographViewModel>> GetAutographItemsAsync(DotaSchema schema)
+        private async Task<List<ItemAutographViewModel>> GetAutographItemsAsync(SchemaModel schema)
         {
             List<ItemAutographViewModel> autographs = new List<ItemAutographViewModel>();
             foreach (var autograph in schema.ItemAutographs)
@@ -107,8 +107,8 @@ namespace DotaDb.Controllers
                 }
 
                 // if there's a name or description, remove the "#" character before
-                string name = !String.IsNullOrEmpty(item.NameLocalized) ? item.NameLocalized.Remove(0, 1) : String.Empty;
-                string description = !String.IsNullOrEmpty(item.DescriptionLocalized) ? item.DescriptionLocalized.Remove(0, 1) : String.Empty;
+                string name = !String.IsNullOrEmpty(item.Name) ? item.Name.Remove(0, 1) : String.Empty;
+                string description = !String.IsNullOrEmpty(item.ItemDescription) ? item.ItemDescription.Remove(0, 1) : String.Empty;
 
                 // look up the rarity and quality details
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
@@ -220,9 +220,9 @@ namespace DotaDb.Controllers
             return gameItems.AsReadOnly();
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, DotaItemAbilitySchemaItem> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
         {
-            DotaItemAbilitySchemaItem ability = null;
+            ItemAbilitySchemaItemModel ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
 
             if (abilityExists)

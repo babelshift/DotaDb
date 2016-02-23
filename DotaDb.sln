@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotaDb", "DotaDb\DotaDb.csproj", "{C38B7F3A-7576-4FB4-8FEE-D107C97C74B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotaDb.Data", "DotaDb.Data\DotaDb.Data.csproj", "{2CC96A61-66EC-4626-8C78-B9F8DD65BC30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotaDb.Data", "..\DotaDb.Data\DotaDb.Data.csproj", "{2CC96A61-66EC-4626-8C78-B9F8DD65BC30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
