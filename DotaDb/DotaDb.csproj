@@ -303,6 +303,7 @@
     <Compile Include="Controllers\LeaguesController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\MatchesController.cs" />
+    <Compile Include="Controllers\PrivacyController.cs" />
     <Compile Include="Converters\HeroToHeroViewModelConverter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -472,6 +473,7 @@
     <Content Include="Views\Matches\_PlayerDetailTableRowPartial.cshtml" />
     <Content Include="Views\Home\_RandomGameItemPartial.cshtml" />
     <Content Include="Views\Files\Index.cshtml" />
+    <Content Include="Views\Privacy\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
