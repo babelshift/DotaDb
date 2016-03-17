@@ -69,7 +69,7 @@ namespace DotaDb.Controllers
         #endregion Hero Index
 
         #region Hero Specifics
-
+        
         [OutputCache(CacheProfile = "Default", VaryByParam = "id")]
         public async Task<ActionResult> Build(int id, string heroName = null)
         {
@@ -77,7 +77,7 @@ namespace DotaDb.Controllers
 
             if (heroName != hero.Url.ToLower())
             {
-                RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
+                return RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
             }
 
             var viewModel = AutoMapperConfiguration.Mapper.Map<HeroDetailModel, HeroItemBuildViewModel>(hero);
@@ -139,7 +139,7 @@ namespace DotaDb.Controllers
 
             if (heroName != hero.Url.ToLower())
             {
-                RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
+                return RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
             }
 
             var viewModel = AutoMapperConfiguration.Mapper.Map<HeroDetailModel, HeroViewModel>(hero);
