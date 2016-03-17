@@ -86,7 +86,7 @@ namespace DotaDb.Controllers
 
             try
             {
-                var itemBuild = await db.GetItemBuildAsync(hero.Name);
+                var itemBuild = await db.GetItemBuildAsync(hero.NameInSchema);
                 viewModel.Title = itemBuild.Title;
                 viewModel.Author = itemBuild.Author;
                 viewModel.ItemGroups = await GetItemGroupsAsync(itemBuild);

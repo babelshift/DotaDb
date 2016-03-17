@@ -304,6 +304,7 @@
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\MatchesController.cs" />
     <Compile Include="Controllers\PrivacyController.cs" />
+    <Compile Include="Converters\HeroToHeroItemBuildViewModelConverter.cs" />
     <Compile Include="Converters\HeroToHeroViewModelConverter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

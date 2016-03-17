@@ -19,7 +19,7 @@ namespace DotaDb
                 config = new MapperConfiguration(x =>
                 {
                     x.CreateMap<HeroDetailModel, HeroViewModel>().ConvertUsing(new HeroToHeroViewModelConverter());
-                    x.CreateMap<HeroDetailModel, HeroItemBuildViewModel>();
+                    x.CreateMap<HeroDetailModel, HeroItemBuildViewModel>().ConvertUsing(new HeroToHeroItemBuildViewModelConverter());
                     x.CreateMap<HeroRoleModel, HeroRoleViewModel>();
                     x.CreateMap<HeroAbilityDetailModel, HeroAbilityViewModel>();
                     x.CreateMap<HeroAbilitySpecialDetailModel, HeroAbilitySpecialViewModel>();
