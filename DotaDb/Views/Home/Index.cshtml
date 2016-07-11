@@ -6,39 +6,28 @@
     ViewBag.ShowTopAlertInfo = false;
 }
 
-<div class="row" style="margin-bottom: 15px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-        <!-- top index (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="5608659030"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 5px auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <h2 style="margin: 0">You're at the Dota Database!</h2>
-        <p class="lead">
-            I created this site to help visualize and understand various in game and match data related to Dota 2. This tool will frequently update its data
-            directly from Dota 2 files and the Steam Web API to give you the most up to date information. Find my contact information
-            in the footer and let me know if you have any neat ideas to improve or enhance this site.
-        </p>
-    </div>
-</div>
+@*<div class="row" style="margin-bottom: 15px">
+        <div class="col-md-8 col-md-offset-2">
+            @if (!HttpContext.Current.IsDebuggingEnabled)
+            {
+            <!-- top index (dotadb) -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1823005717277864"
+                     data-ad-slot="5608659030"
+                     data-ad-format="auto"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+            }
+            else
+            {
+                <div style="width: 610px; margin: 5px auto;">
+                    <img src="https://placehold.it/600x90" />
+                </div>
+            }
+        </div>
+    </div>*@
 
 <div style="background: url('/Content/backgrounds/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
     <div class="full-screen-bg-tint">
