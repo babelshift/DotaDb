@@ -19,8 +19,6 @@ namespace DotaDb.Controllers
         {
             HomeViewModel viewModel = new HomeViewModel();
 
-            var playerCounts = await db.GetPlayerCountsAsync();
-
             IReadOnlyDictionary<int, LeagueModel> leagues = null;
             try
             {
@@ -47,21 +45,28 @@ namespace DotaDb.Controllers
             catch (HttpRequestException) { } // maybe log this in the future, for now do nothing
             viewModel.LiveLeagueGameCount = liveLeagueGameCount;
 
+            var playerCounts = await db.GetPlayerCountsAsync();
             viewModel.InGamePlayerCount = playerCounts.InGamePlayerCount;
             viewModel.DailyPeakPlayerCount = playerCounts.DailyPeakPlayerCount;
             viewModel.AllTimePeakPlayerCount = playerCounts.AllTimePeakPlayerCount;
 
-            IReadOnlyCollection<LiveLeagueGameOverviewViewModel> liveLeagueGames = null;
+            LiveLeagueGameOverviewViewModel topLiveLeagueGame = null;
 
             try
             {
-                liveLeagueGames = await GetTopLiveLeagueGameAsync();
+                topLiveLeagueGame = await GetTopLiveLeagueGameAsync();
             }
-            catch (HttpRequestException ex) { } // maybe log this in the future, for now do nothing
-            viewModel.LiveLeagueGames = liveLeagueGames;
+            catch (HttpRequestException) { } // maybe log this in the future, for now do nothing
+            viewModel.TopLiveLeagueGame = topLiveLeagueGame;
 
             viewModel.RandomHero = GetRandomHeroViewModel(heroes);
             await SetupRandomItems(viewModel, gameItems);
+
+            var dotaBlogFeedItems = db.GetDotaBlogFeedItemsAsync();
+            viewModel.DotaBlogFeedItems = AutoMapperConfiguration.Mapper.Map<
+                IReadOnlyCollection<DotaBlogFeedItem>, 
+                IReadOnlyCollection<DotaBlogFeedItemViewModel>>
+                (dotaBlogFeedItems);
 
             return View(viewModel);
         }
@@ -313,7 +318,7 @@ namespace DotaDb.Controllers
             abilityViewModels.Add(abilityViewModel);
         }
 
-        private async Task<IReadOnlyCollection<LiveLeagueGameOverviewViewModel>> GetTopLiveLeagueGameAsync()
+        private async Task<LiveLeagueGameOverviewViewModel> GetTopLiveLeagueGameAsync()
         {
             var liveLeagueGames = await db.GetLiveLeagueGamesAsync(1);
 
@@ -377,7 +382,14 @@ namespace DotaDb.Controllers
                 .ToList()
                 .AsReadOnly();
 
-            return liveLeagueGameViewModels;
+            if(liveLeagueGameViewModels != null && liveLeagueGameViewModels.Count > 0)
+            {
+                return liveLeagueGameViewModels[0];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

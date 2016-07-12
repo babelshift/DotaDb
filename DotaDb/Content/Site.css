@@ -7,6 +7,7 @@
 body {
     margin-top: 54px;
     padding-bottom: 200px;
+    background-color: #eee;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -99,10 +100,6 @@ textarea {
 }
 
 .autograph-list > .col-md-4:nth-child(3n+1) {
-    clear: both;
-}
-
-.random-hero-ability-list > .col-md-4:nth-child(3n+1) {
     clear: both;
 }
 

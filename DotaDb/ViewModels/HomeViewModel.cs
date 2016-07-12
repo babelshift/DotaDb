@@ -14,10 +14,12 @@ namespace DotaDb.ViewModels
         public int HeroAbilityCount { get; set; }
         public int? LiveLeagueGameCount { get; set; }
 
-        public IReadOnlyCollection<LiveLeagueGameOverviewViewModel> LiveLeagueGames { get; set; }
+        public LiveLeagueGameOverviewViewModel TopLiveLeagueGame { get; set; }
 
         public HeroViewModel RandomHero { get; set; }
 
         public IReadOnlyCollection<GameItemViewModel> RandomGameItems { get; set; }
+
+        public IReadOnlyCollection<DotaBlogFeedItemViewModel> DotaBlogFeedItems { get; set; }
     }
 }

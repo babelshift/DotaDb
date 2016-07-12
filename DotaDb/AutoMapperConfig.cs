@@ -23,6 +23,7 @@ namespace DotaDb
                     x.CreateMap<HeroRoleModel, HeroRoleViewModel>();
                     x.CreateMap<HeroAbilityDetailModel, HeroAbilityViewModel>();
                     x.CreateMap<HeroAbilitySpecialDetailModel, HeroAbilitySpecialViewModel>();
+                    x.CreateMap<DotaBlogFeedItem, DotaBlogFeedItemViewModel>();
                 });
             }
 

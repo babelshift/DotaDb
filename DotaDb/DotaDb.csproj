@@ -181,8 +181,8 @@
       <HintPath>..\..\DotaDbPackages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Steam.Models, Version=1.0.0.31, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\Steam.Models.1.0.0.31\lib\net46\Steam.Models.dll</HintPath>
+    <Reference Include="Steam.Models, Version=1.0.0.37, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\Steam.Models.1.0.0.37\lib\net46\Steam.Models.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SteamWebAPI2, Version=2.0.0.10, Culture=neutral, processorArchitecture=MSIL">
@@ -314,6 +314,7 @@
     <Compile Include="Utilities\HtmlHelperExtensions.cs" />
     <Compile Include="Utilities\LogHelper.cs" />
     <Compile Include="ViewModels\BaseHeroViewModel.cs" />
+    <Compile Include="ViewModels\DotaBlogFeedItemViewModel.cs" />
     <Compile Include="ViewModels\FilesIndexViewModel.cs" />
     <Compile Include="ViewModels\GameItemViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilitySpecialViewModel.cs" />
