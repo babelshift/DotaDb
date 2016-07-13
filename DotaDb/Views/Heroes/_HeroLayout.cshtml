@@ -9,11 +9,11 @@
     ViewBag.HeaderText = Model.Name;
 }
 @*<ol class="breadcrumb">
-    <li><a href="@Url.Action("index", "home")">Home</a></li>
-    <li><a href="@Url.Action("index", "heroes")">Heroes</a></li>
-    <li class="active">@Model.Name (@Model.ActiveTab)</li>
-</ol>*@
-<div class="row" style="margin-bottom: 15px">
+        <li><a href="@Url.Action("index", "home")">Home</a></li>
+        <li><a href="@Url.Action("index", "heroes")">Heroes</a></li>
+        <li class="active">@Model.Name (@Model.ActiveTab)</li>
+    </ol>*@
+<div class="row" style="margin-bottom: 5px; margin-top: 5px">
     <div class="col-md-8 col-md-offset-2">
         @if (!HttpContext.Current.IsDebuggingEnabled)
         {
@@ -23,13 +23,13 @@
                  data-ad-client="ca-pub-1823005717277864"
                  data-ad-slot="4717021832"
                  data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
         }
         else
         {
-            <div style="width: 610px; margin: 5px auto;">
+            <div style="width: 610px; margin: 0 auto;">
                 <img src="https://placehold.it/600x90" />
             </div>
         }
@@ -37,130 +37,136 @@
 </div>
 <div class="row">
     <div class="col-lg-3">
-        <img src="@Model.AvatarImagePath" class="shadow" />
-        @*<p>@Model.Description</p>*@
-        <hr />
-        <div class="row">
-            <div class="col-xs-6">
-                <img src="~/Content/icon_str.png" width="40" height="40" />
-                <strong>@Model.BaseStrength</strong> <small class="text-muted">(+@Model.StrengthGain.ToString("F"))</small>
-            </div>
-            <div class="col-xs-6">
-                <img src="~/Content/icon_atk.png" height="40" />
-                <strong>@Model.BaseDamageMin - @Model.BaseDamageMax</strong>
-            </div>
-            <div class="col-xs-6">
-                <img src="~/Content/icon_agi.png" width="40" height="40" />
-                <strong>@Model.BaseAgility</strong> <small class="text-muted">(+@Model.AgilityGain.ToString("F"))</small>
-            </div>
-            <div class="col-xs-6">
-                <img src="~/Content/icon_speed.png" height="40" />
-                <strong>@Model.BaseMoveSpeed</strong>
-            </div>
-            <div class="col-xs-6">
-                <img src="~/Content/icon_int.png" width="40" height="40" />
-                <strong>@Model.BaseIntelligence</strong> <small class="text-muted">(+@Model.IntelligenceGain.ToString("F"))</small>
-            </div>
-            <div class="col-xs-6">
-                <img src="~/Content/icon_def.png" height="40" />
-                <strong>@Math.Round(Model.ArmorLevels[0], 2).ToString()</strong>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="text-uppercase">
-                    @foreach (var role in Model.Roles)
-                    {
-                        string color = String.Empty;
-                        int percent = 0;
-                        if (role.Level == "1")
-                        {
-                            color = "progress-bar-danger";
-                            percent = 33;
-                        }
-                        else if (role.Level == "2")
-                        {
-                            color = "progress-bar-warning";
-                            percent = 66;
-                        }
-                        else if (role.Level == "3")
-                        {
-                            color = "progress-bar-success";
-                            percent = 100;
-                        }
-                        <small class="text-muted">@role.Name</small>
-                        <div class="progress" style="margin-bottom: 0">
-                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
-                                @role.Level
-                            </div>
+        <div class="panel panel-default">
+            <div class="panel-body" style="padding: 3px">
+                <img class="img-responsive" src="@Model.AvatarImagePath" class="shadow" />
+                @*<p>@Model.Description</p>*@
+                <hr />
+                <div class="row">
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_str.png" width="40" height="40" />
+                        <strong>@Model.BaseStrength</strong> <small class="text-muted">(+@Model.StrengthGain.ToString("F"))</small>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_atk.png" height="40" />
+                        <strong>@Model.BaseDamageMin - @Model.BaseDamageMax</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_agi.png" width="40" height="40" />
+                        <strong>@Model.BaseAgility</strong> <small class="text-muted">(+@Model.AgilityGain.ToString("F"))</small>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_speed.png" height="40" />
+                        <strong>@Model.BaseMoveSpeed</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_int.png" width="40" height="40" />
+                        <strong>@Model.BaseIntelligence</strong> <small class="text-muted">(+@Model.IntelligenceGain.ToString("F"))</small>
+                    </div>
+                    <div class="col-xs-6">
+                        <img src="~/Content/icon_def.png" height="40" />
+                        <strong>@Math.Round(Model.ArmorLevels[0], 2).ToString()</strong>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="text-uppercase">
+                            @foreach (var role in Model.Roles)
+                            {
+                                string color = String.Empty;
+                                int percent = 0;
+                                if (role.Level == "1")
+                                {
+                                    color = "progress-bar-danger";
+                                    percent = 33;
+                                }
+                                else if (role.Level == "2")
+                                {
+                                    color = "progress-bar-warning";
+                                    percent = 66;
+                                }
+                                else if (role.Level == "3")
+                                {
+                                    color = "progress-bar-success";
+                                    percent = 100;
+                                }
+                                <small class="text-muted">@role.Name</small>
+                                        <div class="progress" style="margin-bottom: 0">
+                                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                                @role.Level
+                                            </div>
+                                        </div>
+                            }
                         </div>
-                    }
+                    </div>
+                    <div class="col-xs-6 text-uppercase">
+                        <small class="text-muted">Atk Type:</small>
+                        <small>@Model.AttackType</small>
+                        <br />
+                        @if (Model.PrimaryAttribute != null)
+                        {
+                            <small class="text-muted">Primary:</small>
+                            if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                            {
+                                <img src="~/Content/icon_str.png" width="24" height="24" />
+                                        <small>STR</small>
+                            }
+                            else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                            {
+                                <img src="~/Content/icon_agi.png" width="24" height="24" />
+                                        <small>AGI</small>
+                            }
+                            else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                            {
+                                <img src="~/Content/icon_int.png" width="24" height="24" />
+                                        <small>INT</small>
+                            }
+                            else
+                            {
+                                <i class="fa fa-question-circle"></i>
+                            }
+                            <br />
+                        }
+                        <small class="text-muted">Team:</small>
+                        <small>@Model.Team</small>
+                        <br />
+                        <small class="text-muted">Atk Rate:</small>
+                        <small>@Model.AttackRate.ToString("F")</small>
+                        <br />
+                        <small class="text-muted">Atk Range:</small>
+                        <small>@Model.AttackRange.ToString("F")</small>
+                        <br />
+                        <small class="text-muted">Turn Rate:</small>
+                        <small>@Model.TurnRate.ToString("F")</small>
+                    </div>
+                </div>
+                <div class="hidden-sm hidden-md hidden-lg">
+                    <hr />
+                    <div class="panel panel-default">
+                        <div class="list-group">
+                            <a class="list-group-item" href="#">
+                                <i class="fa fa-info fa-fw"></i>
+                                Overview
+                            </a>
+                            <a class="list-group-item" href="#">
+                                <i class="fa fa-cogs fa-fw"></i>
+                                Item Builds
+                            </a>
+                            @*<a class="list-group-item" href="#">
+                                    <i class="fa fa-play-circle fa-fw"></i>
+                                    Matches
+                                </a>
+                                <a class="list-group-item" href="#">
+                                    <i class="fa fa-list-alt fa-fw"></i>
+                                    Raw Data
+                                </a>*@
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-xs-6 text-uppercase">
-                <small class="text-muted">Atk Type:</small>
-                <small>@Model.AttackType</small>
-                <br />
-                @if (Model.PrimaryAttribute != null)
-                {
-                    <small class="text-muted">Primary:</small>
-                    if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
-                    {
-                        <img src="~/Content/icon_str.png" width="24" height="24" />
-                        <small>STR</small>
-                    }
-                    else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
-                    {
-                        <img src="~/Content/icon_agi.png" width="24" height="24" />
-                        <small>AGI</small>
-                    }
-                    else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
-                    {
-                        <img src="~/Content/icon_int.png" width="24" height="24" />
-                        <small>INT</small>
-                    }
-                    else
-                    {
-                        <i class="fa fa-question-circle"></i>
-                    }
-                    <br />
-                }
-                <small class="text-muted">Team:</small>
-                <small>@Model.Team</small>
-                <br />
-                <small class="text-muted">Atk Rate:</small>
-                <small>@Model.AttackRate.ToString("F")</small>
-                <br />
-                <small class="text-muted">Atk Range:</small>
-                <small>@Model.AttackRange.ToString("F")</small>
-                <br />
-                <small class="text-muted">Turn Rate:</small>
-                <small>@Model.TurnRate.ToString("F")</small>
-            </div>
-        </div>
-        <div class="hidden-sm hidden-md hidden-lg">
-            <hr />
-            <div class="panel panel-default">
-                <div class="list-group">
-                    <a class="list-group-item" href="#">
-                        <i class="fa fa-info fa-fw"></i>
-                        Overview
-                    </a>
-                    <a class="list-group-item" href="#">
-                        <i class="fa fa-cogs fa-fw"></i>
-                        Item Builds
-                    </a>
-                    @*<a class="list-group-item" href="#">
-                            <i class="fa fa-play-circle fa-fw"></i>
-                            Matches
-                        </a>
-                        <a class="list-group-item" href="#">
-                            <i class="fa fa-list-alt fa-fw"></i>
-                            Raw Data
-                        </a>*@
-                </div>
-            </div>
+
+
         </div>
     </div>
     <div class="col-lg-9">
@@ -180,17 +186,17 @@
                         </a>
                     </li>
                     @*<li role="presentation" class="@(Model.ActiveTab == "Matches" ? "active" : String.Empty)">
-                        <a href="#">
-                            <i class="fa fa-play-circle"></i>
-                            Matches
-                        </a>
-                    </li>
-                    <li role="presentation" class="@(Model.ActiveTab == "RawData" ? "active" : String.Empty)">
-                        <a href="#">
-                            <i class="fa fa-list-alt"></i>
-                            Raw Data
-                        </a>
-                    </li>*@
+                            <a href="#">
+                                <i class="fa fa-play-circle"></i>
+                                Matches
+                            </a>
+                        </li>
+                        <li role="presentation" class="@(Model.ActiveTab == "RawData" ? "active" : String.Empty)">
+                            <a href="#">
+                                <i class="fa fa-list-alt"></i>
+                                Raw Data
+                            </a>
+                        </li>*@
                 </ul>
             </div>
         </div>
@@ -211,9 +217,9 @@
                  data-ad-client="ca-pub-1823005717277864"
                  data-ad-slot="6193755038"
                  data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
         }
         else
         {

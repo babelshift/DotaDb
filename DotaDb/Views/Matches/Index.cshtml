@@ -9,7 +9,7 @@
     ViewBag.HeaderText = "Live League Games";
 }
 
-<div class="row">
+<div class="row" style="margin-top: 5px; margin-bottom: 5px">
     <div class="col-md-8 col-md-offset-2">
         @if (!HttpContext.Current.IsDebuggingEnabled)
         {
@@ -19,13 +19,13 @@
                  data-ad-client="ca-pub-1823005717277864"
                  data-ad-slot="7026516636"
                  data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
         }
         else
         {
-            <div style="width: 610px; margin: 5px auto;">
+            <div style="width: 610px; margin: 0 auto;">
                 <img src="https://placehold.it/600x90" />
             </div>
         }
