@@ -1,7 +1,7 @@
 ﻿@model string
 
-<div class="row">
-    <div class="col-xs-12" style="padding: 4px">
+<div class="panel panel-default">
+    <div class="panel-body">
         <ul class="nav nav-pills">
             <li role="presentation" @(Model == "ingame" ? "class=active" : String.Empty)>
                 <a href="@Url.Action("index", "items")">
@@ -24,6 +24,5 @@
                 </a>
             </li>
         </ul>
-        <hr />
     </div>
 </div>

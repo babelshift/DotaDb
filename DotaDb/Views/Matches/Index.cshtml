@@ -9,7 +9,7 @@
     ViewBag.HeaderText = "Live League Games";
 }
 
-<div class="row" style="margin-bottom: 15px">
+<div class="row">
     <div class="col-md-8 col-md-offset-2">
         @if (!HttpContext.Current.IsDebuggingEnabled)
         {
@@ -31,27 +31,6 @@
         }
     </div>
 </div>
-@*<div class="row">
-    <div class="col-md-12">
-        <ol class="breadcrumb">
-            <li class="active">Matches</li>
-        </ol>
-    </div>
-</div>*@
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active">
-        <a href="#">
-            <i class="fa fa-ticket"></i>
-            Live League Games
-        </a>
-    </li>
-    @*<li role="presentation">
-        <a href="#">
-            <i class="fa fa-book"></i>
-            Match History
-        </a>
-    </li>*@
-</ul>
 <div class="panel panel-default">
     <div class="list-group live-league-game-list">
         @foreach (var game in Model)

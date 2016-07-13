@@ -21,7 +21,8 @@ namespace DotaDb
                     x.CreateMap<HeroDetailModel, HeroViewModel>().ConvertUsing(new HeroToHeroViewModelConverter());
                     x.CreateMap<HeroDetailModel, HeroItemBuildViewModel>().ConvertUsing(new HeroToHeroItemBuildViewModelConverter());
                     x.CreateMap<HeroRoleModel, HeroRoleViewModel>();
-                    x.CreateMap<HeroAbilityDetailModel, HeroAbilityViewModel>();
+                    x.CreateMap<HeroAbilityDetailModel, HeroAbilityViewModel>()
+                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Replace("\\n", "<br />")));
                     x.CreateMap<HeroAbilitySpecialDetailModel, HeroAbilitySpecialViewModel>();
                     x.CreateMap<DotaBlogFeedItem, DotaBlogFeedItemViewModel>();
                 });

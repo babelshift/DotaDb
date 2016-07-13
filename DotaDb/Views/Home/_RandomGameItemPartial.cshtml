@@ -1,448 +1,444 @@
 ﻿@model DotaDb.ViewModels.GameItemViewModel
 
-    <div class="col-md-4">
-        <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
-            <div class="media" style="margin-bottom: 0">
-                <div class="media-left">
-                    <div class="thumbnail" style="margin: 0; border: 0; width: 64px" title="@Model.Name">
-                        <img src="@Model.IconPath" class="shadow" />
-                    </div>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">
-                        @if (!String.IsNullOrEmpty(Model.Name))
+    <div class="media" style="margin-bottom: 0">
+        <div class="media-left">
+            <div class="thumbnail" style="margin: 0; border: 0; width: 64px" title="@Model.Name">
+                <img src="@Model.IconPath" class="shadow" />
+            </div>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">
+                @if (!String.IsNullOrEmpty(Model.Name))
+                {
+                    @Model.Name
+                }
+                else
+                {
+                    @:Undefined
+                }
+            </h4>
+            <p class="text-muted">@Model.Lore</p>
+        </div>
+        <div class="row" style="margin-bottom: 0">
+            <div class="col-xs-6 text-uppercase">
+                <p>
+                    <small class="text-muted">ID:</small>
+                    <small>@Model.Id</small>
+                </p>
+                <p>
+                    <small class="text-muted">Cost:</small>
+                    <small class="text-warning">@Model.Cost</small>
+                </p>
+                @if (!String.IsNullOrEmpty(Model.ManaCost))
+                {
+                    <p>
+                        <small class="text-muted">Mana Cost:</small>
+                        <small class="text-primary">@Model.ManaCost</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.Duration))
+                {
+                    <p>
+                        <small class="text-muted">Duration:</small>
+                        <small class="text-warning">@Model.Duration</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.Damage))
+                {
+                    <p>
+                        <small class="text-muted">Damage:</small>
+                        <small class="text-warning">@Model.Damage</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.CastPoint))
+                {
+                    <p>
+                        <small class="text-muted">Cast Point:</small>
+                        <small>@Model.CastPoint</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.CastRange))
+                {
+                    <p>
+                        <small class="text-muted">Cast Range:</small>
+                        <small>@Model.CastRange</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.Cooldown))
+                {
+                    <p>
+                        <small class="text-muted">Cooldown:</small>
+                        <small>@Model.Cooldown</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.TargetFlags))
+                {
+                    <p>
+                        <small class="text-muted">Target Flags:</small>
+                        <small>@Model.TargetFlags</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.TargetTypes))
+                {
+                    <p>
+                        <small class="text-muted">Target Types:</small>
+                        <small>@Model.TargetTypes</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.TeamTargets))
+                {
+                    <p>
+                        <small class="text-muted">Team Targets:</small>
+                        <small>@Model.TeamTargets</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.Declarations))
+                {
+                    <p>
+                        <small class="text-muted">Declarations:</small>
+                        <small>@Model.Declarations</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.DisassembleRule))
+                {
+                    <p>
+                        <small class="text-muted">Disassemble Rule:</small>
+                        <small>@Model.DisassembleRule</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.Shareability))
+                {
+                    <p>
+                        <small class="text-muted">Shareability:</small>
+                        <small>@Model.Shareability</small>
+                    </p>
+                }
+                @if (!String.IsNullOrEmpty(Model.ShopTags))
+                {
+                    <p>
+                        <small class="text-muted">Shop Tags:</small>
+                        <small>@Model.ShopTags</small>
+                    </p>
+                }
+                @if (Model.InitialCharges.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Initial Charges:</small>
+                        <small>@Model.InitialCharges.Value</small>
+                    </p>
+                }
+                @if (Model.DisplayCharges.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Display Charges:</small>
+                        <small>@Model.DisplayCharges.Value</small>
+                    </p>
+                }
+                @if (Model.StockInitial.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Initial Stock:</small>
+                        <small>@Model.StockInitial.Value</small>
+                    </p>
+                }
+                @if (Model.StockMax.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Max Stock:</small>
+                        <small>@Model.StockMax.Value</small>
+                    </p>
+                }
+                @if (Model.StockTime.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Stock Time:</small>
+                        <small>@Model.StockTime.Value</small>
+                    </p>
+                }
+                @if (Model.IsAlertable.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Alertable:</small>
+                        <small>
+                            @if (Model.IsAlertable.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsDroppable.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Droppable:</small>
+                        <small>
+                            @if (Model.IsDroppable.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsKillable.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Killable:</small>
+                        <small>
+                            @if (Model.IsKillable.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsPermanent.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Permanent:</small>
+                        <small>
+                            @if (Model.IsPermanent.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsPurchasable.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Purchasable:</small>
+                        <small>
+                            @if (Model.IsPurchasable.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsSellable.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Sellable:</small>
+                        <small>
+                            @if (Model.IsSellable.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsStackable.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Stackable:</small>
+                        <small>
+                            @if (Model.IsStackable.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.IsSupport.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Support:</small>
+                        <small>
+                            @if (Model.IsSupport.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+                @if (Model.ContributesToNetWorthWhenDropped.HasValue)
+                {
+                    <p>
+                        <small class="text-muted">Contributes to Net Worth when Dropped:</small>
+                        <small>
+                            @if (Model.ContributesToNetWorthWhenDropped.Value)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    No
+                                </span>
+                            }
+                        </small>
+                    </p>
+                }
+            </div>
+            <div class="col-xs-6 text-uppercase">
+                @foreach (var abilitySpecial in Model.Attributes)
+                {
+                    <p>
+                        <small class="text-muted">
+                            @if (!String.IsNullOrEmpty(abilitySpecial.Name))
+                            {
+                                @abilitySpecial.Name
+                            }
+                            else
+                            {
+                                @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
+                            }
+                        </small>
+                        <small>@abilitySpecial.Value</small>
+                    </p>
+                }
+                <p>
+                    <small class="text-muted">Secret Shop:</small>
+                    <small>
+                        @if (Model.SecretShop)
                         {
-                            @Model.Name
+                            <span class="text-success">
+                                <i class="fa fa-check"></i>
+                                Yes
+                            </span>
                         }
                         else
                         {
-                            @:Undefined
-                            }
-                    </h4>
-                    <p class="text-muted">@Model.Lore</p>
-                </div>
-                <div class="row" style="margin-bottom: 0">
-                    <div class="col-xs-6 text-uppercase">
-                        <p>
-                            <small class="text-muted">ID:</small>
-                            <small>@Model.Id</small>
-                        </p>
-                        <p>
-                            <small class="text-muted">Cost:</small>
-                            <small class="text-warning">@Model.Cost</small>
-                        </p>
-                        @if (!String.IsNullOrEmpty(Model.ManaCost))
-                        {
-                            <p>
-                                <small class="text-muted">Mana Cost:</small>
-                                <small class="text-primary">@Model.ManaCost</small>
-                            </p>
+                            <span class="text-danger">
+                                <i class="fa fa-remove"></i>
+                                No
+                            </span>
                         }
-                        @if (!String.IsNullOrEmpty(Model.Duration))
+                    </small>
+                </p>
+                <p>
+                    <small class="text-muted">Side Shop:</small>
+                    <small>
+                        @if (Model.SideShop)
                         {
-                            <p>
-                                <small class="text-muted">Duration:</small>
-                                <small class="text-warning">@Model.Duration</small>
-                            </p>
+                            <span class="text-success">
+                                <i class="fa fa-check"></i>
+                                Yes
+                            </span>
                         }
-                        @if (!String.IsNullOrEmpty(Model.Damage))
+                        else
                         {
-                            <p>
-                                <small class="text-muted">Damage:</small>
-                                <small class="text-warning">@Model.Damage</small>
-                            </p>
+                            <span class="text-danger">
+                                <i class="fa fa-remove"></i>
+                                No
+                            </span>
                         }
-                        @if (!String.IsNullOrEmpty(Model.CastPoint))
+                    </small>
+                </p>
+                <p>
+                    <small class="text-muted">Is Recipe:</small>
+                    <small>
+                        @if (Model.IsRecipe)
                         {
-                            <p>
-                                <small class="text-muted">Cast Point:</small>
-                                <small>@Model.CastPoint</small>
-                            </p>
+                            <span class="text-success">
+                                <i class="fa fa-check"></i>
+                                Yes
+                            </span>
                         }
-                        @if (!String.IsNullOrEmpty(Model.CastRange))
+                        else
                         {
-                            <p>
-                                <small class="text-muted">Cast Range:</small>
-                                <small>@Model.CastRange</small>
-                            </p>
+                            <span class="text-danger">
+                                <i class="fa fa-remove"></i>
+                                No
+                            </span>
                         }
-                        @if (!String.IsNullOrEmpty(Model.Cooldown))
-                        {
-                            <p>
-                                <small class="text-muted">Cooldown:</small>
-                                <small>@Model.Cooldown</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.TargetFlags))
-                        {
-                            <p>
-                                <small class="text-muted">Target Flags:</small>
-                                <small>@Model.TargetFlags</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.TargetTypes))
-                        {
-                            <p>
-                                <small class="text-muted">Target Types:</small>
-                                <small>@Model.TargetTypes</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.TeamTargets))
-                        {
-                            <p>
-                                <small class="text-muted">Team Targets:</small>
-                                <small>@Model.TeamTargets</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.Declarations))
-                        {
-                            <p>
-                                <small class="text-muted">Declarations:</small>
-                                <small>@Model.Declarations</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.DisassembleRule))
-                        {
-                            <p>
-                                <small class="text-muted">Disassemble Rule:</small>
-                                <small>@Model.DisassembleRule</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.Shareability))
-                        {
-                            <p>
-                                <small class="text-muted">Shareability:</small>
-                                <small>@Model.Shareability</small>
-                            </p>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.ShopTags))
-                        {
-                            <p>
-                                <small class="text-muted">Shop Tags:</small>
-                                <small>@Model.ShopTags</small>
-                            </p>
-                        }
-                        @if (Model.InitialCharges.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Initial Charges:</small>
-                                <small>@Model.InitialCharges.Value</small>
-                            </p>
-                        }
-                        @if (Model.DisplayCharges.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Display Charges:</small>
-                                <small>@Model.DisplayCharges.Value</small>
-                            </p>
-                        }
-                        @if (Model.StockInitial.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Initial Stock:</small>
-                                <small>@Model.StockInitial.Value</small>
-                            </p>
-                        }
-                        @if (Model.StockMax.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Max Stock:</small>
-                                <small>@Model.StockMax.Value</small>
-                            </p>
-                        }
-                        @if (Model.StockTime.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Stock Time:</small>
-                                <small>@Model.StockTime.Value</small>
-                            </p>
-                        }
-                        @if (Model.IsAlertable.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Alertable:</small>
-                                <small>
-                                    @if (Model.IsAlertable.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsDroppable.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Droppable:</small>
-                                <small>
-                                    @if (Model.IsDroppable.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsKillable.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Killable:</small>
-                                <small>
-                                    @if (Model.IsKillable.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsPermanent.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Permanent:</small>
-                                <small>
-                                    @if (Model.IsPermanent.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsPurchasable.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Purchasable:</small>
-                                <small>
-                                    @if (Model.IsPurchasable.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsSellable.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Sellable:</small>
-                                <small>
-                                    @if (Model.IsSellable.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsStackable.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Stackable:</small>
-                                <small>
-                                    @if (Model.IsStackable.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.IsSupport.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Support:</small>
-                                <small>
-                                    @if (Model.IsSupport.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                        @if (Model.ContributesToNetWorthWhenDropped.HasValue)
-                        {
-                            <p>
-                                <small class="text-muted">Contributes to Net Worth when Dropped:</small>
-                                <small>
-                                    @if (Model.ContributesToNetWorthWhenDropped.Value)
-                                    {
-                                        <span class="text-success">
-                                            <i class="fa fa-check"></i>
-                                            Yes
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">
-                                            <i class="fa fa-remove"></i>
-                                            No
-                                        </span>
-                                    }
-                                </small>
-                            </p>
-                        }
-                    </div>
-                    <div class="col-xs-6 text-uppercase">
-                        @foreach (var abilitySpecial in Model.Attributes)
-                        {
-                            <p>
-                                <small class="text-muted">
-                                    @if (!String.IsNullOrEmpty(abilitySpecial.Name))
-                                    {
-                                        @abilitySpecial.Name
-                                    }
-                                    else
-                                    {
-                                        @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
-                                    }
-                                </small>
-                                <small>@abilitySpecial.Value</small>
-                            </p>
-                        }
-                        <p>
-                            <small class="text-muted">Secret Shop:</small>
-                            <small>
-                                @if (Model.SecretShop)
-                                {
-                                    <span class="text-success">
-                                        <i class="fa fa-check"></i>
-                                        Yes
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text-danger">
-                                        <i class="fa fa-remove"></i>
-                                        No
-                                    </span>
-                                }
-                            </small>
-                        </p>
-                        <p>
-                            <small class="text-muted">Side Shop:</small>
-                            <small>
-                                @if (Model.SideShop)
-                                {
-                                    <span class="text-success">
-                                        <i class="fa fa-check"></i>
-                                        Yes
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text-danger">
-                                        <i class="fa fa-remove"></i>
-                                        No
-                                    </span>
-                                }
-                            </small>
-                        </p>
-                        <p>
-                            <small class="text-muted">Is Recipe:</small>
-                            <small>
-                                @if (Model.IsRecipe)
-                                {
-                                    <span class="text-success">
-                                        <i class="fa fa-check"></i>
-                                        Yes
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text-danger">
-                                        <i class="fa fa-remove"></i>
-                                        No
-                                    </span>
-                                }
-                            </small>
-                        </p>
-                    </div>
-                    @if (!String.IsNullOrEmpty(Model.Description))
-                    {
-                        <div class="col-xs-12">
-                            <hr style="margin: 5px 0 5px 0" />
-                            <p>
-                                <small class="text-muted">
-                                    @Model.Description
-                                </small>
-                            </p>
-                        </div>
-                    }
-                </div>
+                    </small>
+                </p>
             </div>
+            @if (!String.IsNullOrEmpty(Model.Description))
+            {
+                <div class="col-xs-12">
+                    <p>
+                        <small class="text-muted">
+                            @Model.Description
+                        </small>
+                    </p>
+                </div>
+            }
         </div>
     </div>
+<hr />

@@ -10,14 +10,14 @@
 }
 
 @*<div class="row">
-    <div class="col-xs-12" style="padding: 4px">
-        <ol class="breadcrumb">
-            <li><a href="@Url.Action("index", "home")">Home</a></li>
-            <li class="active">Leagues</li>
-        </ol>
-    </div>
-</div>*@
-<div class="row" style="margin-bottom: 15px">
+        <div class="col-xs-12" style="padding: 4px">
+            <ol class="breadcrumb">
+                <li><a href="@Url.Action("index", "home")">Home</a></li>
+                <li class="active">Leagues</li>
+            </ol>
+        </div>
+    </div>*@
+<div class="row">
     <div class="col-md-8 col-md-offset-2">
         @if (!HttpContext.Current.IsDebuggingEnabled)
         {
@@ -28,7 +28,7 @@
                  data-ad-slot="9147221435"
                  data-ad-format="auto"></ins>
                 <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
+                    (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
         }
         else
@@ -39,48 +39,58 @@
         }
     </div>
 </div>
-<div class="row league-list">
-    @foreach (var league in Model)
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row league-list">
+            @foreach (var league in Model)
             {
-        <div class="col-md-6" style="padding: 4px">
-            <div class="well well-sm" style="padding: 5px; margin-bottom: 0">
-                <div class="media">
-                    <div class="media-left">
-                        @if (!String.IsNullOrEmpty(league.LogoFilePath))
-                        {
-                            <a href="@league.Url">
-                                <div class="thumbnail" style="margin: 0; border: 0; width: 200px" title="@league.Name">
-                                    <img src="@league.LogoFilePath" class="shadow" />
+                <div class="col-md-6">
+                    <div class="well well-sm" style="padding: 3px; margin-bottom: 10px">
+                        <div class="media">
+                            <div class="media-left">
+                                @if (!String.IsNullOrEmpty(league.LogoFilePath))
+                                {
+                                    <a href="@league.Url">
+                                        <div class="thumbnail" style="margin: 0; border: 0; width: 200px" title="@league.Name">
+                                            <img src="@league.LogoFilePath" class="shadow" />
+                                        </div>
+                                    </a>
+                                }
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    @league.Name
+                                </h4>
+                                <p class="text-muted">@league.Description</p>
+                                <div class="text-uppercase">
+                                    @if (!String.IsNullOrEmpty(league.Tier))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Tier:</small>
+                                            <small>@league.Tier</small>
+                                        </p>
+                                    }
+                                    @if (!String.IsNullOrEmpty(league.Location))
+                                    {
+                                        <p>
+                                            <small class="text-muted">Location:</small>
+                                            <small>@league.Location</small>
+                                        </p>
+                                    }
                                 </div>
-                            </a>
-                        }
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            @league.Name
-                        </h4>
-                        <p class="text-muted">@league.Description</p>
-                        <div class="text-uppercase">
-                            @if (!String.IsNullOrEmpty(league.Tier))
-                            {
-                                <p>
-                                    <small class="text-muted">Tier:</small>
-                                    <small>@league.Tier</small>
-                                </p>
-                            }
-                            @if (!String.IsNullOrEmpty(league.Location))
-                            {
-                                <p>
-                                    <small class="text-muted">Location:</small>
-                                    <small>@league.Location</small>
-                                </p>
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
-    }
+
+        @if (Model.PageCount > 1)
+        {
+            @Html.PagedListPager(Model, page => Url.Action("index", new { page }))
+        }
+
+    </div>
 </div>
 <div class="row" style="margin-bottom: 15px">
     <div class="col-md-8 col-md-offset-2">
@@ -92,9 +102,9 @@
                  data-ad-client="ca-pub-1823005717277864"
                  data-ad-slot="1623954639"
                  data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
         }
         else
         {
@@ -104,11 +114,6 @@
         }
     </div>
 </div>
-@if (Model.PageCount > 1)
-{
-    @Html.PagedListPager(Model, page => Url.Action("index", new { page }))
-}
-
 @section scripts {
     @if (!HttpContext.Current.IsDebuggingEnabled)
     {
