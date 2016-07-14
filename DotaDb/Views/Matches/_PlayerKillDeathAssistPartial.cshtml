@@ -7,6 +7,8 @@
     <span class="text-muted">/</span>
     @Model.AssistCount
 </h4>
-<a href="@Url.Action("hero", "heroes", new { id = Model.HeroId })">
-    <small class="text-uppercase text-muted">@Model.HeroName</small>
-</a>
+<div style="line-height: 13px">
+    <a href="@Url.Action("hero", "heroes", new { id = Model.HeroId })">
+        <small class="text-uppercase text-muted">@Model.HeroName</small>
+    </a>
+</div>

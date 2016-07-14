@@ -116,11 +116,11 @@
             {
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!-- middle index (dotadb) -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-1823005717277864"
-                     data-ad-slot="4771054234"
-                     data-ad-format="auto"></ins>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1823005717277864"
+                 data-ad-slot="4771054234"
+                 data-ad-format="auto"></ins>
                     <script>
                         (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
@@ -169,6 +169,9 @@
                     <h2 style="margin: 0; font-weight: 100; color: #333">Top Live Game</h2>
                 </div>
                 <div class="panel-body">
+                    <div class="text-center">
+                        <a href="@Url.Action("live", "matches", new { id = Model.TopLiveLeagueGame.MatchId })" class="btn btn-xs btn-primary" style="margin-bottom: 5px">See game details</a>
+                    </div>
                     <img class="shadow center-block" src="@Model.TopLiveLeagueGame.LeagueLogoPath" />
                     <div class="text-center">
                         <h3 style="margin-bottom: 0; font-weight: 100; color: #333">@Model.TopLiveLeagueGame.RadiantTeamName</h3>
@@ -224,6 +227,9 @@
                     <h2 style="margin: 0; font-weight: 100; color: #333">@Model.RandomHero.Name</h2>
                 </div>
                 <div class="panel-body">
+                    <div class="text-center">
+                        <a href="@Url.Action("hero", "heroes", new { id = Model.RandomHero.Id })" class="btn btn-xs btn-primary" style="margin-bottom: 5px">See hero details</a>
+                    </div>
                     <img class="shadow center-block" src="@Model.RandomHero.AvatarImagePath" />
                     <div class="row" style="margin-top: 15px">
                         <div class="col-xs-6">
