@@ -24,7 +24,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-xs-5 col-sm-6 col-md-3">
                                 <h4 class="league-name">@Model.LeagueName</h4>
                                 <div class="thumbnail league-logo">
                                     <img src="@Model.LeagueLogoPath" class="shadow" />
@@ -40,12 +40,50 @@
                                     Unknown
                                 </p>
                             </div>
-                            <div class="col-md-6 text-uppercase picks-and-bans">
+                            <div class="col-xs-7 col-sm-6 text-right text-uppercase visible-xs visible-sm">
+                                <p class="no-margin">
+                                    <span class="text-muted">Lobby ID:</span>
+                                    @Model.LobbyId
+                                </p>
+                                <p class="no-margin">
+                                    <span class="text-muted">Match ID:</span>
+                                    @Model.MatchId
+                                </p>
+                                <p class="no-margin">
+                                    <span class="text-muted">Stream Delay:</span>
+                                    <span class="text-lowercase">@Model.StreamDelay</span>
+                                </p>
+                                <p class="no-margin">
+                                    <i class="fa fa-ticket fa-fw"></i>
+                                    <span class="text-muted">Game #:</span>
+                                    @Model.GameNumber
+                                </p>
+                                <p class="no-margin">
+                                    <span class="text-muted">Series:</span>
+                                    @String.Format("{0} (radiant) - {1} (dire)", Model.RadiantSeriesWins, Model.DireSeriesWins) (Best of @Model.BestOf)
+                                </p>
+                                <p class="no-margin">
+                                    <i class="fa fa-clock-o fa-fw"></i>
+                                    <span class="text-muted">
+                                        Started:
+                                    </span>
+                                    @Model.TimeStarted.ToString("dd MMM yyyy HH:mm:ss")
+                                </p>
+                                <p class="no-margin">
+                                    <i class="fa fa-desktop fa-fw"></i>
+                                    <span class="text-muted">
+                                        Spectators:
+                                    </span>
+                                    @Model.SpectatorCount
+                                </p>
+                            </div>
+                            <div class="col-sm-12 col-md-6 text-uppercase picks-and-bans">
+                                <hr class="visible-xs visible-sm" style="margin-top: 10px; margin-bottom: 10px" />
                                 <div class="row">
-                                    <div class="col-md-7 text-uppercase text-muted">
+                                    <div class="col-xs-7 text-uppercase text-muted">
                                         Radiant Picks
                                     </div>
-                                    <div class="col-md-5 text-uppercase text-muted">
+                                    <div class="col-xs-5 text-uppercase text-muted">
                                         Dire Picks
                                     </div>
                                 </div>
@@ -78,10 +116,10 @@
                                     }
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7 text-uppercase text-muted">
+                                    <div class="col-xs-7 text-uppercase text-muted">
                                         Radiant Bans
                                     </div>
-                                    <div class="col-md-5 text-uppercase text-muted">
+                                    <div class="col-xs-5 text-uppercase text-muted">
                                         Dire Bans
                                     </div>
                                 </div>
@@ -116,7 +154,7 @@
                                     }
                                 </div>
                             </div>
-                            <div class="col-md-3 text-right text-uppercase">
+                            <div class="col-md-3 text-right text-uppercase visible-md visible-lg">
                                 <p class="no-margin">
                                     <span class="text-muted">Lobby ID:</span>
                                     @Model.LobbyId
@@ -163,16 +201,16 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <h3 class="team-name">@Model.RadiantTeamName</h3>
                                 <h2 class="no-margin">@Model.RadiantKillCount <small class="text-uppercase">kills</small></h2>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-sm-4 text-center">
                                 <h3 class="no-margin" style="font-weight: 200">
                                     &mdash; vs &mdash;
                                 </h3>
                             </div>
-                            <div class="col-md-4 text-right">
+                            <div class="col-sm-4 text-right">
                                 <h3 class="team-name">@Model.DireTeamName</h3>
                                 <h2 class="no-margin">@Model.DireKillCount <small class="text-uppercase">kills</small></h2>
                             </div>
@@ -192,21 +230,21 @@
                                 }
                                 <h4 class="media-heading no-margin">
                                     @player.PlayerName
+                                    &mdash;
+                                    <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
+                                        <small class="text-uppercase text-muted">@player.HeroName</small>
+                                    </a>
                                 </h4>
-                                <div class="pull-left text-right player-level">
-                                    <small class="text-uppercase text-muted">Level</small>
-                                    <h4 class="no-margin">@player.Level</h4>
-                                </div>
                                 <div class="media player-details">
                                     <div class="media-left">
                                         @Html.Partial("_PlayerHeroAvatarPartial", player)
                                     </div>
                                     <div class="media-body">
                                         <div class="row">
-                                            <div class="col-md-5">
+                                            <div class="col-xs-5">
                                                 @Html.Partial("_PlayerKillDeathAssistPartial", player)
                                             </div>
-                                            <div class="col-md-7 live-game-items">
+                                            <div class="col-xs-7 live-game-items">
                                                 @for (int i = 0; i < player.Items.Count; i++)
                                                 {
                                                     // after the third item we need to clear because the items should be arranged like so:
@@ -318,15 +356,15 @@
                                 }
                                 <h4 class="media-heading no-margin">
                                     @player.PlayerName
+                                    &mdash;
+                                    <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
+                                        <small class="text-uppercase text-muted">@player.HeroName</small>
+                                    </a>
                                 </h4>
-                                <div class="pull-right text-left player-level">
-                                    <small class="text-uppercase text-muted">Level</small>
-                                    <h4 class="no-margin">@player.Level</h4>
-                                </div>
                                 <div class="media player-details">
                                     <div class="media-body">
                                         <div class="row">
-                                            <div class="col-md-7 live-game-items">
+                                            <div class="col-xs-7 live-game-items">
                                                 @for (int i = 0; i < player.Items.Count; i++)
                                                 {
                                                     // after the third item we need to clear because the items should be arranged like so:
@@ -341,7 +379,7 @@
                                                     </div>
                                                 }
                                             </div>
-                                            <div class="col-md-5">
+                                            <div class="col-xs-5">
                                                 @Html.Partial("_PlayerKillDeathAssistPartial", player)
                                             </div>
                                         </div>
