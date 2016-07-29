@@ -61,9 +61,9 @@ namespace DotaDb.Controllers
         private static IEnumerable<KeyValuePair<int, HeroDetailModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<int, HeroDetailModel> heroes, string attributeKey)
         {
             return heroes.Where(x =>
-                x.Value.PrimaryAttribute.Key == attributeKey
-                && x.Value.NameInSchema != "npc_dota_hero_base"
-                && x.Value.IsEnabled);
+                x.Value.IsEnabled
+                && x.Value.PrimaryAttribute.Key == attributeKey
+                && x.Value.NameInSchema != "npc_dota_hero_base");
         }
 
         #endregion Hero Index
