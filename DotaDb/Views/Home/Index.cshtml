@@ -163,9 +163,10 @@
                 </div>
             }
         </div>
-        @if (Model.TopLiveLeagueGame != null)
-        {
-            <div class="col-md-4">
+        <div class="col-md-4">
+
+            @if (Model.TopLiveLeagueGame != null)
+            {
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
                         <h2 style="margin: 0; font-weight: 100; color: #333">Top Live Game</h2>
@@ -224,6 +225,9 @@
                         <a href="@Url.Action("index", "matches")">See all live games</a>
                     </div>
                 </div>
+            }
+            @if (Model.RandomHero != null)
+            {
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
                         <h2 style="margin: 0; font-weight: 100; color: #333">@Model.RandomHero.Name</h2>
@@ -356,6 +360,9 @@
                         <a href="@Url.Action("index", "heroes", new { tab = "table" })">See All Heroes</a>
                     </div>
                 </div>
+            }
+            @if (Model.RandomGameItems != null && Model.RandomGameItems.Count > 0)
+            {
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
                         <h2 style="margin: 0; font-weight: 100; color: #333">Random Items</h2>
@@ -370,8 +377,8 @@
                         <a href="@Url.Action("index", "items")">See All Items</a>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
