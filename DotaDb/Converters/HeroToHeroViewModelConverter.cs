@@ -17,7 +17,34 @@ namespace DotaDb.Converters
 
             HeroViewModel viewModel = new HeroViewModel();
 
-            viewModel.Abilities = AutoMapperConfiguration.Mapper.Map<IReadOnlyCollection<HeroAbilityDetailModel>, IReadOnlyCollection<HeroAbilityViewModel>>(source.Abilities);
+            var abilities = source.Abilities.Where(x => x.AbilityType != DotaHeroAbilityType.ATTRIBUTES).ToList().AsReadOnly();
+
+            var talents = source.Abilities
+                .Where(x => x.AbilityType == DotaHeroAbilityType.ATTRIBUTES)
+                .Select(x => new HeroTalentViewModel() { Id = x.Id, Name = x.Name })
+                .ToList().AsReadOnly();
+
+            if (talents.Count >= 2)
+            {
+                viewModel.TalentChoiceAtLevel10 = new HeroTalentChoiceViewModel() { HeroTalentChoice1 = talents[0], HeroTalentChoice2 = talents[1] };
+            }
+
+            if(talents.Count >= 4)
+            {
+                viewModel.TalentChoiceAtLevel15 = new HeroTalentChoiceViewModel() { HeroTalentChoice1 = talents[2], HeroTalentChoice2 = talents[3] };
+            }
+
+            if (talents.Count >= 6)
+            {
+                viewModel.TalentChoiceAtLevel20 = new HeroTalentChoiceViewModel() { HeroTalentChoice1 = talents[4], HeroTalentChoice2 = talents[5] };
+            }
+
+            if (talents.Count >= 8)
+            {
+                viewModel.TalentChoiceAtLevel25 = new HeroTalentChoiceViewModel() { HeroTalentChoice1 = talents[6], HeroTalentChoice2 = talents[7] };
+            }
+
+            viewModel.Abilities = AutoMapperConfiguration.Mapper.Map<IReadOnlyCollection<HeroAbilityDetailModel>, IReadOnlyCollection<HeroAbilityViewModel>>(abilities);
             viewModel.ActiveTab = source.ActiveTab;
             viewModel.AgilityGain = source.AgilityGain;
             viewModel.AttackRange = source.AttackRange;

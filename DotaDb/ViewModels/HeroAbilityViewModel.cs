@@ -29,5 +29,6 @@ namespace DotaDb.ViewModels
         public string Note3 { get; set; }
         public string Note4 { get; set; }
         public string Note5 { get; set; }
+        public bool HasLinkedSpecialBonus { get; set; }
     }
 }

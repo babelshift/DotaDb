@@ -41,7 +41,13 @@
             <div class="panel-body" style="padding: 5px">
                 <img class="img-responsive" src="@Model.AvatarImagePath" />
                 @*<p>@Model.Description</p>*@
-                <hr />
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 style="margin: 0; font-weight: 100; color: #333" class="text-center text-uppercase">Attributes</h3>
+            </div>
+            <div class="panel-body" style="padding: 5px">
                 <div class="row">
                     <div class="col-xs-6">
                         <img src="~/Content/icon_str.png" width="40" height="40" />
@@ -68,7 +74,13 @@
                         <strong>@Math.Round(Model.ArmorLevels[0], 2).ToString()</strong>
                     </div>
                 </div>
-                <hr />
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 style="margin: 0; font-weight: 100; color: #333" class="text-center text-uppercase">Stats</h3>
+            </div>
+            <div class="panel-body" style="padding: 5px">
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="text-uppercase">
@@ -92,11 +104,11 @@
                                     percent = 100;
                                 }
                                 <small class="text-muted">@role.Name</small>
-                                        <div class="progress" style="margin-bottom: 0">
-                                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
-                                                @role.Level
-                                            </div>
-                                        </div>
+                                <div class="progress" style="margin-bottom: 0">
+                                    <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                        @role.Level
+                                    </div>
+                                </div>
                             }
                         </div>
                     </div>
@@ -110,17 +122,17 @@
                             if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
                             {
                                 <img src="~/Content/icon_str.png" width="24" height="24" />
-                                        <small>STR</small>
+                                <small>STR</small>
                             }
                             else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
                             {
                                 <img src="~/Content/icon_agi.png" width="24" height="24" />
-                                        <small>AGI</small>
+                                <small>AGI</small>
                             }
                             else if (Model.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
                             {
                                 <img src="~/Content/icon_int.png" width="24" height="24" />
-                                        <small>INT</small>
+                                <small>INT</small>
                             }
                             else
                             {
@@ -141,32 +153,40 @@
                         <small>@Model.TurnRate.ToString("F")</small>
                     </div>
                 </div>
-                <div class="hidden-sm hidden-md hidden-lg">
-                    <hr />
-                    <div class="panel panel-default">
-                        <div class="list-group">
-                            <a class="list-group-item" href="#">
-                                <i class="fa fa-info fa-fw"></i>
-                                Overview
-                            </a>
-                            <a class="list-group-item" href="#">
-                                <i class="fa fa-cogs fa-fw"></i>
-                                Item Builds
-                            </a>
-                            @*<a class="list-group-item" href="#">
-                                    <i class="fa fa-play-circle fa-fw"></i>
-                                    Matches
-                                </a>
-                                <a class="list-group-item" href="#">
-                                    <i class="fa fa-list-alt fa-fw"></i>
-                                    Raw Data
-                                </a>*@
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 style="margin: 0; font-weight: 100; color: #333" class="text-center text-uppercase">Talents</h3>
+            </div>
+            <div class="panel-body" style="padding: 5px">
+                <p><strong>Level 10:</strong> @Model.TalentChoiceAtLevel10.HeroTalentChoice1.Name <strong>OR</strong> @Model.TalentChoiceAtLevel10.HeroTalentChoice2.Name</p>
+                <p><strong>Level 15:</strong> @Model.TalentChoiceAtLevel15.HeroTalentChoice1.Name <strong>OR</strong> @Model.TalentChoiceAtLevel15.HeroTalentChoice2.Name</p>
+                <p><strong>Level 20:</strong> @Model.TalentChoiceAtLevel20.HeroTalentChoice1.Name <strong>OR</strong> @Model.TalentChoiceAtLevel20.HeroTalentChoice2.Name</p>
+                <p><strong>Level 25:</strong> @Model.TalentChoiceAtLevel25.HeroTalentChoice1.Name <strong>OR</strong> @Model.TalentChoiceAtLevel25.HeroTalentChoice2.Name</p>
+            </div>
+        </div>
+        <div class="hidden-sm hidden-md hidden-lg">
+            <div class="panel panel-default">
+                <div class="list-group">
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-tags fa-fw"></i>
+                        <span class="text-uppercase">Abilities</span>
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-cogs fa-fw"></i>
+                        <span class="text-uppercase">Item Builds</span>
+                    </a>
+                    @*<a class="list-group-item" href="#">
+                            <i class="fa fa-play-circle fa-fw"></i>
+                            Matches
+                        </a>
+                        <a class="list-group-item" href="#">
+                            <i class="fa fa-list-alt fa-fw"></i>
+                            Raw Data
+                        </a>*@
                 </div>
             </div>
-
-
         </div>
     </div>
     <div class="col-lg-9">
@@ -175,14 +195,14 @@
                 <ul class="nav nav-tabs hidden-xs">
                     <li role="presentation" class="@(Model.ActiveTab == "Overview" ? "active" : String.Empty)">
                         <a href="@Url.Action("hero", "heroes")">
-                            <i class="fa fa-info"></i>
-                            Overview
+                            <i class="fa fa-tags"></i>
+                            <span class="text-uppercase">Abilities</span>
                         </a>
                     </li>
                     <li role="presentation" class="@(Model.ActiveTab == "ItemBuilds" ? "active" : String.Empty)">
                         <a href="@Url.Action("build", "heroes", new { id = Model.Id, heroName = Model.Url.ToLower() })">
                             <i class="fa fa-cogs"></i>
-                            Item Builds
+                            <span class="text-uppercase">Item Builds</span>
                         </a>
                     </li>
                     @*<li role="presentation" class="@(Model.ActiveTab == "Matches" ? "active" : String.Empty)">

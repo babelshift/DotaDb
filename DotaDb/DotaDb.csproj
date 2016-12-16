@@ -161,8 +161,8 @@
       <HintPath>..\..\DotaDbPackages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -181,12 +181,12 @@
       <HintPath>..\..\DotaDbPackages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Steam.Models, Version=1.0.0.37, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\Steam.Models.1.0.0.37\lib\net46\Steam.Models.dll</HintPath>
+    <Reference Include="Steam.Models, Version=1.0.0.47, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\Steam.Models.1.0.0.47\lib\net46\Steam.Models.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SteamWebAPI2, Version=2.0.0.10, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\SteamWebAPI2.2.0.0.10\lib\net46\SteamWebAPI2.dll</HintPath>
+    <Reference Include="SteamWebAPI2, Version=2.0.0.34, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\SteamWebAPI2.2.0.0.34\lib\net46\SteamWebAPI2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -318,6 +318,8 @@
     <Compile Include="ViewModels\FilesIndexViewModel.cs" />
     <Compile Include="ViewModels\GameItemViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilitySpecialViewModel.cs" />
+    <Compile Include="ViewModels\HeroTalentChoiceViewModel.cs" />
+    <Compile Include="ViewModels\HeroTalentViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilityViewModel.cs" />
     <Compile Include="ViewModels\HeroItemBuildGroupViewModel.cs" />
     <Compile Include="ViewModels\HeroItemBuildItemViewModel.cs" />

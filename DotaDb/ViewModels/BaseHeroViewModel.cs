@@ -39,5 +39,9 @@ namespace DotaDb.ViewModels
         public IReadOnlyDictionary<int, double> StrengthLevels { get; set; }
         public IReadOnlyDictionary<int, double> AgilityLevels { get; set; }
         public IReadOnlyDictionary<int, double> IntelligenceLevels { get; set; }
+        public HeroTalentChoiceViewModel TalentChoiceAtLevel10 { get; set; }
+        public HeroTalentChoiceViewModel TalentChoiceAtLevel15 { get; set; }
+        public HeroTalentChoiceViewModel TalentChoiceAtLevel20 { get; set; }
+        public HeroTalentChoiceViewModel TalentChoiceAtLevel25 { get; set; }
     }
 }
