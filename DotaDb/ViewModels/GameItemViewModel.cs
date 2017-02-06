@@ -4,12 +4,12 @@ namespace DotaDb.ViewModels
 {
     public class GameItemViewModel
     {
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Lore { get; set; }
         public string IconPath { get; set; }
-        public int Cost { get; set; }
+        public uint Cost { get; set; }
         public bool SecretShop { get; set; }
         public bool SideShop { get; set; }
         public bool IsRecipe { get; set; }
@@ -39,11 +39,11 @@ namespace DotaDb.ViewModels
         public string Quality { get; set; }
         public bool? IsStackable { get; set; }
         public string Shareability { get; set; }
-        public int? InitialCharges { get; set; }
-        public int? DisplayCharges { get; set; }
+        public uint? InitialCharges { get; set; }
+        public uint? DisplayCharges { get; set; }
         public bool? IsPermanent { get; set; }
-        public int? StockMax { get; set; }
-        public int? StockInitial { get; set; }
+        public uint? StockMax { get; set; }
+        public uint? StockInitial { get; set; }
         public double? StockTime { get; set; }
         public string Declarations { get; set; }
         public bool? IsSupport { get; set; }

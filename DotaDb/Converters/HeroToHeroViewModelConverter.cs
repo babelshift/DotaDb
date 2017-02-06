@@ -11,16 +11,14 @@ namespace DotaDb.Converters
 {
     public class HeroToHeroViewModelConverter : ITypeConverter<HeroDetailModel, HeroViewModel>
     {
-        public HeroViewModel Convert(ResolutionContext context)
+        public HeroViewModel Convert(HeroDetailModel source, HeroViewModel destination, ResolutionContext context)
         {
-            var source = context.SourceValue as HeroDetailModel;
-
             HeroViewModel viewModel = new HeroViewModel();
 
-            var abilities = source.Abilities.Where(x => x.AbilityType != DotaHeroAbilityType.ATTRIBUTES).ToList().AsReadOnly();
+            var abilities = source.Abilities.Where(x => x.AbilityType != DotaHeroAbilityType.TALENTS).ToList().AsReadOnly();
 
             var talents = source.Abilities
-                .Where(x => x.AbilityType == DotaHeroAbilityType.ATTRIBUTES)
+                .Where(x => x.AbilityType == DotaHeroAbilityType.TALENTS)
                 .Select(x => new HeroTalentViewModel() { Id = x.Id, Name = x.Name })
                 .ToList().AsReadOnly();
 

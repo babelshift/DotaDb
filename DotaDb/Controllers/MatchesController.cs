@@ -70,7 +70,7 @@ namespace DotaDb.Controllers
             return View(liveLeagueGameViewModels);
         }
 
-        public async Task<ActionResult> Live(long id)
+        public async Task<ActionResult> Live(ulong id)
         {
             var liveLeagueGame = await db.GetLiveLeagueGameAsync(id);
             if (liveLeagueGame == null)

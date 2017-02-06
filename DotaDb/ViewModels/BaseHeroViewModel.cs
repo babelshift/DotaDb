@@ -5,17 +5,17 @@ namespace DotaDb.ViewModels
 {
     public abstract class BaseHeroViewModel
     {
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public string Url { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string AvatarImagePath { get; set; }
-        public int BaseStrength { get; set; }
-        public int BaseAgility { get; set; }
-        public int BaseIntelligence { get; set; }
-        public int BaseDamageMin { get; set; }
-        public int BaseDamageMax { get; set; }
-        public int BaseMoveSpeed { get; set; }
+        public uint BaseStrength { get; set; }
+        public uint BaseAgility { get; set; }
+        public uint BaseIntelligence { get; set; }
+        public uint BaseDamageMin { get; set; }
+        public uint BaseDamageMax { get; set; }
+        public uint BaseMoveSpeed { get; set; }
         public double BaseArmor { get; set; }
         public string Team { get; set; }
         public double AttackRange { get; set; }

@@ -11,10 +11,8 @@ namespace DotaDb.Converters
 {
     public class HeroToHeroItemBuildViewModelConverter : ITypeConverter<HeroDetailModel, HeroItemBuildViewModel>
     {
-        public HeroItemBuildViewModel Convert(ResolutionContext context)
+        public HeroItemBuildViewModel Convert(HeroDetailModel source, HeroItemBuildViewModel destination, ResolutionContext context)
         {
-            var source = context.SourceValue as HeroDetailModel;
-
             HeroItemBuildViewModel viewModel = new HeroItemBuildViewModel();
 
             viewModel.ActiveTab = source.ActiveTab;

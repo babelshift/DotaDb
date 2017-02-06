@@ -5,18 +5,18 @@ namespace DotaDb.ViewModels
 {
     public class LiveLeagueGameOverviewViewModel
     {
-        public long MatchId { get; set; }
+        public ulong MatchId { get; set; }
         public string LeagueName { get; set; }
-        public int SpectatorCount { get; set; }
+        public uint SpectatorCount { get; set; }
         public string RadiantTeamName { get; set; }
         public string DireTeamName { get; set; }
-        public int RadiantKillCount { get; set; }
-        public int DireKillCount { get; set; }
+        public uint RadiantKillCount { get; set; }
+        public uint DireKillCount { get; set; }
         public string ElapsedTime { get; set; }
-        public int GameNumber { get; set; }
-        public int BestOf { get; set; }
-        public int RadiantSeriesWins { get; set; }
-        public int DireSeriesWins { get; set; }
+        public uint GameNumber { get; set; }
+        public uint BestOf { get; set; }
+        public uint RadiantSeriesWins { get; set; }
+        public uint DireSeriesWins { get; set; }
         public string LeagueLogoPath { get; set; }
         public string RadiantTeamLogo { get; set; }
         public string DireTeamLogo { get; set; }

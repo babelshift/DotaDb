@@ -4,9 +4,9 @@ namespace DotaDb.ViewModels
 {
     public class HomeViewModel
     {
-        public int InGamePlayerCount { get; set; }
-        public int DailyPeakPlayerCount { get; set; }
-        public int AllTimePeakPlayerCount { get; set; }
+        public uint InGamePlayerCount { get; set; }
+        public uint DailyPeakPlayerCount { get; set; }
+        public uint AllTimePeakPlayerCount { get; set; }
         public int HeroCount { get; set; }
         public int InGameItemCount { get; set; }
         public int ShopItemCount { get; set; }

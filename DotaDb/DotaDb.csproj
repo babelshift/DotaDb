@@ -48,8 +48,8 @@
       <HintPath>..\..\DotaDbPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EasyAzureKeyVault, Version=1.1.0.10, Culture=neutral, processorArchitecture=MSIL">
@@ -181,12 +181,8 @@
       <HintPath>..\..\DotaDbPackages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Steam.Models, Version=1.0.0.47, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\Steam.Models.1.0.0.47\lib\net46\Steam.Models.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SteamWebAPI2, Version=2.0.0.34, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\SteamWebAPI2.2.0.0.34\lib\net46\SteamWebAPI2.dll</HintPath>
+    <Reference Include="Steam.Models, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\Steam.Models.3.0.1-ci-00027\lib\net45\Steam.Models.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

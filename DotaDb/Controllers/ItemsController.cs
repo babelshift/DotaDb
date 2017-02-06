@@ -220,7 +220,7 @@ namespace DotaDb.Controllers
             return gameItems.AsReadOnly();
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
         {
             ItemAbilitySchemaItemModel ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);

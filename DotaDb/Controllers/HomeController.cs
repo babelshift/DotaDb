@@ -19,7 +19,7 @@ namespace DotaDb.Controllers
         {
             HomeViewModel viewModel = new HomeViewModel();
 
-            IReadOnlyDictionary<int, LeagueModel> leagues = null;
+            IReadOnlyDictionary<uint, LeagueModel> leagues = null;
             try
             {
                 leagues = await db.GetLeaguesAsync();
@@ -94,7 +94,7 @@ namespace DotaDb.Controllers
             viewModel.RandomGameItems = randomGameItems.AsReadOnly();
         }
 
-        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
+        private async Task<GameItemViewModel> GetRandomItem(Random r, IList<GameItemModel> randomItems, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
         {
             int index = r.Next(0, randomItems.Count);
             var randomItem1 = randomItems[index];
@@ -120,7 +120,7 @@ namespace DotaDb.Controllers
             };
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<int, ItemAbilitySchemaItemModel> abilities)
+        private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
         {
             ItemAbilitySchemaItemModel ability = null;
             bool abilityExists = abilities.TryGetValue(viewModel.Id, out ability);
@@ -195,7 +195,7 @@ namespace DotaDb.Controllers
             }
         }
 
-        private HeroViewModel GetRandomHeroViewModel(IReadOnlyDictionary<int, HeroDetailModel> heroes)
+        private HeroViewModel GetRandomHeroViewModel(IReadOnlyDictionary<uint, HeroDetailModel> heroes)
         {
             Random r = new Random();
             int index = r.Next(0, heroes.Count);

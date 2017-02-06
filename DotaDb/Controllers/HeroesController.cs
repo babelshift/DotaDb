@@ -45,7 +45,7 @@ namespace DotaDb.Controllers
             }
         }
 
-        private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<int, HeroDetailModel>> heroes)
+        private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<uint, HeroDetailModel>> heroes)
         {
             List<HeroViewModel> heroViewModels = new List<HeroViewModel>();
 
@@ -58,7 +58,7 @@ namespace DotaDb.Controllers
             return heroViewModels;
         }
 
-        private static IEnumerable<KeyValuePair<int, HeroDetailModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<int, HeroDetailModel> heroes, string attributeKey)
+        private static IEnumerable<KeyValuePair<uint, HeroDetailModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<uint, HeroDetailModel> heroes, string attributeKey)
         {
             return heroes.Where(x =>
                 x.Value.IsEnabled
@@ -71,7 +71,7 @@ namespace DotaDb.Controllers
         #region Hero Specifics
         
         [OutputCache(CacheProfile = "Default", VaryByParam = "id")]
-        public async Task<ActionResult> Build(int id, string heroName = null)
+        public async Task<ActionResult> Build(uint id, string heroName = null)
         {
             var hero = await db.GetHeroDetailsAsync(id);
 
@@ -133,7 +133,7 @@ namespace DotaDb.Controllers
         }
 
         [OutputCache(CacheProfile = "Default", VaryByParam = "id")]
-        public async Task<ActionResult> Hero(int id, string heroName = null)
+        public async Task<ActionResult> Hero(uint id, string heroName = null)
         {
             var hero = await db.GetHeroDetailsAsync(id);
 
