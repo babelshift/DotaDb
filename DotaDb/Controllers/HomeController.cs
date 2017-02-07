@@ -42,7 +42,11 @@ namespace DotaDb.Controllers
             {
                 liveLeagueGameCount = await db.GetLiveLeagueGameCountAsync();
             }
-            catch (HttpRequestException) { } // maybe log this in the future, for now do nothing
+            catch (HttpRequestException)
+            {
+                // live league game endpoints return 500 or 404 randomly and without warning
+                // maybe log this in the future, for now do nothing
+            }
             viewModel.LiveLeagueGameCount = liveLeagueGameCount;
 
             var playerCounts = await db.GetPlayerCountsAsync();
@@ -56,7 +60,11 @@ namespace DotaDb.Controllers
             {
                 topLiveLeagueGame = await GetTopLiveLeagueGameAsync();
             }
-            catch (HttpRequestException) { } // maybe log this in the future, for now do nothing
+            catch (HttpRequestException)
+            {
+                // live league game endpoints return 500 or 404 randomly and without warning
+                // maybe log this in the future, for now do nothing
+            }
             viewModel.TopLiveLeagueGame = topLiveLeagueGame;
 
             viewModel.RandomHero = GetRandomHeroViewModel(heroes);
