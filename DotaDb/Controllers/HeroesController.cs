@@ -16,7 +16,7 @@ namespace DotaDb.Controllers
 
         #region Hero Index
 
-        [OutputCache(CacheProfile = "Default", VaryByParam = "tab")]
+        //[OutputCache(CacheProfile = "Default", VaryByParam = "tab")]
         public async Task<ActionResult> Index(string tab = "")
         {
             var heroes = await db.GetHeroDetailsAsync();
@@ -70,7 +70,7 @@ namespace DotaDb.Controllers
 
         #region Hero Specifics
         
-        [OutputCache(CacheProfile = "Default", VaryByParam = "id")]
+        //[OutputCache(CacheProfile = "Default", VaryByParam = "id")]
         public async Task<ActionResult> Build(uint id, string heroName = null)
         {
             var hero = await db.GetHeroDetailsAsync(id);
@@ -132,7 +132,7 @@ namespace DotaDb.Controllers
             return itemGroupViewModels;
         }
 
-        [OutputCache(CacheProfile = "Default", VaryByParam = "id")]
+        //[OutputCache(CacheProfile = "Default", VaryByParam = "id")]
         public async Task<ActionResult> Hero(uint id, string heroName = null)
         {
             var hero = await db.GetHeroDetailsAsync(id);

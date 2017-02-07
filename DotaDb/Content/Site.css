@@ -7,7 +7,6 @@
 body {
     margin-top: 54px;
     padding-bottom: 200px;
-    background-color: #eee;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -470,4 +469,8 @@ textarea {
     color: #fff;
     margin: 10px 0 0 0;
     font-weight: 100;
+}
+
+.navbar {
+    min-height: 53px;
 }
