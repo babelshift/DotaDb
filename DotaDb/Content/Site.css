@@ -474,3 +474,15 @@ textarea {
 .navbar {
     min-height: 53px;
 }
+
+.table-column-ability-name {
+    width: 33% !important;
+}
+
+.table-column-ability-special-name {
+    width: 50% !important;
+}
+
+.table-column-ability-note-name {
+    width: 10% !important;
+}
