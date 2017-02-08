@@ -1,0 +1,9 @@
+﻿@model DotaDb.ViewModels.GameItemAttributeViewModel
+
+@if (!String.IsNullOrWhiteSpace(Model.Value))
+{
+    <tr>
+        <td>@Model.Name</td>
+        <td>@Model.Value</td>
+    </tr>
+}

@@ -109,33 +109,30 @@
         </div>
     </div>
 </div>
-
-<div class="row" style="margin-top: 5px; margin-bottom: 5px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-            {
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- middle index (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="4771054234"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 0 auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
-
-
 <div class="container">
+    <div class="row" style="margin-top: 5px; margin-bottom: 5px">
+        <div class="col-md-8 col-md-offset-2">
+            @if (!HttpContext.Current.IsDebuggingEnabled)
+            {
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- middle index (dotadb) -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1823005717277864"
+                     data-ad-slot="4771054234"
+                     data-ad-format="auto"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+            }
+            else
+            {
+                <div style="width: 610px; margin: 0 auto;">
+                    <img src="https://placehold.it/600x90" />
+                </div>
+            }
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8">
             @foreach (var dotaBlogFeedItem in Model.DotaBlogFeedItems)
@@ -164,7 +161,6 @@
             }
         </div>
         <div class="col-md-4">
-
             @if (Model.TopLiveLeagueGame != null)
             {
                 <div class="panel panel-default">
@@ -233,83 +229,128 @@
                         <h2 style="margin: 0; font-weight: 100; color: #333">@Model.RandomHero.Name</h2>
                     </div>
                     <div class="panel-body">
-                        <div class="text-center">
-                            <a href="@Url.Action("hero", "heroes", new { id = Model.RandomHero.Id })" class="btn btn-xs btn-primary" style="margin-bottom: 5px">See hero details</a>
-                        </div>
-                        <img class="shadow center-block" src="@Model.RandomHero.AvatarImagePath" />
-                        <div class="row" style="margin-top: 15px">
-                            <div class="col-xs-6">
-                                <img src="~/Content/icon_str.png" width="40" height="40" />
-                                <strong>@Model.RandomHero.BaseStrength</strong> <small class="text-muted">(+@Model.RandomHero.StrengthGain.ToString("F"))</small>
-                            </div>
-                            <div class="col-xs-6">
-                                <img src="~/Content/icon_atk.png" height="40" />
-                                <strong>@Model.RandomHero.BaseDamageMin - @Model.RandomHero.BaseDamageMax</strong>
-                            </div>
-                            <div class="col-xs-6">
-                                <img src="~/Content/icon_agi.png" width="40" height="40" />
-                                <strong>@Model.RandomHero.BaseAgility</strong> <small class="text-muted">(+@Model.RandomHero.AgilityGain.ToString("F"))</small>
-                            </div>
-                            <div class="col-xs-6">
-                                <img src="~/Content/icon_speed.png" height="40" />
-                                <strong>@Model.RandomHero.BaseMoveSpeed</strong>
-                            </div>
-                            <div class="col-xs-6">
-                                <img src="~/Content/icon_int.png" width="40" height="40" />
-                                <strong>@Model.RandomHero.BaseIntelligence</strong> <small class="text-muted">(+@Model.RandomHero.IntelligenceGain.ToString("F"))</small>
-                            </div>
-                            <div class="col-xs-6">
-                                <img src="~/Content/icon_def.png" height="40" />
-                                <strong>@Math.Round(Model.RandomHero.ArmorLevels[0], 2).ToString()</strong>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row text-uppercase">
-                            <div class="col-xs-6">
-                                <small class="text-muted">Atk Type:</small>
-                                <small>@Model.RandomHero.AttackType</small>
-                                <br />
-                                @if (Model.RandomHero.PrimaryAttribute != null)
-                                {
-                                    <small class="text-muted">Primary:</small>
-                                    if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
-                                    {
-                                        <img src="~/Content/icon_str.png" width="24" height="24" />
-                                        <small>Str</small>
-                                    }
-                                    else if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
-                                    {
-                                        <img src="~/Content/icon_agi.png" width="24" height="24" />
-                                        <small>Agi</small>
-                                    }
-                                    else if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
-                                    {
-                                        <img src="~/Content/icon_int.png" width="24" height="24" />
-                                        <small>Int</small>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa fa-question-circle"></i>
-                                    }
-                                    <br />
-                                }
-                                <small class="text-muted">Team:</small>
-                                <small>@Model.RandomHero.Team</small>
-                            </div>
-                            <div class="col-xs-6">
-                                <small class="text-muted">Atk Rate:</small>
-                                <small>@Model.RandomHero.AttackRate.ToString("F")</small>
-                                <br />
-                                <small class="text-muted">Atk Range:</small>
-                                <small>@Model.RandomHero.AttackRange.ToString("F")</small>
-                                <br />
-                                <small class="text-muted">Turn Rate:</small>
-                                <small>@Model.RandomHero.TurnRate.ToString("F")</small>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row text-uppercase">
-                            <div class="col-xs-12">
+                        <a href="@Url.Action("hero", "heroes", new { id = Model.RandomHero.Id })">
+                            <img class="shadow center-block" src="@Model.RandomHero.AvatarImagePath" />
+                        </a>
+                        <table class="table table-striped table-condensed" style="margin-top: 15px; margin-bottom: 0">
+                            <tbody class="text-center text-uppercase">
+                                <tr>
+                                    <td>
+                                        <img src="~/Content/icon_str.png" width="36" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="~/Content/icon_agi.png" width="36" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="~/Content/icon_int.png" width="36" height="36" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>@Model.RandomHero.BaseStrength</strong> <small class="text-muted">(+@Model.RandomHero.StrengthGain.ToString("F"))</small>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.BaseAgility</strong> <small class="text-muted">(+@Model.RandomHero.AgilityGain.ToString("F"))</small>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.BaseIntelligence</strong> <small class="text-muted">(+@Model.RandomHero.IntelligenceGain.ToString("F"))</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="~/Content/icon_atk.png" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="~/Content/icon_speed.png" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="~/Content/icon_def.png" height="36" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>@Model.RandomHero.BaseDamageMin - @Model.RandomHero.BaseDamageMax</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.BaseMoveSpeed</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Math.Round(Model.RandomHero.ArmorLevels[0], 2).ToString()</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-striped table-condensed" style="table-layout: fixed">
+                            <tbody class="text-uppercase">
+                                <tr>
+                                    <td>
+                                        <span>Hero ID</span>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.Id</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle">
+                                        <span>Primary</span>
+                                    </td>
+                                    <td>
+                                        @if (Model.RandomHero.PrimaryAttribute != null)
+                                        {
+                                            if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                                            {
+                                                <img alt="Strength" title="Strength" src="~/Content/icon_str.png" width="24" height="24" />
+                                                <strong>STR</strong>
+                                            }
+                                            else if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                                            {
+                                                <img alt="Agility" title="Agility" src="~/Content/icon_agi.png" width="24" height="24" />
+                                                <strong>AGI</strong>
+                                            }
+                                            else if (Model.RandomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                                            {
+                                                <img alt="Intelligence" title="Intelligence" src="~/Content/icon_int.png" width="24" height="24" />
+                                                <strong>INT</strong>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-question-circle"></i>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Attack Type</span>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.AttackType</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Attack Rate</span>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.AttackRate.ToString("F")</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Attack Range</span>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.AttackRange.ToString("F")</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Turn Rate</span>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.RandomHero.TurnRate.ToString("F")</strong>
+                                    </td>
+                                </tr>
                                 @foreach (var role in Model.RandomHero.Roles)
                                 {
                                     string color = String.Empty;
@@ -329,16 +370,83 @@
                                         color = "progress-bar-success";
                                         percent = 100;
                                     }
-                                    <p class="text-muted" style="margin: 0">@role.Name</p>
-                                    <div class="progress" style="margin-bottom: 5px">
-                                        <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
-                                            @role.Level
-                                        </div>
-                                    </div>
+                                    <tr>
+                                        <td>
+                                            @role.Name
+                                        </td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 0">
+                                                <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                                    @role.Level
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
-                            </div>
-                        </div>
-                        <hr />
+                            </tbody>
+                        </table>
+                        <h3>Talents</h3>
+                        <table class="table table-striped table-condensed" style="table-layout: fixed">
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel10.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">10</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel10.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel15.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">15</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel15.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel20.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">20</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel20.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel25.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">25</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@Model.RandomHero.TalentChoiceAtLevel25.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h3>Abilities</h3>
                         <div class="row">
                             <div class="col-xs-12">
                                 @foreach (var ability in Model.RandomHero.Abilities)
@@ -367,12 +475,12 @@
                     <div class="panel-heading text-center">
                         <h2 style="margin: 0; font-weight: 100; color: #333">Random Items</h2>
                     </div>
-                    <div class="panel-body item-list">
+                    <ul class="list-group">
                         @foreach (var randomGameItem in Model.RandomGameItems)
                         {
                             Html.RenderPartial("_RandomGameItemPartial", randomGameItem);
                         }
-                    </div>
+                    </ul>
                     <div class="panel-footer text-center text-uppercase">
                         <a href="@Url.Action("index", "items")">See All Items</a>
                     </div>

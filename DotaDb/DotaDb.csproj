@@ -312,6 +312,8 @@
     <Compile Include="ViewModels\BaseHeroViewModel.cs" />
     <Compile Include="ViewModels\DotaBlogFeedItemViewModel.cs" />
     <Compile Include="ViewModels\FilesIndexViewModel.cs" />
+    <Compile Include="ViewModels\GameItemNullableBoolAttributeViewModel.cs" />
+    <Compile Include="ViewModels\GameItemStringAttributeViewModel.cs" />
     <Compile Include="ViewModels\GameItemViewModel.cs" />
     <Compile Include="ViewModels\HeroAbilitySpecialViewModel.cs" />
     <Compile Include="ViewModels\HeroTalentChoiceViewModel.cs" />
@@ -485,6 +487,9 @@
     <Content Include="Views\Home\_RandomGameItemPartial.cshtml" />
     <Content Include="Views\Files\Index.cshtml" />
     <Content Include="Views\Privacy\Index.cshtml" />
+    <Content Include="Views\Shared\_BooleanYesNoPartial.cshtml" />
+    <Content Include="Views\Shared\_GameItemAttributeRowIfHasValuePartial.cshtml" />
+    <Content Include="Views\Shared\_GameItemAttributeRowIfBoolHasValuePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
