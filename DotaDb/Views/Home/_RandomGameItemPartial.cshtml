@@ -20,7 +20,7 @@
             </h4>
             <p class="text-muted">@Model.Lore</p>
         </div>
-        <table class="table table-striped table-condensed" style="table-layout: fixed; margin-top: 15px; margin-bottom: 0">
+        <table class="table table-striped table-condensed" style="table-layout: fixed; margin-top: 15px">
             <tbody class="text-uppercase">
                 <tr>
                     <td>Item ID</td>
@@ -110,8 +110,9 @@
         </table>
         @if (!String.IsNullOrWhiteSpace(Model.Description))
         {
-            <hr />
-            <p>@Model.Description</p>
+            <div class="alert alert-info">
+                <small>@Model.Description</small>
+            </div>
         }
     </div>
 </li>

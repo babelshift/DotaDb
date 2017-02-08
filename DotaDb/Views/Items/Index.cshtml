@@ -54,10 +54,14 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row item-list">
+            @{ int gameItemNumber = 0; }
             @foreach (var gameItem in Model)
             {
-            <div class="col-md-4">
-                <div class="well well-sm" style="padding: 3px; margin-bottom: 10px">
+                <div class="col-md-4">
+                    @if (gameItemNumber++ >= 3)
+                    {
+                        <hr />
+                    }
                     <div class="media" style="margin-bottom: 0">
                         <div class="media-left">
                             <div class="thumbnail" style="margin: 0; border: 0; width: 64px" title="@gameItem.Name">
@@ -67,441 +71,113 @@
                         <div class="media-body">
                             <h4 class="media-heading">
                                 @if (!String.IsNullOrEmpty(gameItem.Name))
-                                    {
+                                {
                                     @gameItem.Name
-                                    }
-                                    else
-                                    {
+                                }
+                                else
+                                {
                                     @:Undefined
-                            }
+                                }
                             </h4>
                             <p class="text-muted">@gameItem.Lore</p>
                         </div>
-                        <div class="row" style="margin-bottom: 0">
-                            <div class="col-xs-6 text-uppercase">
-                                <p>
-                                    <small class="text-muted">ID:</small>
-                                    <small>@gameItem.Id</small>
-                                </p>
-                                <p>
-                                    <small class="text-muted">Cost:</small>
-                                    <small class="text-warning">@gameItem.Cost</small>
-                                </p>
-                                @if (!String.IsNullOrEmpty(gameItem.ManaCost))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Mana Cost:</small>
-                                        <small class="text-primary">@gameItem.ManaCost</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.Duration))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Duration:</small>
-                                        <small class="text-warning">@gameItem.Duration</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.Damage))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Damage:</small>
-                                        <small class="text-warning">@gameItem.Damage</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.CastPoint))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Cast Point:</small>
-                                        <small>@gameItem.CastPoint</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.CastRange))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Cast Range:</small>
-                                        <small>@gameItem.CastRange</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.Cooldown))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Cooldown:</small>
-                                        <small>@gameItem.Cooldown</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.TargetFlags))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Target Flags:</small>
-                                        <small>@gameItem.TargetFlags</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.TargetTypes))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Target Types:</small>
-                                        <small>@gameItem.TargetTypes</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.TeamTargets))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Team Targets:</small>
-                                        <small>@gameItem.TeamTargets</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.Declarations))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Declarations:</small>
-                                        <small>@gameItem.Declarations</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.DisassembleRule))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Disassemble Rule:</small>
-                                        <small>@gameItem.DisassembleRule</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.Shareability))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Shareability:</small>
-                                        <small>@gameItem.Shareability</small>
-                                    </p>
-                                    }
-                                @if (!String.IsNullOrEmpty(gameItem.ShopTags))
-                                    {
-                                    <p>
-                                        <small class="text-muted">Shop Tags:</small>
-                                        <small>@gameItem.ShopTags</small>
-                                    </p>
-                                    }
+
+                        <table class="table table-striped table-condensed" style="table-layout: fixed; margin-top: 15px">
+                            <tbody class="text-uppercase">
+                                <tr>
+                                    <td>Item ID</td>
+                                    <td>@gameItem.Id</td>
+                                </tr>
+                                <tr>
+                                    <td>Cost</td>
+                                    <td>@gameItem.Cost</td>
+                                </tr>
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Mana Cost", Value = gameItem.ManaCost });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Duration", Value = gameItem.Duration });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Damage", Value = gameItem.Damage });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Cast Point", Value = gameItem.CastPoint });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Cast Range", Value = gameItem.CastRange });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Cooldown", Value = gameItem.Cooldown });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Target Flags", Value = gameItem.TargetFlags });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Target Types", Value = gameItem.TargetTypes });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Team Targets", Value = gameItem.TeamTargets });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Declarations", Value = gameItem.Declarations });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Disassemble Rules", Value = gameItem.DisassembleRule });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Shareability", Value = gameItem.Shareability });}
+                                @{Html.RenderPartial("_GameItemAttributeRowIfHasValuePartial", new DotaDb.ViewModels.GameItemStringAttributeViewModel() { Name = "Shop Tags", Value = gameItem.ShopTags });}
                                 @if (gameItem.InitialCharges.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Initial Charges:</small>
-                                        <small>@gameItem.InitialCharges.Value</small>
-                                    </p>
-                                    }
-                                @if (gameItem.DisplayCharges.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Display Charges:</small>
-                                        <small>@gameItem.DisplayCharges.Value</small>
-                                    </p>
-                                    }
-                                @if (gameItem.StockInitial.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Initial Stock:</small>
-                                        <small>@gameItem.StockInitial.Value</small>
-                                    </p>
-                                    }
-                                @if (gameItem.StockMax.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Max Stock:</small>
-                                        <small>@gameItem.StockMax.Value</small>
-                                    </p>
-                                    }
-                                @if (gameItem.StockTime.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Stock Time:</small>
-                                        <small>@gameItem.StockTime.Value</small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsAlertable.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Alertable:</small>
-                                        <small>
-                                            @if (gameItem.IsAlertable.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsDroppable.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Droppable:</small>
-                                        <small>
-                                            @if (gameItem.IsDroppable.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsKillable.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Killable:</small>
-                                        <small>
-                                            @if (gameItem.IsKillable.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsPermanent.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Permanent:</small>
-                                        <small>
-                                            @if (gameItem.IsPermanent.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsPurchasable.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Purchasable:</small>
-                                        <small>
-                                            @if (gameItem.IsPurchasable.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsSellable.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Sellable:</small>
-                                        <small>
-                                            @if (gameItem.IsSellable.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsStackable.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Stackable:</small>
-                                        <small>
-                                            @if (gameItem.IsStackable.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.IsSupport.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Support:</small>
-                                        <small>
-                                            @if (gameItem.IsSupport.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                                @if (gameItem.ContributesToNetWorthWhenDropped.HasValue)
-                                    {
-                                    <p>
-                                        <small class="text-muted">Contributes to Net Worth when Dropped:</small>
-                                        <small>
-                                            @if (gameItem.ContributesToNetWorthWhenDropped.Value)
-                                                {
-                                                <span class="text-success">
-                                                    <i class="fa fa-check"></i>
-                                                    Yes
-                                                </span>
-                                                }
-                                                else
-                                                {
-                                                <span class="text-danger">
-                                                    <i class="fa fa-remove"></i>
-                                                    No
-                                                </span>
-                                                }
-                                        </small>
-                                    </p>
-                                    }
-                            </div>
-                            <div class="col-xs-6 text-uppercase">
-                                @foreach (var abilitySpecial in gameItem.Attributes)
-                                    {
-                                    <p>
-                                        <small class="text-muted">
-                                            @if (!String.IsNullOrEmpty(abilitySpecial.Name))
-                                                {
-                                                @abilitySpecial.Name
-                                                }
-                                                else
-                                                {
-                                                @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
-                                                }
-                                        </small>
-                                        <small>@abilitySpecial.Value</small>
-                                    </p>
-                                    }
-                                <p>
-                                    <small class="text-muted">Secret Shop:</small>
-                                    <small>
-                                        @if (gameItem.SecretShop)
-                                            {
-                                            <span class="text-success">
-                                                <i class="fa fa-check"></i>
-                                                Yes
-                                            </span>
-                                            }
-                                            else
-                                            {
-                                            <span class="text-danger">
-                                                <i class="fa fa-remove"></i>
-                                                No
-                                            </span>
-                                            }
-                                    </small>
-                                </p>
-                                <p>
-                                    <small class="text-muted">Side Shop:</small>
-                                    <small>
-                                        @if (gameItem.SideShop)
-                                            {
-                                            <span class="text-success">
-                                                <i class="fa fa-check"></i>
-                                                Yes
-                                            </span>
-                                            }
-                                            else
-                                            {
-                                            <span class="text-danger">
-                                                <i class="fa fa-remove"></i>
-                                                No
-                                            </span>
-                                            }
-                                    </small>
-                                </p>
-                                <p>
-                                    <small class="text-muted">Is Recipe:</small>
-                                    <small>
-                                        @if (gameItem.IsRecipe)
-                                            {
-                                            <span class="text-success">
-                                                <i class="fa fa-check"></i>
-                                                Yes
-                                            </span>
-                                            }
-                                            else
-                                            {
-                                            <span class="text-danger">
-                                                <i class="fa fa-remove"></i>
-                                                No
-                                            </span>
-                                            }
-                                    </small>
-                                </p>
-                            </div>
-                            @if (!String.IsNullOrEmpty(gameItem.Description))
                                 {
-                                <div class="col-xs-12">
-                                    <hr style="margin: 5px 0 5px 0" />
-                                    <p>
-                                        <small class="text-muted">
-                                            @gameItem.Description
-                                        </small>
-                                    </p>
-                                </div>
+                                    <tr>
+                                        <td>Initial Charges</td>
+                                        <td>@gameItem.InitialCharges.Value</td>
+                                    </tr>
                                 }
-                        </div>
+                                @if (gameItem.DisplayCharges.HasValue)
+                                {
+                                    <tr>
+                                        <td>Display Charges</td>
+                                        <td>@gameItem.DisplayCharges.Value</td>
+                                    </tr>
+                                }
+                                @if (gameItem.StockInitial.HasValue)
+                                {
+                                    <tr>
+                                        <td>Initial Stock</td>
+                                        <td>@gameItem.StockInitial.Value</td>
+                                    </tr>
+                                }
+                                @if (gameItem.StockMax.HasValue)
+                                {
+                                    <tr>
+                                        <td>Max Stock</td>
+                                        <td>@gameItem.StockMax.Value</td>
+                                    </tr>
+                                }
+                                @if (gameItem.StockTime.HasValue)
+                                {
+                                    <tr>
+                                        <td>Stock Time</td>
+                                        <td>@gameItem.StockTime.Value</td>
+                                    </tr>
+                                }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Alertable", Value = gameItem.IsAlertable }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Droppable", Value = gameItem.IsDroppable }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Killable", Value = gameItem.IsKillable }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Permanent", Value = gameItem.IsPermanent }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Purchasable", Value = gameItem.IsPurchasable }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Sellable", Value = gameItem.IsSellable }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Stackable", Value = gameItem.IsStackable }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Contributes to Net Worth", Value = gameItem.ContributesToNetWorthWhenDropped }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Secret Shop", Value = gameItem.SecretShop }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Side Shop", Value = gameItem.SideShop }); }
+                                @{Html.RenderPartial("_BooleanYesNoPartial", new DotaDb.ViewModels.GameItemNullableBoolAttributeViewModel() { Name = "Recipe", Value = gameItem.IsRecipe }); }
+
+                                @foreach (var abilitySpecial in gameItem.Attributes)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
+                                            {
+                                                @abilitySpecial.Name
+                                            }
+                                            else
+                                            {
+                                                @String.Format("{0}", abilitySpecial.RawName.Replace("_", " "))
+                                            }
+                                        </td>
+                                        <td>@abilitySpecial.Value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @if (!String.IsNullOrWhiteSpace(gameItem.Description))
+                        {
+                            <div class="alert alert-info">
+                                <small>@gameItem.Description</small>
+                            </div>
+                        }
                     </div>
                 </div>
-            </div>
             }
         </div>
     </div>
