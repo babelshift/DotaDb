@@ -34,6 +34,9 @@ namespace DotaDb.Controllers
                     RadiantSeriesWins = x.RadiantSeriesWins,
                     DireSeriesWins = x.DireSeriesWins,
                     SpectatorCount = x.SpectatorCount,
+                    DireTeamLogo = x.DireTeamLogo,
+                    LeagueTier = x.LeagueTier,
+                    RadiantTeamLogo = x.RadiantTeamLogo,
                     DirePlayers = x.Players
                         .Where(y => y.Team == 1)
                         .Select(y => new LiveLeagueGamePlayerViewModel()

@@ -9,6 +9,7 @@ namespace DotaDb.ViewModels
     {
         public ulong MatchId { get; set; }
         public string LeagueName { get; set; }
+        public string LeagueTier { get; set; }
         public string RadiantTeamName { get; set; }
         public string DireTeamName { get; set; }
         public string LeagueLogoPath { get; set; }
@@ -19,6 +20,8 @@ namespace DotaDb.ViewModels
         public uint DireSeriesWins { get; set; }
         public uint RadiantKillCount { get; set; }
         public uint DireKillCount { get; set; }
+        public string RadiantTeamLogo { get; set; }
+        public string DireTeamLogo { get; set; }
 
         public uint RadiantTotalWorth
         {

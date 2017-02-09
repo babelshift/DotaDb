@@ -32,97 +32,92 @@
     </div>
 </div>
 <div class="panel panel-default">
-    <div class="list-group live-league-game-list">
-        @foreach (var game in Model)
-        {
-            <a href="@Url.Action("live", "matches", new { id = game.MatchId })" class="list-group-item">
-                <div class="row">
-                    <div class="col-sm-6 col-md-5">
-                        <div class="media">
-                            <div class="media-left">
-                                <div class="thumbnail league-logo">
-                                    <img class="media-object" src="@game.LeagueLogoPath" alt="...">
-                                </div>
-                            </div>
-                            <div class="media-body">
-                                <h3 class="media-heading">@game.LeagueName</h3>
-                                <h4 class="teams"><span class="text-success">@game.RadiantTeamName</span> vs. <span class="text-danger">@game.DireTeamName</span></h4>
-                                <p class="stats">
-                                    <i class="fa fa-clock-o fa-fw"></i>
-                                    <span class="text-muted text-uppercase">Elapsed:</span> @game.ElapsedTime
-                                    <br />
-                                    <i class="fa fa-desktop fa-fw"></i>
-                                    <span class="text-muted text-uppercase">Spectators:</span> @game.SpectatorCount
-                                    <br />
-                                    <i class="fa fa-list-alt fa-fw"></i>
-                                    <span class="text-muted text-uppercase">Best of:</span> @game.BestOf
-                                    <br />
-                                    <i class="fa fa-trophy fa-fw"></i>
-                                    <span class="text-muted text-uppercase">Series:</span> @String.Format("{0} - {1}", game.RadiantSeriesWins, game.DireSeriesWins)
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <h3 style="margin: 0 0 5px 0" class="text-success">@game.RadiantKillCount</h3>
-                                @foreach (var player in game.RadiantPlayers)
-                                {
-                                    if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
-                                    {
-                                        <img src="@player.MinimapIconFilePath" width="24" height="24" title="@player.HeroName" />
-                                    }
-                                    @player.PlayerName
-                                    <br />
-                                }
-                            </div>
-                            <div class="col-xs-6">
-                                <h3 style="margin: 0 0 5px 0" class="text-danger">@game.DireKillCount</h3>
-                                @foreach (var player in game.DirePlayers)
-                                {
-                                    if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
-                                    {
-                                        <img src="@player.MinimapIconFilePath" width="24" height="24" title="@player.HeroName" />
-                                    }
-                                    @player.PlayerName
-                                    <br />
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8 col-sm-offset-2 col-md-3 col-md-offset-0">
-                        <h5 style="margin: 5px 0" class="text-uppercase text-muted">
-                            Total Worth:
-                        </h5>
-                        <div class="progress" style="margin-bottom: 5px">
-                            <div class="progress-bar progress-bar-success" style="width: @game.RadiantTotalWorthPercent%">
-                                <span class="sr-only">@String.Format("{0}%", game.RadiantTotalWorthPercent)</span>
-                                @game.RadiantTotalWorth.ToString("N0")
-                            </div>
-                            <div class="progress-bar progress-bar-danger" style="width: @game.DireTotalWorthPercent%">
-                                <span class="sr-only">@String.Format("{0}%", game.DireTotalWorthPercent)</span>
-                                @game.DireTotalWorth.ToString("N0")
-                            </div>
-                        </div>
-                        <h5 style="margin: 5px 0" class="text-uppercase text-muted">
-                            Total XP:
-                        </h5>
-                        <div class="progress" style="margin-bottom: 5px">
-                            <div class="progress-bar progress-bar-success" style="width: @game.RadiantTotalExperiencePercent%">
-                                <span class="sr-only">@String.Format("{0}%", game.RadiantTotalExperiencePercent)</span>
-                                @game.RadiantTotalExperience.ToString("N0")
-                            </div>
-                            <div class="progress-bar progress-bar-danger" style="width: @game.DireTotalExperiencePercent%">
-                                <span class="sr-only">@String.Format("{0}%", game.DireTotalExperiencePercent)</span>
-                                @game.DireTotalExperience.ToString("N0")
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        }
-    </div>
+    <table class="table table-condensed table-striped live-league-game-list">
+        <thead>
+            <tr>
+                <th colspan="2">League</th>
+                <th>Match</th>
+                <th>Radiant</th>
+                <th>Dire</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!String.IsNullOrWhiteSpace(game.LeagueLogoPath))
+                        {
+                            <img class="media-object" src="@game.LeagueLogoPath" alt="@game.LeagueName" width="75">
+                        }
+                        else
+                        {
+                            <img class="media-object" src="http://placehold.it/75x50" />
+                        }
+                    </td>
+                    <td style="vertical-align: middle">
+                        <h4 style="margin-top: 0; margin-bottom: 5px">
+                            @if (!String.IsNullOrWhiteSpace(game.LeagueName))
+                            {
+                                @game.LeagueName
+                            }
+                            else
+                            {
+                                @:Unknown
+                            }
+                        </h4>
+                        @if (!String.IsNullOrWhiteSpace(@game.LeagueTier))
+                        {
+                            <small>@game.LeagueTier</small>
+                        }
+                    </td>
+                    <td style="vertical-align: middle">
+                        <a href="@Url.Action("live", "matches", new { id = game.MatchId })">@game.MatchId</a>
+                        <br />
+                        <small>@game.SpectatorCount spectators</small>
+                    </td>
+                    <td>
+                        <h4 class="text-success" style="margin-top: 0; margin-bottom: 5px">
+                            @game.RadiantTeamName
+                            <small>@game.RadiantKillCount kills</small>
+                        </h4>
+                        @foreach (var player in game.RadiantPlayers)
+                        {
+                            if (!String.IsNullOrWhiteSpace(player.MinimapIconFilePath))
+                            {
+                                <img src="@player.MinimapIconFilePath" title="@player.HeroName" width="28" />
+                            }
+                            else
+                            {
+                                <img src="http://placehold.it/32x32" title="Unknown" />
+                            }
+                        }
+                    </td>
+                    <td>
+                        <h4 class="text-danger" style="margin-top: 0; margin-bottom: 5px">
+                            @game.DireTeamName
+                            <small>@game.DireKillCount kills</small>
+                        </h4>
+                        @foreach (var player in game.DirePlayers)
+                        {
+                            if (!String.IsNullOrWhiteSpace(player.MinimapIconFilePath))
+                            {
+                                <img src="@player.MinimapIconFilePath" title="@player.HeroName" width="28" />
+                            }
+                            else
+                            {
+                                <img src="http://placehold.it/32x32" title="Unknown" />
+                            }
+                        }
+                    </td>
+                    <td style="vertical-align: middle">
+                        <span class="label label-default" style="font-size: 12px; font-weight: 300">@game.ElapsedTime</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 @if (Model.PageCount > 1)
 {
@@ -139,9 +134,9 @@
                  data-ad-client="ca-pub-1823005717277864"
                  data-ad-slot="9979983033"
                  data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
         }
         else
         {
