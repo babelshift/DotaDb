@@ -516,3 +516,9 @@ textarea {
     font-size: 11px; 
     width: 52px;
 }
+
+.live-league-game-ban-image { 
+    filter: gray; /* IE6-9 */
+    filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}

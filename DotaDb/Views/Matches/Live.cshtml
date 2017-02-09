@@ -154,7 +154,7 @@
                             var hero = Model.RadiantBannedHeroes[i];
                             <div style="display: inline-block; margin-right: 0px;">
                                 <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
-                                    <img src="@hero.AvatarImagePath" width="52" />
+                                    <img src="@hero.AvatarImagePath" width="52" class="live-league-game-ban-image" />
                                 </a>
                                 <br />
                                 <div class="text-uppercase text-center live-league-game-pick-ban-box">
@@ -215,7 +215,7 @@
                             var hero = Model.DireBannedHeroes[i];
                             <div style="display: inline-block; margin-right: 0px;">
                                 <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
-                                    <img src="@hero.AvatarImagePath" width="52" />
+                                    <img src="@hero.AvatarImagePath" width="52" class="live-league-game-ban-image" />
                                 </a>
                                 <br />
                                 <div class="text-uppercase text-center live-league-game-pick-ban-box">
