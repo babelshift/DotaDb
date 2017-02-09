@@ -1,18 +1,26 @@
 ﻿@model DotaDb.ViewModels.LiveLeagueGamePlayerViewModel
 
 <td>
-    <img src="@Model.MinimapIconFilePath" width="24" height="24" />
+
+    <a href="@Url.Action("hero", "heroes", new { id = Model.HeroId })" title="@Model.HeroName">
+        <img src="@Model.HeroAvatarFilePath" width="50" />
+    </a>
     @Model.PlayerName
 </td>
-<td>@Model.HeroName</td>
 <td>@Model.Level</td>
-<td>@Model.NetWorth</td>
-<td>@Model.Gold</td>
-<td>@Model.XP</td>
-<td>@Model.KillCount</td>
+<td class="text-warning"><strong>@Model.NetWorthDisplay</strong></td>
+<td>@Model.GoldDisplay</td>
+<td>@Model.XPDisplay</td>
+<td class="text-info"><strong>@Model.KillCount</strong></td>
 <td>@Model.DeathCount</td>
-<td>@Model.AssistCount</td>
+<td class="text-info"><strong>@Model.AssistCount</strong></td>
 <td>@Model.GoldPerMinute</td>
 <td>@Model.XpPerMinute</td>
 <td>@Model.LastHits</td>
 <td>@Model.Denies</td>
+<td>
+    @for (int i = 0; i < Model.Items.Count; i++)
+    {
+        @Html.Partial("_PlayerItemIconPartial", Model.Items[i], new ViewDataDictionary())
+    }
+</td>

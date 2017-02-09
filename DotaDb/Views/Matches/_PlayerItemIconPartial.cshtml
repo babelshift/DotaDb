@@ -2,9 +2,9 @@
 
 @if (Model != null)
 {
-    <img src="@Model.IconPath" title="@Model.Name" />
+    <img src="@Model.IconPath" title="@Model.Name" width="32" />
 }
 else
 {
-    <img src="@Url.Content("~/Content/icons/items/base_lg.png")" title="Empty or unknown" />
+    <img src="@Url.Content("~/Content/icons/items/base_lg.png")" title="Empty or unknown" width="32" />
 }
