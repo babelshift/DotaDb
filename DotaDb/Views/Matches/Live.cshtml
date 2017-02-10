@@ -10,430 +10,299 @@
 
 <div class="container">
     <div class="live-league-game" style="margin-top: 15px">
-        @*<div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    <ol class="breadcrumb">
-                        <li><a href="@Url.Action("index", "matches")">Matches</a></li>
-                        <li><a href="@Url.Action("index", "matches")">Live League Games</a></li>
-                        <li class="active">ID: @Model.MatchId</li>
-                    </ol>
-                </div>
-            </div>*@
+
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-xs-5 col-sm-6 col-md-3">
-                                <h4 class="league-name">@Model.LeagueName</h4>
-                                <div class="thumbnail league-logo">
-                                    <img src="@Model.LeagueLogoPath" class="shadow" />
-                                </div>
-                                <p class="text-uppercase league-tier">
-                                    <i class="fa fa-list-alt fa-fw"></i>
-                                    <span class="text-muted">Tier:</span>
-                                    @Model.LeagueTier
-                                </p>
-                                <p class="text-uppercase league-location">
-                                    <i class="fa fa-globe fa-fw"></i>
-                                    <span class="text-muted">Location:</span>
-                                    Unknown
-                                </p>
+                            <div class="col-xs-3">
+                                <h3 class="live-league-game-match-id">Match @Model.MatchId</h3>
+                                <h4 class="text-success text-uppercase live-league-game-live-now">
+                                    <i class="fa fa-exclamation-circle"></i> Live Now
+                                </h4>
                             </div>
-                            <div class="col-xs-7 col-sm-6 text-right text-uppercase visible-xs visible-sm">
-                                <p class="no-margin">
-                                    <span class="text-muted">Lobby ID:</span>
-                                    @Model.LobbyId
-                                </p>
-                                <p class="no-margin">
-                                    <span class="text-muted">Match ID:</span>
-                                    @Model.MatchId
-                                </p>
-                                <p class="no-margin">
-                                    <span class="text-muted">Stream Delay:</span>
-                                    <span class="text-lowercase">@Model.StreamDelay</span>
-                                </p>
-                                <p class="no-margin">
-                                    <i class="fa fa-ticket fa-fw"></i>
-                                    <span class="text-muted">Game #:</span>
-                                    @Model.GameNumber
-                                </p>
-                                <p class="no-margin">
-                                    <span class="text-muted">Series:</span>
-                                    @String.Format("{0} (radiant) - {1} (dire)", Model.RadiantSeriesWins, Model.DireSeriesWins) (Best of @Model.BestOf)
-                                </p>
-                                <p class="no-margin">
-                                    <i class="fa fa-clock-o fa-fw"></i>
-                                    <span class="text-muted">
-                                        Started:
-                                    </span>
-                                    @Model.TimeStarted.ToString("dd MMM yyyy HH:mm:ss")
-                                </p>
-                                <p class="no-margin">
-                                    <i class="fa fa-desktop fa-fw"></i>
-                                    <span class="text-muted">
-                                        Spectators:
-                                    </span>
-                                    @Model.SpectatorCount
-                                </p>
-                            </div>
-                            <div class="col-sm-12 col-md-6 text-uppercase picks-and-bans">
-                                <hr class="visible-xs visible-sm" style="margin-top: 10px; margin-bottom: 10px" />
-                                <div class="row">
-                                    <div class="col-xs-7 text-uppercase text-muted">
-                                        Radiant Picks
-                                    </div>
-                                    <div class="col-xs-5 text-uppercase text-muted">
-                                        Dire Picks
-                                    </div>
+                            <div class="col-xs-9">
+                                <div class="pull-right">
+                                    <dl class="live-league-game-header-item">
+                                        <dt>@Model.StreamDelay</dt>
+                                        <dd class="text-uppercase">Stream Delay</dd>
+                                    </dl>
+                                    <dl class="live-league-game-header-item">
+                                        <dt>@Model.SpectatorCount.ToString("#,#")</dt>
+                                        <dd class="text-uppercase">Watching</dd>
+                                    </dl>
+                                    <dl class="live-league-game-header-item">
+                                        <dt>@Model.TimeStarted.ToString("MMM dd, HH:mm") UTC</dt>
+                                        <dd class="text-uppercase">Match Started</dd>
+                                    </dl>
+                                    <dl style="display: inline-block;">
+                                        <dt>@Model.ElapsedTimeDisplay</dt>
+                                        <dd class="text-uppercase">Duration</dd>
+                                    </dl>
                                 </div>
-                                <div class="row">
-                                    @for (int i = 0; i < Model.RadiantPickedHeroes.Count; i++)
-                                    {
-                                        var hero = Model.RadiantPickedHeroes[i];
-                                        <div class="col-xs-1">
-                                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
-                                                <div class="thumbnail radiant">
-                                                    <img src="@hero.AvatarImagePath" />
-                                                </div>
-                                            </a>
-                                        </div>
-                                    }
-                                    @for (int i = 0; i < 5 - Model.RadiantPickedHeroes.Count; i++)
-                                    {
-                                        <div class="col-xs-1"></div>
-                                    }
-                                    <div class="col-xs-2"></div>
-                                    @foreach (var hero in Model.DirePickedHeroes)
-                                    {
-                                        <div class="col-xs-1">
-                                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
-                                                <div class="thumbnail dire">
-                                                    <img src="@hero.AvatarImagePath" />
-                                                </div>
-                                            </a>
-                                        </div>
-                                    }
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-7 text-uppercase text-muted">
-                                        Radiant Bans
-                                    </div>
-                                    <div class="col-xs-5 text-uppercase text-muted">
-                                        Dire Bans
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    @for (int i = 0; i < Model.RadiantBannedHeroes.Count; i++)
-                                    {
-                                        var hero = Model.RadiantBannedHeroes[i];
-                                        <div class="col-xs-1 text-right">
-                                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
-                                                <div class="thumbnail radiant">
-                                                    <img src="@hero.AvatarImagePath" />
-                                                </div>
-                                                <i class="fa fa-ban fa-2x text-danger ban"></i>
-                                            </a>
-                                        </div>
-                                    }
-                                    @for (int i = 0; i < 5 - Model.RadiantBannedHeroes.Count; i++)
-                                    {
-                                        <div class="col-xs-1"></div>
-                                    }
-                                    <div class="col-xs-2"></div>
-                                    @foreach (var hero in Model.DireBannedHeroes)
-                                    {
-                                        <div class="col-xs-1">
-                                            <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })">
-                                                <div class="thumbnail dire">
-                                                    <img src="@hero.AvatarImagePath" />
-                                                </div>
-                                                <i class="fa fa-ban fa-2x text-danger ban"></i>
-                                            </a>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                            <div class="col-md-3 text-right text-uppercase visible-md visible-lg">
-                                <p class="no-margin">
-                                    <span class="text-muted">Lobby ID:</span>
-                                    @Model.LobbyId
-                                </p>
-                                <p class="no-margin">
-                                    <span class="text-muted">Match ID:</span>
-                                    @Model.MatchId
-                                </p>
-                                <p class="no-margin">
-                                    <span class="text-muted">Stream Delay:</span>
-                                    <span class="text-lowercase">@Model.StreamDelay</span>
-                                </p>
-                                <p class="no-margin">
-                                    <i class="fa fa-ticket fa-fw"></i>
-                                    <span class="text-muted">Game #:</span>
-                                    @Model.GameNumber
-                                </p>
-                                <p class="no-margin">
-                                    <span class="text-muted">Series:</span>
-                                    @String.Format("{0} (radiant) - {1} (dire)", Model.RadiantSeriesWins, Model.DireSeriesWins) (Best of @Model.BestOf)
-                                </p>
-                                <p class="no-margin">
-                                    <i class="fa fa-clock-o fa-fw"></i>
-                                    <span class="text-muted">
-                                        Started:
-                                    </span>
-                                    @Model.TimeStarted.ToString("dd MMM yyyy HH:mm:ss")
-                                </p>
-                                <p class="no-margin">
-                                    <i class="fa fa-desktop fa-fw"></i>
-                                    <span class="text-muted">
-                                        Spectators:
-                                    </span>
-                                    @Model.SpectatorCount
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-sm-4">
-                                <h3 class="team-name">@Model.RadiantTeamName</h3>
-                                <h2 class="no-margin">@Model.RadiantKillCount <small class="text-uppercase">kills</small></h2>
-                            </div>
-                            <div class="col-sm-4 text-center">
-                                <h3 class="no-margin" style="font-weight: 200">
-                                    &mdash; vs &mdash;
-                                </h3>
-                            </div>
-                            <div class="col-sm-4 text-right">
-                                <h3 class="team-name">@Model.DireTeamName</h3>
-                                <h2 class="no-margin">@Model.DireKillCount <small class="text-uppercase">kills</small></h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        @foreach (var player in Model.RadiantPlayers)
-                        {
-                            <div class="well well-sm player-well">
-                                @if (!player.IsAlive)
-                                {
-                                    <div class="death text-danger">
-                                        <span>Respawn in @player.RespawnTimerSeconds sec</span>
-                                    </div>
-                                }
-                                <h4 class="media-heading no-margin">
-                                    @player.PlayerName
-                                    &mdash;
-                                    <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
-                                        <small class="text-uppercase text-muted">@player.HeroName</small>
-                                    </a>
-                                </h4>
-                                <div class="media player-details">
+                            <div class="col-xs-8">
+                                <div class="media">
                                     <div class="media-left">
-                                        @Html.Partial("_PlayerHeroAvatarPartial", player)
+                                        <img src="@Model.LeagueLogoPath" width="125" alt="@Model.LeagueName" />
                                     </div>
                                     <div class="media-body">
-                                        <div class="row">
-                                            <div class="col-xs-5">
-                                                @Html.Partial("_PlayerKillDeathAssistPartial", player)
-                                            </div>
-                                            <div class="col-xs-7 live-game-items">
-                                                @for (int i = 0; i < player.Items.Count; i++)
-                                                {
-                                                    // after the third item we need to clear because the items should be arranged like so:
-                                                    // [item1][item2][item3]
-                                                    // [item4][item5][item6]
-                                                    if (i == 3)
-                                                    {
-                                                        <div class="clearfix"></div>
-                                                    }
-                                                    <div class="thumbnail pull-right">
-                                                        @Html.Partial("_PlayerItemIconPartial", player.Items[i], new ViewDataDictionary())
-                                                    </div>
-                                                }
-                                            </div>
-                                        </div>
+                                        <h4 class="media-heading text-info"><strong>@Model.LeagueName</strong></h4>
+                                        <span class="text-uppercase">@Model.LeagueTier</span>
                                     </div>
-                                </div>
-                                <hr style="margin: 5px 0" />
-                                <div class="row text-center">
-                                    @Html.Partial("_PlayerStatsPartial", player)
                                 </div>
                             </div>
-                        }
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <div class="center-block minimap-container">
-                            <img src="~/Content/dota_minimap_512.jpg" style="width: 100%" />
-                            @foreach (var player in Model.DirePlayers)
-                            {
-                                if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
-                                {
-                                    <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                    <div class="minimap-icon-circle large dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
-                                }
-                            }
-                            @foreach (var player in Model.RadiantPlayers)
-                            {
-                                if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
-                                {
-                                    <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
-                                    <div class="minimap-icon-circle large radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
-                                }
-                            }
-                            @Html.Partial("_RadiantTowerMinimapIconsPartial", Model.RadiantTowerStates, new ViewDataDictionary())
-                            @Html.Partial("_DireTowerMinimapIconsPartial", Model.DireTowerStates, new ViewDataDictionary())
-                        </div>
-                        <div class="panel panel-default" style="margin-top: 15px;">
-                            <div class="panel-body">
-                                <div class="text-center">
-                                    <h5 class="text-uppercase text-muted" style="margin-top: 0">Elapsed: <strong>@Model.ElapsedTimeDisplay</strong></h5>
-                                    <h5 class="text-uppercase roshan-status">
-                                        <span class="text-muted">Roshan:</span>
-                                        @if (Model.IsRoshanAlive)
-                                        {
-                                            <span class="text-success">
-                                                <i class="fa fa-check"></i>
-                                                Alive
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-danger">
-                                                <i class="fa fa-remove"></i>
-                                                Dead
-                                                <span class="text-lowercase">(@Model.RoshanRespawnTimer)</span>
-                                            </span>
-                                        }
-                                    </h5>
-                                </div>
-                                <hr style="margin: 5px 0" />
-                                <h5 class="text-uppercase text-muted no-margin">
-                                    Total Worth:
-                                </h5>
-                                <div class="progress" style="margin-bottom: 5px">
-                                    <div class="progress-bar progress-bar-success" style="width: @Model.RadiantTotalWorthPercent%">
-                                        <span class="sr-only">@String.Format("{0}%", Model.RadiantTotalWorthPercent)</span>
-                                        @Model.RadiantTotalWorth.ToString("N0")
-                                    </div>
-                                    <div class="progress-bar progress-bar-danger" style="width: @Model.DireTotalWorthPercent%">
-                                        <span class="sr-only">@String.Format("{0}%", Model.DireTotalWorthPercent)</span>
-                                        @Model.DireTotalWorth.ToString("N0")
-                                    </div>
-                                </div>
-                                <h5 class="text-uppercase text-muted no-margin">
-                                    Total XP:
-                                </h5>
-                                <div class="progress" style="margin-bottom: 0">
-                                    <div class="progress-bar progress-bar-success" style="width: @Model.RadiantTotalExperiencePercent%">
-                                        <span class="sr-only">@String.Format("{0}%", Model.RadiantTotalExperiencePercent)</span>
-                                        @Model.RadiantTotalExperience.ToString("N0")
-                                    </div>
-                                    <div class="progress-bar progress-bar-danger" style="width: @Model.DireTotalExperiencePercent%">
-                                        <span class="sr-only">@String.Format("{0}%", Model.DireTotalExperiencePercent)</span>
-                                        @Model.DireTotalExperience.ToString("N0")
-                                    </div>
+                            <div class="col-xs-4">
+                                <div class="pull-right">
+                                    <dl class="dl-horizontal live-league-game-series-details">
+                                        <dt class="text-info live-league-game-series-details-list-item">
+                                            Best Of
+                                        </dt>
+                                        <dd class="text-info live-league-game-series-details-list-item">
+                                            @Model.BestOf
+                                        </dd>
+                                        <dt class="text-info live-league-game-series-details-list-item">
+                                            Game #
+                                        </dt>
+                                        <dd class="text-info live-league-game-series-details-list-item">
+                                            @Model.GameNumber
+                                        </dd>
+                                        <dt>
+                                            @Model.RadiantTeamName
+                                            (Radiant)
+                                        </dt>
+                                        <dd>
+                                            <small class="text-muted">@Model.RadiantSeriesWins</small>
+                                        </dd>
+                                        <dt>
+                                            @Model.DireTeamName
+                                            (Dire)
+                                        </dt>
+                                        <dd>
+                                            <small class="text-muted">@Model.DireSeriesWins</small>
+                                        </dd>
+                                    </dl>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 text-right">
-                        @foreach (var player in Model.DirePlayers)
-                        {
-                            <div class="well well-sm player-well">
-                                @if (!player.IsAlive)
-                                {
-                                    <div class="death text-danger">
-                                        <span>Respawn in @player.RespawnTimerSeconds sec</span>
-                                    </div>
-                                }
-                                <h4 class="media-heading no-margin">
-                                    @player.PlayerName
-                                    &mdash;
-                                    <a href="@Url.Action("hero", "heroes", new { id = player.HeroId })">
-                                        <small class="text-uppercase text-muted">@player.HeroName</small>
-                                    </a>
-                                </h4>
-                                <div class="media player-details">
-                                    <div class="media-body">
-                                        <div class="row">
-                                            <div class="col-xs-7 live-game-items">
-                                                @for (int i = 0; i < player.Items.Count; i++)
-                                                {
-                                                    // after the third item we need to clear because the items should be arranged like so:
-                                                    // [item1][item2][item3]
-                                                    // [item4][item5][item6]
-                                                    if (i == 3)
-                                                    {
-                                                        <div class="clearfix"></div>
-                                                    }
-                                                    <div class="thumbnail pull-left">
-                                                        @Html.Partial("_PlayerItemIconPartial", player.Items[i], new ViewDataDictionary())
-                                                    </div>
-                                                }
-                                            </div>
-                                            <div class="col-xs-5">
-                                                @Html.Partial("_PlayerKillDeathAssistPartial", player)
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="media-right">
-                                        @Html.Partial("_PlayerHeroAvatarPartial", player)
-                                    </div>
-                                </div>
-                                <hr style="margin: 5px 0" />
-                                <div class="row text-center">
-                                    @Html.Partial("_PlayerStatsPartial", player)
-                                </div>
-                            </div>
-                        }
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <table id="table-stats" class="table table-condensed" data-toggle="table">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="text-uppercase panel-title">@Model.RadiantTeamName &middot; @Model.RadiantKillCount</h3>
+                    </div>
+                    <table id="table-radiant-stats" class="table table-condensed table-striped" data-toggle="table">
                         <thead>
                             <tr>
                                 <th>Player</th>
-                                <th>Hero</th>
                                 <th data-sortable="true">Level</th>
                                 <th data-sortable="true">Worth</th>
                                 <th data-sortable="true">Gold</th>
                                 <th data-sortable="true">XP</th>
-                                <th data-sortable="true">Kills</th>
-                                <th data-sortable="true">Deaths</th>
-                                <th data-sortable="true">Assists</th>
-                                <th data-sortable="true">Gold / Min</th>
-                                <th data-sortable="true">XP / Min</th>
-                                <th data-sortable="true">Last Hits</th>
-                                <th data-sortable="true">Denies</th>
+                                <th data-sortable="true">K</th>
+                                <th data-sortable="true">D</th>
+                                <th data-sortable="true">A</th>
+                                <th data-sortable="true">GPM</th>
+                                <th data-sortable="true">XPM</th>
+                                <th data-sortable="true">LH</th>
+                                <th data-sortable="true">DN</th>
+                                <th data-sortable="false">Items</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var player in Model.RadiantPlayers)
                             {
-                                <tr class="success">
-                                    @Html.Partial("_PlayerDetailTableRowPartial", player)
-                                </tr>
-                            }
-                            @foreach (var player in Model.DirePlayers)
-                            {
-                                <tr class="danger">
+                                <tr>
                                     @Html.Partial("_PlayerDetailTableRowPartial", player)
                                 </tr>
                             }
                         </tbody>
                     </table>
+                    <div class="panel-footer">
+                        @for (int i = 0; i < Model.RadiantPickedHeroes.Count; i++)
+                        {
+                            var hero = Model.RadiantPickedHeroes[i];
+                            <div style="display: inline-block">
+                                <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
+                                    <img src="@hero.AvatarImagePath" width="52" />
+                                </a>
+                                <br />
+                                <div class="text-uppercase text-center live-league-game-pick-ban-box">
+                                    <i class="fa fa-check text-success"></i> Pick
+                                </div>
+                            </div>
+                        }
+                        @for (int i = 0; i < Model.RadiantBannedHeroes.Count; i++)
+                        {
+                            var hero = Model.RadiantBannedHeroes[i];
+                            <div style="display: inline-block; margin-right: 0px;">
+                                <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
+                                    <img src="@hero.AvatarImagePath" width="52" class="live-league-game-ban-image" />
+                                </a>
+                                <br />
+                                <div class="text-uppercase text-center live-league-game-pick-ban-box">
+                                    <i class="fa fa-remove text-danger"></i> Ban
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="text-uppercase panel-title">@Model.DireTeamName &middot; @Model.DireKillCount</h3>
+                    </div>
+                    <table id="table-dire-stats" class="table table-condensed table-striped" data-toggle="table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th data-sortable="true">Level</th>
+                                <th data-sortable="true">Worth</th>
+                                <th data-sortable="true">Gold</th>
+                                <th data-sortable="true">XP</th>
+                                <th data-sortable="true">K</th>
+                                <th data-sortable="true">D</th>
+                                <th data-sortable="true">A</th>
+                                <th data-sortable="true">GPM</th>
+                                <th data-sortable="true">XPM</th>
+                                <th data-sortable="true">LH</th>
+                                <th data-sortable="true">DN</th>
+                                <th data-sortable="false">Items</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var player in Model.DirePlayers)
+                            {
+                                <tr>
+                                    @Html.Partial("_PlayerDetailTableRowPartial", player)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="panel-footer">
+                        @for (int i = 0; i < Model.DirePickedHeroes.Count; i++)
+                        {
+                            var hero = Model.DirePickedHeroes[i];
+                            <div style="display: inline-block">
+                                <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
+                                    <img src="@hero.AvatarImagePath" width="52" />
+                                </a>
+                                <br />
+                                <div class="text-uppercase text-center live-league-game-pick-ban-box">
+                                    <i class="fa fa-check text-success"></i> Pick
+                                </div>
+                            </div>
+                        }
+                        @for (int i = 0; i < Model.DireBannedHeroes.Count; i++)
+                        {
+                            var hero = Model.DireBannedHeroes[i];
+                            <div style="display: inline-block; margin-right: 0px;">
+                                <a href="@Url.Action("hero", "heroes", new { id = hero.Id, heroName = hero.Url })" title="@hero.Name">
+                                    <img src="@hero.AvatarImagePath" width="52" class="live-league-game-ban-image" />
+                                </a>
+                                <br />
+                                <div class="text-uppercase text-center live-league-game-pick-ban-box">
+                                    <i class="fa fa-remove text-danger"></i> Ban
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2 text-center">
+            <div class="center-block minimap-container">
+                <img src="~/Content/dota_minimap_512.jpg" style="width: 100%" />
+                @foreach (var player in Model.DirePlayers)
+            {
+                if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
+                {
+                        <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                        <div class="minimap-icon-circle large dire" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                    }
+                }
+                @foreach (var player in Model.RadiantPlayers)
+            {
+                if (!String.IsNullOrEmpty(player.MinimapIconFilePath))
+                {
+                        <img src="@player.MinimapIconFilePath" class="minimap-icon" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%" />
+                        <div class="minimap-icon-circle large radiant" style="bottom: @(player.PositionYPercent)%; left: @(player.PositionXPercent)%"></div>
+                    }
+                }
+                @Html.Partial("_RadiantTowerMinimapIconsPartial", Model.RadiantTowerStates, new ViewDataDictionary())
+                @Html.Partial("_DireTowerMinimapIconsPartial", Model.DireTowerStates, new ViewDataDictionary())
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h5 class="text-uppercase text-muted" style="margin-top: 0">Duration: <strong>@Model.ElapsedTimeDisplay</strong></h5>
+                        <h5 class="text-uppercase roshan-status">
+                            <span class="text-muted">Roshan:</span>
+                            @if (Model.IsRoshanAlive)
+                            {
+                                <span class="text-success">
+                                    <i class="fa fa-check"></i>
+                                    Alive
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    <i class="fa fa-remove"></i>
+                                    Dead
+                                    <span class="text-lowercase">(@Model.RoshanRespawnTimer)</span>
+                                </span>
+                            }
+                        </h5>
+                    </div>
+                    <hr style="margin: 5px 0" />
+                    <h5 class="text-uppercase text-muted no-margin">
+                        Total Worth:
+                    </h5>
+                    <div class="progress" style="margin-bottom: 5px">
+                        <div class="progress-bar progress-bar-success" style="width: @Model.RadiantTotalWorthPercent%">
+                            <span class="sr-only">@String.Format("{0}%", Model.RadiantTotalWorthPercent)</span>
+                            @Model.RadiantTotalWorth.ToString("N0")
+                        </div>
+                        <div class="progress-bar progress-bar-danger" style="width: @Model.DireTotalWorthPercent%">
+                            <span class="sr-only">@String.Format("{0}%", Model.DireTotalWorthPercent)</span>
+                            @Model.DireTotalWorth.ToString("N0")
+                        </div>
+                    </div>
+                    <h5 class="text-uppercase text-muted no-margin">
+                        Total XP:
+                    </h5>
+                    <div class="progress" style="margin-bottom: 0">
+                        <div class="progress-bar progress-bar-success" style="width: @Model.RadiantTotalExperiencePercent%">
+                            <span class="sr-only">@String.Format("{0}%", Model.RadiantTotalExperiencePercent)</span>
+                            @Model.RadiantTotalExperience.ToString("N0")
+                        </div>
+                        <div class="progress-bar progress-bar-danger" style="width: @Model.DireTotalExperiencePercent%">
+                            <span class="sr-only">@String.Format("{0}%", Model.DireTotalExperiencePercent)</span>
+                            @Model.DireTotalExperience.ToString("N0")
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

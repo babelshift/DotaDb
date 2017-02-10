@@ -28,7 +28,17 @@ namespace DotaDb.ViewModels
         public ulong LobbyId { get; set; }
         public ulong MatchId { get; set; }
         public string StreamDelay { get; set; }
-        public DateTime TimeStarted { get { return DateTime.Now - TimeSpan.FromSeconds(ElapsedTime); } }
+        public DateTime TimeStarted { get { return DateTime.UtcNow - TimeSpan.FromSeconds(ElapsedTime); } }
+        public string TimeStartedAgo
+        {
+            get
+            {
+                var elapsedTime = TimeSpan.FromSeconds(ElapsedTime);
+                DateTimeOffset? timeStarted = new DateTimeOffset(DateTime.UtcNow - elapsedTime);
+                string timeStartedAgo = timeStarted.GetTimeAgo();
+                return timeStartedAgo;
+            }
+        }
 
         public uint RadiantTotalWorth
         {

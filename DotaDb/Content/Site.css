@@ -486,3 +486,39 @@ textarea {
 .table-column-ability-note-name {
     width: 10% !important;
 }
+
+.live-league-game-match-id {
+    margin-top: 0; 
+    margin-bottom: 5px;
+}
+
+.live-league-game-live-now {
+    margin-top: 0; 
+    margin-bottom: 0;
+}
+
+.live-league-game-header-item {
+    display: inline-block; 
+    margin-right: 10px;
+}
+
+.live-league-game-series-details {
+    margin-bottom: 0;
+}
+
+.live-league-game-series-details-list-item {
+    font-size: 16px;
+}
+
+.live-league-game-pick-ban-box {
+    background-color: #333; 
+    color: #fff; 
+    font-size: 11px; 
+    width: 52px;
+}
+
+.live-league-game-ban-image { 
+    filter: gray; /* IE6-9 */
+    filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}

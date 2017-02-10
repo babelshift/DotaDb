@@ -23,7 +23,21 @@ namespace DotaDb.ViewModels
         public string MinimapIconFilePath { get; set; }
         public IReadOnlyList<LiveLeagueGameItemViewModel> Items { get; set; }
         public uint NetWorth { get; set; }
+        public string NetWorthDisplay
+        {
+            get
+            {
+                return FormatNumber(NetWorth);
+            }
+        }
         public uint Gold { get; set; }
+        public string GoldDisplay
+        {
+            get
+            {
+                return FormatNumber(Gold);
+            }
+        }
         public uint Level { get; set; }
         public uint LastHits { get; set; }
         public uint Denies { get; set; }
@@ -40,8 +54,30 @@ namespace DotaDb.ViewModels
             }
         }
 
+        public string XPDisplay
+        {
+            get
+            {
+                return FormatNumber(XP);
+            }
+        }
+
         public uint RespawnTimerSeconds { get; set; }
         public TimeSpan RespawnTimer { get { return TimeSpan.FromSeconds(RespawnTimerSeconds); } }
         public bool IsAlive { get { return RespawnTimerSeconds <= 0; } }
+
+        private static string FormatNumber(uint num)
+        {
+            if (num >= 1000000)
+            {
+                return (num / 1000000D).ToString("0.#M");
+            }
+            if (num >= 1000)
+            {
+                return (num / 1000D).ToString("0.#k");
+            }
+
+            return num.ToString("#,0");
+        }
     }
 }
