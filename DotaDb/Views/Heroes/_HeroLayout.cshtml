@@ -8,33 +8,6 @@
     ViewBag.HeaderImageName = "bg8_fade.jpg";
     ViewBag.HeaderText = Model.Name;
 }
-@*<ol class="breadcrumb">
-        <li><a href="@Url.Action("index", "home")">Home</a></li>
-        <li><a href="@Url.Action("index", "heroes")">Heroes</a></li>
-        <li class="active">@Model.Name (@Model.ActiveTab)</li>
-    </ol>*@
-<div class="row" style="margin-bottom: 5px; margin-top: 5px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-            <!-- top hero detail (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="4717021832"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 0 auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -338,33 +311,3 @@
         </div>
     </div>
 </div>
-
-<div class="row" style="margin-bottom: 15px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-            <!-- bottom hero detail (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="6193755038"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 5px auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
-
-@section scripts {
-    @if (!HttpContext.Current.IsDebuggingEnabled)
-    {
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    }
-}

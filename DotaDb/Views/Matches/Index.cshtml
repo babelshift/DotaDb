@@ -9,28 +9,6 @@
     ViewBag.HeaderText = "Live League Games";
 }
 
-<div class="row" style="margin-top: 5px; margin-bottom: 5px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-            <!-- top matches (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="7026516636"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 0 auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
 <div class="panel panel-default">
     <table class="table table-condensed table-striped live-league-game-list">
         <thead>
@@ -122,35 +100,4 @@
 @if (Model.PageCount > 1)
 {
     @Html.PagedListPager(Model, page => Url.Action("index", new { page }))
-}
-
-<div class="row" style="margin-top: 15px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-            <!-- bottom matches (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="9979983033"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 5px auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
-
-
-@section scripts {
-    @if (!HttpContext.Current.IsDebuggingEnabled)
-    {
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    }
 }

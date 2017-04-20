@@ -7,38 +7,6 @@
     ViewBag.HeaderText = "Heroes (Table)";
 }
 
-@*<div class="row">
-        <div class="col-xs-12">
-            <ol class="breadcrumb">
-                <li><a href="@Url.Action("index", "home")">Home</a></li>
-                <li class="active">Heroes (Table)</li>
-            </ol>
-        </div>
-    </div>*@
-
-<div class="row" style="margin-top: 5px; margin-bottom: 5px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-        <!-- top heroes table (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="9101692236"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 0 auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
-
 <div class="panel panel-default">
     <div class="panel-body">
         <ul class="nav nav-pills">
@@ -108,34 +76,3 @@
         </tbody>
     </table>
 </div>
-
-<div class="row" style="margin-top: 15px">
-    <div class="col-md-8 col-md-offset-2">
-        @if (!HttpContext.Current.IsDebuggingEnabled)
-        {
-        <!-- bottom heroes table (dotadb) -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1823005717277864"
-                 data-ad-slot="1578425435"
-                 data-ad-format="auto"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-        }
-        else
-        {
-            <div style="width: 610px; margin: 5px auto;">
-                <img src="https://placehold.it/600x90" />
-            </div>
-        }
-    </div>
-</div>
-
-@section Scripts {
-    @if (!HttpContext.Current.IsDebuggingEnabled)
-    {
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    }
-    @Scripts.Render("~/bundles/bootstrap-table")
-}
