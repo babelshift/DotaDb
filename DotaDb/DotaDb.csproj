@@ -181,9 +181,8 @@
       <HintPath>..\..\DotaDbPackages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Steam.Models, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\DotaDbPackages\Steam.Models.3.0.1-ci-00027\lib\net45\Steam.Models.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Steam.Models, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\DotaDbPackages\Steam.Models.3.0.2\lib\net45\Steam.Models.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
