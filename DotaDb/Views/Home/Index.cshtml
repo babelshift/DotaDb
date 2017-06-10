@@ -92,23 +92,19 @@
             @foreach (var dotaBlogFeedItem in Model.DotaBlogFeedItems)
             {
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h2 style="margin: 0">@dotaBlogFeedItem.Title</h2>
-                        <h4 style="margin: 0" class="text-muted">
-                            @dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")
-                        </h4>
-                    </div>
                     <div class="panel-body">
-                        <div style="margin-left: -15px; margin-right: -15px">
-                            <img class="img-responsive center-block" src="@dotaBlogFeedItem.ImageUrl" />
-                        </div>
-                        <div style="margin-top: 15px">
-                            <p class="lead">@Html.Raw(dotaBlogFeedItem.Description)</p>
-                        </div>
-                    </div>
-                    <div class="panel-footer text-center text-uppercase">
-                        <a href="@dotaBlogFeedItem.Link">
-                            Read More <small><i class="fa fa-external-link"></i></small>
+                        <a href="@dotaBlogFeedItem.Link" class="news-item" style="background-image: url('@dotaBlogFeedItem.ImageUrl')">
+                            <span class="news-item-tint">
+                                <span class="news-item-info">
+                                    <h3 style="color: #eee;">@dotaBlogFeedItem.Title</h3>
+                                    <h4 style="color: #aaa;">
+                                        @dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")
+                                    </h4>
+                                    <h4 style="color: #aaa;">
+                                        @dotaBlogFeedItem.Description
+                                    </h4>
+                                </span>
+                            </span>
                         </a>
                     </div>
                 </div>
