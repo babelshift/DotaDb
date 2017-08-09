@@ -137,6 +137,11 @@ namespace DotaDb.Controllers
         {
             var hero = await db.GetHeroDetailsAsync(id);
 
+            if(hero == null || string.IsNullOrWhiteSpace(hero.Url))
+            {
+                return HttpNotFound();
+            }
+
             if (heroName != hero.Url.ToLower())
             {
                 return RedirectToAction("hero", new { id = id, heroName = hero.Url.ToLower() });
