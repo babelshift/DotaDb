@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -500,7 +501,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DotaDb.Data\DotaDb.Data.csproj">
+    <ProjectReference Include="..\DotaDb.Data\DotaDb.Data.csproj">
       <Project>{2cc96a61-66ec-4626-8c78-b9f8dd65bc30}</Project>
       <Name>DotaDb.Data</Name>
     </ProjectReference>
