@@ -1,15 +1,92 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" style="padding: 5px" href="#">
+        <span><img src="/images/dotadb-45x45.png" /></span>
+        <span style="text-transform: uppercase; font-size: 24px">
+            <strong style="font-weight: 500; color: #444">Dota</strong><span style="color: #8E1A1C; font-weight: 200">Database</span>
+        </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarColor03">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Items
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">In Game</a>
+                    <a class="dropdown-item" href="#">Cosmetics</a>
+                    <a class="dropdown-item" href="#">Sets</a>
+                    <a class="dropdown-item" href="#">Autographs</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Matches</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Leagues</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Map</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Files</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="body-content">
+    @Body
 </div>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </div>
-
-    <div class="content px-4">
-        @Body
-    </div>
+<div class="footer">
+    <footer>
+        <div class="footer-bottom text-center-xs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 style="margin: 0 0 5px 0">
+                            <a href="" class="link-white">
+                                <img src="/images/dotadb-32x32.png" />
+                            </a>
+                            <span itemprop="name" class="hidden-xs">Dota Database</span>
+                            <small>2020,</small>
+                            <small>v1.0</small>
+                        </h4>
+                        <p>
+                            <small>
+                                This site is not affiliated with Valve, Steam, or any of their partners. All copyrights reserved to their respective owners.
+                                All images, content, and files related to Dota 2 are owned by Valve.
+                            </small>
+                        </p>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-right text-center-xs">
+                            <p><small>Created by <a href="https://github.com/babelshift" class="link-white">babelshift</a></small></p>
+                            <a href="mailto:info@dotadatabase.net" class="btn btn-default btn-sm" title="Email Us">
+                                <i class="fa fa-envelope fa-fw fa-lg"></i>
+                            </a>
+                            <a href="http://twitter.com/DotaDatabase" class="btn btn-default btn-sm" title="Follow us on Twitter">
+                                <i class="fa fa-twitter fa-fw fa-lg"></i>
+                            </a>
+                            <a href="https://www.facebook.com/Dota-Database-1571638349826115/" class="btn btn-default btn-sm" title="Like us on Facebook">
+                                <i class="fa fa-facebook-official fa-fw fa-lg"></i>
+                            </a>
+                            <a href="http://github.com/babelshift" class="btn btn-default btn-sm" title="Report a Problem on GitHub">
+                                <i class="fa fa-github fa-fw fa-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
