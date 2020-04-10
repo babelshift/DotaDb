@@ -1,11 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-app {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -32,8 +26,8 @@ html {
 }
 
 body {
-    margin-top: 54px;
-    padding-bottom: 200px;
+    margin-top: 70px;
+    margin-bottom: 132px;
 }
 
 .full-screen-bg-tint {
@@ -63,8 +57,10 @@ body {
 }
 
 .footer {
+    position: absolute;
     bottom: 0;
     width: 100%;
+    height: 132px; /* Set the fixed height of the footer here */
 }
 
     .footer p,
@@ -78,6 +74,10 @@ body {
 
 .footer-bottom small {
     color: #999;
+}
+
+.footer a:hover {
+    text-decoration: underline;
 }
 
 .footer hr,
@@ -101,10 +101,6 @@ body {
         margin-bottom: 5px;
         line-height: 15px;
     }
-
-.footer a:hover {
-    text-decoration: underline;
-}
 
 .news-item {
     display: block;

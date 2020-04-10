@@ -1,41 +1,41 @@
 ﻿@page "/"
 
-<div class="container-fluid" style="padding-left: 0; padding-right: 0">
+<div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
         <div class="full-screen-bg-tint">
-            <div class="row text-center home-stats" style="padding: 30px">
+            <div class="row text-center home-stats no-gutters justify-content-center" style="padding: 30px">
                 <div class="col-sm-8 col-sm-offset-2">
                     <div class="row">
                         <div class="col-md-4">
-                            <h2>538364</h2>
+                            <h2>@playersInGame</h2>
                             <p class="text-muted text-uppercase">
                                 In Game Now
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <h2>3583763</h2>
+                            <h2>@peakPlayersToday</h2>
                             <p class="text-muted text-uppercase">Peak Players Today</p>
                         </div>
                         <div class="col-md-4">
-                            <h2>3587364387</h2>
+                            <h2>@peakPlayersAllTime</h2>
                             <p class="text-muted text-uppercase">All-time Peak Players</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <h2>100</h2>
+                            <h2>@heroCount</h2>
                             <p class="text-muted text-uppercase">
                                 <a href="">Heroes</a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <h2>300</h2>
+                            <h2>@inGameItemCount</h2>
                             <p class="text-muted text-uppercase">
                                 <a href="">In Game Items</a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <h2>500</h2>
+                            <h2>@itemCount</h2>
                             <p class="text-muted text-uppercase">
                                 <a href="">Cosmetic &amp; Shop Items</a>
                             </p>
@@ -43,19 +43,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <h2 class="text-uppercase">?</h2>
+                            <h2 class="text-uppercase">@leagueCount</h2>
                             <p class="text-muted text-uppercase">
                                 <a href="">Leagues</a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <h2>700</h2>
+                            <h2>@heroAbilityCount</h2>
                             <p class="text-muted text-uppercase">
                                 <a href="">Hero Abilities</a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <h2 class="text-uppercase">?</h2>
+                            <h2 class="text-uppercase">@liveLeagueGameCount</h2>
                             <p class="text-muted text-uppercase">
                                 <a href="">Live League Games</a>
                             </p>
@@ -66,27 +66,25 @@
         </div>
     </div>
 </div>
-<div class="container" style="margin-top: 5px">
+<div class="container">
     <div class="row">
         <div class="col-md-8">
             @foreach (var dotaBlogFeedItem in dotaBlogFeedItems)
             {
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <a href="@dotaBlogFeedItem.Link" class="news-item" style="background-image: url('@dotaBlogFeedItem.ImageUrl')">
-                            <span class="news-item-tint">
-                                <span class="news-item-info">
-                                    <h3 style="color: #eee;">@dotaBlogFeedItem.Title</h3>
-                                    <h4 style="color: #aaa;">
-                                        @dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")
-                                    </h4>
-                                    <h4 style="color: #aaa;">
-                                        @dotaBlogFeedItem.Description
-                                    </h4>
-                                </span>
+                <div class="card">
+                    <a href="@dotaBlogFeedItem.Link" class="news-item" style="background-image: url('@dotaBlogFeedItem.ImageUrl')">
+                        <span class="news-item-tint">
+                            <span class="news-item-info">
+                                <h3 style="color: #eee;">@dotaBlogFeedItem.Title</h3>
+                                <h4 style="color: #aaa;">
+                                    @dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")
+                                </h4>
+                                <h4 style="color: #aaa;">
+                                    @dotaBlogFeedItem.Description
+                                </h4>
                             </span>
-                        </a>
-                    </div>
+                        </span>
+                    </a>
                 </div>
             }
         </div>
@@ -94,15 +92,24 @@
 </div>
 
 @code {
+    private int playersInGame;
+    private int peakPlayersToday;
+    private int peakPlayersAllTime;
+    private int heroCount;
+    private int inGameItemCount;
+    private int itemCount;
+    private int leagueCount;
+    private int heroAbilityCount;
+    private int liveLeagueGameCount;
     private dynamic[] dotaBlogFeedItems;
 
     protected override async Task OnInitializedAsync()
     {
         dotaBlogFeedItems = new[]
         {
-            new { Title = "Title 1", PublishDate = DateTime.Now, Description = "Description 1", Link="https://google.com", ImageUrl="http://via.placeholder.com/256x128" },
-            new { Title = "Title 2", PublishDate = DateTime.Now, Description = "Description 2", Link="https://google.com", ImageUrl="http://via.placeholder.com/256x128" },
-            new { Title = "Title 3", PublishDate = DateTime.Now, Description = "Description 3", Link="https://google.com", ImageUrl="http://via.placeholder.com/256x128" },
+            new { Title = "Title 1", PublishDate = DateTime.Now, Description = "Description 1", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
+            new { Title = "Title 2", PublishDate = DateTime.Now, Description = "Description 2", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
+            new { Title = "Title 3", PublishDate = DateTime.Now, Description = "Description 3", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
         };
     }
 }
