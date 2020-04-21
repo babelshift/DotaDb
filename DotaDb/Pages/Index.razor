@@ -1,5 +1,8 @@
 ﻿@page "/"
-@using DotaDb.Models 
+@using DotaDb.Data
+@using DotaDb.Models
+@using Steam.Models.DOTA2
+@inject BlogFeedService BlogFeedService
 
 <div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
@@ -67,25 +70,20 @@
         </div>
     </div>
 </div>
-<div class="container">
+<div class="container mt-3">
     <div class="row">
         <div class="col-md-8">
             @foreach (var dotaBlogFeedItem in dotaBlogFeedItems)
             {
-                <div class="card">
-                    <a href="@dotaBlogFeedItem.Link" class="news-item" style="background-image: url('@dotaBlogFeedItem.ImageUrl')">
-                        <div class="news-item-tint">
-                            <div class="news-item-info">
-                                <h3 style="color: #eee;">@dotaBlogFeedItem.Title</h3>
-                                <h4 style="color: #aaa;">
-                                    @dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")
-                                </h4>
-                                <h4 style="color: #aaa;">
-                                    @dotaBlogFeedItem.Description
-                                </h4>
-                            </div>
-                        </div>
-                    </a>
+                <div class="card mb-3">
+                    <h5 class="card-header">@dotaBlogFeedItem.Title</h5>
+                    <div style="height: 200px; overflow: hidden;">
+                        <a href="@dotaBlogFeedItem.Link" target="_blank"><img class="card-img-top" src="@dotaBlogFeedItem.ImageUrl" style="margin: -100px 0px"></a>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@dotaBlogFeedItem.Description</p>
+                        <p class="card-text"><small class="text-muted">@dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")</small></p>
+                    </div>
                 </div>
             }
         </div>
@@ -165,17 +163,12 @@
     private int leagueCount;
     private int heroAbilityCount;
     private int liveLeagueGameCount;
-    private dynamic[] dotaBlogFeedItems;
+    private IEnumerable<DotaBlogFeedItem> dotaBlogFeedItems;
     private TopLiveLeagueGame topLiveLeagueGame;
 
     protected override async Task OnInitializedAsync()
     {
-        dotaBlogFeedItems = new[]
-        {
-            new { Title = "Title 1", PublishDate = DateTime.Now, Description = "Description 1", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
-            new { Title = "Title 2", PublishDate = DateTime.Now, Description = "Description 2", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
-            new { Title = "Title 3", PublishDate = DateTime.Now, Description = "Description 3", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
-        };
+        dotaBlogFeedItems = await BlogFeedService.GetDotaBlogFeedItemsAsync();
 
         topLiveLeagueGame = new TopLiveLeagueGame()
         {
