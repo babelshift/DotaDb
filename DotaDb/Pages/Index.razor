@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using DotaDb.Models 
 
 <div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
@@ -73,8 +74,8 @@
             {
                 <div class="card">
                     <a href="@dotaBlogFeedItem.Link" class="news-item" style="background-image: url('@dotaBlogFeedItem.ImageUrl')">
-                        <span class="news-item-tint">
-                            <span class="news-item-info">
+                        <div class="news-item-tint">
+                            <div class="news-item-info">
                                 <h3 style="color: #eee;">@dotaBlogFeedItem.Title</h3>
                                 <h4 style="color: #aaa;">
                                     @dotaBlogFeedItem.PublishDate.ToString("MMMM d, yyyy")
@@ -82,9 +83,72 @@
                                 <h4 style="color: #aaa;">
                                     @dotaBlogFeedItem.Description
                                 </h4>
-                            </span>
-                        </span>
+                            </div>
+                        </div>
                     </a>
+                </div>
+            }
+        </div>
+        <div class="col-md-4">
+            @if (topLiveLeagueGame != null)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <h2 style="margin: 0; font-weight: 100; color: #333">Top Live Game</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <NavLink href=@($"/matches/live/{topLiveLeagueGame.MatchId}") class="btn btn-sm btn-primary" style="margin-bottom: 5px">See game details</NavLink>
+                        </div>
+                        <img class="shadow center-block" src="@topLiveLeagueGame.LeagueLogoPath" />
+                        <div class="text-center">
+                            <h3 style="margin-bottom: 0; font-weight: 100; color: #333">@topLiveLeagueGame.RadiantTeamName</h3>
+                            <h4 style="margin: 0" class="text-uppercase">
+                                @topLiveLeagueGame.RadiantKillCount <small>kills</small>
+                                @if (topLiveLeagueGame.RadiantKillCount > topLiveLeagueGame.DireKillCount)
+                                {
+                                    <i class="fa fa-star text-warning"></i>
+                                }
+                            </h4>
+                            <h4>&#8212; vs &#8212;</h4>
+                            <h3 style="margin: 0; font-weight: 100; color: #333">@topLiveLeagueGame.DireTeamName</h3>
+                            <h4 style="margin: 0" class="text-uppercase">
+                                @topLiveLeagueGame.DireKillCount <small>kills</small>
+                                @if (topLiveLeagueGame.DireKillCount > topLiveLeagueGame.RadiantKillCount)
+                                {
+                                    <i class="fa fa-star text-warning"></i>
+                                }
+                            </h4>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <i class="fa fa-desktop fa-fw"></i>
+                                <span class="text-muted text-uppercase">Spec:</span>
+                                @topLiveLeagueGame.SpectatorCount.ToString("N0")
+                                <br />
+                                <i class="fa fa-clock-o fa-fw"></i>
+                                <span class="text-muted text-uppercase">Time:</span>
+                                @topLiveLeagueGame.ElapsedTime
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <i class="fa fa-ticket fa-fw"></i>
+                                <span class="text-muted text-uppercase">Game:</span>
+                                @topLiveLeagueGame.GameNumber
+                                <br />
+                                <i class="fa fa-trophy fa-fw"></i>
+                                <span class="text-muted text-uppercase">Series:</span>
+                                @String.Format("{0} - {1}", topLiveLeagueGame.RadiantSeriesWins, topLiveLeagueGame.DireSeriesWins)
+                                <br />
+                                <i class="fa fa-list-alt fa-fw"></i>
+                                <span class="text-muted text-uppercase">Best of:</span>
+                                @topLiveLeagueGame.BestOf
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-center text-uppercase">
+                        <a href="/matches">See all live games</a>
+                    </div>
                 </div>
             }
         </div>
@@ -102,6 +166,7 @@
     private int heroAbilityCount;
     private int liveLeagueGameCount;
     private dynamic[] dotaBlogFeedItems;
+    private TopLiveLeagueGame topLiveLeagueGame;
 
     protected override async Task OnInitializedAsync()
     {
@@ -110,6 +175,14 @@
             new { Title = "Title 1", PublishDate = DateTime.Now, Description = "Description 1", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
             new { Title = "Title 2", PublishDate = DateTime.Now, Description = "Description 2", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
             new { Title = "Title 3", PublishDate = DateTime.Now, Description = "Description 3", Link="https://google.com", ImageUrl="http://blog.dota2.com/wp-content/uploads/2020/02/DPC2020_Blog.png" },
+        };
+
+        topLiveLeagueGame = new TopLiveLeagueGame()
+        {
+            RadiantKillCount = 10,
+            DireKillCount = 20,
+            RadiantTeamName = "Radiant Dudes",
+            DireTeamName = "Dire Dudes"
         };
     }
 }

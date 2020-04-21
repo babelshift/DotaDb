@@ -1,5 +1,12 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
