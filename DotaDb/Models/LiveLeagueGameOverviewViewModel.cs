@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DotaDb.Models
 {
-    public class TopLiveLeagueGame
+    public class LiveLeagueGameOverviewViewModel
     {
         public ulong MatchId { get; set; }
         public string LeagueName { get; set; }

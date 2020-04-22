@@ -163,14 +163,14 @@
     private int liveLeagueGameCount;
     private IEnumerable<DotaBlogFeedItem> dotaBlogFeedItems = new List<DotaBlogFeedItem>();
     private Models.PlayerCountModel playerCounts = new Models.PlayerCountModel();
-    private TopLiveLeagueGame topLiveLeagueGame;
+    private LiveLeagueGameOverviewViewModel topLiveLeagueGame;
 
     protected override async Task OnInitializedAsync()
     {
         playerCounts = await PlayerCountService.GetPlayerCountsFromScrapingAsync();
         dotaBlogFeedItems = await BlogFeedService.GetDotaBlogFeedItemsAsync();
 
-        topLiveLeagueGame = new TopLiveLeagueGame()
+        topLiveLeagueGame = new LiveLeagueGameOverviewViewModel()
         {
             RadiantKillCount = 10,
             DireKillCount = 20,
