@@ -9,7 +9,9 @@ namespace DotaDb.Data
         private readonly ISchemaParser schemaParser;
         private readonly BlobStorageService blobStorageService;
 
-        public LocalizationService(ISchemaParser schemaParser, BlobStorageService blobStorageService)
+        public LocalizationService(
+            ISchemaParser schemaParser,
+            BlobStorageService blobStorageService)
         {
             this.schemaParser = schemaParser;
             this.blobStorageService = blobStorageService;

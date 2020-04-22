@@ -28,6 +28,7 @@ namespace DotaDb
             var storageConnectionString = configSection.Value;
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddMemoryCache();
             services.AddSourceSchemaParser();
             services.AddAzureClients(builder => {
                 builder.AddBlobServiceClient(storageConnectionString);
