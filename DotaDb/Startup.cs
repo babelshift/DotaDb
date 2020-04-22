@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DotaDb.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DotaDb.Data;
+using Microsoft.Extensions.Azure;
+using SourceSchemaParser.Utilities;
 
 namespace DotaDb
 {
@@ -26,10 +22,17 @@ namespace DotaDb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var configSection = Configuration.GetSection("BlobStorage");
+            var storageConnectionString = configSection.Value;
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSourceSchemaParser();
+            services.AddAzureClients(builder => {
+                builder.AddBlobServiceClient(storageConnectionString);
+            });
             services.AddSingleton<BlogFeedService>();
             services.AddSingleton<PlayerCountService>();
+            services.AddSingleton<LiveLeagueGamesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

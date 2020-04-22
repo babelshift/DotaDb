@@ -4,6 +4,7 @@
 @using Steam.Models.DOTA2
 @inject BlogFeedService BlogFeedService
 @inject PlayerCountService PlayerCountService
+@inject LiveLeagueGamesService LiveLeagueGamesService
 
 <div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
@@ -99,7 +100,6 @@
                         <div class="text-center">
                             <NavLink href=@($"/matches/live/{topLiveLeagueGame.MatchId}") class="btn btn-sm btn-primary" style="margin-bottom: 5px">See game details</NavLink>
                         </div>
-                        <img class="shadow center-block" src="@topLiveLeagueGame.LeagueLogoPath" />
                         <div class="text-center">
                             <h3 style="margin-bottom: 0; font-weight: 100; color: #333">@topLiveLeagueGame.RadiantTeamName</h3>
                             <h4 style="margin: 0" class="text-uppercase">
@@ -163,19 +163,12 @@
     private int liveLeagueGameCount;
     private IEnumerable<DotaBlogFeedItem> dotaBlogFeedItems = new List<DotaBlogFeedItem>();
     private Models.PlayerCountModel playerCounts = new Models.PlayerCountModel();
-    private LiveLeagueGameOverviewViewModel topLiveLeagueGame;
+    private LiveLeagueGameOverviewViewModel topLiveLeagueGame = new LiveLeagueGameOverviewViewModel();
 
     protected override async Task OnInitializedAsync()
     {
         playerCounts = await PlayerCountService.GetPlayerCountsFromScrapingAsync();
         dotaBlogFeedItems = await BlogFeedService.GetDotaBlogFeedItemsAsync();
-
-        topLiveLeagueGame = new LiveLeagueGameOverviewViewModel()
-        {
-            RadiantKillCount = 10,
-            DireKillCount = 20,
-            RadiantTeamName = "Radiant Dudes",
-            DireTeamName = "Dire Dudes"
-        };
+        topLiveLeagueGame = await LiveLeagueGamesService.GetTopLiveLeagueGameAsync();
     }
 }

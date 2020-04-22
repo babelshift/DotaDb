@@ -1,11 +1,15 @@
-﻿using DotaDb.Models;
+﻿using Azure.Storage.Blobs;
+using DotaDb.Models;
 using DotaDb.Utilities;
 using Microsoft.Extensions.Configuration;
+using SourceSchemaParser;
 using Steam.Models.DOTA2;
 using SteamWebAPI2.Interfaces;
 using SteamWebAPI2.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,20 +19,35 @@ namespace DotaDb.Data
     public class LiveLeagueGamesService
     {
         private readonly IConfiguration configuration;
+        private readonly ISchemaParser schemaParser;
+        private readonly BlobServiceClient blobServiceClient;
+        private readonly SteamWebInterfaceFactory steamWebInterfaceFactory;
+        private readonly string itemIconsBaseUrl;
+        private readonly string heroAvatarsBaseUrl;
+        private readonly string minimapIconsBaseUrl;
+        private readonly string leagueImagesBaseUrl;
 
-        public LiveLeagueGamesService(IConfiguration configuration)
+        public LiveLeagueGamesService(
+            IConfiguration configuration,
+            ISchemaParser schemaParser,
+            BlobServiceClient blobServiceClient)
         {
             this.configuration = configuration;
+            this.schemaParser = schemaParser;
+            this.blobServiceClient = blobServiceClient;
+            string steamWebApiKey = configuration["SteamWebApiKey"];
+            steamWebInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
+            itemIconsBaseUrl = configuration["ItemIconsBaseUrl"];
+            heroAvatarsBaseUrl = configuration["HeroAvatarsBaseUrl"];
+            minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
+            leagueImagesBaseUrl = configuration["LeagueImagesBaseUrl"];
         }
 
-        private async Task<LiveLeagueGameOverviewViewModel> GetTopLiveLeagueGameAsync()
+        public async Task<LiveLeagueGameOverviewViewModel> GetTopLiveLeagueGameAsync()
         {
-            string steamWebApiKey = configuration["steamWebApiKey"];
-            var steamWebInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
-            
             // TODO: http client factory injection?
             var dota2MatchInterface = steamWebInterfaceFactory.CreateSteamWebInterface<DOTA2Match>(new HttpClient());
-            
+
             var liveLeagueGames = await dota2MatchInterface.GetLiveLeagueGamesAsync();
             var sortedLiveLeagueGames = liveLeagueGames.Data
                 .OrderByDescending(x => x.Spectators)
@@ -43,7 +62,7 @@ namespace DotaDb.Data
                 DireTeamLogo = "Unknown", // lookup from logos collections
                 DireTeamName = topLiveLeagueGame.DireTeam?.TeamName ?? "Unknown",
                 ElapsedTime = topLiveLeagueGame.Scoreboard != null ? GetElapsedTime(topLiveLeagueGame.Scoreboard.Duration) : "Unknown",
-                GameNumber = topLiveLeagueGame.GameNumber,
+                GameNumber = topLiveLeagueGame.RadiantSeriesWins + topLiveLeagueGame.DireSeriesWins + 1,
                 LeagueLogoPath = "Unknown", // lookup from league logos collections
                 LeagueName = "Unknown", // lookup from league information
                 RadiantKillCount = topLiveLeagueGame.Scoreboard?.Radiant?.Score ?? 0,
@@ -53,7 +72,7 @@ namespace DotaDb.Data
                 DireSeriesWins = topLiveLeagueGame.DireSeriesWins,
                 SpectatorCount = topLiveLeagueGame.Spectators,
                 RadiantTowerStates = topLiveLeagueGame.Scoreboard?.Radiant?.TowerStates,
-                DireTowerStates = topLiveLeagueGame.Scoreboard?.Dire?.TowerStates
+                DireTowerStates = topLiveLeagueGame.Scoreboard?.Dire?.TowerStates,
             };
 
             var players = topLiveLeagueGame.Players
@@ -80,6 +99,8 @@ namespace DotaDb.Data
                     .ToDictionary(x => x.AccountId, x => x);
             }
 
+            var heroes = await GetHeroesFromSchemaAsync();
+
             // for all the players in this game, try to fill in their details, stats, names, etc.
             foreach (var player in players)
             {
@@ -89,97 +110,131 @@ namespace DotaDb.Data
                     continue;
                 }
 
-                //var hero = await GetHeroKeyValueAsync(player.HeroId);
-                //player.HeroName = await GetLocalizationTextAsync(hero.Name);
-                //player.HeroAvatarImageFilePath = hero.GetAvatarImageFilePath();
-                //player.HeroUrl = hero.Url;
+                var hero = heroes[player.HeroId];
+                player.HeroName = hero.Name;
+                player.HeroAvatarImageFilePath = string.Empty; // TODO: implement extension method to get image path
+                player.HeroUrl = hero.Url;
 
-                //LiveLeagueGamePlayerDetailModel playerDetail = GetPlayerDetailForLiveLeagueGame(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
+                LiveLeagueGamePlayerDetailModel playerDetail = GetPlayerDetailForLiveLeagueGame(player.Team, player.AccountId, radiantPlayerDetail, direPlayerDetail);
 
-                //// if the player hasn't picked a hero yet, details won't exist
-                //if (playerDetail != null)
-                //{
-                //    player.KillCount = playerDetail.Kills;
-                //    player.DeathCount = playerDetail.Deaths;
-                //    player.AssistCount = playerDetail.Assists;
-                //    player.PositionX = playerDetail.PositionX;
-                //    player.PositionY = playerDetail.PositionY;
-                //    player.NetWorth = playerDetail.NetWorth;
-                //    player.Level = playerDetail.Level;
-                //}
+                // if the player hasn't picked a hero yet, details won't exist
+                if (playerDetail != null)
+                {
+                    player.KillCount = playerDetail.Kills;
+                    player.DeathCount = playerDetail.Deaths;
+                    player.AssistCount = playerDetail.Assists;
+                    player.PositionX = playerDetail.PositionX;
+                    player.PositionY = playerDetail.PositionY;
+                    player.NetWorth = playerDetail.NetWorth;
+                    player.Level = playerDetail.Level;
+                }
             }
 
+            response.DirePlayers = players
+                .Where(x => x.Team == 1)
+                .Select(x => new LiveLeagueGamePlayerViewModel()
+                {
+                    HeroName = x.HeroName,
+                    HeroAvatarFilePath = x.HeroAvatarImageFilePath,
+                    PlayerName = x.Name,
+                    DeathCount = x.DeathCount,
+                    KillCount = x.KillCount,
+                    AssistCount = x.AssistCount,
+                    PositionX = x.PositionX,
+                    PositionY = x.PositionY,
+                    PositionXPercent = x.PositionX.GetPercentOfPositionValue(),
+                    PositionYPercent = x.PositionY.GetPercentOfPositionValue(),
+                    MinimapIconFilePath = x.GetMinimapIconFilePath(minimapIconsBaseUrl)
+                }).ToList();
 
-            //var liveLeagueGameViewModels = liveLeagueGames
-            //    .Select(x => new LiveLeagueGameOverviewViewModel()
-            //    {
-            //        MatchId = x.MatchId,
-            //        BestOf = x.BestOf,
-            //        DireKillCount = x.DireKillCount,
-            //        DireTeamLogo = x.DireTeamLogo,
-            //        DireTeamName = x.DireTeamName,
-            //        ElapsedTime = x.ElapsedTimeDisplay,
-            //        GameNumber = x.GameNumber,
-            //        LeagueLogoPath = x.LeagueLogoPath,
-            //        LeagueName = x.LeagueName,
-            //        RadiantKillCount = x.RadiantKillCount,
-            //        RadiantTeamLogo = x.RadiantTeamLogo,
-            //        RadiantTeamName = x.RadiantTeamName,
-            //        RadiantSeriesWins = x.RadiantSeriesWins,
-            //        DireSeriesWins = x.DireSeriesWins,
-            //        SpectatorCount = x.SpectatorCount,
-            //        RadiantTowerStates = x.RadiantTowerStates,
-            //        DireTowerStates = x.DireTowerStates,
-            //        DirePlayers = x.Players
-            //            .Where(y => y.Team == 1)
-            //            .Select(y => new LiveLeagueGamePlayerViewModel()
-            //            {
-            //                HeroName = y.HeroName,
-            //                HeroAvatarFilePath = y.HeroAvatarImageFilePath,
-            //                PlayerName = y.Name,
-            //                DeathCount = y.DeathCount,
-            //                KillCount = y.KillCount,
-            //                AssistCount = y.AssistCount,
-            //                PositionX = y.PositionX,
-            //                PositionY = y.PositionY,
-            //                PositionXPercent = y.PositionX.GetPercentOfPositionValue(),
-            //                PositionYPercent = y.PositionY.GetPercentOfPositionValue(),
-            //                MinimapIconFilePath = y.GetMinimapIconFilePath()
-            //            })
-            //            .ToList()
-            //            .AsReadOnly(),
-            //        RadiantPlayers = x.Players
-            //            .Where(y => y.Team == 0)
-            //            .Select(y => new LiveLeagueGamePlayerViewModel()
-            //            {
-            //                HeroName = y.HeroName,
-            //                HeroAvatarFilePath = y.HeroAvatarImageFilePath,
-            //                PlayerName = y.Name,
-            //                DeathCount = y.DeathCount,
-            //                KillCount = y.KillCount,
-            //                AssistCount = y.AssistCount,
-            //                PositionX = y.PositionX,
-            //                PositionY = y.PositionY,
-            //                PositionXPercent = y.PositionX.GetPercentOfPositionValue(),
-            //                PositionYPercent = y.PositionY.GetPercentOfPositionValue(),
-            //                MinimapIconFilePath = y.GetMinimapIconFilePath()
-            //            })
-            //            .ToList()
-            //            .AsReadOnly()
-            //    })
-            //    .ToList()
-            //    .AsReadOnly();
-
-            //if (liveLeagueGameViewModels != null && liveLeagueGameViewModels.Count > 0)
-            //{
-            //    return liveLeagueGameViewModels[0];
-            //}
-            //else
-            //{
-            //    return null;
-            //}
+            response.RadiantPlayers = players
+                .Where(x => x.Team == 0)
+                .Select(x => new LiveLeagueGamePlayerViewModel()
+                {
+                    HeroName = x.HeroName,
+                    HeroAvatarFilePath = x.HeroAvatarImageFilePath,
+                    PlayerName = x.Name,
+                    DeathCount = x.DeathCount,
+                    KillCount = x.KillCount,
+                    AssistCount = x.AssistCount,
+                    PositionX = x.PositionX,
+                    PositionY = x.PositionY,
+                    PositionXPercent = x.PositionX.GetPercentOfPositionValue(),
+                    PositionYPercent = x.PositionY.GetPercentOfPositionValue(),
+                    MinimapIconFilePath = x.GetMinimapIconFilePath(minimapIconsBaseUrl)
+                }).ToList();
 
             return response;
+        }
+
+        private async Task<IReadOnlyDictionary<string, LeagueModel>> GetLeagueTicketsAsync()
+        {
+            var schemaVdf = await GetFileFromStorageAsync("schemas", "items_game.vdf");
+            var localizationVdf = await GetFileFromStorageAsync("schemas", "items_english.vdf");
+            var leagues = schemaParser.GetDotaLeaguesFromText(schemaVdf, localizationVdf);
+            return new ReadOnlyDictionary<string, LeagueModel>(leagues.ToDictionary(x => x.ItemDef.ToString(), x => x));
+        }
+
+        private async Task<IReadOnlyCollection<GameItemModel>> GetGameItemsAsync()
+        {
+            var dota2Econ = steamWebInterfaceFactory.CreateSteamWebInterface<DOTA2Econ>(new HttpClient());
+            var gameItems = await dota2Econ.GetGameItemsAsync();
+            return gameItems.Data;
+        }
+
+        private static LiveLeagueGamePlayerDetailModel GetPlayerDetailForLiveLeagueGame(
+            uint playerTeam, uint playerAccountId,
+            IDictionary<uint, LiveLeagueGamePlayerDetailModel> radiantPlayerDetail,
+            IDictionary<uint, LiveLeagueGamePlayerDetailModel> direPlayerDetail)
+        {
+            // team 0 is radiant, if the player hasn't picked a hero yet, details won't exist
+            if (playerTeam == 0)
+            {
+                if (radiantPlayerDetail != null)
+                {
+                    LiveLeagueGamePlayerDetailModel playerDetail = null;
+                    radiantPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
+                    return playerDetail;
+                }
+            }
+            // team 1 is dire
+            else if (playerTeam == 1)
+            {
+                if (direPlayerDetail != null)
+                {
+                    LiveLeagueGamePlayerDetailModel playerDetail = null;
+                    direPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
+                    return playerDetail;
+                }
+            }
+
+            return null;
+        }
+
+        private async Task<IReadOnlyDictionary<uint, HeroSchemaModel>> GetHeroesFromSchemaAsync()
+        {
+            var vdf = await GetFileFromStorageAsync("schemas", "heroes.vdf");
+            var heroes = schemaParser.GetDotaHeroes(vdf);
+            return heroes.ToDictionary(x => x.HeroId, x => x);
+        }
+
+        private async Task<IReadOnlyCollection<string>> GetFileFromStorageAsync(string containerName, string fileName)
+        {
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            var blobClient = blobContainerClient.GetBlobClient(fileName);
+            var download = await blobClient.DownloadAsync();
+
+            List<string> contents = new List<string>();
+            using (StreamReader sr = new StreamReader(download.Value.Content))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string line = await sr.ReadLineAsync();
+                    contents.Add(line);
+                }
+            }
+
+            return new ReadOnlyCollection<string>(contents);
         }
 
         private static uint GetBestOfCountFromSeriesType(uint seriesType)
