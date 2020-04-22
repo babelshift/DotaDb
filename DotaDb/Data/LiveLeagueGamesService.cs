@@ -9,7 +9,6 @@ using SteamWebAPI2.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,7 +19,8 @@ namespace DotaDb.Data
     {
         private readonly IConfiguration configuration;
         private readonly ISchemaParser schemaParser;
-        private readonly BlobServiceClient blobServiceClient;
+        private readonly BlobStorageService blobStorageService;
+        private readonly HeroService heroService;
         private readonly SteamWebInterfaceFactory steamWebInterfaceFactory;
         private readonly string itemIconsBaseUrl;
         private readonly string heroAvatarsBaseUrl;
@@ -30,13 +30,17 @@ namespace DotaDb.Data
         public LiveLeagueGamesService(
             IConfiguration configuration,
             ISchemaParser schemaParser,
-            BlobServiceClient blobServiceClient)
+            BlobStorageService blobStorageService,
+            HeroService heroService)
         {
             this.configuration = configuration;
             this.schemaParser = schemaParser;
-            this.blobServiceClient = blobServiceClient;
+            this.blobStorageService = blobStorageService;
+            this.heroService = heroService;
+
             string steamWebApiKey = configuration["SteamWebApiKey"];
             steamWebInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
+
             itemIconsBaseUrl = configuration["ItemIconsBaseUrl"];
             heroAvatarsBaseUrl = configuration["HeroAvatarsBaseUrl"];
             minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
@@ -99,7 +103,7 @@ namespace DotaDb.Data
                     .ToDictionary(x => x.AccountId, x => x);
             }
 
-            var heroes = await GetHeroesFromSchemaAsync();
+            var heroes = await heroService.GetHeroesAsync();
 
             // for all the players in this game, try to fill in their details, stats, names, etc.
             foreach (var player in players)
@@ -169,8 +173,8 @@ namespace DotaDb.Data
 
         private async Task<IReadOnlyDictionary<string, LeagueModel>> GetLeagueTicketsAsync()
         {
-            var schemaVdf = await GetFileFromStorageAsync("schemas", "items_game.vdf");
-            var localizationVdf = await GetFileFromStorageAsync("schemas", "items_english.vdf");
+            var schemaVdf = await blobStorageService.GetFileFromStorageAsync("schemas", "items_game.vdf");
+            var localizationVdf = await blobStorageService.GetFileFromStorageAsync("schemas", "items_english.vdf");
             var leagues = schemaParser.GetDotaLeaguesFromText(schemaVdf, localizationVdf);
             return new ReadOnlyDictionary<string, LeagueModel>(leagues.ToDictionary(x => x.ItemDef.ToString(), x => x));
         }
@@ -209,32 +213,6 @@ namespace DotaDb.Data
             }
 
             return null;
-        }
-
-        private async Task<IReadOnlyDictionary<uint, HeroSchemaModel>> GetHeroesFromSchemaAsync()
-        {
-            var vdf = await GetFileFromStorageAsync("schemas", "heroes.vdf");
-            var heroes = schemaParser.GetDotaHeroes(vdf);
-            return heroes.ToDictionary(x => x.HeroId, x => x);
-        }
-
-        private async Task<IReadOnlyCollection<string>> GetFileFromStorageAsync(string containerName, string fileName)
-        {
-            var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            var blobClient = blobContainerClient.GetBlobClient(fileName);
-            var download = await blobClient.DownloadAsync();
-
-            List<string> contents = new List<string>();
-            using (StreamReader sr = new StreamReader(download.Value.Content))
-            {
-                while (!sr.EndOfStream)
-                {
-                    string line = await sr.ReadLineAsync();
-                    contents.Add(line);
-                }
-            }
-
-            return new ReadOnlyCollection<string>(contents);
         }
 
         private static uint GetBestOfCountFromSeriesType(uint seriesType)

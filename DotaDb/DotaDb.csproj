@@ -5,6 +5,8 @@
     <UserSecretsId>18a949ea-c4b3-41b8-9de6-3a261e54cd44</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.4.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.23" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.0.0" />

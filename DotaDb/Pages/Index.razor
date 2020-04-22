@@ -2,9 +2,12 @@
 @using DotaDb.Data
 @using DotaDb.Models
 @using Steam.Models.DOTA2
+@using AutoMapper 
 @inject BlogFeedService BlogFeedService
 @inject PlayerCountService PlayerCountService
 @inject LiveLeagueGamesService LiveLeagueGamesService
+@inject HeroService HeroService 
+@inject IMapper Mapper 
 
 <div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
@@ -164,11 +167,18 @@
     private IEnumerable<DotaBlogFeedItem> dotaBlogFeedItems = new List<DotaBlogFeedItem>();
     private Models.PlayerCountModel playerCounts = new Models.PlayerCountModel();
     private LiveLeagueGameOverviewViewModel topLiveLeagueGame = new LiveLeagueGameOverviewViewModel();
+    private HeroViewModel randomHero = new HeroViewModel();
 
     protected override async Task OnInitializedAsync()
     {
         playerCounts = await PlayerCountService.GetPlayerCountsFromScrapingAsync();
         dotaBlogFeedItems = await BlogFeedService.GetDotaBlogFeedItemsAsync();
         topLiveLeagueGame = await LiveLeagueGamesService.GetTopLiveLeagueGameAsync();
+
+        var heroes = await HeroService.GetHeroDetailsAsync();
+        Random r = new Random();
+        int index = r.Next(0, heroes.Count);
+        var hero = heroes.ElementAt(index).Value;
+        randomHero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero);
     }
 }

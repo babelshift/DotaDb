@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Azure;
 using SourceSchemaParser.Utilities;
+using DotaDb.Models;
+using AutoMapper;
 
 namespace DotaDb
 {
@@ -30,9 +32,13 @@ namespace DotaDb
             services.AddAzureClients(builder => {
                 builder.AddBlobServiceClient(storageConnectionString);
             });
+            services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddSingleton<BlogFeedService>();
             services.AddSingleton<PlayerCountService>();
             services.AddSingleton<LiveLeagueGamesService>();
+            services.AddSingleton<BlobStorageService>();
+            services.AddSingleton<LocalizationService>();
+            services.AddSingleton<HeroService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
