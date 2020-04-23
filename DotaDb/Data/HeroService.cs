@@ -1,5 +1,4 @@
 ﻿using DotaDb.Utilities;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using SourceSchemaParser;
 using Steam.Models.DOTA2;
@@ -7,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DotaDb.Data
@@ -179,10 +179,21 @@ namespace DotaDb.Data
             var abilityType = GetHeroAbilityTypeKeyValue(ability.AbilityType);
             if (abilityType == DotaHeroAbilityType.TALENTS)
             {
+                var completedTooltip = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}");
+
+                // Talent tooltips are in a form like this: "+{s:value} Tree Dance Vision AoE"
+                // We need to replace the "{s:value}" token with a value found in the "ability special" list
+                var replaceableTokens = Regex.Matches(completedTooltip, @"{s:(\w+)}");
+                foreach(Match token in replaceableTokens)
+                {
+                    var abilitySpecialValue = ability.AbilitySpecials.FirstOrDefault(x => x.Name == token.Groups[1].Value);
+                    completedTooltip = completedTooltip.Replace(token.Value, abilitySpecialValue.Value);
+                }
+
                 abilityDetailModel = new HeroAbilityDetailModel()
                 {
                     Id = ability.Id,
-                    Name = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}"),
+                    Name = completedTooltip,
                     AbilityType = abilityType,
                 };
             }

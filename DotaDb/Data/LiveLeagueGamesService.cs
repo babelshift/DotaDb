@@ -18,8 +18,7 @@ namespace DotaDb.Data
     public class LiveLeagueGamesService
     {
         private readonly IConfiguration configuration;
-        private readonly ISchemaParser schemaParser;
-        private readonly BlobStorageService blobStorageService;
+        private readonly CacheService cacheService;
         private readonly HeroService heroService;
         private readonly SteamWebInterfaceFactory steamWebInterfaceFactory;
         private readonly string itemIconsBaseUrl;
@@ -29,13 +28,11 @@ namespace DotaDb.Data
 
         public LiveLeagueGamesService(
             IConfiguration configuration,
-            ISchemaParser schemaParser,
-            BlobStorageService blobStorageService,
+            CacheService cacheService,
             HeroService heroService)
         {
             this.configuration = configuration;
-            this.schemaParser = schemaParser;
-            this.blobStorageService = blobStorageService;
+            this.cacheService = cacheService;
             this.heroService = heroService;
 
             string steamWebApiKey = configuration["SteamWebApiKey"];
@@ -52,7 +49,11 @@ namespace DotaDb.Data
             // TODO: http client factory injection?
             var dota2MatchInterface = steamWebInterfaceFactory.CreateSteamWebInterface<DOTA2Match>(new HttpClient());
 
-            var liveLeagueGames = await dota2MatchInterface.GetLiveLeagueGamesAsync();
+            var liveLeagueGames = await cacheService.GetOrSetAsync("liveLeagueGames", async () =>
+            {
+                return await dota2MatchInterface.GetLiveLeagueGamesAsync();
+            }, TimeSpan.FromMinutes(15));
+            
             var sortedLiveLeagueGames = liveLeagueGames.Data
                 .OrderByDescending(x => x.Spectators)
                 .AsEnumerable();
@@ -171,21 +172,6 @@ namespace DotaDb.Data
             return response;
         }
 
-        private async Task<IReadOnlyDictionary<string, LeagueModel>> GetLeagueTicketsAsync()
-        {
-            var schemaVdf = await blobStorageService.GetFileFromStorageAsync("schemas", "items_game.vdf");
-            var localizationVdf = await blobStorageService.GetFileFromStorageAsync("schemas", "items_english.vdf");
-            var leagues = schemaParser.GetDotaLeaguesFromText(schemaVdf, localizationVdf);
-            return new ReadOnlyDictionary<string, LeagueModel>(leagues.ToDictionary(x => x.ItemDef.ToString(), x => x));
-        }
-
-        private async Task<IReadOnlyCollection<GameItemModel>> GetGameItemsAsync()
-        {
-            var dota2Econ = steamWebInterfaceFactory.CreateSteamWebInterface<DOTA2Econ>(new HttpClient());
-            var gameItems = await dota2Econ.GetGameItemsAsync();
-            return gameItems.Data;
-        }
-
         private static LiveLeagueGamePlayerDetailModel GetPlayerDetailForLiveLeagueGame(
             uint playerTeam, uint playerAccountId,
             IDictionary<uint, LiveLeagueGamePlayerDetailModel> radiantPlayerDetail,
@@ -196,7 +182,7 @@ namespace DotaDb.Data
             {
                 if (radiantPlayerDetail != null)
                 {
-                    LiveLeagueGamePlayerDetailModel playerDetail = null;
+                    LiveLeagueGamePlayerDetailModel playerDetail;
                     radiantPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
                     return playerDetail;
                 }
@@ -206,7 +192,7 @@ namespace DotaDb.Data
             {
                 if (direPlayerDetail != null)
                 {
-                    LiveLeagueGamePlayerDetailModel playerDetail = null;
+                    LiveLeagueGamePlayerDetailModel playerDetail;
                     direPlayerDetail.TryGetValue(playerAccountId, out playerDetail);
                     return playerDetail;
                 }

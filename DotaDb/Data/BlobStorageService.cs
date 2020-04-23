@@ -12,12 +12,10 @@ namespace DotaDb.Data
     public class BlobStorageService
     {
         private readonly BlobServiceClient blobServiceClient;
-        private readonly CacheService cacheService;
 
-        public BlobStorageService(BlobServiceClient blobServiceClient, CacheService cacheService)
+        public BlobStorageService(BlobServiceClient blobServiceClient)
         {
             this.blobServiceClient = blobServiceClient;
-            this.cacheService = cacheService;
         }
 
         public async Task<IReadOnlyCollection<string>> GetFileFromStorageAsync(string containerName, string fileName)

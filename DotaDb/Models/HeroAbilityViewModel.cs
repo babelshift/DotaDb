@@ -5,6 +5,11 @@ namespace DotaDb.Models
 {
     public class HeroAbilityViewModel
     {
+        public HeroAbilityViewModel()
+        {
+            Attributes = new List<HeroAbilitySpecialViewModel>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string AvatarImagePath { get; set; }

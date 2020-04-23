@@ -5,6 +5,23 @@ namespace DotaDb.Models
 {
     public abstract class BaseHeroViewModel
     {
+        public BaseHeroViewModel()
+        {
+            Roles = new List<HeroRoleViewModel>();
+            HealthLevels = new Dictionary<int, double>();
+            ManaLevels = new Dictionary<int, double>();
+            MinDamageLevels = new Dictionary<int, double>();
+            MaxDamageLevels = new Dictionary<int, double>();
+            ArmorLevels = new Dictionary<int, double>();
+            StrengthLevels = new Dictionary<int, double>();
+            AgilityLevels = new Dictionary<int, double>();
+            IntelligenceLevels = new Dictionary<int, double>();
+            TalentChoiceAtLevel10 = new HeroTalentChoiceViewModel();
+            TalentChoiceAtLevel15 = new HeroTalentChoiceViewModel();
+            TalentChoiceAtLevel20 = new HeroTalentChoiceViewModel();
+            TalentChoiceAtLevel25 = new HeroTalentChoiceViewModel();
+        }
+
         public uint Id { get; set; }
         public string Url { get; set; }
         public string Name { get; set; }

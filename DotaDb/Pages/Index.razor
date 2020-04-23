@@ -2,12 +2,12 @@
 @using DotaDb.Data
 @using DotaDb.Models
 @using Steam.Models.DOTA2
-@using AutoMapper 
+@using AutoMapper
 @inject BlogFeedService BlogFeedService
 @inject PlayerCountService PlayerCountService
 @inject LiveLeagueGamesService LiveLeagueGamesService
-@inject HeroService HeroService 
-@inject IMapper Mapper 
+@inject HeroService HeroService
+@inject IMapper Mapper
 
 <div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
@@ -95,11 +95,11 @@
         <div class="col-md-4">
             @if (topLiveLeagueGame != null)
             {
-                <div class="panel panel-default">
-                    <div class="panel-heading text-center">
+                <div class="card">
+                    <div class="card-header text-center">
                         <h2 style="margin: 0; font-weight: 100; color: #333">Top Live Game</h2>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="text-center">
                             <NavLink href=@($"/matches/live/{topLiveLeagueGame.MatchId}") class="btn btn-sm btn-primary" style="margin-bottom: 5px">See game details</NavLink>
                         </div>
@@ -148,8 +148,257 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer text-center text-uppercase">
+                    <div class="card-footer text-center text-uppercase">
                         <a href="/matches">See all live games</a>
+                    </div>
+                </div>
+            }
+            @if (randomHero != null)
+            {
+                <div class="card mt-3">
+                    <div class="card-header text-center">
+                        <h2 style="margin: 0; font-weight: 100; color: #333">@randomHero.Name</h2>
+                    </div>
+                    <div class="card-body">
+                        <a href="/heroes/hero/@randomHero.Id">
+                            <img class="shadow center-block" src="@randomHero.AvatarImagePath" />
+                        </a>
+                        <table class="table table-striped table-condensed" style="margin-top: 15px; margin-bottom: 0">
+                            <tbody class="text-center text-uppercase">
+                                <tr>
+                                    <td>
+                                        <img src="/images/icon_str.png" width="36" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="/images/icon_agi.png" width="36" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="/images/icon_int.png" width="36" height="36" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>@randomHero.BaseStrength</strong> <small class="text-muted">(+@randomHero.StrengthGain.ToString("F"))</small>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.BaseAgility</strong> <small class="text-muted">(+@randomHero.AgilityGain.ToString("F"))</small>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.BaseIntelligence</strong> <small class="text-muted">(+@randomHero.IntelligenceGain.ToString("F"))</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="/images/icon_atk.png" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="/images/icon_speed.png" height="36" />
+                                    </td>
+                                    <td>
+                                        <img src="/images/icon_def.png" height="36" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>@randomHero.BaseDamageMin - @randomHero.BaseDamageMax</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.BaseMoveSpeed</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            @(randomHero.ArmorLevels.TryGetValue(0, out double value) ? Math.Round(value, 2).ToString() : "?")
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-striped table-condensed" style="table-layout: fixed">
+                            <tbody class="text-uppercase">
+                                <tr>
+                                    <td>
+                                        <span>Hero ID</span>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.Id</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle">
+                                        <span>Primary</span>
+                                    </td>
+                                    <td>
+                                        @if (randomHero.PrimaryAttribute != null)
+                                        {
+                                            if (randomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                                            {
+                                                <img alt="Strength" title="Strength" src="/images/icon_str.png" width="24" height="24" />
+                                                <strong>STR</strong>
+                                            }
+                                            else if (randomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                                            {
+                                                <img alt="Agility" title="Agility" src="/images/icon_agi.png" width="24" height="24" />
+                                                <strong>AGI</strong>
+                                            }
+                                            else if (randomHero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                                            {
+                                                <img alt="Intelligence" title="Intelligence" src="/images/icon_int.png" width="24" height="24" />
+                                                <strong>INT</strong>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-question-circle"></i>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Attack Type</span>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.AttackType</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Attack Rate</span>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.AttackRate.ToString("F")</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Attack Range</span>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.AttackRange.ToString("F")</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Turn Rate</span>
+                                    </td>
+                                    <td>
+                                        <strong>@randomHero.TurnRate.ToString("F")</strong>
+                                    </td>
+                                </tr>
+                                @foreach (var role in randomHero.Roles)
+                                {
+                                    string color = String.Empty;
+                                    int percent = 0;
+                                    if (role.Level == "1")
+                                    {
+                                        color = "progress-bar-danger";
+                                        percent = 33;
+                                    }
+                                    else if (role.Level == "2")
+                                    {
+                                        color = "progress-bar-warning";
+                                        percent = 66;
+                                    }
+                                    else if (role.Level == "3")
+                                    {
+                                        color = "progress-bar-success";
+                                        percent = 100;
+                                    }
+                                    <tr>
+                                        <td>
+                                            @role.Name
+                                        </td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 0">
+                                                <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                                    @role.Level
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <h3>Talents</h3>
+                        <table class="table table-striped table-condensed" style="table-layout: fixed">
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@randomHero.TalentChoiceAtLevel10.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">10</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@randomHero.TalentChoiceAtLevel10.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@randomHero.TalentChoiceAtLevel15.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">15</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@randomHero.TalentChoiceAtLevel15.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@randomHero.TalentChoiceAtLevel20.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">20</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@randomHero.TalentChoiceAtLevel20.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <small>@randomHero.TalentChoiceAtLevel25.HeroTalentChoice1.Name</small>
+                                    </td>
+                                    <td class="text-center" style="width: 20%">
+                                        <span class="fa-stack fa-lg" aria-hidden="true">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">25</i>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@randomHero.TalentChoiceAtLevel25.HeroTalentChoice2.Name</small>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h3>Abilities</h3>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <ul class="list-unstyled">
+                                    @foreach (var ability in randomHero.Abilities)
+                                    {
+                                        <li class="media">
+                                            <img class="mr-3 shadow" src="@ability.AvatarImagePath" style="width: 64px" />
+                                            <div class="media-body">
+                                                <h4 class="mt-0">@ability.Name</h4>
+                                                <span class="text-muted">@ability.Description</span>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center text-uppercase">
+                        <a href="/heroes?tab=table)">See All Heroes</a>
                     </div>
                 </div>
             }
@@ -169,16 +418,31 @@
     private LiveLeagueGameOverviewViewModel topLiveLeagueGame = new LiveLeagueGameOverviewViewModel();
     private HeroViewModel randomHero = new HeroViewModel();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        playerCounts = await PlayerCountService.GetPlayerCountsFromScrapingAsync();
-        dotaBlogFeedItems = await BlogFeedService.GetDotaBlogFeedItemsAsync();
-        topLiveLeagueGame = await LiveLeagueGamesService.GetTopLiveLeagueGameAsync();
+        if (firstRender)
+        {
+            var playerCountTask = PlayerCountService.GetPlayerCountsFromScrapingAsync();
+            var blogFeedTask = BlogFeedService.GetDotaBlogFeedItemsAsync();
+            var topLiveLeagueGameTask = LiveLeagueGamesService.GetTopLiveLeagueGameAsync();
+            var heroTask = HeroService.GetHeroDetailsAsync();
 
-        var heroes = await HeroService.GetHeroDetailsAsync();
-        Random r = new Random();
-        int index = r.Next(0, heroes.Count);
-        var hero = heroes.ElementAt(index).Value;
-        randomHero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero);
+            playerCounts = await playerCountTask;
+            StateHasChanged();
+
+            dotaBlogFeedItems = await blogFeedTask;
+            StateHasChanged();
+
+            topLiveLeagueGame = await topLiveLeagueGameTask;
+            StateHasChanged();
+
+            var heroes = await heroTask;
+            Random r = new Random();
+            int index = r.Next(0, heroes.Count);
+            var hero = heroes.ElementAt(index).Value;
+            randomHero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero);
+
+            StateHasChanged();
+        }
     }
 }

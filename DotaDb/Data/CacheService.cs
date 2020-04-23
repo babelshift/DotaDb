@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace DotaDb.Data
 {
     public class CacheService
     {
+        private readonly Dictionary<string, SemaphoreSlim> lockSet = new Dictionary<string, SemaphoreSlim>();
         private readonly SemaphoreSlim s = new SemaphoreSlim(1, 1);
         private readonly IMemoryCache cache;
 
@@ -34,7 +36,7 @@ namespace DotaDb.Data
                         // Set the results of the population for other consumers
                         cache.Set(key, value, new MemoryCacheEntryOptions()
                         {
-                            AbsoluteExpiration = DateTime.UtcNow.Add(expiration)
+                            AbsoluteExpirationRelativeToNow = expiration,
                         });
                     }
                 }
