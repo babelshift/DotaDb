@@ -1,13 +1,13 @@
-﻿using SourceSchemaParser;
+﻿using DotaDb.Utilities;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using SourceSchemaParser;
 using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using DotaDb.Utilities;
-using DotaDb.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DotaDb.Data
 {
@@ -15,68 +15,75 @@ namespace DotaDb.Data
     {
         private readonly IConfiguration configuration;
         private readonly ISchemaParser schemaParser;
+        private readonly CacheService cacheService;
         private readonly BlobStorageService blobStorageService;
         private readonly LocalizationService localizationService;
         private readonly string minimapIconsBaseUrl;
 
+        // I have seen some of these keys having different casing such as "DOTA_Tooltip_ability" and "DOTA_Tooltip_Ability". Watch out.
+        private const string tooltipLocalizationPrefix = "DOTA_Tooltip_ability";
+
         public HeroService(
-            IConfiguration configuration, 
+            IConfiguration configuration,
             ISchemaParser schemaParser,
+            CacheService cacheService,
             BlobStorageService blobStorageService,
             LocalizationService localizationService)
         {
             this.configuration = configuration;
             this.schemaParser = schemaParser;
+            this.cacheService = cacheService;
             this.blobStorageService = blobStorageService;
             this.localizationService = localizationService;
             minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
         }
 
-        public async Task<HeroDetailModel> GetHeroDetailsAsync(uint id)
+        public async Task<IReadOnlyDictionary<uint, HeroSchemaModel>> GetHeroesAsync()
+        {
+            string fileName = "heroes.vdf";
+            string cacheKey = $"parsed_{fileName}";
+            return await cacheService.GetOrSetAsync(fileName, async () =>
+            {
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                var heroes = schemaParser.GetDotaHeroes(vdf);
+                return heroes.ToDictionary(hero => hero.HeroId, hero => hero);
+            }, TimeSpan.FromDays(1));
+        }
+
+        public async Task<HeroDetailModel> GetHeroDetailsAsync(uint heroId)
         {
             var heroes = await GetHeroesAsync();
-
-            heroes.TryGetValue(id, out HeroSchemaModel heroModel);
-
-            if (heroModel != null)
-            {
-                return await GetHeroDetailModelAsync(heroModel);
-            }
-
-            return null;
+            heroes.TryGetValue(heroId, out HeroSchemaModel heroModel);
+            return heroModel != null ? (await GetHeroDetailModelAsync(heroModel)).Value : null;
         }
 
         public async Task<IReadOnlyDictionary<uint, HeroDetailModel>> GetHeroDetailsAsync()
         {
-            Dictionary<uint, HeroDetailModel> heroDetails = new Dictionary<uint, HeroDetailModel>();
-
             var heroes = await GetHeroesAsync();
 
+            List<Task<KeyValuePair<uint, HeroDetailModel>>> tasks = new List<Task<KeyValuePair<uint, HeroDetailModel>>>();
             foreach (var hero in heroes)
             {
                 // skip over the "base" hero since we don't care about it
-                if (hero.Key == 0)
-                {
-                    continue;
-                }
+                if (hero.Key == 0) { continue; }
 
-                HeroDetailModel heroDetail = await GetHeroDetailModelAsync(hero.Value);
-
-                heroDetails.Add(hero.Key, heroDetail);
+                tasks.Add(GetHeroDetailModelAsync(hero.Value));
             }
+            var completedTasks = await Task.WhenAll(tasks);
 
+            var heroDetails = new Dictionary<uint, HeroDetailModel>(completedTasks);
             return new ReadOnlyDictionary<uint, HeroDetailModel>(heroDetails);
         }
 
-        private async Task<HeroDetailModel> GetHeroDetailModelAsync(HeroSchemaModel hero)
+        private async Task<KeyValuePair<uint, HeroDetailModel>> GetHeroDetailModelAsync(HeroSchemaModel hero)
         {
             var heroDetail = new HeroDetailModel()
             {
                 Id = hero.HeroId,
-                Url = !String.IsNullOrEmpty(hero.Url) ? hero.Url.ToLower() : String.Empty,
+                Url = !string.IsNullOrWhiteSpace(hero.Url) ? hero.Url.ToLower() : string.Empty,
                 Name = await localizationService.GetLocalizationTextAsync(hero.Name),
                 Description = await localizationService.GetLocalizationTextAsync($"{hero.Name}_bio"),
-                AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/heroes/{0}_full.png", hero.Name.Replace("npc_dota_hero_", "")),
+                AvatarImagePath = $"http://cdn.dota2.com/apps/dota2/images/heroes/{hero.Name.Replace("npc_dota_hero_", string.Empty)}_full.png",
                 BaseAgility = hero.AttributeBaseAgility,
                 BaseArmor = hero.ArmorPhysical,
                 BaseDamageMax = hero.AttackDamageMax,
@@ -86,9 +93,9 @@ namespace DotaDb.Data
                 BaseIntelligence = hero.AttributeBaseIntelligence,
                 AttackRate = hero.AttackRate,
                 AttackRange = hero.AttackRange,
-                Team = GetTeamTypeKeyValue(hero.Team) != null ? GetTeamTypeKeyValue(hero.Team).ToString() : String.Empty,
+                Team = GetTeamTypeKeyValue(hero.Team)?.ToString() ?? string.Empty,
                 TurnRate = hero.MovementTurnRate,
-                AttackType = GetAttackTypeKeyValue(hero.AttackCapabilities) != null ? GetAttackTypeKeyValue(hero.AttackCapabilities).ToString() : String.Empty,
+                AttackType = GetAttackTypeKeyValue(hero.AttackCapabilities)?.ToString() ?? string.Empty,
                 Roles = hero.GetRoles(),
                 AgilityGain = hero.AttributeAgilityGain,
                 IntelligenceGain = hero.AttributeIntelligenceGain,
@@ -128,29 +135,28 @@ namespace DotaDb.Data
             await AddAbilityToViewModelIfNotNull(hero.Ability24, abilities, abilityDetailModels);
 
             heroDetail.Abilities = abilityDetailModels;
-            return heroDetail;
-        }
-
-        public async Task<IReadOnlyDictionary<uint, HeroSchemaModel>> GetHeroesAsync()
-        {
-            var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", "heroes.vdf");
-            var heroes = schemaParser.GetDotaHeroes(vdf);
-            return heroes.ToDictionary(x => x.HeroId, x => x);
+            return new KeyValuePair<uint, HeroDetailModel>(heroDetail.Id, heroDetail);
         }
 
         public async Task<IReadOnlyCollection<AbilitySchemaItemModel>> GetHeroAbilitiesAsync()
         {
-            var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", "hero_abilities.vdf");
-            var abilities = schemaParser.GetDotaHeroAbilities(vdf);
-            return abilities;
+            string fileName = "hero_abilities.vdf";
+            string cacheKey = $"parsed_{fileName}";
+            return await cacheService.GetOrSetAsync(fileName, async () =>
+            {
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                return schemaParser.GetDotaHeroAbilities(vdf);
+            }, TimeSpan.FromDays(1));
         }
 
         private async Task AddAbilityToViewModelIfNotNull(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities, List<HeroAbilityDetailModel> abilityDetailModels)
         {
-            if (!String.IsNullOrEmpty(abilityName))
+            if (string.IsNullOrWhiteSpace(abilityName))
             {
-                abilityDetailModels.Add(await GetHeroAbilityDetailModel(abilityName, abilities));
+                return;
             }
+
+            abilityDetailModels.Add(await GetHeroAbilityDetailModel(abilityName, abilities));
         }
 
         /// <summary>
@@ -161,65 +167,43 @@ namespace DotaDb.Data
         /// <returns></returns>
         private async Task<HeroAbilityDetailModel> GetHeroAbilityDetailModel(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities)
         {
-            if (String.IsNullOrWhiteSpace(abilityName))
+            if (string.IsNullOrWhiteSpace(abilityName))
             {
                 return null;
             }
 
-            // I have seen some of these keys having different casing such as "DOTA_Tooltip_ability" and "DOTA_Tooltip_Ability". Watch out.
-            string tooltipLocalizationPrefix = "DOTA_Tooltip_ability";
-
             var ability = abilities.FirstOrDefault(x => x.Name == abilityName);
-
-            // Join together various flags and attributes on an ability to a single string for display purposes
-            string joinedBehaviors = GetJoinedBehaviors(ability.AbilityBehavior);
-            string joinedUnitTargetTeamTypes = GetJoinedUnitTargetTeamTypes(ability.AbilityUnitTargetTeam);
-            string joinedUnitTargetTypes = GetJoinedUnitTargetTypes(ability.AbilityUnitTargetType);
-            string joinedUnitTargetFlags = GetJoinedUnitTargetFlags(ability.AbilityUnitTargetFlags);
-
-            List<HeroAbilitySpecialDetailModel> abilitySpecialDetailModels = new List<HeroAbilitySpecialDetailModel>();
-            foreach (var abilitySpecial in ability.AbilitySpecials)
-            {
-                var abilitySpecialDetail = new HeroAbilitySpecialDetailModel()
-                {
-                    Name = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, abilitySpecial.Name)),
-                    RawName = abilitySpecial.Name,
-                    Value = abilitySpecial.Value.ToSlashSeparatedString(),
-                    LinkedSpecialBonus = abilitySpecial.LinkedSpecialBonus
-                };
-
-                // Remove underscores from the displayed name for readability
-                if (!String.IsNullOrWhiteSpace(abilitySpecialDetail.Name))
-                {
-                    abilitySpecialDetail.Name = abilitySpecialDetail.RawName.Replace("_", " ");
-                }
-
-                abilitySpecialDetailModels.Add(abilitySpecialDetail);
-            }
-
-
-            DotaHeroAbilityType abilityType = GetHeroAbilityTypeKeyValue(ability.AbilityType);
-
-            HeroAbilityDetailModel abilityDetailModel = new HeroAbilityDetailModel();
+            var abilityDetailModel = new HeroAbilityDetailModel();
 
             // If the ability type is "ATTRIBUTE", treat it differently since there's less information about them. Also, ATTRIBUTES are now known as TALENTS as of the latest DOTA 2 7.00 patch.
+            var abilityType = GetHeroAbilityTypeKeyValue(ability.AbilityType);
             if (abilityType == DotaHeroAbilityType.TALENTS)
             {
                 abilityDetailModel = new HeroAbilityDetailModel()
                 {
                     Id = ability.Id,
-                    Name = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}", tooltipLocalizationPrefix, abilityName)),
+                    Name = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}"),
                     AbilityType = abilityType,
                 };
             }
             else
             {
+                var abilityNameTask = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}");
+                var descriptionTask = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Description");
+                var abilitySpecialTask = GetHeroAbilitySpecialDetailModels(abilityName, tooltipLocalizationPrefix, ability);
+                var note0Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note0");
+                var note1Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note1");
+                var note2Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note2");
+                var note3Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note3");
+                var note4Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note4");
+                var note5Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note5");
+
                 abilityDetailModel = new HeroAbilityDetailModel()
                 {
                     Id = ability.Id,
-                    Name = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}", tooltipLocalizationPrefix, abilityName)),
-                    AvatarImagePath = String.Format("http://cdn.dota2.com/apps/dota2/images/abilities/{0}_lg.png", ability.Name),
-                    Description = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Description")),
+                    Name = await abilityNameTask,
+                    AvatarImagePath = $"http://cdn.dota2.com/apps/dota2/images/abilities/{ability.Name}_lg.png",
+                    Description = await descriptionTask,
                     CastPoint = ability.AbilityCastPoint.ToSlashSeparatedString(),
                     CastRange = ability.AbilityCastRange.ToSlashSeparatedString(),
                     Cooldown = ability.AbilityCooldown.ToSlashSeparatedString(),
@@ -228,22 +212,35 @@ namespace DotaDb.Data
                     Duration = ability.AbilityDuration.ToSlashSeparatedString(),
                     ManaCost = ability.AbilityManaCost.ToSlashSeparatedString(),
                     SpellImmunityType = GetSpellImmunityTypeKeyValue(ability.SpellImmunityType),
-                    Attributes = abilitySpecialDetailModels,
-                    Behaviors = joinedBehaviors,
+                    Attributes = await abilitySpecialTask,
+                    Behaviors = GetJoinedBehaviors(ability.AbilityBehavior),
                     AbilityType = abilityType,
-                    TargetFlags = joinedUnitTargetFlags,
-                    TargetTypes = joinedUnitTargetTypes,
-                    TeamTargets = joinedUnitTargetTeamTypes,
-                    Note0 = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Note0")),
-                    Note1 = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Note1")),
-                    Note2 = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Note2")),
-                    Note3 = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Note3")),
-                    Note4 = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Note4")),
-                    Note5 = await localizationService.GetLocalizationTextAsync(String.Format("{0}_{1}_{2}", tooltipLocalizationPrefix, abilityName, "Note5"))
+                    TargetFlags = GetJoinedUnitTargetFlags(ability.AbilityUnitTargetFlags),
+                    TargetTypes = GetJoinedUnitTargetTypes(ability.AbilityUnitTargetType),
+                    TeamTargets = GetJoinedUnitTargetTeamTypes(ability.AbilityUnitTargetTeam),
+                    Note0 = await note0Task,
+                    Note1 = await note1Task,
+                    Note2 = await note2Task,
+                    Note3 = await note3Task,
+                    Note4 = await note4Task,
+                    Note5 = await note5Task
                 };
             }
 
             return abilityDetailModel;
+        }
+
+        private async Task<List<HeroAbilitySpecialDetailModel>> GetHeroAbilitySpecialDetailModels(string abilityName, string tooltipLocalizationPrefix, AbilitySchemaItemModel ability)
+        {
+            var abilitySpecialDetailModels = ability.AbilitySpecials
+                .Select(async abilitySpecial => new HeroAbilitySpecialDetailModel()
+                {
+                    Name = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_{abilitySpecial.Name}"),
+                    RawName = abilitySpecial.Name,
+                    Value = abilitySpecial.Value.ToSlashSeparatedString(),
+                    LinkedSpecialBonus = abilitySpecial.LinkedSpecialBonus
+                });
+            return (await Task.WhenAll(abilitySpecialDetailModels)).ToList();
         }
 
         private DotaTeamType GetTeamTypeKeyValue(string key)
@@ -341,24 +338,6 @@ namespace DotaDb.Data
             return new ReadOnlyDictionary<string, DotaHeroAbilityType>(temp);
         }
 
-        private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
-        {
-            if (key == null || String.IsNullOrEmpty(key.ToString()))
-            {
-                return default(T);
-            }
-
-            T value;
-            if (dict != null && dict.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return default(T);
-            }
-        }
-
         public string GetJoinedUnitTargetFlags(string value)
         {
             return GetJoinedValues(value, GetUnitTargetFlags());
@@ -452,14 +431,31 @@ namespace DotaDb.Data
 
         private string GetJoinedValues<T>(string startingValue, IReadOnlyDictionary<string, T> lookup)
         {
-            if (String.IsNullOrEmpty(startingValue))
+            if (string.IsNullOrWhiteSpace(startingValue))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             string[] raw = startingValue.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
             List<T> individual = raw.Select(x => GetKeyValue(x, lookup)).ToList();
-            return String.Join(", ", individual);
+            return string.Join(", ", individual);
+        }
+
+        private T GetKeyValue<T, K>(K key, IReadOnlyDictionary<K, T> dict)
+        {
+            if (key == null || string.IsNullOrWhiteSpace(key.ToString()))
+            {
+                return default(T);
+            }
+
+            if (dict != null && dict.TryGetValue(key, out T value))
+            {
+                return value;
+            }
+            else
+            {
+                return default(T);
+            }
         }
     }
 }

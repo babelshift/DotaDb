@@ -9,6 +9,10 @@ namespace DotaDb.Utilities
         public HeroMappingProfile()
         {
             CreateMap<HeroDetailModel, HeroViewModel>().ConvertUsing(new HeroToHeroViewModelConverter());
+            CreateMap<HeroRoleModel, HeroRoleViewModel>();
+            CreateMap<HeroAbilityDetailModel, HeroAbilityViewModel>()
+             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Replace("\\n", "<br />")));
+            CreateMap<HeroAbilitySpecialDetailModel, HeroAbilitySpecialViewModel>();
         }
     }
 }
