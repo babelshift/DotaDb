@@ -1,0 +1,119 @@
+﻿@page "/hero"
+@using DotaDb.Models
+@using DotaDb.Data
+@using Steam.Models.DOTA2
+@using AutoMapper
+@inject HeroService HeroService
+@inject IMapper Mapper
+
+<div class="container pt-1">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active" href="/hero?tab=grid)">
+                <i class="fa fa-th"></i> Grid
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/hero?tab=table">
+                <i class="fa fa-table"></i> Table
+            </a>
+        </li>
+    </ul>
+    <div class="card">
+        <h5 class="card-header">
+            <img src="/images/icon_str.png" width="24" height="24" />
+            Strength
+        </h5>
+        <div class="card-body hero-select-list" style="padding: 0">
+            <div class="row" style="margin: 0">
+                @foreach (var hero in viewModel.StrengthHeroes)
+                {
+                    <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
+                        <a href="/hero?id=@hero.Id&heroName=@hero.Url" title="@hero.Name">
+                            <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <h4 class="card-header">
+            <img src="/images/icon_agi.png" width="24" height="24" />
+            Agility
+        </h4>
+        <div class="card-body hero-select-list" style="padding: 0">
+            <div class="row" style="margin: 0">
+                @foreach (var hero in viewModel.AgilityHeroes)
+                {
+                    <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
+                        <a href="/hero?id=@hero.Id&heroName=@hero.Url" title="@hero.Name">
+                            <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <h5 class="card-header">
+            <img src="/images/icon_int.png" width="24" height="24" />
+            Intelligence
+        </h5>
+        <div class="card-body hero-select-list" style="padding: 0">
+            <div class="row" style="margin: 0">
+                @foreach (var hero in viewModel.IntelligenceHeroes)
+                {
+                    <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
+                        <a href="/hero?id=@hero.Id&heroName=@hero.Url" title="@hero.Name">
+                            <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private HeroSelectViewModel viewModel = new HeroSelectViewModel();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var heroes = await HeroService.GetHeroDetailsAsync();
+
+            var str = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.STRENGTH.Key);
+            var agi = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.AGILITY.Key);
+            var intel = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.INTELLECT.Key);
+
+            viewModel.StrengthHeroes = TranslateToViewModel(str);
+            viewModel.AgilityHeroes = TranslateToViewModel(agi);
+            viewModel.IntelligenceHeroes = TranslateToViewModel(intel);
+
+            StateHasChanged();
+        }
+    }
+
+    private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<uint, HeroDetailModel>> heroes)
+    {
+        List<HeroViewModel> heroViewModels = new List<HeroViewModel>();
+
+        foreach (var hero in heroes)
+        {
+            HeroViewModel heroViewModel = Mapper.Map<HeroDetailModel, HeroViewModel>(hero.Value);
+            heroViewModels.Add(heroViewModel);
+        }
+
+        return heroViewModels;
+    }
+
+    private static IEnumerable<KeyValuePair<uint, HeroDetailModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<uint, HeroDetailModel> heroes, string attributeKey)
+    {
+        return heroes.Where(x =>
+            x.Value.IsEnabled
+            && x.Value.PrimaryAttribute.Key == attributeKey
+            && x.Value.NameInSchema != "npc_dota_hero_base");
+    }
+}
