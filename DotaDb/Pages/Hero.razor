@@ -11,12 +11,12 @@
         <ul class="nav nav-pills">
             <li class="nav-item">
                 <NavLink class="nav-link" href="/hero/grid">
-                    <i class="fa fa-th"></i> Grid
+                    <i class="fas fa-th"></i> Grid
                 </NavLink>
             </li>
             <li class="nav-item">
                 <NavLink class="nav-link" href="/hero/table">
-                    <i class="fa fa-table"></i> Table
+                    <i class="fas fa-table"></i> Table
                 </NavLink>
             </li>
         </ul>
@@ -32,7 +32,7 @@
                         @foreach (var hero in viewModel.StrengthHeroes)
                         {
                             <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
-                                <a href="/hero?id=@hero.Id&heroName=@hero.Url" title="@hero.Name">
+                                <a href="/hero/@hero.Id?heroName=@hero.Url" title="@hero.Name">
                                     <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
                                 </a>
                             </div>
@@ -50,7 +50,7 @@
                         @foreach (var hero in viewModel.AgilityHeroes)
                         {
                             <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
-                                <a href="/hero?id=@hero.Id&heroName=@hero.Url" title="@hero.Name">
+                                <a href="/hero/@hero.Id?heroName=@hero.Url" title="@hero.Name">
                                     <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
                                 </a>
                             </div>
@@ -68,7 +68,7 @@
                         @foreach (var hero in viewModel.IntelligenceHeroes)
                         {
                             <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
-                                <a href="/hero?id=@hero.Id&heroName=@hero.Url" title="@hero.Name">
+                                <a href="/hero/@hero.Id?heroName=@hero.Url" title="@hero.Name">
                                     <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
                                 </a>
                             </div>
@@ -120,16 +120,15 @@
                         @foreach (var hero in viewModel.StrengthHeroes)
                         {
                             <HeroTableRow Hero="hero" />
-                            //Html.RenderPartial("_HeroTableRowPartial", hero);
                         }
-                        @*@foreach (var hero in Model.AgilityHeroes)
+                        @foreach (var hero in viewModel.AgilityHeroes)
                         {
-                            Html.RenderPartial("_HeroTableRowPartial", hero);
+                            <HeroTableRow Hero="hero" />
                         }
-                        @foreach (var hero in Model.IntelligenceHeroes)
+                        @foreach (var hero in viewModel.IntelligenceHeroes)
                         {
-                            Html.RenderPartial("_HeroTableRowPartial", hero);
-                        }*@
+                            <HeroTableRow Hero="hero" />
+                        }
                     </tbody>
                 </table>
             </div>

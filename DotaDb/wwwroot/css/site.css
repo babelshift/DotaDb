@@ -134,3 +134,28 @@ body {
     background: rgba(0, 0, 0, .5);
     max-width: 75%;
 }
+
+.abilities p {
+    margin-top: 3px;
+    line-height: 15px;
+    margin-bottom: 3px;
+}
+
+.abilities .alert {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    margin-bottom: 5px;
+}
+
+.table-column-ability-name {
+    width: 33% !important;
+}
+
+.table-column-ability-special-name {
+    width: 50% !important;
+}
+
+.table-column-ability-note-name {
+    width: 10% !important;
+}

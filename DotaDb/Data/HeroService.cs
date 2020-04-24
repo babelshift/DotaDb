@@ -82,7 +82,7 @@ namespace DotaDb.Data
                 Id = hero.HeroId,
                 Url = !string.IsNullOrWhiteSpace(hero.Url) ? hero.Url.ToLower() : string.Empty,
                 Name = await localizationService.GetLocalizationTextAsync(hero.Name),
-                Description = await localizationService.GetLocalizationTextAsync($"{hero.Name}_bio"),
+                Description = await localizationService.GetLocalizationTextAsync($"{hero.Name}_hype"),
                 AvatarImagePath = $"http://cdn.dota2.com/apps/dota2/images/heroes/{hero.Name.Replace("npc_dota_hero_", string.Empty)}_full.png",
                 BaseAgility = hero.AttributeBaseAgility,
                 BaseArmor = hero.ArmorPhysical,
@@ -152,6 +152,12 @@ namespace DotaDb.Data
         private async Task AddAbilityToViewModelIfNotNull(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities, List<HeroAbilityDetailModel> abilityDetailModels)
         {
             if (string.IsNullOrWhiteSpace(abilityName))
+            {
+                return;
+            }
+
+            // Don't return "generic" and "hidden" abilities (I don't know what they are)
+            if(abilityName.ToLower().Contains("generic"))
             {
                 return;
             }

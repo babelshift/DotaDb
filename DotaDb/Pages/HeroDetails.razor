@@ -1,0 +1,276 @@
+﻿@using DotaDb.Models
+
+<h3>Abilities</h3>
+<div class="abilities">
+    @foreach (var ability in Hero.Abilities)
+    {
+        <div class="media" style="margin-bottom: 10px">
+            <img class="mr-3 shadow" src="@ability.AvatarImagePath" width="80" height="80" />
+            <div class="media-body">
+                <h4 class="mt-0">
+                    @ability.Name
+                    @if (ability.AbilityType != null)
+                    {
+                        <span class="badge badge-primary">@ability.AbilityType</span>
+                    }
+                </h4>
+                <p class="text-muted">@ability.Description</p>
+            </div>
+        </div>
+        <div class="row">
+            @{ string unknownText = "N/A"; }
+            <div class="col-sm-6">
+                <table class="table table-sm table-striped">
+                    <tbody class="text-uppercase" style="table-layout: fixed">
+                        <tr>
+                            <td class="table-column-ability-name">Ability ID</td>
+                            <td class="text-warning"><strong>@ability.Id</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Behaviors</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @(!String.IsNullOrWhiteSpace(ability.Behaviors) ? ability.Behaviors : unknownText)
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Target Types</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.TargetTypes))
+                                    {
+                                        @ability.TargetTypes
+                                    }
+                                    else
+                                    {
+                                        @unknownText
+                                    }
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Team Targets</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.TeamTargets))
+                                    {@ability.TeamTargets }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Target Flags</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.TargetFlags))
+                                    {@ability.TargetFlags }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Cast Point</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.CastPoint))
+                                    {@ability.CastPoint }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Cast Range</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.CastRange))
+                                    {@ability.CastRange }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Cooldown</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.Cooldown))
+                                    {@ability.Cooldown }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Damage</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.Damage))
+                                    {@ability.Damage }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Damage Types</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (ability.DamageType != null)
+                                    {
+                                        if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.PHYSICAL.Key)
+                                        {
+                                            <span class="text-primary">@ability.DamageType</span>
+                                        }
+                                        else if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.MAGICAL.Key)
+                                        {
+                                            <span class="text-info">@ability.DamageType</span>
+                                        }
+                                        else if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.PURE.Key)
+                                        {
+                                            <span class="text-success">@ability.DamageType</span>
+                                        }
+                                    }
+                                    else
+                                    { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Duration</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.Duration))
+                                    {@ability.Duration }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Mana Cost</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (!String.IsNullOrWhiteSpace(ability.ManaCost))
+                                    {@ability.ManaCost }
+                                else
+                                { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-column-ability-name">Spell Immunity Types</td>
+                            <td class="text-warning">
+                                <strong>
+                                    @if (ability.SpellImmunityType != null)
+                                    {
+                                        if (ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ENEMIES_YES.Key)
+                                        {
+                                            <small class="text-success">
+                                                <i class="fas fa-check"></i>
+                                                <strong>@ability.SpellImmunityType</strong>
+                                            </small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-danger">
+                                                <i class="fas fa-times"></i>
+                                                <strong>@ability.SpellImmunityType</strong>
+                                            </small>
+                                        }
+                                    }
+                                    else
+                                    { @unknownText}
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <table class="table table-sm table-striped">
+                    <tbody class="text-uppercase" style="table-layout: fixed">
+                        @foreach (var abilitySpecial in ability.Attributes)
+                        {
+                            <tr>
+                                <td class="table-column-ability-special-name">
+                                    @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
+                                    {
+                                        @abilitySpecial.Name
+                                    }
+                                    else
+                                    {
+                                        @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
+                                    }
+                                </td>
+                                <td class="text-warning">
+                                    <strong>
+                                        @abilitySpecial.Value
+                                    </strong>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-sm table-striped" style="table-layout: fixed">
+                    <tbody>
+                        @if (!String.IsNullOrWhiteSpace(ability.Note0))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note0</td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Note1))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note1</td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Note2))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note2</td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Note3))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note3</td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Note4))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note4</td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Note5))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note5</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public HeroViewModel Hero { get; set; }
+}

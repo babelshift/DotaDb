@@ -1,0 +1,331 @@
+﻿@page "/hero/{HeroId:int}"
+@using DotaDb.Models
+@using DotaDb.Data
+@using AutoMapper
+@using Steam.Models.DOTA2
+@inject HeroService HeroService
+@inject IMapper Mapper
+
+<div class="container pt-2 pb-2">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-3">
+                    <img class="img-fluid" src="@hero.AvatarImagePath" />
+                    <h4>Stats</h4>
+                    <table class="table table-striped table-sm" style="margin-top: 5px; margin-bottom: 0px">
+                        <tbody class="text-center text-uppercase">
+                            <tr>
+                                <td>
+                                    <img src="/images/icon_str.png" width="36" height="36" />
+                                </td>
+                                <td>
+                                    <img src="/images/icon_agi.png" width="36" height="36" />
+                                </td>
+                                <td>
+                                    <img src="/images/icon_int.png" width="36" height="36" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>@hero.BaseStrength</strong> <small class="text-muted">(+@hero.StrengthGain.ToString("F"))</small>
+                                </td>
+                                <td>
+                                    <strong>@hero.BaseAgility</strong> <small class="text-muted">(+@hero.AgilityGain.ToString("F"))</small>
+                                </td>
+                                <td>
+                                    <strong>@hero.BaseIntelligence</strong> <small class="text-muted">(+@hero.IntelligenceGain.ToString("F"))</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/images/icon_atk.png" height="36" />
+                                </td>
+                                <td>
+                                    <img src="/images/icon_speed.png" height="36" />
+                                </td>
+                                <td>
+                                    <img src="/images/icon_def.png" height="36" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>@hero.BaseDamageMin - @hero.BaseDamageMax</strong>
+                                </td>
+                                <td>
+                                    <strong>@hero.BaseMoveSpeed</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        @(hero.ArmorLevels.TryGetValue(0, out double value) ? Math.Round(value, 2).ToString() : "?")
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Details</h4>
+                    <table class="table table-striped table-sm" style="table-layout: fixed">
+                        <tbody class="text-uppercase">
+                            <tr>
+                                <td>
+                                    <span>Hero ID</span>
+                                </td>
+                                <td>
+                                    <strong>@hero.Id</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: middle">
+                                    <span>Primary</span>
+                                </td>
+                                <td>
+                                    @if (hero.PrimaryAttribute != null)
+                                    {
+                                        if (hero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+                                        {
+                                            <img alt="Strength" title="Strength" src="/images/icon_str.png" width="24" height="24" />
+                                            <strong>STR</strong>
+                                        }
+                                        else if (hero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+                                        {
+                                            <img alt="Agility" title="Agility" src="/images/icon_agi.png" width="24" height="24" />
+                                            <strong>AGI</strong>
+                                        }
+                                        else if (hero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+                                        {
+                                            <img alt="Intelligence" title="Intelligence" src="/images/icon_int.png" width="24" height="24" />
+                                            <strong>INT</strong>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-question-circle"></i>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Attack Type</span>
+                                </td>
+                                <td>
+                                    <strong>@hero.AttackType</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Attack Rate</span>
+                                </td>
+                                <td>
+                                    <strong>@hero.AttackRate.ToString("F")</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Attack Range</span>
+                                </td>
+                                <td>
+                                    <strong>@hero.AttackRange.ToString("F")</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Turn Rate</span>
+                                </td>
+                                <td>
+                                    <strong>@hero.TurnRate.ToString("F")</strong>
+                                </td>
+                            </tr>
+                            @foreach (var role in hero.Roles)
+                            {
+                                string color = String.Empty;
+                                int percent = 0;
+                                if (role.Level == "1")
+                                {
+                                    color = "progress-bar-danger";
+                                    percent = 33;
+                                }
+                                else if (role.Level == "2")
+                                {
+                                    color = "progress-bar-warning";
+                                    percent = 66;
+                                }
+                                else if (role.Level == "3")
+                                {
+                                    color = "progress-bar-success";
+                                    percent = 100;
+                                }
+                                <tr>
+                                    <td>
+                                        @role.Name
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="margin-bottom: 0">
+                                            <div class="progress-bar @color" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @String.Format("{0}%", percent);">
+                                                @role.Level
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <h4>Talents</h4>
+                    <table class="table table-striped table-sm" style="table-layout: fixed">
+                        <tbody>
+                            <tr>
+                                <td class="text-right">
+                                    <small>@hero.TalentChoiceAtLevel10.HeroTalentChoice1.Name</small>
+                                </td>
+                                <td class="text-center" style="width: 20%">
+                                    <span class="fa-stack fa-lg" aria-hidden="true">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-stack-1x fa-inverse">10</i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <small>@hero.TalentChoiceAtLevel10.HeroTalentChoice2.Name</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <small>@hero.TalentChoiceAtLevel15.HeroTalentChoice1.Name</small>
+                                </td>
+                                <td class="text-center" style="width: 20%">
+                                    <span class="fa-stack fa-lg" aria-hidden="true">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-stack-1x fa-inverse">15</i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <small>@hero.TalentChoiceAtLevel15.HeroTalentChoice2.Name</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <small>@hero.TalentChoiceAtLevel20.HeroTalentChoice1.Name</small>
+                                </td>
+                                <td class="text-center" style="width: 20%">
+                                    <span class="fa-stack fa-lg" aria-hidden="true">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-stack-1x fa-inverse">20</i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <small>@hero.TalentChoiceAtLevel20.HeroTalentChoice2.Name</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <small>@hero.TalentChoiceAtLevel25.HeroTalentChoice1.Name</small>
+                                </td>
+                                <td class="text-center" style="width: 20%">
+                                    <span class="fa-stack fa-lg" aria-hidden="true">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-stack-1x fa-inverse">25</i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <small>@hero.TalentChoiceAtLevel25.HeroTalentChoice2.Name</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-9">
+                    <h3>@hero.Name</h3>
+                    @hero.Description
+                    <HeroDetails Hero="hero" />
+                </div>
+            </div>
+            <h4>Hero Level Progression</h4>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped text-uppercase text-muted" style="font-size: 12px; margin-bottom: 0">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            @for (int i = 1; i <= 25; i++)
+                            {
+                                <th>@i</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HP</td>
+                            @foreach (var healthLevel in hero.HealthLevels)
+                            {
+                                <td>@healthLevel.Value</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>MP</td>
+                            @foreach (var manaLevel in hero.ManaLevels)
+                            {
+                                <td>@manaLevel.Value</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>DMG (min)</td>
+                            @foreach (var minDamageLevel in hero.MinDamageLevels)
+                            {
+                                <td>@minDamageLevel.Value</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>DMG (max)</td>
+                            @foreach (var maxDamageLevel in hero.MaxDamageLevels)
+                            {
+                                <td>@maxDamageLevel.Value</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Armor</td>
+                            @foreach (var armorLevel in hero.ArmorLevels)
+                            {
+                                <td>@Math.Round(armorLevel.Value, 2).ToString()</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>STR</td>
+                            @foreach (var strengthLevel in hero.StrengthLevels)
+                            {
+                                <td>@strengthLevel.Value</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>AGI</td>
+                            @foreach (var agilityLevel in hero.AgilityLevels)
+                            {
+                                <td>@agilityLevel.Value</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            @foreach (var intelligenceLevel in hero.IntelligenceLevels)
+                            {
+                                <td>@intelligenceLevel.Value</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int HeroId { get; set; }
+
+    private HeroViewModel hero = new HeroViewModel();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var hero = await HeroService.GetHeroDetailsAsync((uint)HeroId);
+            this.hero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero);
+
+            StateHasChanged();
+        }
+    }
+}
