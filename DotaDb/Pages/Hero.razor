@@ -7,133 +7,124 @@
 @inject HeroService HeroService
 @inject IMapper Mapper
 
-    <div class="container pt-1">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/hero/grid">
-                    <i class="fas fa-th"></i> Grid
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/hero/table">
-                    <i class="fas fa-table"></i> Table
-                </NavLink>
-            </li>
-        </ul>
-        @if (Tab == "grid")
-        {
-            <div class="card">
-                <h5 class="card-header">
-                    <img src="/images/icon_str.png" width="24" height="24" />
-                    Strength
-                </h5>
-                <div class="card-body hero-select-list" style="padding: 0">
-                    <div class="row" style="margin: 0">
-                        @foreach (var hero in viewModel.StrengthHeroes)
-                        {
-                            <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
-                                <a href="/hero/@hero.Id?heroName=@hero.Url" title="@hero.Name">
-                                    <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
-                                </a>
-                            </div>
-                        }
-                    </div>
+<div class="container pt-1">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <NavLink class="nav-link" href="/hero/grid">
+                <i class="fas fa-th"></i> Grid
+            </NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="/hero/table">
+                <i class="fas fa-table"></i> Table
+            </NavLink>
+        </li>
+    </ul>
+    @if (Tab == "grid")
+    {
+        <div class="card my-2">
+            <h5 class="card-header">
+                <img src="/images/icon_str.png" width="28" height="28" />
+                Strength
+            </h5>
+            <div class="card-body hero-select-list" style="padding: 0">
+                <div class="row" style="margin: 0">
+                    @for (int i = 0; i < viewModel.StrengthHeroes.Count; i++)
+                    {
+                        var hero = viewModel.StrengthHeroes.ElementAt(i);
+                        <HeroGridCell Index="i" Hero="hero" />
+                    }
                 </div>
             </div>
-            <div class="card">
-                <h4 class="card-header">
-                    <img src="/images/icon_agi.png" width="24" height="24" />
-                    Agility
-                </h4>
-                <div class="card-body hero-select-list" style="padding: 0">
-                    <div class="row" style="margin: 0">
-                        @foreach (var hero in viewModel.AgilityHeroes)
-                        {
-                            <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
-                                <a href="/hero/@hero.Id?heroName=@hero.Url" title="@hero.Name">
-                                    <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
-                                </a>
-                            </div>
-                        }
-                    </div>
+        </div>
+        <div class="card my-2">
+            <h5 class="card-header">
+                <img src="/images/icon_agi.png" width="28" height="28" />
+                Agility
+            </h5>
+            <div class="card-body hero-select-list" style="padding: 0">
+                <div class="row" style="margin: 0">
+                    @for (int i = 0; i < viewModel.AgilityHeroes.Count; i++)
+                    {
+                        var hero = viewModel.AgilityHeroes.ElementAt(i);
+                        <HeroGridCell Index="i" Hero="hero" />
+                    }
                 </div>
             </div>
-            <div class="card">
-                <h5 class="card-header">
-                    <img src="/images/icon_int.png" width="24" height="24" />
-                    Intelligence
-                </h5>
-                <div class="card-body hero-select-list" style="padding: 0">
-                    <div class="row" style="margin: 0">
-                        @foreach (var hero in viewModel.IntelligenceHeroes)
-                        {
-                            <div class="col-xs-3 col-sm-2 col-md-1" style="padding: 1px">
-                                <a href="/hero/@hero.Id?heroName=@hero.Url" title="@hero.Name">
-                                    <img class="img-thumbnail m-0 p-0 border-0" src="@hero.AvatarImagePath" />
-                                </a>
-                            </div>
-                        }
-                    </div>
+        </div>
+        <div class="card my-2">
+            <h5 class="card-header">
+                <img src="/images/icon_int.png" width="28" height="28" />
+                Intelligence
+            </h5>
+            <div class="card-body hero-select-list" style="padding: 0">
+                <div class="row" style="margin: 0">
+                    @for (int i = 0; i < viewModel.IntelligenceHeroes.Count; i++)
+                    {
+                        var hero = viewModel.IntelligenceHeroes.ElementAt(i);
+                        <HeroGridCell Index="i" Hero="hero" />
+                    }
                 </div>
             </div>
-        }
-        else if (Tab == "table")
-        {
-            <div class="table-responsive">
-                <table class="table table-striped hero-table" data-toggle="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th colspan="3">Gain per Level</th>
-                            <th></th>
-                            <th colspan="2">Damage</th>
-                            <th colspan="3">Attack</th>
-                        </tr>
-                        <tr>
-                            <th>Hero</th>
-                            <th>Primary</th>
-                            <th data-sortable="true">HP</th>
-                            <th data-sortable="true">MP</th>
-                            <th data-sortable="true">Armor</th>
-                            <th data-sortable="true">Str</th>
-                            <th data-sortable="true">Agi</th>
-                            <th data-sortable="true">Int</th>
-                            <th data-sortable="true">Str</th>
-                            <th data-sortable="true">Agi</th>
-                            <th data-sortable="true">Int</th>
-                            <th data-sortable="true">Speed</th>
-                            <th data-sortable="true">Min</th>
-                            <th data-sortable="true">Max</th>
-                            <th data-sortable="true">Range</th>
-                            <th data-sortable="true">Rate</th>
-                            <th data-sortable="true">Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var hero in viewModel.StrengthHeroes)
-                        {
-                            <HeroTableRow Hero="hero" />
-                        }
-                        @foreach (var hero in viewModel.AgilityHeroes)
-                        {
-                            <HeroTableRow Hero="hero" />
-                        }
-                        @foreach (var hero in viewModel.IntelligenceHeroes)
-                        {
-                            <HeroTableRow Hero="hero" />
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-    </div>
+        </div>
+    }
+    else if (Tab == "table")
+    {
+        <div class="table-responsive">
+            <table class="table table-striped hero-table" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="3">Gain per Level</th>
+                        <th></th>
+                        <th colspan="2">Damage</th>
+                        <th colspan="3">Attack</th>
+                    </tr>
+                    <tr>
+                        <th>Hero</th>
+                        <th>Primary</th>
+                        <th data-sortable="true">HP</th>
+                        <th data-sortable="true">MP</th>
+                        <th data-sortable="true">Armor</th>
+                        <th data-sortable="true">Str</th>
+                        <th data-sortable="true">Agi</th>
+                        <th data-sortable="true">Int</th>
+                        <th data-sortable="true">Str</th>
+                        <th data-sortable="true">Agi</th>
+                        <th data-sortable="true">Int</th>
+                        <th data-sortable="true">Speed</th>
+                        <th data-sortable="true">Min</th>
+                        <th data-sortable="true">Max</th>
+                        <th data-sortable="true">Range</th>
+                        <th data-sortable="true">Rate</th>
+                        <th data-sortable="true">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hero in viewModel.StrengthHeroes)
+                    {
+                        <HeroTableRow Hero="hero" />
+                    }
+                    @foreach (var hero in viewModel.AgilityHeroes)
+                    {
+                        <HeroTableRow Hero="hero" />
+                    }
+                    @foreach (var hero in viewModel.IntelligenceHeroes)
+                    {
+                        <HeroTableRow Hero="hero" />
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
 
 @code {
     private HeroSelectViewModel viewModel = new HeroSelectViewModel();

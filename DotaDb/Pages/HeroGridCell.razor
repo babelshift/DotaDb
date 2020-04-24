@@ -1,0 +1,42 @@
+﻿@using DotaDb.Models 
+
+@{
+    if ((Index > 0) && (Index % 8) == 0)
+    {
+        <div class="d-none d-xl-block w-100"></div>
+    }
+    if ((Index > 0) && (Index % 7) == 0)
+    {
+        <div class="d-none d-lg-block d-xl-none w-100"></div>
+    }
+    if ((Index > 0) && (Index % 5) == 0)
+    {
+        <div class="d-none d-md-block d-lg-none w-100"></div>
+    }
+    if ((Index > 0) && (Index % 3) == 0)
+    {
+        <div class="d-none d-sm-block d-md-none w-100"></div>
+    }
+    if ((Index > 0) && (Index % 3) == 0)
+    {
+        <div class="d-block d-sm-none w-100"></div>
+    }
+    <div class="col" style="padding: 1px">
+        <a href="/hero/@Hero.Id?heroName=@Hero.Url" title="@Hero.Name">
+            <div class="hero-grid-img-overlay">
+                <img width="128" src="@Hero.AvatarImagePath" />
+            </div>
+            <span style="position: absolute; left: 7px; bottom: 5px; color: #fff; text-shadow: 1px 1px 1px #000">
+                <small>@Hero.Name</small>
+            </span>
+        </a>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Index { get; set; }
+
+    [Parameter]
+    public HeroViewModel Hero { get; set; }
+}

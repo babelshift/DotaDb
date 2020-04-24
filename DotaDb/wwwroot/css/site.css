@@ -121,6 +121,21 @@ body {
         border: 0;
     }
 
+.hero-grid-img-overlay {
+    position: relative;
+}
+
+    .hero-grid-img-overlay::before {
+        content: '';
+        position: absolute;
+        top: 45px;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0, 0, 0, .5);
+        width: 128px;
+    }
+
 .img-overlay {
     position: relative;
 }
