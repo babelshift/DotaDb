@@ -1,0 +1,50 @@
+﻿@using DotaDb.Models
+
+<tr>
+    <td class="text-left" style="position: relative">
+        <div class="img-overlay">
+            <img style="max-width: 75%" src="@Hero.AvatarImagePath" />
+        </div>
+        <small>
+            <a href="/hero?id=@Hero.Id&heroName=@Hero.Url" style="position: absolute; left: 20px; bottom: 15px; color: #fff">
+                @Hero.Name
+            </a>
+        </small>
+    </td>
+    @if (Hero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.STRENGTH.Key)
+    {
+        <td><img src="/images/icon_str.png" width="32" height="32" /></td>
+    }
+    else if (Hero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.AGILITY.Key)
+    {
+        <td><img src="/images/icon_agi.png" width="32" height="32" /></td>
+    }
+    else if (Hero.PrimaryAttribute.Key == Steam.Models.DOTA2.DotaHeroPrimaryAttributeType.INTELLECT.Key)
+    {
+        <td><img src="/images/icon_int.png" width="32" height="32" /></td>
+    }
+    else
+    {
+        <td><i class="fa fa-question-circle"></i></td>
+    }
+    <td>@Hero.BaseHealth</td>
+    <td>@Hero.BaseMana</td>
+    <td>@Hero.BaseArmor</td>
+    <td>@Hero.BaseStrength</td>
+    <td>@Hero.BaseAgility</td>
+    <td>@Hero.BaseIntelligence</td>
+    <td>@Hero.StrengthGain</td>
+    <td>@Hero.AgilityGain</td>
+    <td>@Hero.IntelligenceGain</td>
+    <td>@Hero.BaseMoveSpeed</td>
+    <td>@Hero.BaseDamageMin</td>
+    <td>@Hero.BaseDamageMax</td>
+    <td>@Hero.AttackRange</td>
+    <td>@Hero.AttackRate</td>
+    <td>@Hero.AttackType</td>
+</tr>
+
+@code {
+    [Parameter]
+    public HeroViewModel Hero { get; set; }
+}
