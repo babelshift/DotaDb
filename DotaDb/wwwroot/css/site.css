@@ -113,6 +113,11 @@ body {
     clear: both;
 }
 
+.hero-table td {
+    vertical-align: middle;
+    padding: 0;
+}
+
 .hero-table td, .hero-table th {
     text-align: center;
 }
@@ -147,7 +152,7 @@ body {
     bottom: 0;
     right: 0;
     background: rgba(0, 0, 0, .5);
-    max-width: 75%;
+    width: 128px;
 }
 
 .abilities p {
