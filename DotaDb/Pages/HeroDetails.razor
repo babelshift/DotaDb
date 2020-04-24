@@ -26,95 +26,80 @@
                             <td class="table-column-ability-name">Ability ID</td>
                             <td class="text-warning"><strong>@ability.Id</strong></td>
                         </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Behaviors</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @(!String.IsNullOrWhiteSpace(ability.Behaviors) ? ability.Behaviors : unknownText)
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Target Types</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.TargetTypes))
-                                    {
-                                        @ability.TargetTypes
-                                    }
-                                    else
-                                    {
-                                        @unknownText
-                                    }
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Team Targets</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.TeamTargets))
-                                    {@ability.TeamTargets }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Target Flags</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.TargetFlags))
-                                    {@ability.TargetFlags }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Cast Point</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.CastPoint))
-                                    {@ability.CastPoint }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Cast Range</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.CastRange))
-                                    {@ability.CastRange }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Cooldown</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.Cooldown))
-                                    {@ability.Cooldown }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Damage</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.Damage))
-                                    {@ability.Damage }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
+                        @if (!string.IsNullOrWhiteSpace(ability.Behaviors))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Behaviors</td>
+                                <td class="text-warning">
+                                    <strong>@ability.Behaviors</strong>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(ability.TargetTypes))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Target Types</td>
+                                <td class="text-warning">
+                                    <strong>@ability.TargetTypes</strong>
+                                </td>
+                            </tr>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(ability.TeamTargets))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Team Targets</td>
+                                <td class="text-warning">
+                                    <strong>@ability.TeamTargets</strong>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(ability.TargetFlags))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Target Flags</td>
+                                <td class="text-warning">
+                                    <strong>@ability.TargetFlags</strong>
+                                </td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.CastPoint))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Cast Point</td>
+                                <td class="text-warning">
+                                    <strong>@ability.CastPoint</strong>
+                                </td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.CastRange))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Cast Range</td>
+                                <td class="text-warning">
+                                    <strong>@ability.CastRange</strong>
+                                </td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Cooldown))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Cooldown</td>
+                                <td class="text-warning">
+                                    <strong>@ability.Cooldown</strong>
+                                </td>
+                            </tr>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(ability.Damage))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Damage</td>
+                                <td class="text-warning">
+                                    <strong>@ability.Damage</strong>
+                                </td>
+                            </tr>
+                        }
                         <tr>
                             <td class="table-column-ability-name">Damage Types</td>
                             <td class="text-warning">
@@ -139,28 +124,26 @@
                                 </strong>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Duration</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.Duration))
-                                    {@ability.Duration }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-column-ability-name">Mana Cost</td>
-                            <td class="text-warning">
-                                <strong>
-                                    @if (!String.IsNullOrWhiteSpace(ability.ManaCost))
-                                    {@ability.ManaCost }
-                                else
-                                { @unknownText}
-                                </strong>
-                            </td>
-                        </tr>
+
+                        @if (!String.IsNullOrWhiteSpace(ability.Duration))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Duration</td>
+                                <td class="text-warning">
+                                    <strong>@ability.Duration</strong>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (!String.IsNullOrWhiteSpace(ability.ManaCost))
+                        {
+                            <tr>
+                                <td class="table-column-ability-name">Mana Cost</td>
+                                <td class="text-warning">
+                                    <strong>@ability.ManaCost</strong>
+                                </td>
+                            </tr>
+                        }
                         <tr>
                             <td class="table-column-ability-name">Spell Immunity Types</td>
                             <td class="text-warning">
