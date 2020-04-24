@@ -263,6 +263,13 @@
                                 <td>@ability.Note5</td>
                             </tr>
                         }
+                        @if (!String.IsNullOrWhiteSpace(ability.Note6))
+                        {
+                            <tr>
+                                <td class="table-column-ability-note-name text-uppercase">Note:</td>
+                                <td>@ability.Note6</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

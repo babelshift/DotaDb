@@ -214,6 +214,7 @@ namespace DotaDb.Data
                 var note3Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note3");
                 var note4Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note4");
                 var note5Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note5");
+                var note6Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_Note6");
 
                 abilityDetailModel = new HeroAbilityDetailModel()
                 {
@@ -240,7 +241,8 @@ namespace DotaDb.Data
                     Note2 = await note2Task,
                     Note3 = await note3Task,
                     Note4 = await note4Task,
-                    Note5 = await note5Task
+                    Note5 = await note5Task,
+                    Note6 = await note6Task
                 };
             }
 
