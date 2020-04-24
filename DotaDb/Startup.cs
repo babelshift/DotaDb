@@ -42,6 +42,7 @@ namespace DotaDb
             services.AddSingleton<LocalizationService>();
             services.AddSingleton<HeroService>();
             services.AddSingleton<CacheService>();
+            services.AddSingleton<SharedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
