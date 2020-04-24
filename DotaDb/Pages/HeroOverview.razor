@@ -17,13 +17,34 @@
                         <tbody class="text-center text-uppercase">
                             <tr>
                                 <td>
-                                    <img src="/images/icon_str.png" width="36" height="36" />
+                                    @if (hero.PrimaryAttribute == DotaHeroPrimaryAttributeType.STRENGTH)
+                                    {
+                                        <img src="/images/icon_str.png" width="36" height="36" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/icon_str_faded.png" width="36" height="36" />
+                                    }
                                 </td>
                                 <td>
-                                    <img src="/images/icon_agi.png" width="36" height="36" />
+                                    @if (hero.PrimaryAttribute == DotaHeroPrimaryAttributeType.AGILITY)
+                                    {
+                                        <img src="/images/icon_agi.png" width="36" height="36" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/icon_agi_faded.png" width="36" height="36" />
+                                    }
                                 </td>
                                 <td>
-                                    <img src="/images/icon_int.png" width="36" height="36" />
+                                    @if (hero.PrimaryAttribute == DotaHeroPrimaryAttributeType.INTELLECT)
+                                    {
+                                        <img src="/images/icon_int.png" width="36" height="36" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/icon_int_faded.png" width="36" height="36" />
+                                    }
                                 </td>
                             </tr>
                             <tr>

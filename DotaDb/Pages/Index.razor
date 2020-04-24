@@ -160,20 +160,41 @@
                         <h2 style="margin: 0; font-weight: 100; color: #333">@randomHero.Name</h2>
                     </div>
                     <div class="card-body">
-                        <a href="/heroes/hero/@randomHero.Id">
+                        <a href="/hero/@randomHero.Id">
                             <img class="shadow center-block" src="@randomHero.AvatarImagePath" />
                         </a>
                         <table class="table table-striped table-sm" style="margin-top: 15px; margin-bottom: 0">
                             <tbody class="text-center text-uppercase">
                                 <tr>
                                     <td>
-                                        <img src="/images/icon_str.png" width="36" height="36" />
+                                        @if (randomHero.PrimaryAttribute == DotaHeroPrimaryAttributeType.STRENGTH)
+                                        {
+                                            <img src="/images/icon_str.png" width="36" height="36" />
+                                        }
+                                        else
+                                        {
+                                            <img src="/images/icon_str_faded.png" width="36" height="36" />
+                                        }
                                     </td>
                                     <td>
-                                        <img src="/images/icon_agi.png" width="36" height="36" />
+                                        @if (randomHero.PrimaryAttribute == DotaHeroPrimaryAttributeType.AGILITY)
+                                        {
+                                            <img src="/images/icon_agi.png" width="36" height="36" />
+                                        }
+                                        else
+                                        {
+                                            <img src="/images/icon_agi_faded.png" width="36" height="36" />
+                                        }
                                     </td>
                                     <td>
-                                        <img src="/images/icon_int.png" width="36" height="36" />
+                                        @if (randomHero.PrimaryAttribute == DotaHeroPrimaryAttributeType.INTELLECT)
+                                        {
+                                            <img src="/images/icon_int.png" width="36" height="36" />
+                                        }
+                                        else
+                                        {
+                                            <img src="/images/icon_int_faded.png" width="36" height="36" />
+                                        }
                                     </td>
                                 </tr>
                                 <tr>
