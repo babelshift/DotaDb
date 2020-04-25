@@ -7,6 +7,7 @@
 @inject PlayerCountService PlayerCountService
 @inject LiveLeagueGamesService LiveLeagueGamesService
 @inject HeroService HeroService
+@inject AppStateService AppStateService
 @inject IMapper Mapper
 
 <div class="container-fluid p-0">
@@ -438,6 +439,12 @@
     private Models.PlayerCountModel playerCounts = new Models.PlayerCountModel();
     private LiveLeagueGameOverviewViewModel topLiveLeagueGame = new LiveLeagueGameOverviewViewModel();
     private HeroViewModel randomHero = new HeroViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppStateService.HeaderImageName = string.Empty;
+        AppStateService.HeaderText = string.Empty;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

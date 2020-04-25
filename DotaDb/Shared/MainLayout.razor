@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using DotaDb.Data
+@using System.ComponentModel
+@inherits LayoutComponentBase
+@inject AppStateService AppStateService
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
@@ -60,6 +63,16 @@
     </div>
 </nav>
 
+@if (!string.IsNullOrWhiteSpace(AppStateService.HeaderImageName))
+{
+    <div style="background: url('/images/backgrounds/@AppStateService.HeaderImageName') no-repeat scroll center center">
+        <div class="header-bg-tint">
+            <div class="container">
+                <h2 class="text-uppercase pt-4 text-white">@AppStateService.HeaderText</h2>
+            </div>
+        </div>
+    </div>
+}
 <div class="body-content">
     @Body
 </div>
@@ -109,3 +122,16 @@
         </div>
     </div>
 </footer>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        AppStateService.PropertyChanged += OnPropertyChanged;
+    }
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+}

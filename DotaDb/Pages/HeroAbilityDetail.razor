@@ -1,0 +1,16 @@
+﻿
+@if (!string.IsNullOrWhiteSpace(DetailValue))
+{
+    <tr>
+        <td class="text-uppercase text-muted table-column-ability-name">@DetailName</td>
+        <td>@DetailValue</td>
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public string DetailName { get; set; }
+
+    [Parameter]
+    public string DetailValue { get; set; }
+}

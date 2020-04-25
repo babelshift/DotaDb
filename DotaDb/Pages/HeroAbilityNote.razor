@@ -1,0 +1,13 @@
+﻿
+@if (!String.IsNullOrWhiteSpace(Note))
+{
+    <tr class="table-light">
+        <td>@Note</td>
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public string Note { get; set; }
+
+}

@@ -5,6 +5,7 @@
 @using Steam.Models.DOTA2
 @using AutoMapper
 @inject HeroService HeroService
+@inject AppStateService AppStateService
 @inject IMapper Mapper
 
 <div class="container py-2">
@@ -136,6 +137,12 @@
 
     [Parameter]
     public string Tab { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppStateService.HeaderImageName = "bg8_fade.jpg";
+        AppStateService.HeaderText = "Heroes";
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

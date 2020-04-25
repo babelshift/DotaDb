@@ -179,3 +179,9 @@ body {
 .table-column-ability-note-name {
     width: 10% !important;
 }
+
+.header-bg-tint {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 85px;
+}

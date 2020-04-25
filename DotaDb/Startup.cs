@@ -35,14 +35,15 @@ namespace DotaDb
                 builder.AddBlobServiceClient(storageConnectionString);
             });
             services.AddAutoMapper(typeof(HeroMappingProfile), typeof(SourceSchemaParser.DotaSchemaMapperProfile));
-            services.AddSingleton<BlogFeedService>();
-            services.AddSingleton<PlayerCountService>();
-            services.AddSingleton<LiveLeagueGamesService>();
-            services.AddSingleton<BlobStorageService>();
-            services.AddSingleton<LocalizationService>();
-            services.AddSingleton<HeroService>();
-            services.AddSingleton<CacheService>();
-            services.AddSingleton<SharedService>();
+            services.AddScoped<BlogFeedService>();
+            services.AddScoped<PlayerCountService>();
+            services.AddScoped<LiveLeagueGamesService>();
+            services.AddScoped<BlobStorageService>();
+            services.AddScoped<LocalizationService>();
+            services.AddScoped<HeroService>();
+            services.AddScoped<CacheService>();
+            services.AddScoped<SharedService>();
+            services.AddScoped<AppStateService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
