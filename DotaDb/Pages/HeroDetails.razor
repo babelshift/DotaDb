@@ -2,6 +2,7 @@
 @using DotaDb.Data
 @inject AppStateService AppStateService
 
+<hr />
 <h3 class="mt-2">Abilities</h3>
 <div class="abilities">
     @foreach (var ability in Hero.Abilities)
@@ -21,6 +22,7 @@
                         <p class="text-muted">@ability.Description</p>
                     </div>
                 </div>
+                <hr />
                 <div class="row">
                     @{ string unknownText = "N/A"; }
                     <div class="col-sm-6">

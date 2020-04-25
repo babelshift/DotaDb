@@ -5,6 +5,7 @@ using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -82,11 +83,26 @@ namespace DotaDb.Data
 
         private async Task<KeyValuePair<uint, HeroDetailModel>> GetHeroDetailModelAsync(HeroSchemaModel hero)
         {
+            string heroName = string.Empty;
+
+            // For some reason, the latest 2 heroes added in patch 7.23 don't have localization names, so we do our best to figure it out
+            if (hero.Name.EndsWith("snapfire") || hero.Name.EndsWith("void_spirit"))
+            {
+                TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                heroName = hero.Name.Replace("npc_dota_hero_", string.Empty);
+                heroName = heroName.Replace("_", " ");
+                heroName = textInfo.ToTitleCase(heroName);
+            }
+            else
+            {
+                heroName = await localizationService.GetLocalizationTextAsync(hero.Name);
+            }
+
             var heroDetail = new HeroDetailModel()
             {
                 Id = hero.HeroId,
                 Url = !string.IsNullOrWhiteSpace(hero.Url) ? hero.Url.ToLower() : string.Empty,
-                Name = await localizationService.GetLocalizationTextAsync(hero.Name),
+                Name = heroName,
                 Description = await localizationService.GetLocalizationTextAsync($"{hero.Name}_hype"),
                 AvatarImagePath = $"http://cdn.dota2.com/apps/dota2/images/heroes/{hero.Name.Replace("npc_dota_hero_", string.Empty)}_full.png",
                 BaseAgility = hero.AttributeBaseAgility,
