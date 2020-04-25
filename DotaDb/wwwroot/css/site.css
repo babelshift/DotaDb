@@ -185,3 +185,7 @@ body {
     width: 100%;
     height: 85px;
 }
+
+.item-list > .col-md-4:nth-child(3n+1) {
+    clear: both;
+}

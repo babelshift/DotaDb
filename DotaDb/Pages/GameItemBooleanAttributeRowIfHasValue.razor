@@ -1,0 +1,30 @@
+﻿@if (Value.HasValue)
+{
+    <tr>
+        <td>@Name</td>
+        <td>
+            @if (Value.Value)
+            {
+                <span class="text-success">
+                    <i class="fas fa-check"></i>
+                    Yes
+                </span>
+            }
+            else
+            {
+                <span class="text-danger">
+                    <i class="fas fa-times"></i>
+                    No
+                </span>
+            }
+        </td>
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public bool? Value { get; set; }
+}

@@ -52,7 +52,7 @@ namespace DotaDb.Data
             {
                 var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
                 var heroes = schemaParser.GetDotaHeroes(vdf);
-                return heroes.ToDictionary(hero => hero.HeroId, hero => hero);
+                return new ReadOnlyDictionary<uint, HeroSchemaModel>(heroes.ToDictionary(hero => hero.HeroId, hero => hero));
             }, TimeSpan.FromDays(1));
         }
 

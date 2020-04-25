@@ -158,8 +158,6 @@
             viewModel.AgilityHeroes = TranslateToViewModel(agi);
             viewModel.IntelligenceHeroes = TranslateToViewModel(intel);
 
-            StateHasChanged();
-
             // Default view to grid if URL doesn't indicate it
             if (string.IsNullOrWhiteSpace(Tab) || (Tab != "grid" && Tab != "table"))
             {

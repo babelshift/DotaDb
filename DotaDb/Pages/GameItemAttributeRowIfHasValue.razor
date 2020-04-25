@@ -1,0 +1,15 @@
+﻿@if (!String.IsNullOrWhiteSpace(Value))
+{
+    <tr>
+        <td>@Name</td>
+        <td>@Value</td>
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public string Value { get; set; }
+}

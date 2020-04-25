@@ -204,6 +204,53 @@ namespace DotaDb.Data
             return new ReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>(temp);
         }
 
+        public string GetJoinedItemDisassembleTypes(string value)
+        {
+            return GetJoinedValues(value, GetItemDisassembleTypes());
+        }
+
+        private IReadOnlyDictionary<string, DotaItemDisassembleType> GetItemDisassembleTypes()
+        {
+            Dictionary<string, DotaItemDisassembleType> temp = new Dictionary<string, DotaItemDisassembleType>();
+
+            temp.Add(DotaItemDisassembleType.ALWAYS.Key, DotaItemDisassembleType.ALWAYS);
+            temp.Add(DotaItemDisassembleType.NEVER.Key, DotaItemDisassembleType.NEVER);
+
+            return new ReadOnlyDictionary<string, DotaItemDisassembleType>(temp);
+        }
+
+        public string GetJoinedItemShareabilityTypes(string value)
+        {
+            return GetJoinedValues(value, GetItemShareabilityTypes());
+        }
+
+        private IReadOnlyDictionary<string, DotaItemShareabilityType> GetItemShareabilityTypes()
+        {
+            Dictionary<string, DotaItemShareabilityType> temp = new Dictionary<string, DotaItemShareabilityType>();
+
+            temp.Add(DotaItemShareabilityType.FULLY_SHAREABLE.Key, DotaItemShareabilityType.FULLY_SHAREABLE);
+            temp.Add(DotaItemShareabilityType.FULLY_SHAREABLE_STACKING.Key, DotaItemShareabilityType.FULLY_SHAREABLE_STACKING);
+            temp.Add(DotaItemShareabilityType.PARTIALLY_SHAREABLE.Key, DotaItemShareabilityType.PARTIALLY_SHAREABLE);
+
+            return new ReadOnlyDictionary<string, DotaItemShareabilityType>(temp);
+        }
+
+        public string GetJoinedItemDeclarationTypes(string value)
+        {
+            return GetJoinedValues(value, GetItemDeclarationTypes());
+        }
+
+        private IReadOnlyDictionary<string, DotaItemDeclarationType> GetItemDeclarationTypes()
+        {
+            Dictionary<string, DotaItemDeclarationType> temp = new Dictionary<string, DotaItemDeclarationType>();
+
+            temp.Add(DotaItemDeclarationType.PURCHASES_IN_SPEECH.Key, DotaItemDeclarationType.PURCHASES_IN_SPEECH);
+            temp.Add(DotaItemDeclarationType.PURCHASES_TO_SPECTATORS.Key, DotaItemDeclarationType.PURCHASES_TO_SPECTATORS);
+            temp.Add(DotaItemDeclarationType.PURCHASES_TO_TEAMMATES.Key, DotaItemDeclarationType.PURCHASES_TO_TEAMMATES);
+
+            return new ReadOnlyDictionary<string, DotaItemDeclarationType>(temp);
+        }
+
         public string GetJoinedValues<T>(string startingValue, IReadOnlyDictionary<string, T> lookup)
         {
             if (string.IsNullOrWhiteSpace(startingValue))

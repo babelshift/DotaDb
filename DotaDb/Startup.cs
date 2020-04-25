@@ -44,6 +44,7 @@ namespace DotaDb
             services.AddScoped<CacheService>();
             services.AddScoped<SharedService>();
             services.AddScoped<AppStateService>();
+            services.AddScoped<ItemService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
