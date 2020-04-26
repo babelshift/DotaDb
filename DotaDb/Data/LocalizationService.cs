@@ -31,14 +31,7 @@ namespace DotaDb.Data
             }
 
             var localizationKeys = await GetAbilityLocalizationAsync();
-            if (localizationKeys != null && localizationKeys.TryGetValue(key, out string value))
-            {
-                return value;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return localizationKeys != null && localizationKeys.TryGetValue(key, out string value) ? value : string.Empty;
         }
 
         private async Task<IReadOnlyDictionary<string, string>> GetAbilityLocalizationAsync()
@@ -60,19 +53,35 @@ namespace DotaDb.Data
             }
 
             var localizationKeys = await GetPublicLocalizationAsync();
-            if (localizationKeys != null && localizationKeys.TryGetValue(key, out string value))
-            {
-                return value;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return localizationKeys != null && localizationKeys.TryGetValue(key, out string value) ? value : string.Empty;
         }
 
         private async Task<IReadOnlyDictionary<string, string>> GetPublicLocalizationAsync()
         {
             string fileName = "dota_english.vdf";
+            string cacheKey = $"parsed_{fileName}";
+
+            return await cacheService.GetOrSetAsync(fileName, async () =>
+            {
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                return schemaParser.GetDotaPublicLocalizationKeys(vdf);
+            }, TimeSpan.FromDays(1));
+        }
+
+        public async Task<string> GetCosmeticItemLocalizationTextAsync(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return string.Empty;
+            }
+
+            var localizationKeys = await GetCosmeticItemLocalizationAsync();
+            return localizationKeys != null && localizationKeys.TryGetValue(key, out string value) ? value : string.Empty;
+        }
+
+        private async Task<IReadOnlyDictionary<string, string>> GetCosmeticItemLocalizationAsync()
+        {
+            string fileName = "items_english.vdf";
             string cacheKey = $"parsed_{fileName}";
 
             return await cacheService.GetOrSetAsync(fileName, async () =>

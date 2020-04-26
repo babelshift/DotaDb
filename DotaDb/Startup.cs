@@ -35,13 +35,13 @@ namespace DotaDb
                 builder.AddBlobServiceClient(storageConnectionString);
             });
             services.AddAutoMapper(typeof(HeroMappingProfile), typeof(SourceSchemaParser.DotaSchemaMapperProfile));
+            services.AddSingleton<CacheService>();
             services.AddScoped<BlogFeedService>();
             services.AddScoped<PlayerCountService>();
             services.AddScoped<LiveLeagueGamesService>();
             services.AddScoped<BlobStorageService>();
             services.AddScoped<LocalizationService>();
             services.AddScoped<HeroService>();
-            services.AddScoped<CacheService>();
             services.AddScoped<SharedService>();
             services.AddScoped<AppStateService>();
             services.AddScoped<ItemService>();

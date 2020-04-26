@@ -1,0 +1,235 @@
+﻿@page "/items/cosmetic"
+@page "/items/cosmetic/{PrefabId:int}"
+@using DotaDb.Data
+@using DotaDb.Models
+@inject ItemService ItemService
+@inject AppStateService AppStateService
+
+<div class="container py-2">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card">
+                <div class="list-group">
+                    @foreach (var prefab in viewModel.Prefabs)
+                    {
+                        <a class="list-group-item text-uppercase" href="/items/cosmetics/@prefab.Id">
+                            @prefab.Name
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row instore-item-list">
+                        @if (!String.IsNullOrEmpty(viewModel.SelectedPrefab))
+                        {
+                            <div class="col-xs-12">
+                                <h4>Showing items tagged with '<strong>@viewModel.SelectedPrefab</strong>'</h4>
+                            </div>
+                        }
+                        @foreach (var item in viewModel.Items)
+                        {
+                            <div class="col-md-6">
+                                <div class="card" style="padding: 3px; margin-bottom: 10px">
+                                    <div class="media" style="margin-bottom: 0">
+                                        <div class="img-thumbnail" style="border: 0">
+                                            <img class="mr-2 shadow" src="@item.IconPath" alt="No icon available">
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="mt-0">@item.Name</h4>
+                                        @if (item.Price.HasValue && item.Price.Value > 0)
+                                        {
+                                            <a href="@item.StorePath" target="_blank">
+                                                View in Dota 2 Store
+                                            </a>
+                                            <i class="fas fa-external-link-square-alt"></i>
+                                            <br />
+                                        }
+                                        <span class="text-muted">@item.Description</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    @if (item.UsedBy != null && item.UsedBy.Count > 0)
+                                    {
+                                        <div class="col-md-6">
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Used by:</span>
+                                                </small>
+                                                @foreach (var hero in item.UsedBy)
+                                                {
+                                                    <img src="@hero.MinimapIconPath" width="24" height="24" />
+                                                    <a href="/hero/@hero.HeroId">
+                                                        @hero.HeroName
+                                                    </a>
+                                                }
+                                            </p>
+                                            @if (item.BundledItems != null && item.BundledItems.Count > 0)
+                                            {
+                                                <p>
+                                                    <small class="text-uppercase">
+                                                        <span class="text-muted">Bundled Items:</span>
+                                                    </small>
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    @foreach (var bundledItem in item.BundledItems)
+                                                    {
+                                                        <li>
+                                                            <small class="text-uppercase">
+                                                                <i class="fas fa-chevron-right"></i>
+                                                                @bundledItem
+                                                            </small>
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            }
+                                        </div>
+                                    }
+                                    <div class="col-md-6">
+                                        @if (!String.IsNullOrEmpty(item.Rarity))
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Rarity:</span>
+                                                    @if (!String.IsNullOrEmpty(item.RarityColor))
+                                                    {
+                                                        <span style="color: @item.RarityColor">
+                                                            @item.Rarity
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.Rarity
+                                                    }
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(item.Quality))
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Quality:</span>
+                                                    @if (!String.IsNullOrEmpty(item.QualityColor))
+                                                    {
+                                                        <span style="color: @item.QualityColor">
+                                                            @item.Quality
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.Quality
+                                                    }
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(item.PriceBucket))
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Price Bucket:</span>
+                                                    @item.PriceBucket
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(item.PriceCategoryTags))
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Category Tags:</span>
+                                                    @item.PriceCategoryTags
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (!String.IsNullOrEmpty(item.PriceClass))
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Price Class:</span>
+                                                    @item.PriceClass
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (item.PriceDate.HasValue)
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Price Date:</span>
+                                                    @item.PriceDate.Value.ToShortDateString()
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (item.Price.HasValue && item.Price.Value > 0)
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Price:</span>
+                                                    @item.Price.Value.ToString("C")
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (item.CreationDate.HasValue)
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Creation Date:</span>
+                                                    @item.CreationDate.Value.ToShortDateString()
+                                                </small>
+                                            </p>
+                                        }
+                                        @if (item.ExpirationDate.HasValue)
+                                        {
+                                            <p>
+                                                <small class="text-uppercase">
+                                                    <span class="text-muted">Expiration Date:</span>
+                                                    @item.ExpirationDate.Value.ToShortDateString()
+                                                </small>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-12">
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int PrefabId { get; set; }
+
+    private InStoreViewModel viewModel = new InStoreViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppStateService.HeaderImageName = "bg6_fade.jpg";
+        AppStateService.HeaderText = "Cosmetic & Store Items";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            string searchedCosmeticItemName = string.Empty;
+            viewModel = await ItemService.GetCosmeticItemsAsync(searchedCosmeticItemName, null);
+            viewModel.Items = viewModel.Items.Take(25);
+            StateHasChanged();
+        }
+    }
+}

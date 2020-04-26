@@ -22,7 +22,11 @@ namespace DotaDb.Data
         private readonly LocalizationService localizationService;
         private readonly BlobStorageService blobStorageService;
         private readonly SharedService sharedService;
+        private readonly HeroService heroService;
         private readonly SteamWebInterfaceFactory steamWebInterfaceFactory;
+        private readonly string minimapIconsBaseUrl;
+        private readonly string itemIconsBaseUrl;
+        private readonly string inStoreItemIconsBaseUrl;
 
         public ItemService(
             IConfiguration configuration,
@@ -30,7 +34,8 @@ namespace DotaDb.Data
             CacheService cacheService,
             LocalizationService localizationService,
             BlobStorageService blobStorageService,
-            SharedService sharedService)
+            SharedService sharedService,
+            HeroService heroService)
         {
             this.configuration = configuration;
             this.schemaParser = schemaParser;
@@ -38,8 +43,12 @@ namespace DotaDb.Data
             this.localizationService = localizationService;
             this.blobStorageService = blobStorageService;
             this.sharedService = sharedService;
+            this.heroService = heroService;
             string steamWebApiKey = configuration["SteamWebApiKey"];
             steamWebInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
+            minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
+            itemIconsBaseUrl = configuration["ItemIconsBaseUrl"];
+            inStoreItemIconsBaseUrl = configuration["InStoreItemIconsBaseUrl"];
         }
 
         public async Task<IReadOnlyCollection<GameItemViewModel>> GetGameItemsAsync(string searchedItemName)
@@ -190,6 +199,97 @@ namespace DotaDb.Data
             {
                 return string.Empty;
             }
+        }
+
+        public async Task<InStoreViewModel> GetCosmeticItemsAsync(string prefab, int? page)
+        {
+            var schema = await GetSchemaAsync();
+
+            InStoreViewModel viewModel = new InStoreViewModel();
+
+            viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
+            {
+                Id = x.Type,
+                Name = x.Type.Replace('_', ' ')
+            }).ToList().AsReadOnly();
+
+            var heroes = await heroService.GetHeroesAsync();
+            List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
+            foreach (var item in schema.Items)
+            {
+                // if the user picked a prefab and the item doesn't fit that, skip it
+                if (!String.IsNullOrEmpty(prefab) && item.Prefab != prefab)
+                {
+                    continue;
+                }
+
+                // if there's a name or description, remove the "#" character before
+                string name = !String.IsNullOrEmpty(item.Name) ? item.Name.Remove(0, 1) : String.Empty;
+                string description = !String.IsNullOrEmpty(item.ItemDescription) ? item.ItemDescription.Remove(0, 1) : String.Empty;
+
+                // look up the rarity and quality details
+                var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
+                var rarityColor = rarity != null ? schema.Colors.FirstOrDefault(x => x.Name == rarity.Color) : null;
+                var quality = schema.Qualities.FirstOrDefault(x => x.Name == item.ItemQuality);
+
+                // setup the heroes that are able to use this item
+                List<InStoreItemUsedByHeroViewModel> usedByHeroes = new List<InStoreItemUsedByHeroViewModel>();
+                if (item.UsedByHeroes != null)
+                {
+                    foreach (var heroName in item.UsedByHeroes)
+                    {
+                        var hero = heroes.FirstOrDefault(x => x.Value.Name == heroName);
+                        if (hero.Value != null)
+                        {
+                            usedByHeroes.Add(new InStoreItemUsedByHeroViewModel()
+                            {
+                                HeroId = hero.Value.HeroId,
+                                HeroName = await localizationService.GetLocalizationTextAsync(hero.Value.Name),
+                                MinimapIconPath = hero.Value.GetMinimapIconFilePath(minimapIconsBaseUrl)
+                            });
+                        }
+                    }
+                }
+
+                var itemViewModel = new InStoreItemViewModel()
+                {
+                    Name = await localizationService.GetCosmeticItemLocalizationTextAsync(name),
+                    Description = await localizationService.GetCosmeticItemLocalizationTextAsync(description),
+                    IconPath = item.GetIconPath(itemIconsBaseUrl),
+                    StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
+                    CreationDate = item.CreationDate,
+                    ExpirationDate = item.ExpirationDate,
+                    PriceBucket = item.PriceInfo != null ? item.PriceInfo.Bucket : String.Empty,
+                    PriceCategoryTags = item.PriceInfo != null ? item.PriceInfo.CategoryTags : String.Empty,
+                    PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
+                    PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : null,
+                    Price = item.PriceInfo != null ? item.PriceInfo.Price : null,
+                    Rarity = rarity != null ? rarity.Name : String.Empty,
+                    RarityColor = rarityColor != null ? rarityColor.HexColor : String.Empty,
+                    Quality = quality != null ? quality.Name : String.Empty,
+                    QualityColor = quality != null ? quality.HexColor : String.Empty,
+                    UsedBy = usedByHeroes != null ? usedByHeroes.AsReadOnly() : null,
+                    BundledItems = item.BundledItems != null ? item.BundledItems.ToList().AsReadOnly() : null
+                };
+
+                inStoreItems.Add(itemViewModel);
+            }
+
+            viewModel.Items = inStoreItems;
+            viewModel.SelectedPrefab = prefab;
+
+            return viewModel;
+        }
+
+        private async Task<SchemaModel> GetSchemaAsync()
+        {
+            string fileName = "items_game.vdf";
+            string cacheKey = $"parsed_{fileName}";
+            return await cacheService.GetOrSetAsync(cacheKey, async () =>
+            {
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                return schemaParser.GetDotaSchema(vdf);
+            }, TimeSpan.FromDays(1));
         }
     }
 }
