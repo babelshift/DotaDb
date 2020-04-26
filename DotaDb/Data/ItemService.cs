@@ -224,8 +224,12 @@ namespace DotaDb.Data
                 }
 
                 // if there's a name or description, remove the "#" character before
-                string name = !String.IsNullOrEmpty(item.Name) ? item.Name.Remove(0, 1) : String.Empty;
-                string description = !String.IsNullOrEmpty(item.ItemDescription) ? item.ItemDescription.Remove(0, 1) : String.Empty;
+                string name = !string.IsNullOrWhiteSpace(item.ItemName) && item.ItemName.StartsWith("#") 
+                    ? item.ItemName.Remove(0, 1) 
+                    : string.Empty;
+                string description = !string.IsNullOrWhiteSpace(item.ItemDescription) && item.ItemDescription.StartsWith("#") 
+                    ? item.ItemDescription.Remove(0, 1) 
+                    : string.Empty;
 
                 // look up the rarity and quality details
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
