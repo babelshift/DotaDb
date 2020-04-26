@@ -24,9 +24,11 @@ namespace DotaDb.Data
         private readonly SharedService sharedService;
         private readonly HeroService heroService;
         private readonly SteamWebInterfaceFactory steamWebInterfaceFactory;
+
         private readonly string minimapIconsBaseUrl;
-        private readonly string itemIconsBaseUrl;
         private readonly string inStoreItemIconsBaseUrl;
+        private readonly string itemAbilitiesFileName;
+        private readonly string cosmeticItemsFileName;
 
         public ItemService(
             IConfiguration configuration,
@@ -46,9 +48,11 @@ namespace DotaDb.Data
             this.heroService = heroService;
             string steamWebApiKey = configuration["SteamWebApiKey"];
             steamWebInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
-            minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
-            itemIconsBaseUrl = configuration["ItemIconsBaseUrl"];
-            inStoreItemIconsBaseUrl = configuration["InStoreItemIconsBaseUrl"];
+
+            minimapIconsBaseUrl = configuration["ImageUrls:MinimapIconsBaseUrl"];
+            inStoreItemIconsBaseUrl = configuration["ImageUrls:InStoreItemIconsBaseUrl"];
+            itemAbilitiesFileName = configuration["FileNames:ItemAbilities"];
+            cosmeticItemsFileName = configuration["FileNames:CosmeticItems"];
         }
 
         public async Task<IReadOnlyCollection<GameItemViewModel>> GetGameItemsAsync(string searchedItemName)
@@ -119,11 +123,10 @@ namespace DotaDb.Data
 
         private async Task<IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel>> GetItemAbilitiesAsync()
         {
-            string fileName = "item_abilities.vdf";
-            string cacheKey = $"parsed_{fileName}";
+            string cacheKey = $"parsed_{itemAbilitiesFileName}";
             return await cacheService.GetOrSetAsync(cacheKey, async () =>
             {
-                var vdf = await blobStorageService.GetFileFromStorageAsync("schema", fileName);
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schema", itemAbilitiesFileName);
                 var itemAbilities = schemaParser.GetDotaItemAbilities(vdf);
                 return new ReadOnlyDictionary<uint, ItemAbilitySchemaItemModel>(itemAbilities.ToDictionary(itemAbility => itemAbility.Id, x => x));
             }, TimeSpan.FromDays(1));
@@ -259,7 +262,7 @@ namespace DotaDb.Data
                 {
                     Name = await localizationService.GetCosmeticItemLocalizationTextAsync(name),
                     Description = await localizationService.GetCosmeticItemLocalizationTextAsync(description),
-                    IconPath = item.GetIconPath(itemIconsBaseUrl),
+                    IconPath = item.GetIconPath(inStoreItemIconsBaseUrl),
                     StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
                     CreationDate = item.CreationDate,
                     ExpirationDate = item.ExpirationDate,
@@ -287,11 +290,10 @@ namespace DotaDb.Data
 
         private async Task<SchemaModel> GetSchemaAsync()
         {
-            string fileName = "items_game.vdf";
-            string cacheKey = $"parsed_{fileName}";
+            string cacheKey = $"parsed_{cosmeticItemsFileName}";
             return await cacheService.GetOrSetAsync(cacheKey, async () =>
             {
-                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", cosmeticItemsFileName);
                 return schemaParser.GetDotaSchema(vdf);
             }, TimeSpan.FromDays(1));
         }

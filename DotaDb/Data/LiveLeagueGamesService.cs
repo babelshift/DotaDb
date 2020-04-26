@@ -38,10 +38,10 @@ namespace DotaDb.Data
             string steamWebApiKey = configuration["SteamWebApiKey"];
             steamWebInterfaceFactory = new SteamWebInterfaceFactory(steamWebApiKey);
 
-            itemIconsBaseUrl = configuration["ItemIconsBaseUrl"];
-            heroAvatarsBaseUrl = configuration["HeroAvatarsBaseUrl"];
-            minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
-            leagueImagesBaseUrl = configuration["LeagueImagesBaseUrl"];
+            itemIconsBaseUrl = configuration["ImageUrls:ItemIconsBaseUrl"];
+            heroAvatarsBaseUrl = configuration["ImageUrls:HeroAvatarsBaseUrl"];
+            minimapIconsBaseUrl = configuration["ImageUrls:MinimapIconsBaseUrl"];
+            leagueImagesBaseUrl = configuration["ImageUrls:LeagueImagesBaseUrl"];
         }
 
         public async Task<LiveLeagueGameOverviewViewModel> GetTopLiveLeagueGameAsync()

@@ -21,6 +21,8 @@ namespace DotaDb.Data
         private readonly LocalizationService localizationService;
         private readonly SharedService sharedService;
 
+        private readonly string heroesFileName;
+        private readonly string heroAbilitiesFileName;
         private readonly string minimapIconsBaseUrl;
 
         // I have seen some of these keys having different casing such as "DOTA_Tooltip_ability" and "DOTA_Tooltip_Ability". Watch out.
@@ -41,16 +43,17 @@ namespace DotaDb.Data
             this.localizationService = localizationService;
             this.sharedService = sharedService;
 
-            minimapIconsBaseUrl = configuration["MinimapIconsBaseUrl"];
+            minimapIconsBaseUrl = configuration["ImageUrls:MinimapIconsBaseUrl"];
+            heroesFileName = configuration["FileNames:Heroes"];
+            heroAbilitiesFileName = configuration["FileNames:HeroAbilities"];
         }
 
         public async Task<IReadOnlyDictionary<uint, HeroSchemaModel>> GetHeroesAsync()
         {
-            string fileName = "heroes.vdf";
-            string cacheKey = $"parsed_{fileName}";
-            return await cacheService.GetOrSetAsync(fileName, async () =>
+            string cacheKey = $"parsed_{heroesFileName}";
+            return await cacheService.GetOrSetAsync(cacheKey, async () =>
             {
-                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", heroesFileName);
                 var heroes = schemaParser.GetDotaHeroes(vdf);
                 return new ReadOnlyDictionary<uint, HeroSchemaModel>(heroes.ToDictionary(hero => hero.HeroId, hero => hero));
             }, TimeSpan.FromDays(1));
@@ -161,11 +164,10 @@ namespace DotaDb.Data
 
         public async Task<IReadOnlyCollection<AbilitySchemaItemModel>> GetHeroAbilitiesAsync()
         {
-            string fileName = "hero_abilities.vdf";
-            string cacheKey = $"parsed_{fileName}";
-            return await cacheService.GetOrSetAsync(fileName, async () =>
+            string cacheKey = $"parsed_{heroAbilitiesFileName}";
+            return await cacheService.GetOrSetAsync(cacheKey, async () =>
             {
-                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", fileName);
+                var vdf = await blobStorageService.GetFileFromStorageAsync("schemas", heroAbilitiesFileName);
                 return schemaParser.GetDotaHeroAbilities(vdf);
             }, TimeSpan.FromDays(1));
         }
