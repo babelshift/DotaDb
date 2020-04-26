@@ -169,23 +169,15 @@
     }
 
     private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<uint, HeroDetailModel>> heroes)
-    {
-        List<HeroViewModel> heroViewModels = new List<HeroViewModel>();
-
-        foreach (var hero in heroes)
-        {
-            HeroViewModel heroViewModel = Mapper.Map<HeroDetailModel, HeroViewModel>(hero.Value);
-            heroViewModels.Add(heroViewModel);
-        }
-
-        return heroViewModels;
-    }
+        => heroes
+            .Select(hero => Mapper.Map<HeroDetailModel, HeroViewModel>(hero.Value))
+            .ToList()
+            .AsReadOnly();
 
     private static IEnumerable<KeyValuePair<uint, HeroDetailModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<uint, HeroDetailModel> heroes, string attributeKey)
-    {
-        return heroes.Where(x =>
+        => heroes.Where(x =>
             x.Value.IsEnabled
             && x.Value.PrimaryAttribute.Key == attributeKey
-            && x.Value.NameInSchema != "npc_dota_hero_base");
-    }
+            && x.Value.NameInSchema != "npc_dota_hero_base"
+            && x.Value.NameInSchema != "npc_dota_hero_target_dummy");
 }

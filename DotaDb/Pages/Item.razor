@@ -2,6 +2,8 @@
 @using DotaDb.Data
 @using DotaDb.Models
 @inject ItemService ItemService
+@inject AppStateService AppStateService 
+
 @*<div class="panel panel-default" style="margin-top: 5px">
         <div class="panel-body">
             @using (Html.BeginForm("index", "items", FormMethod.Get, new { @class = "form-inline", role = "form" }))
@@ -154,6 +156,12 @@
 
 @code {
     private IReadOnlyCollection<GameItemViewModel> gameItems = new List<GameItemViewModel>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        AppStateService.HeaderImageName = "bg6_fade.jpg";
+        AppStateService.HeaderText = "In Game Items";
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
