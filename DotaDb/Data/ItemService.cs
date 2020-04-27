@@ -189,6 +189,7 @@ namespace DotaDb.Data
                 viewModel.StockInitial = item.ItemStockInitial;
                 viewModel.StockMax = item.ItemStockMax;
                 viewModel.StockTime = item.ItemStockTime;
+                viewModel.IsNeutralDrop = item.ItemIsNeutralDrop;
 
                 if (!string.IsNullOrWhiteSpace(item.ItemQuality))
                 {

@@ -61,5 +61,7 @@ namespace DotaDb.Models
         public string RecipeResult { get; set; }
         public bool? IsDroppable { get; set; }
         public bool? IsPurchasable { get; set; }
+
+        public bool? IsNeutralDrop { get; set; }
     }
 }

@@ -114,15 +114,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var hero in viewModel.StrengthHeroes)
-                    {
-                        <HeroTableRow Hero="hero" />
-                    }
-                    @foreach (var hero in viewModel.AgilityHeroes)
-                    {
-                        <HeroTableRow Hero="hero" />
-                    }
-                    @foreach (var hero in viewModel.IntelligenceHeroes)
+                    @foreach (var hero in heroTableList)
                     {
                         <HeroTableRow Hero="hero" />
                     }
@@ -134,6 +126,7 @@
 
 @code {
     private HeroSelectViewModel viewModel = new HeroSelectViewModel();
+    private IEnumerable<HeroViewModel> heroTableList = new List<HeroViewModel>();
 
     [Parameter]
     public string Tab { get; set; }
@@ -154,9 +147,15 @@
             var agi = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.AGILITY.Key);
             var intel = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.INTELLECT.Key);
 
-            viewModel.StrengthHeroes = TranslateToViewModel(str);
-            viewModel.AgilityHeroes = TranslateToViewModel(agi);
-            viewModel.IntelligenceHeroes = TranslateToViewModel(intel);
+            viewModel.StrengthHeroes = TranslateToViewModel(str).OrderBy(x => x.Name).ToList().AsReadOnly();
+            viewModel.AgilityHeroes = TranslateToViewModel(agi).OrderBy(x => x.Name).ToList().AsReadOnly();
+            viewModel.IntelligenceHeroes = TranslateToViewModel(intel).OrderBy(x => x.Name).ToList().AsReadOnly();
+
+            List<HeroViewModel> heroTableList = new List<HeroViewModel>();
+            heroTableList.AddRange(viewModel.StrengthHeroes);
+            heroTableList.AddRange(viewModel.AgilityHeroes);
+            heroTableList.AddRange(viewModel.IntelligenceHeroes);
+            this.heroTableList = heroTableList.OrderBy(x => x.Name);
 
             // Default view to grid if URL doesn't indicate it
             if (string.IsNullOrWhiteSpace(Tab) || (Tab != "grid" && Tab != "table"))

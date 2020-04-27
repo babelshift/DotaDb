@@ -157,7 +157,7 @@ body {
 
 .game-item-table td {
     vertical-align: middle;
-    padding: 0;
+    padding: 3px;
 }
 
 .game-item-table td, .game-item-table th {

@@ -22,32 +22,34 @@
                     <th>Sellable</th>
                     <th>Killable</th>
                     <th>Droppable</th>
+                    <th>Neutral Drop</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var gameItem in gameItems)
                 {
-                    <tr>
-                        <td>
-                            <div class="text-center py-2">
-                                <img src="@gameItem.IconPath" />
-                                <br />
-                                <small>@gameItem.Name</small>
-                            </div>
-                        </td>
-                        <td>@gameItem.Id</td>
-                        <td>@gameItem.Cost</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Quality) ? (MarkupString)gameItem.Quality : iconMinus)</td>
-                        <td>@gameItem.Behaviors</td>
-                        <td>@(gameItem.SecretShop ? iconCheck : iconTimes)</td>
-                        <td>@(gameItem.SideShop ? iconCheck : iconTimes)</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.ManaCost) ? (MarkupString)gameItem.ManaCost : iconMinus)</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Cooldown) ? (MarkupString)gameItem.Cooldown : iconMinus)</td>
-                        <td>@(gameItem.IsStackable.HasValue ? (gameItem.IsStackable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsSellable.HasValue ? (gameItem.IsSellable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsKillable.HasValue ? (gameItem.IsKillable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsDroppable.HasValue ? (gameItem.IsDroppable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                    </tr>
+                <tr>
+                    <td>
+                        <div class="text-center py-1">
+                            <img src="@gameItem.IconPath" />
+                            <br />
+                            <small>@(!string.IsNullOrWhiteSpace(gameItem.Name) ? gameItem.Name : "???")</small>
+                        </div>
+                    </td>
+                    <td>@gameItem.Id</td>
+                    <td>@gameItem.Cost</td>
+                    <td>@(!string.IsNullOrWhiteSpace(gameItem.Quality) ? (MarkupString)gameItem.Quality : iconMinus)</td>
+                    <td>@(!string.IsNullOrWhiteSpace(gameItem.Behaviors) ? (MarkupString)gameItem.Behaviors : iconMinus)</td>
+                    <td>@(gameItem.SecretShop ? iconCheck : iconTimes)</td>
+                    <td>@(gameItem.SideShop ? iconCheck : iconTimes)</td>
+                    <td>@(!string.IsNullOrWhiteSpace(gameItem.ManaCost) ? (MarkupString)gameItem.ManaCost : iconMinus)</td>
+                    <td>@(!string.IsNullOrWhiteSpace(gameItem.Cooldown) ? (MarkupString)gameItem.Cooldown : iconMinus)</td>
+                    <td>@(gameItem.IsStackable.HasValue ? (gameItem.IsStackable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                    <td>@(gameItem.IsSellable.HasValue ? (gameItem.IsSellable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                    <td>@(gameItem.IsKillable.HasValue ? (gameItem.IsKillable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                    <td>@(gameItem.IsDroppable.HasValue ? (gameItem.IsDroppable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                    <td>@(gameItem.IsNeutralDrop.HasValue ? (gameItem.IsNeutralDrop.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -222,7 +224,10 @@
         if (firstRender)
         {
             string searchedItemName = string.Empty;
-            gameItems = await ItemService.GetGameItemsAsync(searchedItemName);
+            gameItems = (await ItemService.GetGameItemsAsync(searchedItemName))
+                .OrderBy(x => x.Name)
+                .ToList()
+                .AsReadOnly();
             StateHasChanged();
         }
     }
