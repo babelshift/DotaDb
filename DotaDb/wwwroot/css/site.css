@@ -155,6 +155,15 @@ body {
     width: 128px;
 }
 
+.game-item-table td {
+    vertical-align: middle;
+    padding: 0;
+}
+
+.game-item-table td, .game-item-table th {
+    text-align: center;
+}
+
 .abilities p {
     margin-top: 3px;
     line-height: 15px;

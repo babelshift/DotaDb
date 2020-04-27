@@ -8,6 +8,7 @@ using SteamWebAPI2.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -134,15 +135,15 @@ namespace DotaDb.Data
 
         private async Task AddAbilityToItemViewModelAsync(GameItemViewModel viewModel, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
         {
-            if (abilities.TryGetValue(viewModel.Id, out ItemAbilitySchemaItemModel ability))
+            if (abilities.TryGetValue(viewModel.Id, out ItemAbilitySchemaItemModel item))
             {
-                string joinedBehaviors = sharedService.GetJoinedBehaviors(ability.AbilityBehavior);
-                string joinedUnitTargetTeamTypes = sharedService.GetJoinedUnitTargetTeamTypes(ability.AbilityUnitTargetTeam);
-                string joinedUnitTargetTypes = sharedService.GetJoinedUnitTargetTypes(ability.AbilityUnitTargetType);
-                string joinedUnitTargetFlags = sharedService.GetJoinedUnitTargetFlags(ability.AbilityUnitTargetFlags);
+                string joinedBehaviors = sharedService.GetJoinedBehaviors(item.AbilityBehavior);
+                string joinedUnitTargetTeamTypes = sharedService.GetJoinedUnitTargetTeamTypes(item.AbilityUnitTargetTeam);
+                string joinedUnitTargetTypes = sharedService.GetJoinedUnitTargetTypes(item.AbilityUnitTargetType);
+                string joinedUnitTargetFlags = sharedService.GetJoinedUnitTargetFlags(item.AbilityUnitTargetFlags);
 
                 List<HeroAbilitySpecialViewModel> abilitySpecialViewModels = new List<HeroAbilitySpecialViewModel>();
-                foreach (var abilitySpecial in ability.AbilitySpecials)
+                foreach (var abilitySpecial in item.AbilitySpecials)
                 {
                     abilitySpecialViewModels.Add(new HeroAbilitySpecialViewModel()
                     {
@@ -152,12 +153,12 @@ namespace DotaDb.Data
                     });
                 }
 
-                viewModel.CastPoint = ability.AbilityCastPoint.ToSlashSeparatedString();
-                viewModel.CastRange = ability.AbilityCastRange.ToSlashSeparatedString();
-                viewModel.Cooldown = ability.AbilityCooldown.ToSlashSeparatedString();
-                viewModel.Damage = ability.AbilityDamage.ToSlashSeparatedString();
-                viewModel.Duration = ability.AbilityDuration.ToSlashSeparatedString();
-                viewModel.ManaCost = ability.AbilityManaCost.ToSlashSeparatedString();
+                viewModel.CastPoint = item.AbilityCastPoint.ToSlashSeparatedString();
+                viewModel.CastRange = item.AbilityCastRange.ToSlashSeparatedString();
+                viewModel.Cooldown = item.AbilityCooldown.ToSlashSeparatedString();
+                viewModel.Damage = item.AbilityDamage.ToSlashSeparatedString();
+                viewModel.Duration = item.AbilityDuration.ToSlashSeparatedString();
+                viewModel.ManaCost = item.AbilityManaCost.ToSlashSeparatedString();
                 viewModel.Attributes = abilitySpecialViewModels;
                 viewModel.Behaviors = joinedBehaviors;
                 viewModel.TargetFlags = joinedUnitTargetFlags;
@@ -169,25 +170,31 @@ namespace DotaDb.Data
                 viewModel.Note3 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note3"));
                 viewModel.Note4 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note4"));
                 viewModel.Note5 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", viewModel.Name, "Note5"));
-                viewModel.CastsOnPickup = ability.ItemCastOnPickup;
-                viewModel.ContributesToNetWorthWhenDropped = ability.ItemContributesToNetWorthWhenDropped;
-                viewModel.Declarations = sharedService.GetJoinedItemDeclarationTypes(ability.ItemDeclarations);
-                viewModel.DisassembleRule = sharedService.GetJoinedItemDisassembleTypes(ability.ItemDisassembleRule);
-                viewModel.DisplayCharges = ability.ItemDisplayCharges;
-                viewModel.InitialCharges = ability.ItemInitialCharges;
-                viewModel.IsAlertable = ability.ItemAlertable;
-                viewModel.IsDroppable = ability.ItemDroppable;
-                viewModel.IsKillable = ability.ItemKillable;
-                viewModel.IsPermanent = ability.ItemPermanent;
-                viewModel.IsPurchasable = ability.ItemPurchasable;
-                viewModel.IsSellable = ability.ItemSellable;
-                viewModel.IsStackable = ability.ItemStackable;
-                viewModel.IsSupport = ability.ItemSupport;
-                viewModel.Shareability = sharedService.GetJoinedItemShareabilityTypes(ability.ItemShareability);
-                viewModel.ShopTags = GetSplitAndRejoinedShopTags(ability.ItemShopTags);
-                viewModel.StockInitial = ability.ItemStockInitial;
-                viewModel.StockMax = ability.ItemStockMax;
-                viewModel.StockTime = ability.ItemStockTime;
+                viewModel.CastsOnPickup = item.ItemCastOnPickup;
+                viewModel.ContributesToNetWorthWhenDropped = item.ItemContributesToNetWorthWhenDropped;
+                viewModel.Declarations = sharedService.GetJoinedItemDeclarationTypes(item.ItemDeclarations);
+                viewModel.DisassembleRule = sharedService.GetJoinedItemDisassembleTypes(item.ItemDisassembleRule);
+                viewModel.DisplayCharges = item.ItemDisplayCharges;
+                viewModel.InitialCharges = item.ItemInitialCharges;
+                viewModel.IsAlertable = item.ItemAlertable;
+                viewModel.IsDroppable = item.ItemDroppable;
+                viewModel.IsKillable = item.ItemKillable;
+                viewModel.IsPermanent = item.ItemPermanent;
+                viewModel.IsPurchasable = item.ItemPurchasable;
+                viewModel.IsSellable = item.ItemSellable;
+                viewModel.IsStackable = item.ItemStackable;
+                viewModel.IsSupport = item.ItemSupport;
+                viewModel.Shareability = sharedService.GetJoinedItemShareabilityTypes(item.ItemShareability);
+                viewModel.ShopTags = GetSplitAndRejoinedShopTags(item.ItemShopTags);
+                viewModel.StockInitial = item.ItemStockInitial;
+                viewModel.StockMax = item.ItemStockMax;
+                viewModel.StockTime = item.ItemStockTime;
+
+                if (!string.IsNullOrWhiteSpace(item.ItemQuality))
+                {
+                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                    viewModel.Quality = textInfo.ToTitleCase(item.ItemQuality.Replace("_", " "));
+                }
             }
         }
 
