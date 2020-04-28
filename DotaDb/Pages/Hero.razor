@@ -71,6 +71,52 @@
     }
     else if (Tab == "table")
     {
+        <div class="card my-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <fieldset class="form-group">
+                            <legend>Primary</legend>
+                            <div class="custom-control custom-checkbox">
+                                <input id="showStrength" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "strength"))" />
+                                <label class="custom-control-label" for="showStrength">
+                                    Strength
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input id="showAgility" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "agility"))" />
+                                <label class="custom-control-label" for="showAgility">
+                                    Agility
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input id="showIntelligence" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "intelligence"))" />
+                                <label class="custom-control-label" for="showIntelligence">
+                                    Intelligence
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-4">
+                        <fieldset class="form-group">
+                            <legend>Attack Type</legend>
+                            <div class="custom-control custom-checkbox">
+                                <input id="showMelee" class="custom-control-input" type="checkbox" @onchange="@(e => OnAttackTypeFilterChanged(e, "melee"))" />
+                                <label class="custom-control-label" for="showMelee">
+                                    Melee
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input id="showRanged" class="custom-control-input" type="checkbox" @onchange="@(e => OnAttackTypeFilterChanged(e, "ranged"))" />
+                                <label class="custom-control-label" for="showRanged">
+                                    Ranged
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped hero-table" data-toggle="table">
                 <thead>
@@ -114,7 +160,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var hero in heroTableList)
+                    @foreach (var hero in filteredHeroTableList)
                     {
                         <HeroTableRow Hero="hero" />
                     }
@@ -127,9 +173,107 @@
 @code {
     private HeroSelectViewModel viewModel = new HeroSelectViewModel();
     private IEnumerable<HeroViewModel> heroTableList = new List<HeroViewModel>();
+    private List<HeroViewModel> filteredHeroTableList = new List<HeroViewModel>();
+    private HashSet<string> activeFiltersPrimaryAttribute = new HashSet<string>();
+    private HashSet<string> activeFiltersAttackType = new HashSet<string>();
 
     [Parameter]
     public string Tab { get; set; }
+
+    private void OnPrimaryAttributeFilterChanged(ChangeEventArgs e, string source)
+    {
+        if ((bool)e.Value)
+        {
+            activeFiltersPrimaryAttribute.Add(source);
+        }
+        else
+        {
+            activeFiltersPrimaryAttribute.Remove(source);
+        }
+
+        ApplyFilters();
+    }
+
+    private void OnAttackTypeFilterChanged(ChangeEventArgs e, string source)
+    {
+        if ((bool)e.Value)
+        {
+            activeFiltersAttackType.Add(source);
+        }
+        else
+        {
+            activeFiltersAttackType.Remove(source);
+        }
+
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        filteredHeroTableList = new List<HeroViewModel>();
+
+        var groupA = FilterHeroListOnPrimaryAttribute();
+        var groupB = FilterHeroListOnAttackType();
+
+        var result = groupA.Intersect(groupB);
+
+        filteredHeroTableList = result
+            .OrderBy(x => x.Name)
+            .ToList();
+    }
+
+
+    private IEnumerable<HeroViewModel> FilterHeroListOnPrimaryAttribute()
+    {
+        List<HeroViewModel> group = new List<HeroViewModel>();
+
+        if (!activeFiltersPrimaryAttribute.Any())
+        {
+            return heroTableList;
+        }
+
+        foreach (var filter in activeFiltersPrimaryAttribute)
+        {
+            if (filter == "strength")
+            {
+                group.AddRange(heroTableList.Where(x => x.PrimaryAttribute == DotaHeroPrimaryAttributeType.STRENGTH));
+            }
+            if (filter == "agility")
+            {
+                group.AddRange(heroTableList.Where(x => x.PrimaryAttribute == DotaHeroPrimaryAttributeType.AGILITY));
+            }
+            if (filter == "intelligence")
+            {
+                group.AddRange(heroTableList.Where(x => x.PrimaryAttribute == DotaHeroPrimaryAttributeType.INTELLECT));
+            }
+        }
+
+        return group;
+    }
+
+    private IEnumerable<HeroViewModel> FilterHeroListOnAttackType()
+    {
+        List<HeroViewModel> group = new List<HeroViewModel>();
+
+        if(!activeFiltersAttackType.Any())
+        {
+            return heroTableList;
+        }
+
+        foreach (var filter in activeFiltersAttackType)
+        {
+            if (filter == "melee")
+            {
+                group.AddRange(heroTableList.Where(x => x.AttackType == "Melee"));
+            }
+            if (filter == "ranged")
+            {
+                group.AddRange(heroTableList.Where(x => x.AttackType == "Ranged"));
+            }
+        }
+
+        return group;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -147,15 +291,18 @@
             var agi = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.AGILITY.Key);
             var intel = GetHeroesByPrimaryAttribute(heroes, DotaHeroPrimaryAttributeType.INTELLECT.Key);
 
+            // Grid list is separated visually by primary attribute
             viewModel.StrengthHeroes = TranslateToViewModel(str).OrderBy(x => x.Name).ToList().AsReadOnly();
             viewModel.AgilityHeroes = TranslateToViewModel(agi).OrderBy(x => x.Name).ToList().AsReadOnly();
             viewModel.IntelligenceHeroes = TranslateToViewModel(intel).OrderBy(x => x.Name).ToList().AsReadOnly();
 
-            List<HeroViewModel> heroTableList = new List<HeroViewModel>();
-            heroTableList.AddRange(viewModel.StrengthHeroes);
-            heroTableList.AddRange(viewModel.AgilityHeroes);
-            heroTableList.AddRange(viewModel.IntelligenceHeroes);
-            this.heroTableList = heroTableList.OrderBy(x => x.Name);
+            // Hero table list is a merged set ordered by name
+            List<HeroViewModel> tempHeroTableList = new List<HeroViewModel>();
+            tempHeroTableList.AddRange(viewModel.StrengthHeroes);
+            tempHeroTableList.AddRange(viewModel.AgilityHeroes);
+            tempHeroTableList.AddRange(viewModel.IntelligenceHeroes);
+            this.heroTableList = tempHeroTableList.OrderBy(x => x.Name);
+            this.filteredHeroTableList = this.heroTableList.ToList();
 
             // Default view to grid if URL doesn't indicate it
             if (string.IsNullOrWhiteSpace(Tab) || (Tab != "grid" && Tab != "table"))
