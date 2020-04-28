@@ -1,5 +1,4 @@
 ﻿@page "/hero"
-@page "/hero/{tab}"
 @using DotaDb.Models
 @using DotaDb.Data
 @using Steam.Models.DOTA2
@@ -9,68 +8,6 @@
 @inject IMapper Mapper
 
 <div class="container py-2">
-    @*<ul class="nav nav-pills">
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/hero/grid">
-                    <i class="fas fa-th"></i> Grid
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/hero/table">
-                    <i class="fas fa-table"></i> Table
-                </NavLink>
-            </li>
-        </ul>
-        @if (Tab == "grid")
-        {
-            <div class="card my-2">
-                <h5 class="card-header">
-                    <img src="/images/icon_str.png" width="28" height="28" />
-                    Strength
-                </h5>
-                <div class="card-body hero-select-list" style="padding: 0">
-                    <div class="row" style="margin: 0">
-                        @for (int i = 0; i < viewModel.StrengthHeroes.Count; i++)
-                        {
-                            var hero = viewModel.StrengthHeroes.ElementAt(i);
-                            <HeroGridCell Index="i" Hero="hero" />
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="card my-2">
-                <h5 class="card-header">
-                    <img src="/images/icon_agi.png" width="28" height="28" />
-                    Agility
-                </h5>
-                <div class="card-body hero-select-list" style="padding: 0">
-                    <div class="row" style="margin: 0">
-                        @for (int i = 0; i < viewModel.AgilityHeroes.Count; i++)
-                        {
-                            var hero = viewModel.AgilityHeroes.ElementAt(i);
-                            <HeroGridCell Index="i" Hero="hero" />
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="card my-2">
-                <h5 class="card-header">
-                    <img src="/images/icon_int.png" width="28" height="28" />
-                    Intelligence
-                </h5>
-                <div class="card-body hero-select-list" style="padding: 0">
-                    <div class="row" style="margin: 0">
-                        @for (int i = 0; i < viewModel.IntelligenceHeroes.Count; i++)
-                        {
-                            var hero = viewModel.IntelligenceHeroes.ElementAt(i);
-                            <HeroGridCell Index="i" Hero="hero" />
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-        else if (Tab == "table")
-        {*@
     <div class="row row-cols-5">
         <div class="col">
             <div class="card my-2 @selectedStrengthClasses">
@@ -142,22 +79,12 @@
         <table class="table table-striped hero-table" data-toggle="table">
             <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th></th>
+                    <th colspan="2">
+                        <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
+                               @bind="searchValue"
+                               @bind:event="oninput"
+                               @onkeyup="OnSearch" />
+                    </th>
                     <th data-sortable="true">HP / MP</th>
                     <th data-sortable="true">
                         <img src="/images/overviewicon_attack.png" width="24" height="24" />
@@ -207,36 +134,39 @@
     private string selectedMeleeClasses;
     private string selectedRangedClasses;
 
-    [Parameter]
-    public string Tab { get; set; }
+    private string searchValue;
 
+    private void OnSearch(KeyboardEventArgs e)
+    {
+        // Apply filters if the user has either cleared out search or pressed "Enter"
+        if (string.IsNullOrWhiteSpace(searchValue) || e.Key == "Enter")
+        {
+            ApplyFilters();
+        }
+    }
 
     private void OnPrimaryAttributeFilterChanged(ChangeEventArgs e, string source)
     {
-        if ((bool)e.Value)
-        {
-            activeFiltersPrimaryAttribute.Add(source);
-        }
-        else
-        {
-            activeFiltersPrimaryAttribute.Remove(source);
-        }
-
+        AddRemoveActiveFilters(activeFiltersPrimaryAttribute, (bool)e.Value, source);
         ApplyFilters();
     }
 
     private void OnAttackTypeFilterChanged(ChangeEventArgs e, string source)
     {
-        if ((bool)e.Value)
+        AddRemoveActiveFilters(activeFiltersAttackType, (bool)e.Value, source);
+        ApplyFilters();
+    }
+
+    private void AddRemoveActiveFilters(HashSet<string> activeFilters, bool isActive, string filter)
+    {
+        if (isActive)
         {
-            activeFiltersAttackType.Add(source);
+            activeFilters.Add(filter);
         }
         else
         {
-            activeFiltersAttackType.Remove(source);
+            activeFilters.Remove(filter);
         }
-
-        ApplyFilters();
     }
 
     private void ApplyFilters()
@@ -248,12 +178,17 @@
         selectedMeleeClasses = string.Empty;
         selectedRangedClasses = string.Empty;
 
+        // Group A filtered with OR (additive)
         var groupA = FilterHeroListOnPrimaryAttribute();
+
+        // Group B filtered with OR (additive)
         var groupB = FilterHeroListOnAttackType();
 
+        // Group A + Group B filtered with AND (exclusive)
         var result = groupA.Intersect(groupB);
 
         filteredHeroTableList = result
+            .Where(x => !string.IsNullOrWhiteSpace(searchValue) ? x.Name.ToLower().Contains(searchValue.ToLower()) : true)
             .OrderBy(x => x.Name)
             .ToList();
     }
@@ -263,11 +198,13 @@
     {
         List<HeroViewModel> group = new List<HeroViewModel>();
 
+        // No active filters? Return everything.
         if (!activeFiltersPrimaryAttribute.Any())
         {
             return heroTableList;
         }
 
+        // Enumerate active filters and apply accordingly
         foreach (var filter in activeFiltersPrimaryAttribute)
         {
             if (filter == "strength")
@@ -344,12 +281,6 @@
             tempHeroTableList.AddRange(viewModel.IntelligenceHeroes);
             this.heroTableList = tempHeroTableList.OrderBy(x => x.Name);
             this.filteredHeroTableList = this.heroTableList.ToList();
-
-            // Default view to grid if URL doesn't indicate it
-            if (string.IsNullOrWhiteSpace(Tab) || (Tab != "grid" && Tab != "table"))
-            {
-                Tab = "grid";
-            }
 
             StateHasChanged();
         }
