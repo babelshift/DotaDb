@@ -200,6 +200,8 @@ namespace DotaDb.Data
             temp.Add(DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN.Key, DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN);
             temp.Add(DotaHeroAbilityBehaviorType.RUNE_TARGET.Key, DotaHeroAbilityBehaviorType.RUNE_TARGET);
             temp.Add(DotaHeroAbilityBehaviorType.UNRESTRICTED.Key, DotaHeroAbilityBehaviorType.UNRESTRICTED);
+            temp.Add(DotaHeroAbilityBehaviorType.OPTIONAL_UNIT_TARGET.Key, DotaHeroAbilityBehaviorType.OPTIONAL_UNIT_TARGET);
+            temp.Add(DotaHeroAbilityBehaviorType.SUPPRESS_ASSOCIATED_CONSUMABLE.Key, DotaHeroAbilityBehaviorType.SUPPRESS_ASSOCIATED_CONSUMABLE);
 
             return new ReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>(temp);
         }

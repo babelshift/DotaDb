@@ -1,12 +1,52 @@
 ﻿@page "/items/game"
 @using DotaDb.Data
 @using DotaDb.Models
+@using DotaDb.Utilities
 @inject ItemService ItemService
 @inject AppStateService AppStateService
 
 <div class="container py-2">
+    <div class="row mb-2">
+        <div class="col-md-2">
+            <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
+                   @bind="searchValue"
+                   @bind:event="oninput"
+                   @onkeyup="OnSearch" />
+        </div>
+        <div class="col-md-2">
+            <select class="custom-select custom-select-sm" @onchange="OnQualityChanged">
+                <option selected value=" ">-- Quality --</option>
+                <option value="artifact">Artifact</option>
+                <option value="common">Common</option>
+                <option value="component">Component</option>
+                <option value="epic">Epic</option>
+                <option value="secret shop">Secret Shop</option>
+                <option value="rare">Rare</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="custom-select custom-select-sm" @onchange="OnBehaviorChanged">
+                <option selected value=" ">-- Behavior --</option>
+                <option value="area of effect">Area of Effect</option>
+                <option value="channelled">Channelled</option>
+                <option value="cursor target">Cursor Target</option>
+                <option value="directional">Directional</option>
+                <option value="disable roots">Disable Roots</option>
+                <option value="ignore channel">Ignore Channel</option>
+                <option value="immediate">Immediate</option>
+                <option value="no target">No Target</option>
+                <option value="optional unit target">Optional Unit Target</option>
+                <option value="passive">Passive</option>
+                <option value="stops attacking">Stops Attacking</option>
+                <option value="stops movement">Stops Movement</option>
+                <option value="toggle">Toggle</option>
+                <option value="unit target">Unit Target</option>
+                <option value="suppress associated consumable">Suppress Associated Consumable</option>
+            </select>
+        </div>
+    </div>
     <div class="table-responsive">
-        <table class="table table-striped game-item-table" data-toggle="table">
+        <table class="table table-hover game-item-table" data-toggle="table">
             <thead>
                 <tr>
                     <th></th>
@@ -14,8 +54,6 @@
                     <th>Cost</th>
                     <th>Quality</th>
                     <th>Behavior</th>
-                    <th>Secret Shop</th>
-                    <th>Side Shop</th>
                     <th>Mana Cost</th>
                     <th>Cooldown</th>
                     <th>Stackable</th>
@@ -26,54 +64,33 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var gameItem in gameItems)
+                @foreach (var gameItem in filteredGameItems)
                 {
-                <tr>
-                    <td>
-                        <div class="text-center py-1">
-                            <img src="@gameItem.IconPath" />
-                            <br />
-                            <small>@(!string.IsNullOrWhiteSpace(gameItem.Name) ? gameItem.Name : "???")</small>
-                        </div>
-                    </td>
-                    <td>@gameItem.Id</td>
-                    <td>@gameItem.Cost</td>
-                    <td>@(!string.IsNullOrWhiteSpace(gameItem.Quality) ? (MarkupString)gameItem.Quality : iconMinus)</td>
-                    <td>@(!string.IsNullOrWhiteSpace(gameItem.Behaviors) ? (MarkupString)gameItem.Behaviors : iconMinus)</td>
-                    <td>@(gameItem.SecretShop ? iconCheck : iconTimes)</td>
-                    <td>@(gameItem.SideShop ? iconCheck : iconTimes)</td>
-                    <td>@(!string.IsNullOrWhiteSpace(gameItem.ManaCost) ? (MarkupString)gameItem.ManaCost : iconMinus)</td>
-                    <td>@(!string.IsNullOrWhiteSpace(gameItem.Cooldown) ? (MarkupString)gameItem.Cooldown : iconMinus)</td>
-                    <td>@(gameItem.IsStackable.HasValue ? (gameItem.IsStackable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                    <td>@(gameItem.IsSellable.HasValue ? (gameItem.IsSellable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                    <td>@(gameItem.IsKillable.HasValue ? (gameItem.IsKillable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                    <td>@(gameItem.IsDroppable.HasValue ? (gameItem.IsDroppable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                    <td>@(gameItem.IsNeutralDrop.HasValue ? (gameItem.IsNeutralDrop.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                </tr>
+                    <tr>
+                        <td>
+                            <div class="text-center py-1">
+                                <img src="@gameItem.IconPath" />
+                                <br />
+                                <small>@(!string.IsNullOrWhiteSpace(gameItem.Name) ? gameItem.Name : "???")</small>
+                            </div>
+                        </td>
+                        <td>@gameItem.Id</td>
+                        <td>@gameItem.Cost</td>
+                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Quality) ? (MarkupString)gameItem.Quality : iconMinus)</td>
+                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Behaviors) ? (MarkupString)gameItem.Behaviors : iconMinus)</td>
+                        <td>@(!string.IsNullOrWhiteSpace(gameItem.ManaCost) ? (MarkupString)gameItem.ManaCost : iconMinus)</td>
+                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Cooldown) ? (MarkupString)gameItem.Cooldown : iconMinus)</td>
+                        <td>@(gameItem.IsStackable.HasValue ? (gameItem.IsStackable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                        <td>@(gameItem.IsSellable.HasValue ? (gameItem.IsSellable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                        <td>@(gameItem.IsKillable.HasValue ? (gameItem.IsKillable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                        <td>@(gameItem.IsDroppable.HasValue ? (gameItem.IsDroppable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                        <td>@(gameItem.IsNeutralDrop.HasValue ? (gameItem.IsNeutralDrop.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-
-@*<div class="panel panel-default" style="margin-top: 5px">
-        <div class="panel-body">
-            @using (Html.BeginForm("index", "items", FormMethod.Get, new { @class = "form-inline", role = "form" }))
-            {
-                <div class="form-group">
-                    <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Search for an item">
-                </div>
-                <button type="submit" class="btn btn-default">
-                    <i class="fa fa-search"></i>
-                    Search
-                </button>
-            }
-            @if (!String.IsNullOrEmpty(ViewBag.SearchItemName))
-            {
-                <p>Filter: <strong>@String.Format("'{0}'", ViewBag.SearchItemName)</strong> <small><a href="@Url.Action("index", "items")"><i class="fa fa-remove"></i></a></small></p>
-            }
-        </div>
-    </div>*@
 
 @*<div class="container py-2">
         <div class="card">
@@ -207,11 +224,72 @@
     </div>*@
 
 @code {
-    private IReadOnlyCollection<GameItemViewModel> gameItems = new List<GameItemViewModel>();
+    private IEnumerable<GameItemViewModel> gameItems = new List<GameItemViewModel>();
+    private List<GameItemViewModel> filteredGameItems = new List<GameItemViewModel>();
 
     private MarkupString iconCheck = (MarkupString)"<i class=\"fas fa-check text-success\" />";
     private MarkupString iconTimes = (MarkupString)"<i class=\"fas fa-times text-danger\" />";
     private MarkupString iconMinus = (MarkupString)"<i class=\"fas fa-minus text-warning\" />";
+
+    private string searchValue;
+    private string selectedQuality;
+    private string selectedBehavior;
+
+    private void OnSearch(KeyboardEventArgs e)
+    {
+        // Apply filters if the user has either cleared out search or pressed "Enter"
+        if (string.IsNullOrWhiteSpace(searchValue) || e.Key == "Enter")
+        {
+            ApplyFilters();
+        }
+    }
+
+    private void OnQualityChanged(ChangeEventArgs e)
+    {
+        selectedQuality = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    private void OnBehaviorChanged(ChangeEventArgs e)
+    {
+        selectedBehavior = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        filteredGameItems = new List<GameItemViewModel>();
+
+        var groupA = FilterQuality();
+        var groupB = FilterBehavior();
+
+        var result = groupA.Intersect(groupB, new GameItemViewModelEqualityComparer());
+
+        filteredGameItems = result
+            .Where(x => !string.IsNullOrWhiteSpace(searchValue) ? x.Name.ToLower().Contains(searchValue.Trim().ToLower()) : true)
+            .OrderBy(x => x.Name)
+            .ToList();
+    }
+
+    private IEnumerable<GameItemViewModel> FilterQuality()
+    {
+        if (string.IsNullOrWhiteSpace(selectedQuality))
+        {
+            return gameItems;
+        }
+
+        return gameItems.Where(x => !string.IsNullOrWhiteSpace(x.Quality) && x.Quality.ToLower().Contains(selectedQuality));
+    }
+
+    private IEnumerable<GameItemViewModel> FilterBehavior()
+    {
+        if (string.IsNullOrWhiteSpace(selectedBehavior))
+        {
+            return gameItems;
+        }
+
+        return gameItems.Where(x => !string.IsNullOrWhiteSpace(x.Behaviors) && x.Behaviors.ToLower().Contains(selectedBehavior));
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -225,9 +303,8 @@
         {
             string searchedItemName = string.Empty;
             gameItems = (await ItemService.GetGameItemsAsync(searchedItemName))
-                .OrderBy(x => x.Name)
-                .ToList()
-                .AsReadOnly();
+                .OrderBy(x => x.Name);
+            filteredGameItems = gameItems.ToList();
             StateHasChanged();
         }
     }

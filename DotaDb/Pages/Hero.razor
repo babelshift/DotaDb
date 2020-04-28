@@ -1,6 +1,7 @@
 ﻿@page "/hero"
 @using DotaDb.Models
 @using DotaDb.Data
+@using DotaDb.Utilities
 @using Steam.Models.DOTA2
 @using AutoMapper
 @inject HeroService HeroService
@@ -185,10 +186,10 @@
         var groupB = FilterHeroListOnAttackType();
 
         // Group A + Group B filtered with AND (exclusive)
-        var result = groupA.Intersect(groupB);
+        var result = groupA.Intersect(groupB, new HeroViewModelEqualityComparer());
 
         filteredHeroTableList = result
-            .Where(x => !string.IsNullOrWhiteSpace(searchValue) ? x.Name.ToLower().Contains(searchValue.ToLower()) : true)
+            .Where(x => !string.IsNullOrWhiteSpace(searchValue) ? x.Name.ToLower().Contains(searchValue.Trim().ToLower()) : true)
             .OrderBy(x => x.Name)
             .ToList();
     }
