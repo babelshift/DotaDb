@@ -14,7 +14,10 @@ namespace DotaDb.Utilities
         {
             HeroViewModel viewModel = new HeroViewModel();
 
-            var abilities = source.Abilities.Where(x => x.AbilityType != DotaHeroAbilityType.TALENTS).ToList().AsReadOnly();
+            var abilities = source.Abilities
+                .Where(x => x.AbilityType != DotaHeroAbilityType.TALENTS)
+                .ToList()
+                .AsReadOnly();
 
             var talents = source.Abilities
                 .Where(x => x.AbilityType == DotaHeroAbilityType.TALENTS)

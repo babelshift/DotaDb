@@ -28,13 +28,7 @@ namespace DotaDb.Models
         public string Damage { get; set; }
         public string ManaCost { get; set; }
         public DotaHeroAbilityType AbilityType { get; set; }
-        public string Note0 { get; set; }
-        public string Note1 { get; set; }
-        public string Note2 { get; set; }
-        public string Note3 { get; set; }
-        public string Note4 { get; set; }
-        public string Note5 { get; set; }
-        public string Note6 { get; set; }
+        public IReadOnlyCollection<string> Notes { get; set; }
         public bool HasLinkedSpecialBonus { get; set; }
     }
 }

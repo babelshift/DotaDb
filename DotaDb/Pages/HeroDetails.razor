@@ -118,13 +118,10 @@
                     <div class="col-sm-12">
                         <table class="table table-sm" style="table-layout: fixed">
                             <tbody>
-                                <HeroAbilityNote Note="@ability.Note0" />
-                                <HeroAbilityNote Note="@ability.Note1" />
-                                <HeroAbilityNote Note="@ability.Note2" />
-                                <HeroAbilityNote Note="@ability.Note3" />
-                                <HeroAbilityNote Note="@ability.Note4" />
-                                <HeroAbilityNote Note="@ability.Note5" />
-                                <HeroAbilityNote Note="@ability.Note6" />
+                                @foreach (var note in ability.Notes)
+                                {
+                                    <HeroAbilityNote Note="@note" />
+                                }
                             </tbody>
                         </table>
                     </div>

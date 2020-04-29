@@ -174,7 +174,10 @@ namespace DotaDb.Data
             }, TimeSpan.FromDays(1));
         }
 
-        private async Task AddAbilityToViewModelIfNotNull(string abilityName, IReadOnlyCollection<AbilitySchemaItemModel> abilities, List<HeroAbilityDetailModel> abilityDetailModels)
+        private async Task AddAbilityToViewModelIfNotNull(
+            string abilityName, 
+            IReadOnlyCollection<AbilitySchemaItemModel> abilities, 
+            IList<HeroAbilityDetailModel> abilityDetailModels)
         {
             if (string.IsNullOrWhiteSpace(abilityName))
             {
@@ -274,7 +277,10 @@ namespace DotaDb.Data
             return abilityDetailModel;
         }
 
-        private async Task<List<HeroAbilitySpecialDetailModel>> GetHeroAbilitySpecialDetailModels(string abilityName, string tooltipLocalizationPrefix, AbilitySchemaItemModel ability)
+        private async Task<IReadOnlyCollection<HeroAbilitySpecialDetailModel>> GetHeroAbilitySpecialDetailModels(
+            string abilityName, 
+            string tooltipLocalizationPrefix, 
+            AbilitySchemaItemModel ability)
         {
             var abilitySpecialDetailModels = ability.AbilitySpecials
                 .Select(async abilitySpecial => new HeroAbilitySpecialDetailModel()
@@ -284,7 +290,9 @@ namespace DotaDb.Data
                     Value = abilitySpecial.Value.ToSlashSeparatedString(),
                     LinkedSpecialBonus = abilitySpecial.LinkedSpecialBonus
                 });
-            return (await Task.WhenAll(abilitySpecialDetailModels)).ToList();
+            return (await Task.WhenAll(abilitySpecialDetailModels))
+                .ToList()
+                .AsReadOnly();
         }
     }
 }

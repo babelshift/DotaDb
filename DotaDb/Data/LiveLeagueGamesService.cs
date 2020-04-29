@@ -54,9 +54,16 @@ namespace DotaDb.Data
                 return await dota2MatchInterface.GetLiveLeagueGamesAsync();
             }, TimeSpan.FromMinutes(15));
             
+            // The API sometimes returns nothing/garbage/errors
+            if(liveLeagueGames?.Data == null)
+            {
+                return await Task.FromResult(new LiveLeagueGameOverviewViewModel());
+            }
+
             var sortedLiveLeagueGames = liveLeagueGames.Data
                 .OrderByDescending(x => x.Spectators)
                 .AsEnumerable();
+
             var topLiveLeagueGame = sortedLiveLeagueGames.ElementAt(0);
 
             var response = new LiveLeagueGameOverviewViewModel()
