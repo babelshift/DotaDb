@@ -9,6 +9,7 @@
 @inject HeroService HeroService
 @inject AppStateService AppStateService
 @inject IMapper Mapper
+@inject SharedService SharedService
 
 <div class="container-fluid p-0">
     <div style="background: url('/images/DireAncientBackground.jpg') no-repeat scroll center center / cover;">
@@ -468,7 +469,7 @@
             Random r = new Random();
             int index = r.Next(0, heroes.Count);
             var hero = heroes.ElementAt(index).Value;
-            randomHero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero);
+            randomHero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups());
 
             StateHasChanged();
         }

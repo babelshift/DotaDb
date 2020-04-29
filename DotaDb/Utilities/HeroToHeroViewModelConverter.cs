@@ -44,7 +44,8 @@ namespace DotaDb.Utilities
                 viewModel.TalentChoiceAtLevel25 = new HeroTalentChoiceViewModel() { HeroTalentChoice1 = talents[6], HeroTalentChoice2 = talents[7] };
             }
 
-            viewModel.Abilities = context.Mapper.Map<IReadOnlyCollection<HeroAbilityDetailModel>, IReadOnlyCollection<HeroAbilityViewModel>>(abilities);
+            var lookup = context.Items["lookup"] as IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>;
+            viewModel.Abilities = context.Mapper.Map<IReadOnlyCollection<HeroAbilityDetailModel>, IReadOnlyCollection<HeroAbilityViewModel>>(abilities, opts => opts.Items["lookup"] = lookup);
             viewModel.ActiveTab = source.ActiveTab;
             viewModel.AgilityGain = source.AgilityGain;
             viewModel.AttackRange = source.AttackRange;

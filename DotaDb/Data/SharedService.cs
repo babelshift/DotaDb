@@ -118,18 +118,18 @@ namespace DotaDb.Data
             return GetJoinedValues(value, GetUnitTargetFlags());
         }
 
-        private IReadOnlyDictionary<string, DotaUnitTargetFlag> GetUnitTargetFlags()
+        private IReadOnlyDictionary<string, string> GetUnitTargetFlags()
         {
-            Dictionary<string, DotaUnitTargetFlag> temp = new Dictionary<string, DotaUnitTargetFlag>();
+            Dictionary<string, string> temp = new Dictionary<string, string>();
 
-            temp.Add(DotaUnitTargetFlag.INVULNERABLE.Key, DotaUnitTargetFlag.INVULNERABLE);
-            temp.Add(DotaUnitTargetFlag.MAGIC_IMMUNE_ENEMIES.Key, DotaUnitTargetFlag.MAGIC_IMMUNE_ENEMIES);
-            temp.Add(DotaUnitTargetFlag.NOT_ANCIENTS.Key, DotaUnitTargetFlag.NOT_ANCIENTS);
-            temp.Add(DotaUnitTargetFlag.NOT_CREEP_HERO.Key, DotaUnitTargetFlag.NOT_CREEP_HERO);
-            temp.Add(DotaUnitTargetFlag.NOT_MAGIC_IMMUNE_ALLIES.Key, DotaUnitTargetFlag.NOT_MAGIC_IMMUNE_ALLIES);
-            temp.Add(DotaUnitTargetFlag.NOT_SUMMONED.Key, DotaUnitTargetFlag.NOT_SUMMONED);
+            temp.Add(DotaUnitTargetFlag.INVULNERABLE.Key, DotaUnitTargetFlag.INVULNERABLE.ToString());
+            temp.Add(DotaUnitTargetFlag.MAGIC_IMMUNE_ENEMIES.Key, DotaUnitTargetFlag.MAGIC_IMMUNE_ENEMIES.ToString());
+            temp.Add(DotaUnitTargetFlag.NOT_ANCIENTS.Key, DotaUnitTargetFlag.NOT_ANCIENTS.ToString());
+            temp.Add(DotaUnitTargetFlag.NOT_CREEP_HERO.Key, DotaUnitTargetFlag.NOT_CREEP_HERO.ToString());
+            temp.Add(DotaUnitTargetFlag.NOT_MAGIC_IMMUNE_ALLIES.Key, DotaUnitTargetFlag.NOT_MAGIC_IMMUNE_ALLIES.ToString());
+            temp.Add(DotaUnitTargetFlag.NOT_SUMMONED.Key, DotaUnitTargetFlag.NOT_SUMMONED.ToString());
 
-            return new ReadOnlyDictionary<string, DotaUnitTargetFlag>(temp);
+            return new ReadOnlyDictionary<string, string>(temp);
         }
 
         public string GetJoinedUnitTargetTypes(string value)
@@ -137,16 +137,16 @@ namespace DotaDb.Data
             return GetJoinedValues(value, GetUnitTargetTypes());
         }
 
-        private IReadOnlyDictionary<string, DotaUnitTargetType> GetUnitTargetTypes()
+        private IReadOnlyDictionary<string, string> GetUnitTargetTypes()
         {
-            Dictionary<string, DotaUnitTargetType> temp = new Dictionary<string, DotaUnitTargetType>();
+            Dictionary<string, string> temp = new Dictionary<string, string>();
 
-            temp.Add(DotaUnitTargetType.BASIC.Key, DotaUnitTargetType.BASIC);
-            temp.Add(DotaUnitTargetType.BUILDING.Key, DotaUnitTargetType.BUILDING);
-            temp.Add(DotaUnitTargetType.CUSTOM.Key, DotaUnitTargetType.CUSTOM);
-            temp.Add(DotaUnitTargetType.HERO.Key, DotaUnitTargetType.HERO);
+            temp.Add(DotaUnitTargetType.BASIC.Key, DotaUnitTargetType.BASIC.ToString());
+            temp.Add(DotaUnitTargetType.BUILDING.Key, DotaUnitTargetType.BUILDING.ToString());
+            temp.Add(DotaUnitTargetType.CUSTOM.Key, DotaUnitTargetType.CUSTOM.ToString());
+            temp.Add(DotaUnitTargetType.HERO.Key, DotaUnitTargetType.HERO.ToString());
 
-            return new ReadOnlyDictionary<string, DotaUnitTargetType>(temp);
+            return new ReadOnlyDictionary<string, string>(temp);
         }
 
         public string GetJoinedUnitTargetTeamTypes(string value)
@@ -154,16 +154,16 @@ namespace DotaDb.Data
             return GetJoinedValues(value, GetUnitTargetTeamTypes());
         }
 
-        private IReadOnlyDictionary<string, DotaUnitTargetTeamType> GetUnitTargetTeamTypes()
+        private IReadOnlyDictionary<string, string> GetUnitTargetTeamTypes()
         {
-            Dictionary<string, DotaUnitTargetTeamType> temp = new Dictionary<string, DotaUnitTargetTeamType>();
+            Dictionary<string, string> temp = new Dictionary<string, string>();
 
-            temp.Add(DotaUnitTargetTeamType.BOTH.Key, DotaUnitTargetTeamType.BOTH);
-            temp.Add(DotaUnitTargetTeamType.CUSTOM.Key, DotaUnitTargetTeamType.CUSTOM);
-            temp.Add(DotaUnitTargetTeamType.ENEMY.Key, DotaUnitTargetTeamType.ENEMY);
-            temp.Add(DotaUnitTargetTeamType.FRIENDLY.Key, DotaUnitTargetTeamType.FRIENDLY);
+            temp.Add(DotaUnitTargetTeamType.BOTH.Key, DotaUnitTargetTeamType.BOTH.ToString());
+            temp.Add(DotaUnitTargetTeamType.CUSTOM.Key, DotaUnitTargetTeamType.CUSTOM.ToString());
+            temp.Add(DotaUnitTargetTeamType.ENEMY.Key, DotaUnitTargetTeamType.ENEMY.ToString());
+            temp.Add(DotaUnitTargetTeamType.FRIENDLY.Key, DotaUnitTargetTeamType.FRIENDLY.ToString());
 
-            return new ReadOnlyDictionary<string, DotaUnitTargetTeamType>(temp);
+            return new ReadOnlyDictionary<string, string>(temp);
         }
 
         public string GetJoinedBehaviors(string value)
@@ -171,39 +171,39 @@ namespace DotaDb.Data
             return GetJoinedValues(value, GetAbilityBehaviorTypes());
         }
 
-        private IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType> GetAbilityBehaviorTypes()
+        public IReadOnlyDictionary<string, string> GetAbilityBehaviorTypes()
         {
-            Dictionary<string, DotaHeroAbilityBehaviorType> temp = new Dictionary<string, DotaHeroAbilityBehaviorType>();
+            Dictionary<string, string> temp = new Dictionary<string, string>();
 
-            temp.Add(DotaHeroAbilityBehaviorType.HIDDEN.Key, DotaHeroAbilityBehaviorType.HIDDEN);
-            temp.Add(DotaHeroAbilityBehaviorType.AOE.Key, DotaHeroAbilityBehaviorType.AOE);
-            temp.Add(DotaHeroAbilityBehaviorType.CHANNELLED.Key, DotaHeroAbilityBehaviorType.CHANNELLED);
-            temp.Add(DotaHeroAbilityBehaviorType.ITEM.Key, DotaHeroAbilityBehaviorType.ITEM);
-            temp.Add(DotaHeroAbilityBehaviorType.NOT_LEARNABLE.Key, DotaHeroAbilityBehaviorType.NOT_LEARNABLE);
-            temp.Add(DotaHeroAbilityBehaviorType.NO_TARGET.Key, DotaHeroAbilityBehaviorType.NO_TARGET);
-            temp.Add(DotaHeroAbilityBehaviorType.PASSIVE.Key, DotaHeroAbilityBehaviorType.PASSIVE);
-            temp.Add(DotaHeroAbilityBehaviorType.POINT.Key, DotaHeroAbilityBehaviorType.POINT);
-            temp.Add(DotaHeroAbilityBehaviorType.TOGGLE.Key, DotaHeroAbilityBehaviorType.TOGGLE);
-            temp.Add(DotaHeroAbilityBehaviorType.UNIT_TARGET.Key, DotaHeroAbilityBehaviorType.UNIT_TARGET);
-            temp.Add(DotaHeroAbilityBehaviorType.IMMEDIATE.Key, DotaHeroAbilityBehaviorType.IMMEDIATE);
-            temp.Add(DotaHeroAbilityBehaviorType.ROOT_DISABLES.Key, DotaHeroAbilityBehaviorType.ROOT_DISABLES);
-            temp.Add(DotaHeroAbilityBehaviorType.DONT_RESUME_MOVEMENT.Key, DotaHeroAbilityBehaviorType.DONT_RESUME_MOVEMENT);
-            temp.Add(DotaHeroAbilityBehaviorType.IGNORE_BACKSWING.Key, DotaHeroAbilityBehaviorType.IGNORE_BACKSWING);
-            temp.Add(DotaHeroAbilityBehaviorType.DONT_RESUME_ATTACK.Key, DotaHeroAbilityBehaviorType.DONT_RESUME_ATTACK);
-            temp.Add(DotaHeroAbilityBehaviorType.IGNORE_PSEUDO_QUEUE.Key, DotaHeroAbilityBehaviorType.IGNORE_PSEUDO_QUEUE);
-            temp.Add(DotaHeroAbilityBehaviorType.AUTOCAST.Key, DotaHeroAbilityBehaviorType.AUTOCAST);
-            temp.Add(DotaHeroAbilityBehaviorType.IGNORE_CHANNEL.Key, DotaHeroAbilityBehaviorType.IGNORE_CHANNEL);
-            temp.Add(DotaHeroAbilityBehaviorType.DIRECTIONAL.Key, DotaHeroAbilityBehaviorType.DIRECTIONAL);
-            temp.Add(DotaHeroAbilityBehaviorType.AURA.Key, DotaHeroAbilityBehaviorType.AURA);
-            temp.Add(DotaHeroAbilityBehaviorType.DONT_ALERT_TARGET.Key, DotaHeroAbilityBehaviorType.DONT_ALERT_TARGET);
-            temp.Add(DotaHeroAbilityBehaviorType.DONT_CANCEL_MOVEMENT.Key, DotaHeroAbilityBehaviorType.DONT_CANCEL_MOVEMENT);
-            temp.Add(DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN.Key, DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN);
-            temp.Add(DotaHeroAbilityBehaviorType.RUNE_TARGET.Key, DotaHeroAbilityBehaviorType.RUNE_TARGET);
-            temp.Add(DotaHeroAbilityBehaviorType.UNRESTRICTED.Key, DotaHeroAbilityBehaviorType.UNRESTRICTED);
-            temp.Add(DotaHeroAbilityBehaviorType.OPTIONAL_UNIT_TARGET.Key, DotaHeroAbilityBehaviorType.OPTIONAL_UNIT_TARGET);
-            temp.Add(DotaHeroAbilityBehaviorType.SUPPRESS_ASSOCIATED_CONSUMABLE.Key, DotaHeroAbilityBehaviorType.SUPPRESS_ASSOCIATED_CONSUMABLE);
+            temp.Add(DotaHeroAbilityBehaviorType.HIDDEN.Key, DotaHeroAbilityBehaviorType.HIDDEN.ToString().ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.AOE.Key, DotaHeroAbilityBehaviorType.AOE.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.CHANNELLED.Key, DotaHeroAbilityBehaviorType.CHANNELLED.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.ITEM.Key, DotaHeroAbilityBehaviorType.ITEM.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.NOT_LEARNABLE.Key, DotaHeroAbilityBehaviorType.NOT_LEARNABLE.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.NO_TARGET.Key, DotaHeroAbilityBehaviorType.NO_TARGET.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.PASSIVE.Key, DotaHeroAbilityBehaviorType.PASSIVE.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.POINT.Key, DotaHeroAbilityBehaviorType.POINT.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.TOGGLE.Key, DotaHeroAbilityBehaviorType.TOGGLE.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.UNIT_TARGET.Key, DotaHeroAbilityBehaviorType.UNIT_TARGET.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.IMMEDIATE.Key, DotaHeroAbilityBehaviorType.IMMEDIATE.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.ROOT_DISABLES.Key, DotaHeroAbilityBehaviorType.ROOT_DISABLES.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.DONT_RESUME_MOVEMENT.Key, DotaHeroAbilityBehaviorType.DONT_RESUME_MOVEMENT.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.IGNORE_BACKSWING.Key, DotaHeroAbilityBehaviorType.IGNORE_BACKSWING.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.DONT_RESUME_ATTACK.Key, DotaHeroAbilityBehaviorType.DONT_RESUME_ATTACK.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.IGNORE_PSEUDO_QUEUE.Key, DotaHeroAbilityBehaviorType.IGNORE_PSEUDO_QUEUE.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.AUTOCAST.Key, DotaHeroAbilityBehaviorType.AUTOCAST.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.IGNORE_CHANNEL.Key, DotaHeroAbilityBehaviorType.IGNORE_CHANNEL.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.DIRECTIONAL.Key, DotaHeroAbilityBehaviorType.DIRECTIONAL.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.AURA.Key, DotaHeroAbilityBehaviorType.AURA.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.DONT_ALERT_TARGET.Key, DotaHeroAbilityBehaviorType.DONT_ALERT_TARGET.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.DONT_CANCEL_MOVEMENT.Key, DotaHeroAbilityBehaviorType.DONT_CANCEL_MOVEMENT.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN.Key, DotaHeroAbilityBehaviorType.NORMAL_WHEN_STOLEN.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.RUNE_TARGET.Key, DotaHeroAbilityBehaviorType.RUNE_TARGET.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.UNRESTRICTED.Key, DotaHeroAbilityBehaviorType.UNRESTRICTED.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.OPTIONAL_UNIT_TARGET.Key, DotaHeroAbilityBehaviorType.OPTIONAL_UNIT_TARGET.ToString());
+            temp.Add(DotaHeroAbilityBehaviorType.SUPPRESS_ASSOCIATED_CONSUMABLE.Key, DotaHeroAbilityBehaviorType.SUPPRESS_ASSOCIATED_CONSUMABLE.ToString());
 
-            return new ReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>(temp);
+            return new ReadOnlyDictionary<string, string>(temp);
         }
 
         public string GetJoinedItemDisassembleTypes(string value)
@@ -263,6 +263,19 @@ namespace DotaDb.Data
             string[] raw = startingValue.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
             List<T> individual = raw.Select(x => GetKeyValue(x, lookup)).ToList();
             return string.Join(", ", individual);
+        }
+
+        public IReadOnlyDictionary<string, string> GetCombinedLookups()
+        {
+            var behaviors = GetAbilityBehaviorTypes();
+            var targetFlags = GetUnitTargetFlags();
+            var targetTypes = GetUnitTargetTypes();
+            var teamTargets = GetUnitTargetTeamTypes();
+            return behaviors
+                .Concat(targetFlags)
+                .Concat(targetTypes)
+                .Concat(teamTargets)
+                .ToDictionary(x => x.Key, x => x.Value);
         }
     }
 }

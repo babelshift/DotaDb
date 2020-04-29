@@ -55,7 +55,7 @@ namespace DotaDb.Data
             }, TimeSpan.FromMinutes(15));
             
             // The API sometimes returns nothing/garbage/errors
-            if(liveLeagueGames?.Data == null)
+            if(liveLeagueGames?.Data == null || liveLeagueGames.Data.Count == 0)
             {
                 return await Task.FromResult(new LiveLeagueGameOverviewViewModel());
             }

@@ -1,9 +1,22 @@
 ﻿
-@if (!string.IsNullOrWhiteSpace(DetailValue))
+@if (Details != null && Details.Count > 0)
 {
     <tr>
         <td class="text-uppercase text-muted table-column-ability-name">@DetailName</td>
-        <td>@DetailValue</td>
+        <td>
+            @for (int i = 0; i < Details.Count; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(Details[i]))
+                {
+                    <strong>@Details[i]</strong>
+                    if (i < Details.Count - 1)
+                    {
+                        <span class="text-muted">/</span>
+                    }
+                }
+            }
+
+        </td>
     </tr>
 }
 
@@ -12,5 +25,5 @@
     public string DetailName { get; set; }
 
     [Parameter]
-    public string DetailValue { get; set; }
+    public IReadOnlyList<string> Details { get; set; }
 }
