@@ -74,7 +74,7 @@
                     <tr>
                         <td>
                             <div class="text-center py-1">
-                                <img style="max-width: 128px" src="@item.IconPath" />
+                                <img style="max-width: 128px" src="@item.IconPath" onerror="this.onerror=null;this.src='/images/missing_cosmetic_item.png';" />
                             </div>
                         </td>
                         <td class="text-left">
@@ -188,17 +188,31 @@
                 {
                     <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">@(currentPage - 1)</button></li>
                 }
-                <li class="page-item active"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage))">@currentPage</button></li>
-                <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">@(currentPage + 1)</button></li>
-                <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 2))">@(currentPage + 2)</button></li>
-                <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">Next</button></li>
+                @if (pageCount > 1)
+                {
+                    <li class="page-item active"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage))">@currentPage</button></li>
+                    @if (currentPage < pageCount)
+                    {
+                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">@(currentPage + 1)</button></li>
+                    }
+                    @if (currentPage < pageCount - 1)
+                    {
+                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 2))">@(currentPage + 2)</button></li>
+                    }
+                    @if (currentPage < pageCount)
+                    {
+                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">Next</button></li>
+                    }
+                }
             </ul>
         </nav>
     </div>
 </div>
 @code {
+    private const int itemsPerPage = 25;
+
     private int currentPage = 1;
-    private int itemsPerPage = 25;
+    private int pageCount;
 
     private InStoreViewModel viewModel = new InStoreViewModel();
     private IEnumerable<InStoreItemViewModel> fullItems = new List<InStoreItemViewModel>();
@@ -256,6 +270,7 @@
         var result = resultB.Intersect(groupD, new InStoreItemViewModelEqualityComparer());
 
         currentPage = 1;
+        pageCount = result.Count() / itemsPerPage;
         viewModel.Items = result
             .Where(x => !string.IsNullOrWhiteSpace(searchValue) ? x.Name.ToLower().Contains(searchValue.Trim().ToLower()) : true)
             .OrderBy(x => x.Name)
@@ -272,7 +287,7 @@
         }
 
         return fullItems
-            .Where(x => x.UsedBy != null 
+            .Where(x => x.UsedBy != null
                 && x.UsedBy.Any(y => y.HeroName.ToLower() == selectedUsedBy.ToLower())
             );
     }
@@ -339,6 +354,7 @@
 
             viewModel = await ItemService.GetCosmeticItemsAsync(null);
             fullItems = viewModel.Items;
+            pageCount = viewModel.Items.Count() / itemsPerPage;
             viewModel.Items = viewModel.Items
                 .Skip(itemsPerPage * (currentPage - 1))
                 .Take(itemsPerPage);
