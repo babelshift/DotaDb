@@ -65,7 +65,7 @@ namespace DotaDb.Data
             List<GameItemViewModel> gameItems = new List<GameItemViewModel>();
             foreach (var item in itemsWithoutRecipes)
             {
-                string localizedName = await localizationService.GetAbilityLocalizationTextAsync(String.Format("DOTA_Tooltip_Ability_{0}", item.Name));
+                string localizedName = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_Ability_{item.Name}");
 
                 if (!string.IsNullOrWhiteSpace(searchedItemName))
                 {
@@ -75,13 +75,13 @@ namespace DotaDb.Data
                         {
                             Cost = item.Cost,
                             Name = localizedName,
-                            Description = await localizationService.GetAbilityLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
-                            Lore = await localizationService.GetAbilityLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
+                            Description = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_ability_{item.Name}_Description"),
+                            Lore = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_ability_{item.Name}_Lore"),
                             Id = item.Id,
                             IsRecipe = item.IsRecipe,
                             SecretShop = item.IsAvailableAtSecretShop,
                             SideShop = item.IsAvailableAtSideShop,
-                            IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
+                            IconPath = string.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
                         });
                     }
                 }
@@ -91,13 +91,13 @@ namespace DotaDb.Data
                     {
                         Cost = item.Cost,
                         Name = localizedName,
-                        Description = await localizationService.GetAbilityLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Description", item.Name)),
-                        Lore = await localizationService.GetAbilityLocalizationTextAsync(String.Format("DOTA_Tooltip_ability_{0}_Lore", item.Name)),
+                        Description = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_ability_{item.Name}_Description"),
+                        Lore = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_ability_{item.Name}_Lore"),
                         Id = item.Id,
                         IsRecipe = item.IsRecipe,
                         SecretShop = item.IsAvailableAtSecretShop,
                         SideShop = item.IsAvailableAtSideShop,
-                        IconPath = String.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
+                        IconPath = string.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
                     });
                 }
             }
@@ -212,28 +212,31 @@ namespace DotaDb.Data
             }
         }
 
-        public async Task<InStoreViewModel> GetCosmeticItemsAsync(string prefab, int? page)
+        public async Task<InStoreViewModel> GetCosmeticItemsAsync(int? page)
         {
             var schema = await GetSchemaAsync();
 
             InStoreViewModel viewModel = new InStoreViewModel();
 
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
             {
                 Id = x.Type,
-                Name = x.Type.Replace('_', ' ')
+                Name = textInfo.ToTitleCase(x.Type.Replace('_', ' '))
+            }).ToList().AsReadOnly();
+            viewModel.Rarities = schema.Rarities.Select(x => new InStoreItemRarityViewModel()
+            {
+                Name = textInfo.ToTitleCase(x.Name.Replace('_', ' '))
+            }).ToList().AsReadOnly();
+            viewModel.Qualities = schema.Qualities.Select(x => new InStoreItemQualityViewModel()
+            {
+                Name = textInfo.ToTitleCase(x.Name.Replace('_', ' '))
             }).ToList().AsReadOnly();
 
             var heroes = await heroService.GetHeroesAsync();
             List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
             foreach (var item in schema.Items)
             {
-                // if the user picked a prefab and the item doesn't fit that, skip it
-                if (!String.IsNullOrEmpty(prefab) && item.Prefab != prefab)
-                {
-                    continue;
-                }
-
                 // if there's a name or description, remove the "#" character before
                 string name = !string.IsNullOrWhiteSpace(item.ItemName) && item.ItemName.StartsWith("#") 
                     ? item.ItemName.Remove(0, 1) 
@@ -244,7 +247,7 @@ namespace DotaDb.Data
 
                 // look up the rarity and quality details
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
-                var rarityColor = rarity != null ? schema.Colors.FirstOrDefault(x => x.Name == rarity.Color) : null;
+                var rarityColor = schema.Colors.FirstOrDefault(x => x.Name == rarity?.Color);
                 var quality = schema.Qualities.FirstOrDefault(x => x.Name == item.ItemQuality);
 
                 // setup the heroes that are able to use this item
@@ -268,30 +271,32 @@ namespace DotaDb.Data
 
                 var itemViewModel = new InStoreItemViewModel()
                 {
+                    DefIndex = item.DefIndex,
+                    Prefab = !string.IsNullOrWhiteSpace(item.Prefab) ? item.Prefab.Replace("_", " ") : string.Empty,
                     Name = await localizationService.GetCosmeticItemLocalizationTextAsync(name),
                     Description = await localizationService.GetCosmeticItemLocalizationTextAsync(description),
                     IconPath = item.GetIconPath(inStoreItemIconsBaseUrl),
-                    StorePath = String.Format("http://www.dota2.com/store/itemdetails/{0}", item.DefIndex),
+                    StorePath = $"http://www.dota2.com/store/itemdetails/{item.DefIndex}",
                     CreationDate = item.CreationDate,
                     ExpirationDate = item.ExpirationDate,
-                    PriceBucket = item.PriceInfo != null ? item.PriceInfo.Bucket : String.Empty,
-                    PriceCategoryTags = item.PriceInfo != null ? item.PriceInfo.CategoryTags : String.Empty,
-                    PriceClass = item.PriceInfo != null ? item.PriceInfo.Class : String.Empty,
-                    PriceDate = item.PriceInfo != null ? item.PriceInfo.Date : null,
-                    Price = item.PriceInfo != null ? item.PriceInfo.Price : null,
-                    Rarity = rarity != null ? rarity.Name : String.Empty,
-                    RarityColor = rarityColor != null ? rarityColor.HexColor : String.Empty,
-                    Quality = quality != null ? quality.Name : String.Empty,
-                    QualityColor = quality != null ? quality.HexColor : String.Empty,
-                    UsedBy = usedByHeroes != null ? usedByHeroes.AsReadOnly() : null,
-                    BundledItems = item.BundledItems != null ? item.BundledItems.ToList().AsReadOnly() : null
+                    PriceBucket = item.PriceInfo?.Bucket ?? string.Empty,
+                    PriceCategoryTags = item.PriceInfo?.CategoryTags ?? string.Empty,
+                    PriceClass = item.PriceInfo?.Class ?? string.Empty,
+                    PriceDate = item.PriceInfo?.Date,
+                    Price = item.PriceInfo?.Price,
+                    Rarity = rarity?.Name ?? string.Empty,
+                    RarityColor = rarityColor?.HexColor ?? string.Empty,
+                    Quality = quality?.Name ?? string.Empty,
+                    QualityColor = quality?.HexColor ?? string.Empty,
+                    UsedBy = usedByHeroes?.AsReadOnly() ?? null,
+                    BundledItems = item.BundledItems != null ? item.BundledItems.ToList().AsReadOnly() : null,
+                    Slot = item.ItemSlot
                 };
 
                 inStoreItems.Add(itemViewModel);
             }
 
             viewModel.Items = inStoreItems;
-            viewModel.SelectedPrefab = prefab;
 
             return viewModel;
         }

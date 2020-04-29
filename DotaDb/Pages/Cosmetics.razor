@@ -1,7 +1,7 @@
 ﻿@page "/items/cosmetic"
-@page "/items/cosmetic/{PrefabId:int}"
 @using DotaDb.Data
 @using DotaDb.Models
+@using DotaDb.Utilities
 @using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.Extensions.Primitives
 @inject ItemService ItemService
@@ -9,230 +9,275 @@
 @inject NavigationManager NavigationManager
 
 <div class="container py-2">
-    <div class="row">
+    <div class="row mb-2">
+        <div class="col-md-3">
+            <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
+                   @bind="searchValue"
+                   @bind:event="oninput"
+                   @onkeyup="OnSearch" />
+        </div>
         <div class="col-md-2">
-            <div class="card">
-                <div class="list-group">
-                    @foreach (var prefab in viewModel.Prefabs)
-                    {
-                        <a class="list-group-item text-uppercase" href="/items/cosmetics/@prefab.Id">
-                            @prefab.Name
-                        </a>
-                    }
-                </div>
-            </div>
+            <select class="custom-select custom-select-sm" @onchange="OnPrefabChanged">
+                <option selected value=" ">-- Type --</option>
+                @foreach (var prefab in viewModel.Prefabs)
+                {
+                    <option value="@prefab.Name">@prefab.Name</option>
+                }
+            </select>
         </div>
-        <div class="col-md-10">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row instore-item-list">
-                        @if (!String.IsNullOrEmpty(viewModel.SelectedPrefab))
-                        {
-                            <div class="col-xs-12">
-                                <h4>Showing items tagged with '<strong>@viewModel.SelectedPrefab</strong>'</h4>
-                            </div>
-                        }
-                        @foreach (var item in viewModel.Items)
-                        {
-                            <div class="col-md-6">
-                                <div class="card" style="padding: 3px; margin-bottom: 10px">
-                                    <div class="media" style="margin-bottom: 0">
-                                        <div class="img-thumbnail" style="border: 0">
-                                            <img class="mr-2 shadow" src="@item.IconPath" alt="No icon available">
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="mt-0">@item.Name</h4>
-                                        @if (item.Price.HasValue && item.Price.Value > 0)
-                                        {
-                                            <a href="@item.StorePath" target="_blank">
-                                                View in Dota 2 Store
-                                            </a>
-                                            <i class="fas fa-external-link-square-alt"></i>
-                                            <br />
-                                        }
-                                        <span class="text-muted">@item.Description</span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    @if (item.UsedBy != null && item.UsedBy.Count > 0)
-                                    {
-                                        <div class="col-md-6">
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Used by:</span>
-                                                </small>
-                                                @foreach (var hero in item.UsedBy)
-                                                {
-                                                    <img src="@hero.MinimapIconPath" width="24" height="24" />
-                                                    <a href="/hero/@hero.HeroId">
-                                                        @hero.HeroName
-                                                    </a>
-                                                }
-                                            </p>
-                                            @if (item.BundledItems != null && item.BundledItems.Count > 0)
-                                            {
-                                                <p>
-                                                    <small class="text-uppercase">
-                                                        <span class="text-muted">Bundled Items:</span>
-                                                    </small>
-                                                </p>
-                                                <ul class="list-unstyled">
-                                                    @foreach (var bundledItem in item.BundledItems)
-                                                    {
-                                                        <li>
-                                                            <small class="text-uppercase">
-                                                                <i class="fas fa-chevron-right"></i>
-                                                                @bundledItem
-                                                            </small>
-                                                        </li>
-                                                    }
-
-                                                </ul>
-                                            }
-                                        </div>
-                                    }
-                                    <div class="col-md-6">
-                                        @if (!String.IsNullOrEmpty(item.Rarity))
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Rarity:</span>
-                                                    @if (!String.IsNullOrEmpty(item.RarityColor))
-                                                    {
-                                                        <span style="color: @item.RarityColor">
-                                                            @item.Rarity
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @item.Rarity
-                                                    }
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(item.Quality))
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Quality:</span>
-                                                    @if (!String.IsNullOrEmpty(item.QualityColor))
-                                                    {
-                                                        <span style="color: @item.QualityColor">
-                                                            @item.Quality
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @item.Quality
-                                                    }
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(item.PriceBucket))
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Price Bucket:</span>
-                                                    @item.PriceBucket
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(item.PriceCategoryTags))
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Category Tags:</span>
-                                                    @item.PriceCategoryTags
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (!String.IsNullOrEmpty(item.PriceClass))
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Price Class:</span>
-                                                    @item.PriceClass
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (item.PriceDate.HasValue)
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Price Date:</span>
-                                                    @item.PriceDate.Value.ToShortDateString()
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (item.Price.HasValue && item.Price.Value > 0)
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Price:</span>
-                                                    @item.Price.Value.ToString("C")
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (item.CreationDate.HasValue)
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Creation Date:</span>
-                                                    @item.CreationDate.Value.ToShortDateString()
-                                                </small>
-                                            </p>
-                                        }
-                                        @if (item.ExpirationDate.HasValue)
-                                        {
-                                            <p>
-                                                <small class="text-uppercase">
-                                                    <span class="text-muted">Expiration Date:</span>
-                                                    @item.ExpirationDate.Value.ToShortDateString()
-                                                </small>
-                                            </p>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        <hr />
-                        <div class="col-md-12">
-                            <nav>
-                                <ul class="pagination">
-                                    @if (currentPage > 1)
-                                    {
-                                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">Previous</button></li>
-                                    }
-                                    @if (currentPage > 2)
-                                    {
-                                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 2))">@(currentPage - 2)</button></li>
-                                    }
-                                    @if (currentPage > 1)
-                                    {
-                                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">@(currentPage - 1)</button></li>
-                                    }
-                                    <li class="page-item active"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage))">@currentPage</button></li>
-                                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">@(currentPage + 1)</button></li>
-                                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 2))">@(currentPage + 2)</button></li>
-                                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">Next</button></li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-2">
+            <select class="custom-select custom-select-sm" @onchange="OnRarityChanged">
+                <option selected value=" ">-- Rarity --</option>
+                @foreach (var rarity in viewModel.Rarities)
+                {
+                    <option value="@rarity.Name">@rarity.Name</option>
+                }
+            </select>
         </div>
+        <div class="col-md-2">
+            <select class="custom-select custom-select-sm" @onchange="OnQualityChanged">
+                <option selected value=" ">-- Quality --</option>
+                @foreach (var quality in viewModel.Qualities)
+                {
+                    <option value="@quality.Name">@quality.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover cosmetic-item-table" data-toggle="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-left">Name</th>
+                    <th>ID</th>
+                    <th>Used By</th>
+                    <th>Rarity</th>
+                    <th>Quality</th>
+                    <th>Slot</th>
+                    <th>Created</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in viewModel.Items)
+                {
+                    <tr>
+                        <td>
+                            <div class="text-center py-1">
+                                <img style="max-width: 128px" src="@item.IconPath" />
+                            </div>
+                        </td>
+                        <td class="text-left">
+                            @(!string.IsNullOrWhiteSpace(item.Name) ? item.Name : "???")
+                            <br />
+                            <small class="text-muted text-capitalize">
+                                @item.Prefab
+                            </small>
+                        </td>
+                        <td>@item.DefIndex</td>
+                        <td>
+                            @if (item.UsedBy != null && item.UsedBy.Count > 0)
+                            {
+                                foreach (var hero in item.UsedBy)
+                                {
+                                    <img src="@hero.MinimapIconPath" width="24" height="24" />
+                                    <a href="/hero/@hero.HeroId">
+                                        @hero.HeroName
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fas fa-minus text-warning" />
+                            }
+                        </td>
+                        <td class="text-capitalize">
+                            @if (!string.IsNullOrWhiteSpace(item.Rarity))
+                            {
+                                if (!string.IsNullOrWhiteSpace(item.RarityColor))
+                                {
+                                    <span style="color: @item.RarityColor">
+                                        @item.Rarity
+                                    </span>
+                                }
+                                else
+                                {
+                                    @item.Rarity
+                                }
+                            }
+                            else
+                            {
+                                <i class="fas fa-minus text-warning" />
+                            }
+                        </td>
+                        <td class="text-capitalize">
+                            @if (!string.IsNullOrWhiteSpace(item.QualityColor))
+                            {
+                                if (!string.IsNullOrEmpty(item.QualityColor))
+                                {
+                                    <span style="color: @item.QualityColor">
+                                        @item.Quality
+                                    </span>
+                                }
+                                else
+                                {
+                                    @item.Quality
+                                }
+                            }
+                            else
+                            {
+                                <i class="fas fa-minus text-warning" />
+                            }
+                        </td>
+                        <td class="text-capitalize">
+                            @if (!string.IsNullOrWhiteSpace(item.Slot))
+                            {
+                                @item.Slot
+                            }
+                            else
+                            {
+                                <i class="fas fa-minus text-warning" />
+                            }
+                        </td>
+                        <td>
+                            @if (item.CreationDate.HasValue)
+                            {
+                                @item.CreationDate.Value.ToShortDateString()
+                            }
+                            else
+                            {
+                                <i class="fas fa-minus text-warning" />
+                            }
+                        </td>
+                        <td>
+                            @if (item.Price.HasValue)
+                            {
+                                @item.Price
+                            }
+                            else
+                            {
+                                <i class="fas fa-minus text-warning" />
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        <nav>
+            <ul class="pagination">
+                @if (currentPage > 1)
+                {
+                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">Previous</button></li>
+                }
+                @if (currentPage > 2)
+                {
+                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 2))">@(currentPage - 2)</button></li>
+                }
+                @if (currentPage > 1)
+                {
+                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">@(currentPage - 1)</button></li>
+                }
+                <li class="page-item active"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage))">@currentPage</button></li>
+                <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">@(currentPage + 1)</button></li>
+                <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 2))">@(currentPage + 2)</button></li>
+                <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">Next</button></li>
+            </ul>
+        </nav>
     </div>
 </div>
 @code {
-    [Parameter]
-    public int PrefabId { get; set; }
-
     private int currentPage = 1;
     private int itemsPerPage = 25;
 
     private InStoreViewModel viewModel = new InStoreViewModel();
+    private IEnumerable<InStoreItemViewModel> fullItems = new List<InStoreItemViewModel>();
+
+    private string searchValue;
+    private string selectedPrefab;
+    private string selectedRarity;
+    private string selectedQuality;
+
+    private void OnSearch(KeyboardEventArgs e)
+    {
+        // Apply filters if the user has either cleared out search or pressed "Enter"
+        if (string.IsNullOrWhiteSpace(searchValue) || e.Key == "Enter")
+        {
+            ApplyFilters();
+        }
+    }
+
+    private void OnPrefabChanged(ChangeEventArgs e)
+    {
+        selectedPrefab = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    private void OnRarityChanged(ChangeEventArgs e)
+    {
+        selectedRarity = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    private void OnQualityChanged(ChangeEventArgs e)
+    {
+        selectedQuality = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        viewModel.Items = new List<InStoreItemViewModel>();
+
+        var groupA = FilterPrefab();
+        var groupB = FilterQuality();
+        var groupC = FilterRarity();
+
+        var resultA = groupA.Intersect(groupB, new InStoreItemViewModelEqualityComparer());
+        var result = resultA.Intersect(groupC, new InStoreItemViewModelEqualityComparer());
+
+        currentPage = 1;
+        viewModel.Items = result
+            .Where(x => !string.IsNullOrWhiteSpace(searchValue) ? x.Name.ToLower().Contains(searchValue.Trim().ToLower()) : true)
+            .OrderBy(x => x.Name)
+            .Skip(itemsPerPage * (currentPage - 1))
+            .Take(itemsPerPage)
+            .ToList();
+    }
+
+    private IEnumerable<InStoreItemViewModel> FilterPrefab()
+    {
+        if (string.IsNullOrWhiteSpace(selectedPrefab))
+        {
+            return fullItems;
+        }
+
+        return fullItems.Where(x => !string.IsNullOrWhiteSpace(x.Prefab)
+            && x.Prefab.ToLower() == selectedPrefab.ToLower());
+    }
+
+    private IEnumerable<InStoreItemViewModel> FilterQuality()
+    {
+        if (string.IsNullOrWhiteSpace(selectedQuality))
+        {
+            return fullItems;
+        }
+
+        return fullItems.Where(x => !string.IsNullOrWhiteSpace(x.Quality)
+            && x.Quality.ToLower() == selectedQuality.ToLower());
+    }
+
+    private IEnumerable<InStoreItemViewModel> FilterRarity()
+    {
+        if (string.IsNullOrWhiteSpace(selectedRarity))
+        {
+            return fullItems;
+        }
+
+        return fullItems.Where(x => !string.IsNullOrWhiteSpace(x.Rarity)
+            && x.Rarity.ToLower() == selectedRarity.ToLower());
+    }
 
     // We have to use an onclick event here because NavLink or "a" links don't trigger a component refresh when only the query param changes
     private void UpdatePage(MouseEventArgs e, int page)
@@ -261,8 +306,8 @@
                 }
             }
 
-            string searchedCosmeticItemName = string.Empty;
-            viewModel = await ItemService.GetCosmeticItemsAsync(searchedCosmeticItemName, null);
+            viewModel = await ItemService.GetCosmeticItemsAsync(null);
+            fullItems = viewModel.Items;
             viewModel.Items = viewModel.Items
                 .Skip(itemsPerPage * (currentPage - 1))
                 .Take(itemsPerPage);

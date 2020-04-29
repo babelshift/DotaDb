@@ -164,6 +164,14 @@ body {
     text-align: center;
 }
 
+.cosmetic-item-table td {
+    vertical-align: middle;
+}
+
+.cosmetic-item-table td, .cosmetic-item-table th {
+    text-align: center;
+}
+
 .abilities p {
     margin-top: 3px;
     line-height: 15px;

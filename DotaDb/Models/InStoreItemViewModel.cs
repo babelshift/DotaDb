@@ -11,6 +11,8 @@ namespace DotaDb.Models
             BundledItems = new List<string>();
         }
 
+        public string DefIndex { get; set; }
+        public string Prefab { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string IconPath { get; set; }
@@ -26,6 +28,7 @@ namespace DotaDb.Models
         public string RarityColor { get; set; }
         public string Quality { get; set; }
         public string QualityColor { get; set; }
+        public string Slot { get; set; }
         public IReadOnlyCollection<InStoreItemUsedByHeroViewModel> UsedBy { get; set; }
         public IReadOnlyCollection<string> BundledItems { get; set; }
     }

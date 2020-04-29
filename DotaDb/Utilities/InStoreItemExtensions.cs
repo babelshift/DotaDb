@@ -7,12 +7,12 @@ namespace DotaDb.Utilities
     {
         public static string GetIconPath(this SchemaItemModel item, string baseUrl)
         {
-            if (item == null || String.IsNullOrEmpty(item.DefIndex))
+            if (item == null || string.IsNullOrWhiteSpace(item.DefIndex))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
-            return String.Format("{0}{1}.jpg", baseUrl, item.DefIndex);
+            return $"{baseUrl}/{item.DefIndex}.jpg";
         }
     }
 }
