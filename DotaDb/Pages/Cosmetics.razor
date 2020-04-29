@@ -43,6 +43,15 @@
                 }
             </select>
         </div>
+        <div class="col-md-2">
+            <select class="custom-select custom-select-sm" @onchange="OnUsedByChanged">
+                <option selected value=" ">-- Used By --</option>
+                @foreach (var hero in viewModel.Heroes)
+                {
+                    <option value="@hero">@hero</option>
+                }
+            </select>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover cosmetic-item-table" data-toggle="table">
@@ -198,6 +207,7 @@
     private string selectedPrefab;
     private string selectedRarity;
     private string selectedQuality;
+    private string selectedUsedBy;
 
     private void OnSearch(KeyboardEventArgs e)
     {
@@ -206,6 +216,12 @@
         {
             ApplyFilters();
         }
+    }
+
+    private void OnUsedByChanged(ChangeEventArgs e)
+    {
+        selectedUsedBy = e.Value.ToString();
+        ApplyFilters();
     }
 
     private void OnPrefabChanged(ChangeEventArgs e)
@@ -233,9 +249,11 @@
         var groupA = FilterPrefab();
         var groupB = FilterQuality();
         var groupC = FilterRarity();
+        var groupD = FilterUsedBy();
 
         var resultA = groupA.Intersect(groupB, new InStoreItemViewModelEqualityComparer());
-        var result = resultA.Intersect(groupC, new InStoreItemViewModelEqualityComparer());
+        var resultB = resultA.Intersect(groupC, new InStoreItemViewModelEqualityComparer());
+        var result = resultB.Intersect(groupD, new InStoreItemViewModelEqualityComparer());
 
         currentPage = 1;
         viewModel.Items = result
@@ -244,6 +262,19 @@
             .Skip(itemsPerPage * (currentPage - 1))
             .Take(itemsPerPage)
             .ToList();
+    }
+
+    private IEnumerable<InStoreItemViewModel> FilterUsedBy()
+    {
+        if (string.IsNullOrWhiteSpace(selectedUsedBy))
+        {
+            return fullItems;
+        }
+
+        return fullItems
+            .Where(x => x.UsedBy != null 
+                && x.UsedBy.Any(y => y.HeroName.ToLower() == selectedUsedBy.ToLower())
+            );
     }
 
     private IEnumerable<InStoreItemViewModel> FilterPrefab()

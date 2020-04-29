@@ -28,6 +28,8 @@ namespace DotaDb.Data
         // I have seen some of these keys having different casing such as "DOTA_Tooltip_ability" and "DOTA_Tooltip_Ability". Watch out.
         private const string tooltipLocalizationPrefix = "DOTA_Tooltip_ability";
 
+        private const string heroNamePrefix = "npc_dota_hero_";
+
         public HeroService(
             IConfiguration configuration,
             ISchemaParser schemaParser,
@@ -84,30 +86,30 @@ namespace DotaDb.Data
             return new ReadOnlyDictionary<uint, HeroDetailModel>(heroDetails);
         }
 
-        private async Task<KeyValuePair<uint, HeroDetailModel>> GetHeroDetailModelAsync(HeroSchemaModel hero)
+        public async Task<string> GetHeroNameAsync(HeroSchemaModel hero)
         {
-            string heroName = string.Empty;
-
             // For some reason, the latest 2 heroes added in patch 7.23 don't have localization names, so we do our best to figure it out
             if (hero.Name.EndsWith("snapfire") || hero.Name.EndsWith("void_spirit"))
             {
                 TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                heroName = hero.Name.Replace("npc_dota_hero_", string.Empty);
+                string heroName = hero.Name.Replace(heroNamePrefix, string.Empty);
                 heroName = heroName.Replace("_", " ");
-                heroName = textInfo.ToTitleCase(heroName);
+                return textInfo.ToTitleCase(heroName);
             }
-            else
-            {
-                heroName = await localizationService.GetLocalizationTextAsync(hero.Name);
-            }
+                
+            return await localizationService.GetLocalizationTextAsync(hero.Name);
+        }
+
+        private async Task<KeyValuePair<uint, HeroDetailModel>> GetHeroDetailModelAsync(HeroSchemaModel hero)
+        {
 
             var heroDetail = new HeroDetailModel()
             {
                 Id = hero.HeroId,
                 Url = !string.IsNullOrWhiteSpace(hero.Url) ? hero.Url.ToLower() : string.Empty,
-                Name = heroName,
-                Description = await localizationService.GetLocalizationTextAsync($"{hero.Name}_hype"),
-                AvatarImagePath = $"http://cdn.dota2.com/apps/dota2/images/heroes/{hero.Name.Replace("npc_dota_hero_", string.Empty)}_full.png",
+                Name = await GetHeroNameAsync(hero),
+                Description = await localizationService.GetLocalizationTextAsync($"{hero.Name}_hype"), // TODO: what happened to "bio"?
+                AvatarImagePath = $"http://cdn.dota2.com/apps/dota2/images/heroes/{hero.Name.Replace(heroNamePrefix, string.Empty)}_full.png",
                 BaseAgility = hero.AttributeBaseAgility,
                 BaseArmor = hero.ArmorPhysical,
                 BaseDamageMax = hero.AttackDamageMax,

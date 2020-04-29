@@ -214,9 +214,16 @@ namespace DotaDb.Data
 
         public async Task<InStoreViewModel> GetCosmeticItemsAsync(int? page)
         {
+            InStoreViewModel viewModel = new InStoreViewModel();
+
             var schema = await GetSchemaAsync();
 
-            InStoreViewModel viewModel = new InStoreViewModel();
+            var heroes = await heroService.GetHeroesAsync();
+            var filteredHeroes = heroes
+                .Where(x => x.Value.Name != "npc_dota_hero_base"
+                    && x.Value.Name != "npc_dota_hero_target_dummy")
+                .Select(async x => await heroService.GetHeroNameAsync(x.Value));
+            viewModel.Heroes = await Task.WhenAll(filteredHeroes);
 
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
@@ -224,24 +231,25 @@ namespace DotaDb.Data
                 Id = x.Type,
                 Name = textInfo.ToTitleCase(x.Type.Replace('_', ' '))
             }).ToList().AsReadOnly();
+
             viewModel.Rarities = schema.Rarities.Select(x => new InStoreItemRarityViewModel()
             {
                 Name = textInfo.ToTitleCase(x.Name.Replace('_', ' '))
             }).ToList().AsReadOnly();
+
             viewModel.Qualities = schema.Qualities.Select(x => new InStoreItemQualityViewModel()
             {
                 Name = textInfo.ToTitleCase(x.Name.Replace('_', ' '))
             }).ToList().AsReadOnly();
 
-            var heroes = await heroService.GetHeroesAsync();
-            List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
+            List <InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
             foreach (var item in schema.Items)
             {
                 // if there's a name or description, remove the "#" character before
-                string name = !string.IsNullOrWhiteSpace(item.ItemName) && item.ItemName.StartsWith("#") 
+                string itemName = !string.IsNullOrWhiteSpace(item.ItemName) && item.ItemName.StartsWith("#") 
                     ? item.ItemName.Remove(0, 1) 
                     : string.Empty;
-                string description = !string.IsNullOrWhiteSpace(item.ItemDescription) && item.ItemDescription.StartsWith("#") 
+                string itemDescription = !string.IsNullOrWhiteSpace(item.ItemDescription) && item.ItemDescription.StartsWith("#") 
                     ? item.ItemDescription.Remove(0, 1) 
                     : string.Empty;
 
@@ -262,7 +270,7 @@ namespace DotaDb.Data
                             usedByHeroes.Add(new InStoreItemUsedByHeroViewModel()
                             {
                                 HeroId = hero.Value.HeroId,
-                                HeroName = await localizationService.GetLocalizationTextAsync(hero.Value.Name),
+                                HeroName = await heroService.GetHeroNameAsync(hero.Value),
                                 MinimapIconPath = hero.Value.GetMinimapIconFilePath(minimapIconsBaseUrl)
                             });
                         }
@@ -273,8 +281,8 @@ namespace DotaDb.Data
                 {
                     DefIndex = item.DefIndex,
                     Prefab = !string.IsNullOrWhiteSpace(item.Prefab) ? item.Prefab.Replace("_", " ") : string.Empty,
-                    Name = await localizationService.GetCosmeticItemLocalizationTextAsync(name),
-                    Description = await localizationService.GetCosmeticItemLocalizationTextAsync(description),
+                    Name = await localizationService.GetCosmeticItemLocalizationTextAsync(itemName),
+                    Description = await localizationService.GetCosmeticItemLocalizationTextAsync(itemDescription),
                     IconPath = item.GetIconPath(inStoreItemIconsBaseUrl),
                     StorePath = $"http://www.dota2.com/store/itemdetails/{item.DefIndex}",
                     CreationDate = item.CreationDate,
