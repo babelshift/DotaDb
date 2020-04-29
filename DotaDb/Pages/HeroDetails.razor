@@ -32,14 +32,14 @@
                                     <td class="text-muted table-column-ability-name">ID</td>
                                     <td>@ability.Id</td>
                                 </tr>
-                                <HeroAbilityDetail DetailName="Behaviors" Details="@ability.Behaviors" />
-                                <HeroAbilityDetail DetailName="Target Types" Details="@ability.TargetTypes" />
-                                <HeroAbilityDetail DetailName="Target Flags" Details="@ability.TargetFlags" />
-                                <HeroAbilityDetail DetailName="Team Targets" Details="@ability.TeamTargets" />
-                                <HeroAbilityDetail DetailName="Cast Point" Details="@ability.CastPoint" />
-                                <HeroAbilityDetail DetailName="Cast Range" Details="@ability.CastRange" />
-                                <HeroAbilityDetail DetailName="Cooldown" Details="@ability.Cooldown" />
-                                <HeroAbilityDetail DetailName="Damage" Details="@ability.Damage" />
+                                <HeroAbilityDetail DetailName="Behaviors" Details="@ability.Behaviors" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Target Types" Details="@ability.TargetTypes" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Target Flags" Details="@ability.TargetFlags" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Team Targets" Details="@ability.TeamTargets" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Cast Point" Details="@ability.CastPoint" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Cast Range" Details="@ability.CastRange" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Cooldown" Details="@ability.Cooldown" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Damage" Details="@ability.Damage" ColumnClass="table-column-ability-name" />
                                 <tr>
                                     <td class="text-uppercase text-muted table-column-ability-name">Damage Types</td>
                                     <td>
@@ -62,8 +62,8 @@
                                         { @unknownText}
                                     </td>
                                 </tr>
-                                <HeroAbilityDetail DetailName="Duration" Details="@ability.Duration" />
-                                <HeroAbilityDetail DetailName="Mana Cost" Details="@ability.ManaCost" />
+                                <HeroAbilityDetail DetailName="Duration" Details="@ability.Duration" ColumnClass="table-column-ability-name" />
+                                <HeroAbilityDetail DetailName="Mana Cost" Details="@ability.ManaCost" ColumnClass="table-column-ability-name" />
                                 <tr>
                                     <td class="text-uppercase text-muted table-column-ability-name">Spell Immunity Types</td>
                                     <td>
@@ -96,19 +96,19 @@
                             <tbody style="table-layout: fixed">
                                 @foreach (var abilitySpecial in ability.Attributes)
                                 {
-                                    <tr>
-                                        <td class="text-uppercase text-muted table-column-ability-special-name">
-                                            @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
-                                            {
-                                                @abilitySpecial.Name
-                                            }
-                                            else
-                                            {
-                                                @String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))
-                                            }
-                                        </td>
-                                        <td>@abilitySpecial.Value</td>
-                                    </tr>
+                                    @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
+                                    {
+                                        <HeroAbilityDetail DetailName="@abilitySpecial.Name"
+                                            Details="@abilitySpecial.Value"
+                                            ColumnClass="table-column-ability-special-name" />
+                                    }
+                                    else
+                                    {
+                                        <HeroAbilityDetail DetailName="@String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))"
+                                            Details="@abilitySpecial.Value"
+                                            ColumnClass="table-column-ability-special-name" />
+                                        
+                                    }
                                 }
                             </tbody>
                         </table>

@@ -287,7 +287,7 @@ namespace DotaDb.Data
                 {
                     Name = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipLocalizationPrefix}_{abilityName}_{abilitySpecial.Name}"),
                     RawName = abilitySpecial.Name,
-                    Value = abilitySpecial.Value.ToSlashSeparatedString(),
+                    Value = abilitySpecial.Value,
                     LinkedSpecialBonus = abilitySpecial.LinkedSpecialBonus
                 });
             return (await Task.WhenAll(abilitySpecialDetailModels))

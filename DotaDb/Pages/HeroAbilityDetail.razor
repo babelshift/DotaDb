@@ -2,7 +2,7 @@
 @if (Details != null && Details.Count > 0)
 {
     <tr>
-        <td class="text-uppercase text-muted table-column-ability-name">@DetailName</td>
+        <td class="text-uppercase text-muted @ColumnClass">@DetailName</td>
         <td>
             @for (int i = 0; i < Details.Count; i++)
             {
@@ -21,6 +21,9 @@
 }
 
 @code {
+    [Parameter]
+    public string ColumnClass { get; set; }
+
     [Parameter]
     public string DetailName { get; set; }
 

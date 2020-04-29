@@ -2,7 +2,7 @@
 
 namespace DotaDb.Models
 {
-    public class HeroAbilitySpecialViewModel
+    public class GameItemAbilitySpecialViewModel
     {
         public string Name { get; set; }
         public IReadOnlyList<string> Value { get; set; }

@@ -2,13 +2,8 @@
 
 namespace DotaDb.Models
 {
-    public class GameItemViewModel
+    public class GameItemDetailModel
     {
-        public GameItemViewModel()
-        {
-            AbilitySpecials = new List<GameItemAbilitySpecialViewModel>();
-        }
-
         public uint Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -26,7 +21,7 @@ namespace DotaDb.Models
         public string Note5 { get; set; }
         public string Note6 { get; set; }
 
-        public IReadOnlyCollection<GameItemAbilitySpecialViewModel> AbilitySpecials { get; set; }
+        public IReadOnlyCollection<GameItemAbilitySpecialDetailModel> AbilitySpecials { get; set; }
         public string Behaviors { get; set; }
         public string TeamTargets { get; set; }
         public string TargetTypes { get; set; }

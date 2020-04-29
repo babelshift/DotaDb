@@ -2,8 +2,11 @@
 @using DotaDb.Data
 @using DotaDb.Models
 @using DotaDb.Utilities
+@using AutoMapper
 @inject ItemService ItemService
 @inject AppStateService AppStateService
+@inject IMapper Mapper 
+@inject SharedService SharedService 
 
 <div class="container py-2">
     <div class="row mb-2">
@@ -301,8 +304,8 @@
     {
         if (firstRender)
         {
-            string searchedItemName = string.Empty;
-            gameItems = (await ItemService.GetGameItemsAsync(searchedItemName))
+            var tempGameItems = await ItemService.GetGameItemsAsync();
+            gameItems = Mapper.Map<IReadOnlyCollection<GameItemDetailModel>, IReadOnlyCollection<GameItemViewModel>>(tempGameItems, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups())
                 .OrderBy(x => x.Name);
             filteredGameItems = gameItems.ToList();
             StateHasChanged();
