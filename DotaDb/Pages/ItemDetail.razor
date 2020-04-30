@@ -1,0 +1,21 @@
+﻿<span class="text-uppercase text-muted">
+    @DetailName:
+</span>
+<strong>
+    @if(!string.IsNullOrWhiteSpace(DetailValue))
+    {
+        @DetailValue
+    }
+    else
+    {
+        <i class="fas fa-minus text-warning"></i>
+    }
+</strong>
+
+@code {
+    [Parameter]
+    public string DetailName { get; set; }
+
+    [Parameter]
+    public string DetailValue { get; set; }
+}

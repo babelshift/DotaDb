@@ -39,7 +39,6 @@ namespace DotaDb.Models
         public string ManaCost { get; set; }
         public double? ChannelTime { get; set; }
         public string SharedCooldown { get; set; }
-
         public string ShopTags { get; set; }
         public string Quality { get; set; }
         public bool? IsStackable { get; set; }
@@ -62,5 +61,6 @@ namespace DotaDb.Models
         public bool? IsDroppable { get; set; }
         public bool? IsPurchasable { get; set; }
         public bool? IsNeutralDrop { get; set; }
+        public bool ShowingDetails { get; set; }
     }
 }

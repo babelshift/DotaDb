@@ -74,6 +74,7 @@ namespace DotaDb.Data
             var gameItemTasks = itemsWithoutRecipes.Select(async item => new GameItemDetailModel()
             {
                 Cost = item.Cost,
+                RawName = item.Name,
                 Name = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{item.Name}"),
                 Description = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{item.Name}_Description"),
                 Lore = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{item.Name}_Lore"),
@@ -115,12 +116,12 @@ namespace DotaDb.Data
                     .ToList()
                     .AsReadOnly();
 
-                var note0Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note0");
-                var note1Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note1");
-                var note2Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note2");
-                var note3Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note3");
-                var note4Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note4");
-                var note5Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note5");
+                var note0Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.RawName}_Note0");
+                var note1Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.RawName}_Note1");
+                var note2Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.RawName}_Note2");
+                var note3Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.RawName}_Note3");
+                var note4Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.RawName}_Note4");
+                var note5Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.RawName}_Note5");
 
                 gameItem.CastPoint = item.AbilityCastPoint.ToSlashSeparatedString();
                 gameItem.CastRange = item.AbilityCastRange.ToSlashSeparatedString();

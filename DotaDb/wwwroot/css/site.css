@@ -206,3 +206,13 @@ body {
 .item-list > .col-md-4:nth-child(3n+1) {
     clear: both;
 }
+
+.game-item-description-lore h1 {
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+.table-hover > tbody > tr.no-hover:hover > td,
+.table-hover > tbody > tr.no-hover:hover > th {
+    background-color: inherit;
+}
