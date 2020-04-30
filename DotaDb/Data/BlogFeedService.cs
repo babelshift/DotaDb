@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.Extensions.Configuration;
 using Steam.Models.DOTA2;
 using System;
 using System.Collections.Generic;
@@ -12,22 +13,26 @@ namespace DotaDb.Data
 {
     public class BlogFeedService
     {
+        private readonly IConfiguration configuration;
         private readonly CacheService cacheService;
+        private readonly string blogFeedUrl;
 
-        public BlogFeedService(CacheService cacheService)
+        public BlogFeedService(
+            IConfiguration configuration,
+            CacheService cacheService)
         {
+            this.configuration = configuration;
             this.cacheService = cacheService;
+            this.blogFeedUrl = configuration["BlogFeedUrl"];
         }
 
         public async Task<IEnumerable<DotaBlogFeedItem>> GetDotaBlogFeedItemsAsync()
         {
-            return await cacheService.GetOrSetAsync("blogFeedItems", async () =>
+            return await cacheService.GetOrSetAsync(MemoryCacheKey.BlogFeedItems, async () =>
             {
                 List<DotaBlogFeedItem> dotaBlogFeedItems = new List<DotaBlogFeedItem>();
 
-                string url = "http://blog.dota2.com/feed/";
-
-                using (XmlReader reader = XmlReader.Create(url))
+                using (XmlReader reader = XmlReader.Create(blogFeedUrl))
                 {
                     SyndicationFeed feed = SyndicationFeed.Load(reader);
                     foreach (var item in feed.Items)
@@ -64,7 +69,10 @@ namespace DotaDb.Data
 
         private static T GetExtensionElementValue<T>(SyndicationItem item, string extensionElementName)
         {
-            return item.ElementExtensions.Where(ee => ee.OuterName == extensionElementName).First().GetObject<T>();
+            return item.ElementExtensions
+                .Where(ee => ee.OuterName == extensionElementName)
+                .First()
+                .GetObject<T>();
         }
     }
 }

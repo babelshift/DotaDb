@@ -183,7 +183,7 @@ namespace DotaDb.Data
 
         private async Task<IReadOnlyCollection<GameItemModel>> GetGameItemsFromCacheAsync()
         {
-            return await cacheService.GetOrSetAsync("gameItems", async () =>
+            return await cacheService.GetOrSetAsync(MemoryCacheKey.GameItems, async () =>
             {
                 var dota2Econ = steamWebInterfaceFactory.CreateSteamWebInterface<DOTA2Econ>(new HttpClient());
                 var gameItems = await dota2Econ.GetGameItemsAsync();

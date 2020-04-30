@@ -49,7 +49,7 @@ namespace DotaDb.Data
             // TODO: http client factory injection?
             var dota2MatchInterface = steamWebInterfaceFactory.CreateSteamWebInterface<DOTA2Match>(new HttpClient());
 
-            var liveLeagueGames = await cacheService.GetOrSetAsync("liveLeagueGames", async () =>
+            var liveLeagueGames = await cacheService.GetOrSetAsync(MemoryCacheKey.LiveLeagueGames, async () =>
             {
                 return await dota2MatchInterface.GetLiveLeagueGamesAsync();
             }, TimeSpan.FromMinutes(15));

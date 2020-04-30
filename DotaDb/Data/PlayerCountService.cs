@@ -1,7 +1,8 @@
-﻿using DotaDb.Models;
+﻿
+using DotaDb.Models;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,19 +11,26 @@ namespace DotaDb.Data
 {
     public class PlayerCountService
     {
+        private readonly IConfiguration configuration;
         private readonly CacheService cacheService;
 
-        public PlayerCountService(CacheService cacheService)
+        private readonly string playerCountsUrl;
+
+        public PlayerCountService(
+            IConfiguration configuration,
+            CacheService cacheService)
         {
+            this.configuration = configuration;
             this.cacheService = cacheService;
+            playerCountsUrl = configuration["PlayerCountsUrl"];
         }
 
         public async Task<PlayerCountModel> GetPlayerCountsFromScrapingAsync()
         {
-            return await cacheService.GetOrSetAsync("playerCounts", async () =>
+            return await cacheService.GetOrSetAsync(MemoryCacheKey.PlayerCounts, async () =>
             {
                 HttpClient client = new HttpClient();
-                var steamChartsHtml = await client.GetStringAsync("http://steamcharts.com/app/570");
+                var steamChartsHtml = await client.GetStringAsync(playerCountsUrl);
                 HtmlDocument doc = new HtmlDocument();
 
                 doc.LoadHtml(steamChartsHtml);

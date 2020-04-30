@@ -8,7 +8,6 @@ namespace DotaDb.Data
 {
     public class CacheService
     {
-        private readonly Dictionary<string, SemaphoreSlim> lockSet = new Dictionary<string, SemaphoreSlim>();
         private readonly SemaphoreSlim s = new SemaphoreSlim(1, 1);
         private readonly IMemoryCache cache;
 
