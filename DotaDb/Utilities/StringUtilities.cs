@@ -14,5 +14,10 @@ namespace DotaDb.Utilities
 
             return String.Empty;
         }
+
+        public static string ReplaceUnderscoresWithSpaces(this string value)
+        {
+            return !string.IsNullOrWhiteSpace(value) ? value.Replace("_", " ") : string.Empty;
+        }
     }
 }

@@ -25,9 +25,7 @@ namespace DotaDb.Data
         private readonly string heroAbilitiesFileName;
         private readonly string minimapIconsBaseUrl;
 
-        // I have seen some of these keys having different casing such as "DOTA_Tooltip_ability" and "DOTA_Tooltip_Ability". Watch out.
         private const string tooltipLocalizationPrefix = "DOTA_Tooltip_ability";
-
         private const string heroNamePrefix = "npc_dota_hero_";
 
         public HeroService(
@@ -93,7 +91,7 @@ namespace DotaDb.Data
             {
                 TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
                 string heroName = hero.Name.Replace(heroNamePrefix, string.Empty);
-                heroName = heroName.Replace("_", " ");
+                heroName = heroName.ReplaceUnderscoresWithSpaces();
                 return textInfo.ToTitleCase(heroName);
             }
                 

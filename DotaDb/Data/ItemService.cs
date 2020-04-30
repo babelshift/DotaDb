@@ -30,8 +30,12 @@ namespace DotaDb.Data
 
         private readonly string minimapIconsBaseUrl;
         private readonly string inStoreItemIconsBaseUrl;
+        private readonly string itemIconsBaseUrl;
+        private readonly string cosmeticItemsStoreBaseUrl;
         private readonly string itemAbilitiesFileName;
         private readonly string cosmeticItemsFileName;
+
+        private const string tooltipAbilityPrefix = "DOTA_Tooltip_Ability";
 
         public ItemService(
             IConfiguration configuration,
@@ -56,44 +60,43 @@ namespace DotaDb.Data
 
             minimapIconsBaseUrl = configuration["ImageUrls:MinimapIconsBaseUrl"];
             inStoreItemIconsBaseUrl = configuration["ImageUrls:InStoreItemIconsBaseUrl"];
+            itemIconsBaseUrl = configuration["ImageUrls:ItemIconsBaseUrl"];
+            cosmeticItemsStoreBaseUrl = configuration["ImageUrls:CosmeticItemsStoreBaseUrl"];
             itemAbilitiesFileName = configuration["FileNames:ItemAbilities"];
             cosmeticItemsFileName = configuration["FileNames:CosmeticItems"];
         }
 
         public async Task<IReadOnlyCollection<GameItemDetailModel>> GetGameItemsAsync()
         {
-            var items = await GetGameItemsFromCacheAsync();
+            var itemsWithoutRecipes = (await GetGameItemsFromCacheAsync())
+                .Where(x => !x.IsRecipe);
 
-            var itemsWithoutRecipes = items.Where(x => !x.IsRecipe);
-
-            List<GameItemDetailModel> gameItems = new List<GameItemDetailModel>();
-            foreach (var item in itemsWithoutRecipes)
+            var gameItemTasks = itemsWithoutRecipes.Select(async item => new GameItemDetailModel()
             {
-                gameItems.Add(new GameItemDetailModel()
-                {
-                    Cost = item.Cost,
-                    Name = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_Ability_{item.Name}"),
-                    Description = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_ability_{item.Name}_Description"),
-                    Lore = await localizationService.GetAbilityLocalizationTextAsync($"DOTA_Tooltip_ability_{item.Name}_Lore"),
-                    Id = item.Id,
-                    IsRecipe = item.IsRecipe,
-                    SecretShop = item.IsAvailableAtSecretShop,
-                    SideShop = item.IsAvailableAtSideShop,
-                    IconPath = string.Format("http://cdn.dota2.com/apps/dota2/images/items/{0}_lg.png", item.IsRecipe ? "recipe" : item.Name.Replace("item_", "")),
-                });
-            }
+                Cost = item.Cost,
+                Name = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{item.Name}"),
+                Description = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{item.Name}_Description"),
+                Lore = await localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{item.Name}_Lore"),
+                Id = item.Id,
+                IsRecipe = item.IsRecipe,
+                SecretShop = item.IsAvailableAtSecretShop,
+                SideShop = item.IsAvailableAtSideShop,
+                IconPath = string.Format("{0}{1}_lg.png", itemIconsBaseUrl, item.IsRecipe ? "recipe" : item.Name.Replace("item_", ""))
+            });
+            var gameItems = await Task.WhenAll(gameItemTasks);
 
             var abilities = await GetItemAbilitiesAsync();
 
-            foreach (var itemViewModel in gameItems)
+            var addAbilityTasks = gameItems.Select(gameItem =>
             {
-                await AddAbilityToItemViewModelAsync(itemViewModel, abilities);
-            }
+                return AddAbilityDetailsAsync(gameItem, abilities);
+            });
+            await Task.WhenAll(addAbilityTasks);
 
-            return gameItems.AsReadOnly();
+            return gameItems;
         }
 
-        private async Task AddAbilityToItemViewModelAsync(GameItemDetailModel gameItem, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
+        private async Task AddAbilityDetailsAsync(GameItemDetailModel gameItem, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
         {
             if (abilities.TryGetValue(gameItem.Id, out ItemAbilitySchemaItemModel item))
             {
@@ -102,18 +105,22 @@ namespace DotaDb.Data
                 string joinedUnitTargetTypes = sharedService.GetJoinedUnitTargetTypes(item.AbilityUnitTargetType);
                 string joinedUnitTargetFlags = sharedService.GetJoinedUnitTargetFlags(item.AbilityUnitTargetFlags);
 
-                // I hate this, how can we improve it?
-                List<GameItemAbilitySpecialDetailModel> abilitySpecials = new List<GameItemAbilitySpecialDetailModel>();
-                foreach (var abilitySpecial in item.AbilitySpecials)
-                {
-                    abilitySpecials.Add(new GameItemAbilitySpecialDetailModel()
+                var abilitySpecials = item.AbilitySpecials
+                    .Select(abilitySpecial => new GameItemAbilitySpecialDetailModel()
                     {
-                        Name = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, abilitySpecial.Name)),
                         RawName = abilitySpecial.Name,
                         Value = abilitySpecial.Value,
                         LinkedSpecialBonus = abilitySpecial.LinkedSpecialBonus
-                    });
-                }
+                    })
+                    .ToList()
+                    .AsReadOnly();
+
+                var note0Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note0");
+                var note1Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note1");
+                var note2Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note2");
+                var note3Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note3");
+                var note4Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note4");
+                var note5Task = localizationService.GetAbilityLocalizationTextAsync($"{tooltipAbilityPrefix}_{gameItem.Name}_Note5");
 
                 gameItem.CastPoint = item.AbilityCastPoint.ToSlashSeparatedString();
                 gameItem.CastRange = item.AbilityCastRange.ToSlashSeparatedString();
@@ -126,12 +133,12 @@ namespace DotaDb.Data
                 gameItem.TargetFlags = joinedUnitTargetFlags;
                 gameItem.TargetTypes = joinedUnitTargetTypes;
                 gameItem.TeamTargets = joinedUnitTargetTeamTypes;
-                gameItem.Note0 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, "Note0"));
-                gameItem.Note1 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, "Note1"));
-                gameItem.Note2 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, "Note2"));
-                gameItem.Note3 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, "Note3"));
-                gameItem.Note4 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, "Note4"));
-                gameItem.Note5 = await localizationService.GetAbilityLocalizationTextAsync(String.Format("{0}_{1}_{2}", "DOTA_Tooltip_ability", gameItem.Name, "Note5"));
+                gameItem.Note0 = await note0Task;
+                gameItem.Note1 = await note1Task;
+                gameItem.Note2 = await note2Task;
+                gameItem.Note3 = await note3Task;
+                gameItem.Note4 = await note4Task;
+                gameItem.Note5 = await note5Task;
                 gameItem.CastsOnPickup = item.ItemCastOnPickup;
                 gameItem.ContributesToNetWorthWhenDropped = item.ItemContributesToNetWorthWhenDropped;
                 gameItem.Declarations = sharedService.GetJoinedItemDeclarationTypes(item.ItemDeclarations);
@@ -156,7 +163,7 @@ namespace DotaDb.Data
                 if (!string.IsNullOrWhiteSpace(item.ItemQuality))
                 {
                     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                    gameItem.Quality = textInfo.ToTitleCase(item.ItemQuality.Replace("_", " "));
+                    gameItem.Quality = textInfo.ToTitleCase(item.ItemQuality.ReplaceUnderscoresWithSpaces());
                 }
             }
         }
@@ -199,8 +206,10 @@ namespace DotaDb.Data
         {
             InStoreViewModel viewModel = new InStoreViewModel();
 
+            // Get full schema
             var schema = await GetSchemaAsync();
 
+            // Get heroes without "base" and "dummy"
             var heroes = await heroService.GetHeroesAsync();
             var filteredHeroes = heroes
                 .Where(x => x.Value.Name != "npc_dota_hero_base"
@@ -208,33 +217,30 @@ namespace DotaDb.Data
                 .Select(async x => await heroService.GetHeroNameAsync(x.Value));
             viewModel.Heroes = await Task.WhenAll(filteredHeroes);
 
+            // Collect Prefabs, Rarities, and Qualities and fix up the string casing
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             viewModel.Prefabs = schema.Prefabs.Select(x => new InStoreItemPrefabViewModel()
             {
                 Id = x.Type,
-                Name = textInfo.ToTitleCase(x.Type.Replace('_', ' '))
+                Name = textInfo.ToTitleCase(x.Type.ReplaceUnderscoresWithSpaces())
             }).ToList().AsReadOnly();
 
             viewModel.Rarities = schema.Rarities.Select(x => new InStoreItemRarityViewModel()
             {
-                Name = textInfo.ToTitleCase(x.Name.Replace('_', ' '))
+                Name = textInfo.ToTitleCase(x.Name.ReplaceUnderscoresWithSpaces())
             }).ToList().AsReadOnly();
 
             viewModel.Qualities = schema.Qualities.Select(x => new InStoreItemQualityViewModel()
             {
-                Name = textInfo.ToTitleCase(x.Name.Replace('_', ' '))
+                Name = textInfo.ToTitleCase(x.Name.ReplaceUnderscoresWithSpaces())
             }).ToList().AsReadOnly();
 
             List<InStoreItemViewModel> inStoreItems = new List<InStoreItemViewModel>();
             foreach (var item in schema.Items)
             {
                 // if there's a name or description, remove the "#" character before
-                string itemName = !string.IsNullOrWhiteSpace(item.ItemName) && item.ItemName.StartsWith("#")
-                    ? item.ItemName.Remove(0, 1)
-                    : string.Empty;
-                string itemDescription = !string.IsNullOrWhiteSpace(item.ItemDescription) && item.ItemDescription.StartsWith("#")
-                    ? item.ItemDescription.Remove(0, 1)
-                    : string.Empty;
+                string itemName = RemoveHashPrefix(item.ItemName);
+                string itemDescription = RemoveHashPrefix(item.ItemDescription);
 
                 // look up the rarity and quality details
                 var rarity = schema.Rarities.FirstOrDefault(x => x.Name == item.ItemRarity);
@@ -263,11 +269,11 @@ namespace DotaDb.Data
                 var itemViewModel = new InStoreItemViewModel()
                 {
                     DefIndex = item.DefIndex,
-                    Prefab = !string.IsNullOrWhiteSpace(item.Prefab) ? item.Prefab.Replace("_", " ") : string.Empty,
+                    Prefab = item.Prefab.ReplaceUnderscoresWithSpaces(),
                     Name = await localizationService.GetCosmeticItemLocalizationTextAsync(itemName),
                     Description = await localizationService.GetCosmeticItemLocalizationTextAsync(itemDescription),
                     IconPath = item.GetIconPath(inStoreItemIconsBaseUrl),
-                    StorePath = $"http://www.dota2.com/store/itemdetails/{item.DefIndex}",
+                    StorePath = $"{cosmeticItemsStoreBaseUrl}/{item.DefIndex}",
                     CreationDate = item.CreationDate,
                     ExpirationDate = item.ExpirationDate,
                     PriceBucket = item.PriceInfo?.Bucket ?? string.Empty,
@@ -290,6 +296,13 @@ namespace DotaDb.Data
             viewModel.Items = inStoreItems;
 
             return viewModel;
+        }
+
+        private static string RemoveHashPrefix(string s)
+        {
+            return !string.IsNullOrWhiteSpace(s) && s.StartsWith("#")
+                ? s.Remove(0, 1)
+                : string.Empty;
         }
 
         private async Task<SchemaModel> GetSchemaAsync()
