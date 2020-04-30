@@ -40,12 +40,12 @@
                                 <HeroAbilityDetail DetailName="Cast Range" Details="@ability.CastRange" ColumnClass="table-column-ability-name" />
                                 <HeroAbilityDetail DetailName="Cooldown" Details="@ability.Cooldown" ColumnClass="table-column-ability-name" />
                                 <HeroAbilityDetail DetailName="Damage" Details="@ability.Damage" ColumnClass="table-column-ability-name" />
-                                <tr>
-                                    <td class="text-uppercase text-muted table-column-ability-name">Damage Types</td>
-                                    <td>
-                                        @if (ability.DamageType != null)
-                                        {
-                                            if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.PHYSICAL.Key)
+                                @if (ability.DamageType != null)
+                                {
+                                    <tr>
+                                        <td class="text-uppercase text-muted table-column-ability-name">Damage Types</td>
+                                        <td>
+                                            @if (ability.DamageType.Key == Steam.Models.DOTA2.DotaDamageType.PHYSICAL.Key)
                                             {
                                                 <span class="text-primary"><strong>@ability.DamageType</strong></span>
                                             }
@@ -57,19 +57,18 @@
                                             {
                                                 <span class="text-success"><strong>@ability.DamageType</strong></span>
                                             }
-                                        }
-                                        else
-                                        { @unknownText}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                }
                                 <HeroAbilityDetail DetailName="Duration" Details="@ability.Duration" ColumnClass="table-column-ability-name" />
                                 <HeroAbilityDetail DetailName="Mana Cost" Details="@ability.ManaCost" ColumnClass="table-column-ability-name" />
-                                <tr>
-                                    <td class="text-uppercase text-muted table-column-ability-name">Spell Immunity Types</td>
-                                    <td>
-                                        @if (ability.SpellImmunityType != null)
-                                        {
-                                            if (ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ENEMIES_YES.Key)
+
+                                @if (ability.SpellImmunityType != null)
+                                {
+                                    <tr>
+                                        <td class="text-uppercase text-muted table-column-ability-name">Spell Immunity Types</td>
+                                        <td>
+                                            @if (ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ALLIES_YES.Key || ability.SpellImmunityType.Key == Steam.Models.DOTA2.DotaSpellImmunityType.ENEMIES_YES.Key)
                                             {
                                                 <span class="text-success">
                                                     <i class="fas fa-check"></i>
@@ -83,11 +82,9 @@
                                                     <strong>@ability.SpellImmunityType</strong>
                                                 </span>
                                             }
-                                        }
-                                        else
-                                        { @unknownText}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -99,15 +96,15 @@
                                     @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
                                     {
                                         <HeroAbilityDetail DetailName="@abilitySpecial.Name"
-                                            Details="@abilitySpecial.Value"
-                                            ColumnClass="table-column-ability-special-name" />
+                                                           Details="@abilitySpecial.Value"
+                                                           ColumnClass="table-column-ability-special-name" />
                                     }
                                     else
                                     {
                                         <HeroAbilityDetail DetailName="@String.Format("{0}:", abilitySpecial.RawName.Replace("_", " "))"
-                                            Details="@abilitySpecial.Value"
-                                            ColumnClass="table-column-ability-special-name" />
-                                        
+                                                           Details="@abilitySpecial.Value"
+                                                           ColumnClass="table-column-ability-special-name" />
+
                                     }
                                 }
                             </tbody>
