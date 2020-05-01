@@ -345,7 +345,7 @@
         if (firstRender)
         {
             var hero = await HeroService.GetHeroDetailsAsync((uint)HeroId);
-            this.hero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups());
+            this.hero = Mapper.Map<HeroDetail, HeroViewModel>(hero, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups());
 
             StateHasChanged();
         }

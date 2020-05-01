@@ -469,7 +469,7 @@
             Random r = new Random();
             int index = r.Next(0, heroes.Count);
             var hero = heroes.ElementAt(index).Value;
-            randomHero = Mapper.Map<HeroDetailModel, HeroViewModel>(hero, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups());
+            randomHero = Mapper.Map<HeroDetail, HeroViewModel>(hero, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups());
 
             StateHasChanged();
         }

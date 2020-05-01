@@ -5,7 +5,7 @@ namespace DotaDb.Utilities
 {
     public static class InStoreItemExtensions
     {
-        public static string GetIconPath(this SchemaItemModel item, string baseUrl)
+        public static string GetIconPath(this SchemaItem item, string baseUrl)
         {
             if (item == null || string.IsNullOrWhiteSpace(item.DefIndex))
             {

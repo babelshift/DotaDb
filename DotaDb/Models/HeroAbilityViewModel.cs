@@ -7,14 +7,14 @@ namespace DotaDb.Models
     {
         public HeroAbilityViewModel()
         {
-            Attributes = new List<HeroAbilitySpecialViewModel>();
+            AbilitySpecials = new List<HeroAbilitySpecialViewModel>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string AvatarImagePath { get; set; }
         public string Description { get; set; }
-        public IReadOnlyCollection<HeroAbilitySpecialViewModel> Attributes { get; set; }
+        public IReadOnlyCollection<HeroAbilitySpecialViewModel> AbilitySpecials { get; set; }
         public IReadOnlyList<string> Behaviors { get; set; }
         public IReadOnlyList<string> TeamTargets { get; set; }
         public IReadOnlyList<string> TargetTypes { get; set; }

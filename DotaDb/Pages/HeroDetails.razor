@@ -91,7 +91,7 @@
                     <div class="col-sm-6">
                         <table class="table table-sm table-borderless">
                             <tbody style="table-layout: fixed">
-                                @foreach (var abilitySpecial in ability.Attributes)
+                                @foreach (var abilitySpecial in ability.AbilitySpecials)
                                 {
                                     @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
                                     {

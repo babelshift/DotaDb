@@ -6,25 +6,25 @@ namespace DotaDb.Utilities
 {
     public static class HeroExtensions
     {
-        public static IReadOnlyList<HeroRoleModel> GetRoles(this HeroSchemaModel hero)
+        public static IReadOnlyList<HeroRole> GetRoles(this HeroSchema hero)
         {
             if (hero == null)
             {
-                return new List<HeroRoleModel>().AsReadOnly();
+                return new List<HeroRole>().AsReadOnly();
             }
 
             if (String.IsNullOrEmpty(hero.Role) || String.IsNullOrEmpty(hero.RoleLevels))
             {
-                return new List<HeroRoleModel>();
+                return new List<HeroRole>();
             }
 
             string[] rolesSplit = hero.Role.Split(',');
             string[] roleLevelsSplit = hero.RoleLevels.Split(',');
 
-            List<HeroRoleModel> roleViewModels = new List<HeroRoleModel>();
+            List<HeroRole> roleViewModels = new List<HeroRole>();
             for (int i = 0; i < rolesSplit.Length; i++)
             {
-                roleViewModels.Add(new HeroRoleModel()
+                roleViewModels.Add(new HeroRole()
                 {
                     Name = rolesSplit[i],
                     Level = roleLevelsSplit[i]
@@ -34,7 +34,7 @@ namespace DotaDb.Utilities
             return roleViewModels.AsReadOnly();
         }
 
-        public static string GetMinimapIconFilePath(this HeroSchemaModel hero, string minimapIconsBaseUrl)
+        public static string GetMinimapIconFilePath(this HeroSchema hero, string minimapIconsBaseUrl)
         {
             if (hero == null)
             {
@@ -51,7 +51,7 @@ namespace DotaDb.Utilities
             return String.Format("{0}{1}", minimapIconsBaseUrl, fileName);
         }
 
-        public static string GetAvatarImageFilePath(this HeroSchemaModel hero, string heroAvatarsBaseUrl)
+        public static string GetAvatarImageFilePath(this HeroSchema hero, string heroAvatarsBaseUrl)
         {
             if (hero == null)
             {

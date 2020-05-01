@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace DotaDb.Utilities
 {
-    public class HeroToHeroViewModelConverter : ITypeConverter<HeroDetailModel, HeroViewModel>
+    public class HeroToHeroViewModelConverter : ITypeConverter<HeroDetail, HeroViewModel>
     {
-        public HeroViewModel Convert(HeroDetailModel source, HeroViewModel destination, ResolutionContext context)
+        public HeroViewModel Convert(HeroDetail source, HeroViewModel destination, ResolutionContext context)
         {
             HeroViewModel viewModel = new HeroViewModel();
 
@@ -45,7 +45,7 @@ namespace DotaDb.Utilities
             }
 
             var lookup = context.Items["lookup"] as IReadOnlyDictionary<string, DotaHeroAbilityBehaviorType>;
-            viewModel.Abilities = context.Mapper.Map<IReadOnlyCollection<HeroAbilityDetailModel>, IReadOnlyCollection<HeroAbilityViewModel>>(abilities, opts => opts.Items["lookup"] = lookup);
+            viewModel.Abilities = context.Mapper.Map<IReadOnlyCollection<HeroAbilityDetail>, IReadOnlyCollection<HeroAbilityViewModel>>(abilities, opts => opts.Items["lookup"] = lookup);
             viewModel.ActiveTab = source.ActiveTab;
             viewModel.AgilityGain = source.AgilityGain;
             viewModel.AttackRange = source.AttackRange;
@@ -65,7 +65,7 @@ namespace DotaDb.Utilities
             viewModel.MinimapIconPath = source.MinimapIconPath;
             viewModel.Name = source.Name;
             viewModel.PrimaryAttribute = source.PrimaryAttribute;
-            viewModel.Roles = context.Mapper.Map<IReadOnlyCollection<HeroRoleModel>, IReadOnlyCollection<HeroRoleViewModel>>(source.Roles);
+            viewModel.Roles = context.Mapper.Map<IReadOnlyCollection<HeroRole>, IReadOnlyCollection<HeroRoleViewModel>>(source.Roles);
             viewModel.StrengthGain = source.StrengthGain;
             viewModel.Team = source.Team;
             viewModel.TurnRate = source.TurnRate;

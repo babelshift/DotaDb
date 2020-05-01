@@ -11,9 +11,9 @@ namespace DotaDb.Utilities
     {
         public HeroMappingProfile()
         {
-            CreateMap<HeroDetailModel, HeroViewModel>().ConvertUsing(new HeroToHeroViewModelConverter());
-            CreateMap<HeroRoleModel, HeroRoleViewModel>();
-            CreateMap<HeroAbilityDetailModel, HeroAbilityViewModel>()
+            CreateMap<HeroDetail, HeroViewModel>().ConvertUsing(new HeroToHeroViewModelConverter());
+            CreateMap<HeroRole, HeroRoleViewModel>();
+            CreateMap<HeroAbilityDetail, HeroAbilityViewModel>()
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Replace("\\n", "<br />")))
                 .ForMember(dest => dest.Notes, opt => opt.MapFrom((src, dest) =>
                 {
@@ -69,7 +69,7 @@ namespace DotaDb.Utilities
                 }));
 
             // TODO: move to its own profile
-            CreateMap<HeroAbilitySpecialDetailModel, HeroAbilitySpecialViewModel>()
+            CreateMap<HeroAbilitySpecialDetail, HeroAbilitySpecialViewModel>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom((src, dest, w, context) =>
                 {
                     return SplitSpacesIntoList(src.Value);

@@ -97,9 +97,9 @@ namespace DotaDb.Data
             return gameItems;
         }
 
-        private async Task AddAbilityDetailsAsync(GameItemDetailModel gameItem, IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel> abilities)
+        private async Task AddAbilityDetailsAsync(GameItemDetailModel gameItem, IReadOnlyDictionary<uint, ItemAbility> abilities)
         {
-            if (abilities.TryGetValue(gameItem.Id, out ItemAbilitySchemaItemModel item))
+            if (abilities.TryGetValue(gameItem.Id, out ItemAbility item))
             {
                 string joinedBehaviors = sharedService.GetJoinedBehaviors(item.AbilityBehavior);
                 string joinedUnitTargetTeamTypes = sharedService.GetJoinedUnitTargetTeamTypes(item.AbilityUnitTargetTeam);
@@ -182,7 +182,7 @@ namespace DotaDb.Data
             }
         }
 
-        private async Task<IReadOnlyCollection<GameItemModel>> GetGameItemsFromCacheAsync()
+        private async Task<IReadOnlyCollection<GameItem>> GetGameItemsFromCacheAsync()
         {
             return await cacheService.GetOrSetAsync(MemoryCacheKey.GameItems, async () =>
             {
@@ -192,14 +192,14 @@ namespace DotaDb.Data
             }, TimeSpan.FromDays(1));
         }
 
-        private async Task<IReadOnlyDictionary<uint, ItemAbilitySchemaItemModel>> GetItemAbilitiesAsync()
+        private async Task<IReadOnlyDictionary<uint, ItemAbility>> GetItemAbilitiesAsync()
         {
             string cacheKey = $"parsed_{itemAbilitiesFileName}";
             return await cacheService.GetOrSetAsync(cacheKey, async () =>
             {
                 var vdf = await blobStorageService.GetFileFromStorageAsync("schema", itemAbilitiesFileName);
                 var itemAbilities = schemaParser.GetDotaItemAbilities(vdf);
-                return new ReadOnlyDictionary<uint, ItemAbilitySchemaItemModel>(itemAbilities.ToDictionary(itemAbility => itemAbility.Id, x => x));
+                return new ReadOnlyDictionary<uint, ItemAbility>(itemAbilities.ToDictionary(itemAbility => itemAbility.Id, x => x));
             }, TimeSpan.FromDays(1));
         }
 
@@ -306,7 +306,7 @@ namespace DotaDb.Data
                 : string.Empty;
         }
 
-        private async Task<SchemaModel> GetSchemaAsync()
+        private async Task<Schema> GetSchemaAsync()
         {
             string cacheKey = $"parsed_{cosmeticItemsFileName}";
             return await cacheService.GetOrSetAsync(cacheKey, async () =>

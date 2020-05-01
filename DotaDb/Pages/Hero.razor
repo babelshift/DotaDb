@@ -301,13 +301,13 @@
         }
     }
 
-    private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<uint, HeroDetailModel>> heroes)
+    private IReadOnlyCollection<HeroViewModel> TranslateToViewModel(IEnumerable<KeyValuePair<uint, HeroDetail>> heroes)
         => heroes
-            .Select(hero => Mapper.Map<HeroDetailModel, HeroViewModel>(hero.Value, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups()))
+            .Select(hero => Mapper.Map<HeroDetail, HeroViewModel>(hero.Value, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups()))
             .ToList()
             .AsReadOnly();
 
-    private static IEnumerable<KeyValuePair<uint, HeroDetailModel>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<uint, HeroDetailModel> heroes, string attributeKey)
+    private static IEnumerable<KeyValuePair<uint, HeroDetail>> GetHeroesByPrimaryAttribute(IReadOnlyDictionary<uint, HeroDetail> heroes, string attributeKey)
         => heroes.Where(x =>
             x.Value.IsEnabled
             && x.Value.PrimaryAttribute.Key == attributeKey
