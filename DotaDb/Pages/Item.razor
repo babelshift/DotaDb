@@ -9,213 +9,224 @@
 @inject SharedService SharedService
 
 <div class="container py-2">
-    <div class="row mb-2">
-        <div class="col-md-2">
-            <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
-                   @bind="searchValue"
-                   @bind:event="oninput"
-                   @onkeyup="OnSearch" />
+    @if (!hasRendered)
+    {
+        <div class="d-flex justify-content-center m-3">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
-        <div class="col-md-2">
-            <select class="custom-select custom-select-sm" @onchange="OnQualityChanged">
-                <option selected value=" ">-- Quality --</option>
-                <option value="artifact">Artifact</option>
-                <option value="common">Common</option>
-                <option value="component">Component</option>
-                <option value="epic">Epic</option>
-                <option value="secret shop">Secret Shop</option>
-                <option value="rare">Rare</option>
-            </select>
+    }
+    else
+    {
+        <div class="row mb-2">
+            <div class="col-md-2">
+                <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
+                       @bind="searchValue"
+                       @bind:event="oninput"
+                       @onkeyup="OnSearch" />
+            </div>
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" @onchange="OnQualityChanged">
+                    <option selected value=" ">-- Quality --</option>
+                    <option value="artifact">Artifact</option>
+                    <option value="common">Common</option>
+                    <option value="component">Component</option>
+                    <option value="epic">Epic</option>
+                    <option value="secret shop">Secret Shop</option>
+                    <option value="rare">Rare</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" @onchange="OnBehaviorChanged">
+                    <option selected value=" ">-- Behavior --</option>
+                    <option value="area of effect">Area of Effect</option>
+                    <option value="channelled">Channelled</option>
+                    <option value="cursor target">Cursor Target</option>
+                    <option value="directional">Directional</option>
+                    <option value="disable roots">Disable Roots</option>
+                    <option value="ignore channel">Ignore Channel</option>
+                    <option value="immediate">Immediate</option>
+                    <option value="no target">No Target</option>
+                    <option value="optional unit target">Optional Unit Target</option>
+                    <option value="passive">Passive</option>
+                    <option value="stops attacking">Stops Attacking</option>
+                    <option value="stops movement">Stops Movement</option>
+                    <option value="toggle">Toggle</option>
+                    <option value="unit target">Unit Target</option>
+                    <option value="suppress associated consumable">Suppress Associated Consumable</option>
+                </select>
+            </div>
+            <div class="col-md-2 offset-4 text-right">
+                <button class="btn btn-secondary" @onclick="HideAllDetails">
+                    <i class="fas fa-minus-square"></i>
+                    Hide All Details
+                </button>
+            </div>
         </div>
-        <div class="col-md-2">
-            <select class="custom-select custom-select-sm" @onchange="OnBehaviorChanged">
-                <option selected value=" ">-- Behavior --</option>
-                <option value="area of effect">Area of Effect</option>
-                <option value="channelled">Channelled</option>
-                <option value="cursor target">Cursor Target</option>
-                <option value="directional">Directional</option>
-                <option value="disable roots">Disable Roots</option>
-                <option value="ignore channel">Ignore Channel</option>
-                <option value="immediate">Immediate</option>
-                <option value="no target">No Target</option>
-                <option value="optional unit target">Optional Unit Target</option>
-                <option value="passive">Passive</option>
-                <option value="stops attacking">Stops Attacking</option>
-                <option value="stops movement">Stops Movement</option>
-                <option value="toggle">Toggle</option>
-                <option value="unit target">Unit Target</option>
-                <option value="suppress associated consumable">Suppress Associated Consumable</option>
-            </select>
-        </div>
-        <div class="col-md-2 offset-4 text-right">
-            <button class="btn btn-secondary" @onclick="HideAllDetails">
-                <i class="fas fa-minus-square"></i>
-                Hide All Details
-            </button>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-hover game-item-table" data-toggle="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>ID</th>
-                    <th>Cost</th>
-                    <th>Quality</th>
-                    <th>Behavior</th>
-                    <th>Mana Cost</th>
-                    <th>Cooldown</th>
-                    <th>Stackable</th>
-                    <th>Sellable</th>
-                    <th>Killable</th>
-                    <th>Droppable</th>
-                    <th>Neutral Drop</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var gameItem in filteredGameItems)
-                {
-                    <tr @onclick="@(e => ShowDetails(e, gameItem))" style="cursor: pointer;">
-                        <td>
-                            <div class="text-center py-1">
-                                <img src="@gameItem.IconPath" onerror="this.onerror=null;this.src='/images/missing_game_item.png';" />
-                                <br />
-                                <small>@(!string.IsNullOrWhiteSpace(gameItem.Name) ? gameItem.Name : "???")</small>
-                            </div>
-                        </td>
-                        <td>@gameItem.Id</td>
-                        <td>@gameItem.Cost</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Quality) ? (MarkupString)gameItem.Quality : iconMinus)</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Behaviors) ? (MarkupString)gameItem.Behaviors : iconMinus)</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.ManaCost) ? (MarkupString)gameItem.ManaCost : iconMinus)</td>
-                        <td>@(!string.IsNullOrWhiteSpace(gameItem.Cooldown) ? (MarkupString)gameItem.Cooldown : iconMinus)</td>
-                        <td>@(gameItem.IsStackable.HasValue ? (gameItem.IsStackable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsSellable.HasValue ? (gameItem.IsSellable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsKillable.HasValue ? (gameItem.IsKillable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsDroppable.HasValue ? (gameItem.IsDroppable.Value ? iconCheck : iconTimes) : iconMinus)</td>
-                        <td>@(gameItem.IsNeutralDrop.HasValue ? (gameItem.IsNeutralDrop.Value ? iconCheck : iconTimes) : iconMinus)</td>
+        <div class="table-responsive">
+            <table class="table table-hover game-item-table" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ID</th>
+                        <th>Cost</th>
+                        <th>Quality</th>
+                        <th>Behavior</th>
+                        <th>Mana Cost</th>
+                        <th>Cooldown</th>
+                        <th>Stackable</th>
+                        <th>Sellable</th>
+                        <th>Killable</th>
+                        <th>Droppable</th>
+                        <th>Neutral Drop</th>
                     </tr>
-                    @if (gameItem.ShowingDetails)
+                </thead>
+                <tbody>
+                    @foreach (var gameItem in filteredGameItems)
                     {
-                        <tr class="bg-white no-hover">
-                            <td colspan="12" class="text-left p-2">
-                                @if (!string.IsNullOrWhiteSpace(gameItem.Description))
-                                {
-                                    <div class="row">
-                                        <div class="col-12 game-item-description-lore">
-                                            <div class="alert alert-light">
-                                                @((MarkupString)gameItem.Description)
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(gameItem.Note0)
-                                   || !string.IsNullOrWhiteSpace(gameItem.Note1)
-                                   || !string.IsNullOrWhiteSpace(gameItem.Note2)
-                                   || !string.IsNullOrWhiteSpace(gameItem.Note3)
-                                   || !string.IsNullOrWhiteSpace(gameItem.Note4)
-                                   || !string.IsNullOrWhiteSpace(gameItem.Note5)
-                                   || !string.IsNullOrWhiteSpace(gameItem.Note6))
-                                {
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="alert alert-light">
-                                                <strong>Notes:</strong>
-                                                <br />
-                                                <ul class="list-unstyled mb-0">
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note0))
-                                                    {
-                                                        <li>@gameItem.Note0</li>
-                                                    }
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note1))
-                                                    {
-                                                        <li>@gameItem.Note1</li>
-                                                    }
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note2))
-                                                    {
-                                                        <li>@gameItem.Note2</li>
-                                                    }
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note3))
-                                                    {
-                                                        <li>@gameItem.Note3</li>
-                                                    }
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note4))
-                                                    {
-                                                        <li>@gameItem.Note4</li>
-                                                    }
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note5))
-                                                    {
-                                                        <li>@gameItem.Note5</li>
-                                                    }
-                                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note6))
-                                                    {
-                                                        <li>@gameItem.Note6</li>
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(gameItem.Lore))
-                                {
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="alert alert-light">
-                                                <strong>Lore:</strong>
-                                                <br />
-                                                @gameItem.Lore
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                <div class="row mb-2">
-                                    <div class="col-md-4">
-                                        <ItemDetail DetailName="Cooldown" DetailValue="@gameItem.Cooldown" />
-                                        <br />
-                                        <ItemDetail DetailName="Shared Cooldown" DetailValue="@gameItem.SharedCooldown" />
-                                        <br />
-                                        <ItemDetail DetailName="Cast Point" DetailValue="@gameItem.CastPoint" />
-                                        <br />
-                                        <ItemDetail DetailName="Cast Range" DetailValue="@gameItem.CastRange" />
-                                        <br />
-                                        <ItemDetail DetailName="Target Flags" DetailValue="@gameItem.TargetFlags" />
-                                        <br />
-                                        <ItemDetail DetailName="Target Types" DetailValue="@gameItem.TargetTypes" />
-                                        <br />
-                                        <ItemDetail DetailName="Channel Time" DetailValue="@gameItem.ChannelTime.ToString()" />
-                                        <br />
-                                        <ItemDetail DetailName="Shop Tags" DetailValue="@gameItem.ShopTags" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <ItemDetail DetailName="Initial Charges" DetailValue="@gameItem.InitialCharges?.ToString()" />
-                                        <br />
-                                        <ItemDetail DetailName="Display Charges" DetailValue="@gameItem.DisplayCharges?.ToString()" />
-                                        <br />
-                                        <ItemDetail DetailName="Initial Stock" DetailValue="@gameItem.StockInitial?.ToString()" />
-                                        <br />
-                                        <ItemDetail DetailName="Stock Time" DetailValue="@gameItem.StockTime?.ToString()" />
-                                        <br />
-                                        <ItemDetail DetailName="Contributes to Net Worth" DetailValue="@gameItem.ContributesToNetWorthWhenDropped?.ToString()" />
-                                        <br />
-                                        <ItemDetail DetailName="Disassemble Rule" DetailValue="@gameItem.DisassembleRule" />
-                                        <br />
-                                        <ItemDetail DetailName="Declarations" DetailValue="@gameItem.Declarations" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        @foreach (var abilitySpecial in gameItem.AbilitySpecials)
-                                        {
-                                            <ItemDetail DetailName="@abilitySpecial.RawName" DetailValue="@string.Join(", ", abilitySpecial.Value)" />
-                                            <br />
-                                        }
-                                    </div>
+                        <tr @onclick="@(e => ShowDetails(e, gameItem))" style="cursor: pointer;">
+                            <td>
+                                <div class="text-center py-1">
+                                    <img src="@gameItem.IconPath" onerror="this.onerror=null;this.src='/images/missing_game_item.png';" />
+                                    <br />
+                                    <small>@(!string.IsNullOrWhiteSpace(gameItem.Name) ? gameItem.Name : "???")</small>
                                 </div>
                             </td>
+                            <td>@gameItem.Id</td>
+                            <td>@gameItem.Cost</td>
+                            <td>@(!string.IsNullOrWhiteSpace(gameItem.Quality) ? (MarkupString)gameItem.Quality : iconMinus)</td>
+                            <td>@(!string.IsNullOrWhiteSpace(gameItem.Behaviors) ? (MarkupString)gameItem.Behaviors : iconMinus)</td>
+                            <td>@(!string.IsNullOrWhiteSpace(gameItem.ManaCost) ? (MarkupString)gameItem.ManaCost : iconMinus)</td>
+                            <td>@(!string.IsNullOrWhiteSpace(gameItem.Cooldown) ? (MarkupString)gameItem.Cooldown : iconMinus)</td>
+                            <td>@(gameItem.IsStackable.HasValue ? (gameItem.IsStackable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                            <td>@(gameItem.IsSellable.HasValue ? (gameItem.IsSellable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                            <td>@(gameItem.IsKillable.HasValue ? (gameItem.IsKillable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                            <td>@(gameItem.IsDroppable.HasValue ? (gameItem.IsDroppable.Value ? iconCheck : iconTimes) : iconMinus)</td>
+                            <td>@(gameItem.IsNeutralDrop.HasValue ? (gameItem.IsNeutralDrop.Value ? iconCheck : iconTimes) : iconMinus)</td>
                         </tr>
+                        @if (gameItem.ShowingDetails)
+                        {
+                            <tr class="bg-white no-hover">
+                                <td colspan="12" class="text-left p-2">
+                                    @if (!string.IsNullOrWhiteSpace(gameItem.Description))
+                                    {
+                                        <div class="row">
+                                            <div class="col-12 game-item-description-lore">
+                                                <div class="alert alert-light">
+                                                    @((MarkupString)gameItem.Description)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(gameItem.Note0)
+              || !string.IsNullOrWhiteSpace(gameItem.Note1)
+              || !string.IsNullOrWhiteSpace(gameItem.Note2)
+              || !string.IsNullOrWhiteSpace(gameItem.Note3)
+              || !string.IsNullOrWhiteSpace(gameItem.Note4)
+              || !string.IsNullOrWhiteSpace(gameItem.Note5)
+              || !string.IsNullOrWhiteSpace(gameItem.Note6))
+                                    {
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="alert alert-light">
+                                                    <strong>Notes:</strong>
+                                                    <br />
+                                                    <ul class="list-unstyled mb-0">
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note0))
+                                                        {
+                                                            <li>@gameItem.Note0</li>
+                                                        }
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note1))
+                                                        {
+                                                            <li>@gameItem.Note1</li>
+                                                        }
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note2))
+                                                        {
+                                                            <li>@gameItem.Note2</li>
+                                                        }
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note3))
+                                                        {
+                                                            <li>@gameItem.Note3</li>
+                                                        }
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note4))
+                                                        {
+                                                            <li>@gameItem.Note4</li>
+                                                        }
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note5))
+                                                        {
+                                                            <li>@gameItem.Note5</li>
+                                                        }
+                                                        @if (!string.IsNullOrWhiteSpace(gameItem.Note6))
+                                                        {
+                                                            <li>@gameItem.Note6</li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(gameItem.Lore))
+                                    {
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="alert alert-light">
+                                                    <strong>Lore:</strong>
+                                                    <br />
+                                                    @gameItem.Lore
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="row mb-2">
+                                        <div class="col-md-4">
+                                            <ItemDetail DetailName="Cooldown" DetailValue="@gameItem.Cooldown" />
+                                            <br />
+                                            <ItemDetail DetailName="Shared Cooldown" DetailValue="@gameItem.SharedCooldown" />
+                                            <br />
+                                            <ItemDetail DetailName="Cast Point" DetailValue="@gameItem.CastPoint" />
+                                            <br />
+                                            <ItemDetail DetailName="Cast Range" DetailValue="@gameItem.CastRange" />
+                                            <br />
+                                            <ItemDetail DetailName="Target Flags" DetailValue="@gameItem.TargetFlags" />
+                                            <br />
+                                            <ItemDetail DetailName="Target Types" DetailValue="@gameItem.TargetTypes" />
+                                            <br />
+                                            <ItemDetail DetailName="Channel Time" DetailValue="@gameItem.ChannelTime.ToString()" />
+                                            <br />
+                                            <ItemDetail DetailName="Shop Tags" DetailValue="@gameItem.ShopTags" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ItemDetail DetailName="Initial Charges" DetailValue="@gameItem.InitialCharges?.ToString()" />
+                                            <br />
+                                            <ItemDetail DetailName="Display Charges" DetailValue="@gameItem.DisplayCharges?.ToString()" />
+                                            <br />
+                                            <ItemDetail DetailName="Initial Stock" DetailValue="@gameItem.StockInitial?.ToString()" />
+                                            <br />
+                                            <ItemDetail DetailName="Stock Time" DetailValue="@gameItem.StockTime?.ToString()" />
+                                            <br />
+                                            <ItemDetail DetailName="Contributes to Net Worth" DetailValue="@gameItem.ContributesToNetWorthWhenDropped?.ToString()" />
+                                            <br />
+                                            <ItemDetail DetailName="Disassemble Rule" DetailValue="@gameItem.DisassembleRule" />
+                                            <br />
+                                            <ItemDetail DetailName="Declarations" DetailValue="@gameItem.Declarations" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            @foreach (var abilitySpecial in gameItem.AbilitySpecials)
+                                            {
+                                                <ItemDetail DetailName="@abilitySpecial.RawName" DetailValue="@string.Join(", ", abilitySpecial.Value)" />
+                                                <br />
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
 
 @code {
@@ -229,6 +240,8 @@
     private string searchValue;
     private string selectedQuality;
     private string selectedBehavior;
+
+    private bool hasRendered = false;
 
     private void HideAllDetails()
     {
@@ -313,6 +326,9 @@
             gameItems = Mapper.Map<IReadOnlyCollection<GameItemDetailModel>, IReadOnlyCollection<GameItemViewModel>>(tempGameItems, opts => opts.Items["lookup"] = SharedService.GetCombinedLookups())
                 .OrderBy(x => x.Name);
             filteredGameItems = gameItems.ToList();
+
+            hasRendered = true;
+
             StateHasChanged();
         }
     }

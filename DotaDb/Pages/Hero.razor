@@ -7,119 +7,129 @@
 @inject HeroService HeroService
 @inject AppStateService AppStateService
 @inject IMapper Mapper
-@inject SharedService SharedService 
+@inject SharedService SharedService
 
 <div class="container py-2">
-    <div class="row row-cols-5">
-        <div class="col">
-            <div class="card my-2 @selectedStrengthClasses">
-                <div class="card-body">
-                    <div class="custom-control custom-checkbox">
-                        <input id="showStrength" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "strength"))" />
-                        <label class="custom-control-label" for="showStrength">
+    @if (!hasRendered)
+    {
+        <div class="d-flex justify-content-center m-3">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-5">
+            <div class="col">
+                <div class="card my-2 @selectedStrengthClasses">
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+                            <input id="showStrength" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "strength"))" />
+                            <label class="custom-control-label" for="showStrength">
+                                <img src="/images/icon_str.png" width="24" height="24" />
+                                Strength
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card my-2  @selectedAgilityClasses">
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+                            <input id="showAgility" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "agility"))" />
+                            <label class="custom-control-label" for="showAgility">
+                                <img src="/images/icon_agi.png" width="24" height="24" />
+                                Agility
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card my-2 @selectedIntelligenceClasses">
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+                            <input id="showIntelligence" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "intelligence"))" />
+                            <label class="custom-control-label" for="showIntelligence">
+                                <img src="/images/icon_int.png" width="24" height="24" />
+                                Intelligence
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card my-2 @selectedMeleeClasses">
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+                            <input id="showMelee" class="custom-control-input" type="checkbox" @onchange="@(e => OnAttackTypeFilterChanged(e, "melee"))" />
+                            <label class="custom-control-label" for="showMelee">
+                                <img src="/images/icon_melee.png" width="24" height="24" />
+                                Melee
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card my-2 @selectedRangedClasses">
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+                            <input id="showRanged" class="custom-control-input" type="checkbox" @onchange="@(e => OnAttackTypeFilterChanged(e, "ranged"))" />
+                            <label class="custom-control-label" for="showRanged">
+                                <img src="/images/icon_ranged.png" width="24" height="24" />
+                                Ranged
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped hero-table" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
+                                   @bind="searchValue"
+                                   @bind:event="oninput"
+                                   @onkeyup="OnSearch" />
+                        </th>
+                        <th data-sortable="true">HP / MP</th>
+                        <th data-sortable="true">
+                            <img src="/images/overviewicon_attack.png" width="24" height="24" />
+                        </th>
+                        <th data-sortable="true">
+                            <img src="/images/overviewicon_defense.png" width="24" height="24" />
+                        </th>
+                        <th data-sortable="true">
                             <img src="/images/icon_str.png" width="24" height="24" />
-                            Strength
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card my-2  @selectedAgilityClasses">
-                <div class="card-body">
-                    <div class="custom-control custom-checkbox">
-                        <input id="showAgility" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "agility"))" />
-                        <label class="custom-control-label" for="showAgility">
+                        </th>
+                        <th data-sortable="true">
                             <img src="/images/icon_agi.png" width="24" height="24" />
-                            Agility
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card my-2 @selectedIntelligenceClasses">
-                <div class="card-body">
-                    <div class="custom-control custom-checkbox">
-                        <input id="showIntelligence" class="custom-control-input" type="checkbox" @onchange="@(e => OnPrimaryAttributeFilterChanged(e, "intelligence"))" />
-                        <label class="custom-control-label" for="showIntelligence">
+                        </th>
+                        <th data-sortable="true">
                             <img src="/images/icon_int.png" width="24" height="24" />
-                            Intelligence
-                        </label>
-                    </div>
-                </div>
-            </div>
+                        </th>
+                        <th data-sortable="true">
+                            <img src="/images/overviewicon_speed.png" width="24" height="24" />
+                        </th>
+                        <th class="d-none d-lg-table-cell" data-sortable="true">Range</th>
+                        <th class="d-none d-lg-table-cell" data-sortable="true">Rate</th>
+                        <th class="d-none d-lg-table-cell" data-sortable="true">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hero in filteredHeroTableList)
+                    {
+                        <HeroTableRow Hero="hero" />
+                    }
+                </tbody>
+            </table>
         </div>
-        <div class="col">
-            <div class="card my-2 @selectedMeleeClasses">
-                <div class="card-body">
-                    <div class="custom-control custom-checkbox">
-                        <input id="showMelee" class="custom-control-input" type="checkbox" @onchange="@(e => OnAttackTypeFilterChanged(e, "melee"))" />
-                        <label class="custom-control-label" for="showMelee">
-                            <img src="/images/icon_melee.png" width="24" height="24" />
-                            Melee
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card my-2 @selectedRangedClasses">
-                <div class="card-body">
-                    <div class="custom-control custom-checkbox">
-                        <input id="showRanged" class="custom-control-input" type="checkbox" @onchange="@(e => OnAttackTypeFilterChanged(e, "ranged"))" />
-                        <label class="custom-control-label" for="showRanged">
-                            <img src="/images/icon_ranged.png" width="24" height="24" />
-                            Ranged
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-striped hero-table" data-toggle="table">
-            <thead>
-                <tr>
-                    <th colspan="2">
-                        <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
-                               @bind="searchValue"
-                               @bind:event="oninput"
-                               @onkeyup="OnSearch" />
-                    </th>
-                    <th data-sortable="true">HP / MP</th>
-                    <th data-sortable="true">
-                        <img src="/images/overviewicon_attack.png" width="24" height="24" />
-                    </th>
-                    <th data-sortable="true">
-                        <img src="/images/overviewicon_defense.png" width="24" height="24" />
-                    </th>
-                    <th data-sortable="true">
-                        <img src="/images/icon_str.png" width="24" height="24" />
-                    </th>
-                    <th data-sortable="true">
-                        <img src="/images/icon_agi.png" width="24" height="24" />
-                    </th>
-                    <th data-sortable="true">
-                        <img src="/images/icon_int.png" width="24" height="24" />
-                    </th>
-                    <th data-sortable="true">
-                        <img src="/images/overviewicon_speed.png" width="24" height="24" />
-                    </th>
-                    <th class="d-none d-lg-table-cell" data-sortable="true">Range</th>
-                    <th class="d-none d-lg-table-cell" data-sortable="true">Rate</th>
-                    <th class="d-none d-lg-table-cell" data-sortable="true">Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var hero in filteredHeroTableList)
-                {
-                    <HeroTableRow Hero="hero" />
-                }
-            </tbody>
-        </table>
-    </div>
-    @*}*@
+    }
 </div>
 
 @code {
@@ -135,8 +145,9 @@
     private string selectedIntelligenceClasses;
     private string selectedMeleeClasses;
     private string selectedRangedClasses;
-
     private string searchValue;
+
+    private bool hasRendered = false;
 
     private void OnSearch(KeyboardEventArgs e)
     {
@@ -283,6 +294,8 @@
             tempHeroTableList.AddRange(viewModel.IntelligenceHeroes);
             this.heroTableList = tempHeroTableList.OrderBy(x => x.Name);
             this.filteredHeroTableList = this.heroTableList.ToList();
+
+            hasRendered = true;
 
             StateHasChanged();
         }

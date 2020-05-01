@@ -9,204 +9,215 @@
 @inject NavigationManager NavigationManager
 
 <div class="container py-2">
-    <div class="row mb-2">
-        <div class="col-md-3">
-            <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
-                   @bind="searchValue"
-                   @bind:event="oninput"
-                   @onkeyup="OnSearch" />
+    @if (!hasRendered)
+    {
+        <div class="d-flex justify-content-center m-3">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
-        <div class="col-md-2">
-            <select class="custom-select custom-select-sm" @onchange="OnPrefabChanged">
-                <option selected value=" ">-- Type --</option>
-                @foreach (var prefab in viewModel.Prefabs)
-                {
-                    <option value="@prefab.Name">@prefab.Name</option>
-                }
-            </select>
+    }
+    else
+    {
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <input id="search" class="form-control form-control-sm" type="text" placeholder="Search (press Enter)"
+                       @bind="searchValue"
+                       @bind:event="oninput"
+                       @onkeyup="OnSearch" />
+            </div>
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" @onchange="OnPrefabChanged">
+                    <option selected value=" ">-- Type --</option>
+                    @foreach (var prefab in viewModel.Prefabs)
+                    {
+                        <option value="@prefab.Name">@prefab.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" @onchange="OnRarityChanged">
+                    <option selected value=" ">-- Rarity --</option>
+                    @foreach (var rarity in viewModel.Rarities)
+                    {
+                        <option value="@rarity.Name">@rarity.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" @onchange="OnQualityChanged">
+                    <option selected value=" ">-- Quality --</option>
+                    @foreach (var quality in viewModel.Qualities)
+                    {
+                        <option value="@quality.Name">@quality.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" @onchange="OnUsedByChanged">
+                    <option selected value=" ">-- Used By --</option>
+                    @foreach (var hero in viewModel.Heroes)
+                    {
+                        <option value="@hero">@hero</option>
+                    }
+                </select>
+            </div>
         </div>
-        <div class="col-md-2">
-            <select class="custom-select custom-select-sm" @onchange="OnRarityChanged">
-                <option selected value=" ">-- Rarity --</option>
-                @foreach (var rarity in viewModel.Rarities)
-                {
-                    <option value="@rarity.Name">@rarity.Name</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select class="custom-select custom-select-sm" @onchange="OnQualityChanged">
-                <option selected value=" ">-- Quality --</option>
-                @foreach (var quality in viewModel.Qualities)
-                {
-                    <option value="@quality.Name">@quality.Name</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select class="custom-select custom-select-sm" @onchange="OnUsedByChanged">
-                <option selected value=" ">-- Used By --</option>
-                @foreach (var hero in viewModel.Heroes)
-                {
-                    <option value="@hero">@hero</option>
-                }
-            </select>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-hover cosmetic-item-table" data-toggle="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th class="text-left">Name</th>
-                    <th>ID</th>
-                    <th>Used By</th>
-                    <th>Rarity</th>
-                    <th>Quality</th>
-                    <th>Slot</th>
-                    <th>Created</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in viewModel.Items)
-                {
+        <div class="table-responsive">
+            <table class="table table-hover cosmetic-item-table" data-toggle="table">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="text-center py-1">
-                                <img style="max-width: 128px" src="@item.IconPath" onerror="this.onerror=null;this.src='/images/missing_cosmetic_item.png';" />
-                            </div>
-                        </td>
-                        <td class="text-left">
-                            @(!string.IsNullOrWhiteSpace(item.Name) ? item.Name : "???")
-                            <br />
-                            <small class="text-muted text-capitalize">
-                                @item.Prefab
-                            </small>
-                        </td>
-                        <td>@item.DefIndex</td>
-                        <td>
-                            @if (item.UsedBy != null && item.UsedBy.Count > 0)
-                            {
-                                foreach (var hero in item.UsedBy)
-                                {
-                                    <img src="@hero.MinimapIconPath" width="24" height="24" />
-                                    <a href="/hero/@hero.HeroId">
-                                        @hero.HeroName
-                                    </a>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fas fa-minus text-warning" />
-                            }
-                        </td>
-                        <td class="text-capitalize">
-                            @if (!string.IsNullOrWhiteSpace(item.Rarity))
-                            {
-                                if (!string.IsNullOrWhiteSpace(item.RarityColor))
-                                {
-                                    <span style="color: @item.RarityColor">
-                                        @item.Rarity
-                                    </span>
-                                }
-                                else
-                                {
-                                    @item.Rarity
-                                }
-                            }
-                            else
-                            {
-                                <i class="fas fa-minus text-warning" />
-                            }
-                        </td>
-                        <td class="text-capitalize">
-                            @if (!string.IsNullOrWhiteSpace(item.QualityColor))
-                            {
-                                if (!string.IsNullOrEmpty(item.QualityColor))
-                                {
-                                    <span style="color: @item.QualityColor">
-                                        @item.Quality
-                                    </span>
-                                }
-                                else
-                                {
-                                    @item.Quality
-                                }
-                            }
-                            else
-                            {
-                                <i class="fas fa-minus text-warning" />
-                            }
-                        </td>
-                        <td class="text-capitalize">
-                            @if (!string.IsNullOrWhiteSpace(item.Slot))
-                            {
-                                @item.Slot
-                            }
-                            else
-                            {
-                                <i class="fas fa-minus text-warning" />
-                            }
-                        </td>
-                        <td>
-                            @if (item.CreationDate.HasValue)
-                            {
-                                @item.CreationDate.Value.ToShortDateString()
-                            }
-                            else
-                            {
-                                <i class="fas fa-minus text-warning" />
-                            }
-                        </td>
-                        <td>
-                            @if (item.Price.HasValue)
-                            {
-                                @item.Price
-                            }
-                            else
-                            {
-                                <i class="fas fa-minus text-warning" />
-                            }
-                        </td>
+                        <th></th>
+                        <th class="text-left">Name</th>
+                        <th>ID</th>
+                        <th>Used By</th>
+                        <th>Rarity</th>
+                        <th>Quality</th>
+                        <th>Slot</th>
+                        <th>Created</th>
+                        <th>Price</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <hr />
-        <nav>
-            <ul class="pagination">
-                @if (currentPage > 1)
-                {
-                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">Previous</button></li>
-                }
-                @if (currentPage > 2)
-                {
-                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 2))">@(currentPage - 2)</button></li>
-                }
-                @if (currentPage > 1)
-                {
-                    <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">@(currentPage - 1)</button></li>
-                }
-                @if (pageCount > 1)
-                {
-                    <li class="page-item active"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage))">@currentPage</button></li>
-                    @if (currentPage < pageCount)
+                </thead>
+                <tbody>
+                    @foreach (var item in viewModel.Items)
                     {
-                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">@(currentPage + 1)</button></li>
+                        <tr>
+                            <td>
+                                <div class="text-center py-1">
+                                    <img style="max-width: 128px" src="@item.IconPath" onerror="this.onerror=null;this.src='/images/missing_cosmetic_item.png';" />
+                                </div>
+                            </td>
+                            <td class="text-left">
+                                @(!string.IsNullOrWhiteSpace(item.Name) ? item.Name : "???")
+                                <br />
+                                <small class="text-muted text-capitalize">
+                                    @item.Prefab
+                                </small>
+                            </td>
+                            <td>@item.DefIndex</td>
+                            <td>
+                                @if (item.UsedBy != null && item.UsedBy.Count > 0)
+                                {
+                                    foreach (var hero in item.UsedBy)
+                                    {
+                                        <img src="@hero.MinimapIconPath" width="24" height="24" />
+                                        <a href="/hero/@hero.HeroId">
+                                            @hero.HeroName
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <i class="fas fa-minus text-warning" />
+                                }
+                            </td>
+                            <td class="text-capitalize">
+                                @if (!string.IsNullOrWhiteSpace(item.Rarity))
+                                {
+                                    if (!string.IsNullOrWhiteSpace(item.RarityColor))
+                                    {
+                                        <span style="color: @item.RarityColor">
+                                            @item.Rarity
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Rarity
+                                    }
+                                }
+                                else
+                                {
+                                    <i class="fas fa-minus text-warning" />
+                                }
+                            </td>
+                            <td class="text-capitalize">
+                                @if (!string.IsNullOrWhiteSpace(item.QualityColor))
+                                {
+                                    if (!string.IsNullOrEmpty(item.QualityColor))
+                                    {
+                                        <span style="color: @item.QualityColor">
+                                            @item.Quality
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Quality
+                                    }
+                                }
+                                else
+                                {
+                                    <i class="fas fa-minus text-warning" />
+                                }
+                            </td>
+                            <td class="text-capitalize">
+                                @if (!string.IsNullOrWhiteSpace(item.Slot))
+                                {
+                                    @item.Slot
+                                }
+                                else
+                                {
+                                    <i class="fas fa-minus text-warning" />
+                                }
+                            </td>
+                            <td>
+                                @if (item.CreationDate.HasValue)
+                                {
+                                    @item.CreationDate.Value.ToShortDateString()
+                                }
+                                else
+                                {
+                                    <i class="fas fa-minus text-warning" />
+                                }
+                            </td>
+                            <td>
+                                @if (item.Price.HasValue)
+                                {
+                                    @item.Price
+                                }
+                                else
+                                {
+                                    <i class="fas fa-minus text-warning" />
+                                }
+                            </td>
+                        </tr>
                     }
-                    @if (currentPage < pageCount - 1)
+                </tbody>
+            </table>
+            <hr />
+            <nav>
+                <ul class="pagination">
+                    @if (currentPage > 1)
                     {
-                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 2))">@(currentPage + 2)</button></li>
+                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">Previous</button></li>
                     }
-                    @if (currentPage < pageCount)
+                    @if (currentPage > 2)
                     {
-                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">Next</button></li>
+                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 2))">@(currentPage - 2)</button></li>
                     }
-                }
-            </ul>
-        </nav>
-    </div>
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage - 1))">@(currentPage - 1)</button></li>
+                    }
+                    @if (pageCount > 1)
+                    {
+                        <li class="page-item active"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage))">@currentPage</button></li>
+                        @if (currentPage < pageCount)
+                        {
+                            <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">@(currentPage + 1)</button></li>
+                        }
+                        @if (currentPage < pageCount - 1)
+                        {
+                            <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 2))">@(currentPage + 2)</button></li>
+                        }
+                        @if (currentPage < pageCount)
+                        {
+                            <li class="page-item"><button class="page-link" @onclick="@(e => UpdatePage(e, currentPage + 1))">Next</button></li>
+                        }
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
 </div>
 @code {
     private const int itemsPerPage = 25;
@@ -222,6 +233,8 @@
     private string selectedRarity;
     private string selectedQuality;
     private string selectedUsedBy;
+
+    private bool hasRendered = false;
 
     private void OnSearch(KeyboardEventArgs e)
     {
@@ -358,6 +371,9 @@
             viewModel.Items = viewModel.Items
                 .Skip(itemsPerPage * (currentPage - 1))
                 .Take(itemsPerPage);
+
+            hasRendered = true;
+
             StateHasChanged();
         }
     }
