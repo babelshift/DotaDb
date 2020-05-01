@@ -95,7 +95,7 @@
                                 {
                                     @if (!String.IsNullOrWhiteSpace(abilitySpecial.Name))
                                     {
-                                        <HeroAbilityDetail DetailName="@abilitySpecial.Name"
+                                        <HeroAbilityDetail DetailName="@String.Format("{0}", abilitySpecial.Name.Replace("_", " "))"
                                                            Details="@abilitySpecial.Value"
                                                            ColumnClass="table-column-ability-special-name" />
                                     }
