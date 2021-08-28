@@ -1,3 +1,4 @@
+*.vdf
 App_Data/
 *.mdf
 *.ldf
